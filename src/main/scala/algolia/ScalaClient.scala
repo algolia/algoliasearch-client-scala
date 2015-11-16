@@ -1,0 +1,7 @@
+package algolia
+
+object ScalaClient {
+
+
+
+}
