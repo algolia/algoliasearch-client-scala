@@ -9,7 +9,8 @@ class APIClientTest extends FunSpec with BeforeAndAfter with Matchers {
     val apiClient = new APIClient("APP_ID", "API_KEY")
 
     it("should set user agent") {
-      apiClient.userAgent should be("Algolia Scala 2.11.7")
+      //For 2.11 AND 2.10
+      apiClient.userAgent should startWith("Algolia Scala 2.1")
     }
 
     it("should set indexing hosts") {
