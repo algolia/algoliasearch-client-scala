@@ -12,3 +12,4 @@ libraryDependencies ++= Seq("com.propensive" %% "rapture-net" % raptureVersion)
 
 //Testing
 libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % "2.2.4" % "test")
+libraryDependencies ++= Seq("org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test")
