@@ -39,7 +39,7 @@ class APIClientTest extends FunSpec with BeforeAndAfter with Matchers with MockF
 
   describe("get") {
 
-    val mockHttpClient: RaptureHttpClient = stub[RaptureHttpClient]
+    val mockHttpClient: RaptureHttpClient = mock[RaptureHttpClient]
     val emptyHeaders: Map[String, String] = Map()
 
     val apiClient = new APIClient("a", "b") {
@@ -57,40 +57,40 @@ class APIClientTest extends FunSpec with BeforeAndAfter with Matchers with MockF
     val timeoutRequest: Option[HttpResponse] = None
 
     it("no timeout") {
-      mockHttpClient.get _ when(Https / "a-1.algolianet.com", "/", emptyHeaders) returns successfulRequest1
+      mockHttpClient.get _ expects(Https / "a-1.algolianet.com", "/", emptyHeaders) returning successfulRequest1
 
       apiClient get "/" should equal(successfulRequest1)
     }
 
     it("timeout on first request") {
-      mockHttpClient.get _ when(Https / "a-1.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-2.algolianet.com", "/", emptyHeaders) returns successfulRequest2
+      mockHttpClient.get _ expects(Https / "a-1.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-2.algolianet.com", "/", emptyHeaders) returning successfulRequest2
 
       apiClient get "/" should equal(successfulRequest2)
     }
 
     it("timeout on first and second request") {
-      mockHttpClient.get _ when(Https / "a-1.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-2.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-3.algolianet.com", "/", emptyHeaders) returns successfulRequest3
+      mockHttpClient.get _ expects(Https / "a-1.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-2.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-3.algolianet.com", "/", emptyHeaders) returning successfulRequest3
 
       apiClient get "/" should equal(successfulRequest3)
     }
 
     it("timeout on first, second and third requests") {
-      mockHttpClient.get _ when(Https / "a-1.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-2.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-3.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-dsn.algolia.net", "/", emptyHeaders) returns successfulRequestDsn
+      mockHttpClient.get _ expects(Https / "a-1.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-2.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-3.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-dsn.algolia.net", "/", emptyHeaders) returning successfulRequestDsn
 
       apiClient get "/" should equal(successfulRequestDsn)
     }
 
     it("timeout on all requests") {
-      mockHttpClient.get _ when(Https / "a-1.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-2.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-3.algolianet.com", "/", emptyHeaders) returns timeoutRequest
-      mockHttpClient.get _ when(Https / "a-dsn.algolia.net", "/", emptyHeaders) returns timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-1.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-2.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-3.algolianet.com", "/", emptyHeaders) returning timeoutRequest
+      mockHttpClient.get _ expects(Https / "a-dsn.algolia.net", "/", emptyHeaders) returning timeoutRequest
 
       apiClient get "/" should equal(None)
     }

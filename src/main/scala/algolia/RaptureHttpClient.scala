@@ -8,7 +8,7 @@ trait RaptureHttpClient {
     import rapture.core.modes.returnOption._
     host / path httpGet headers
   }
-  
+
 }
 
 object RaptureHttpClient extends RaptureHttpClient
