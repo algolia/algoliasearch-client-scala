@@ -1,3 +1,5 @@
+# /!\ Under developpement /!\
+
 # algoliasearch-client-scala
 
 [![Build Status](https://magnum.travis-ci.com/algolia/algoliasearch-client-scala.svg?token=JcfCqnibpemvurAz3bnz)](https://magnum.travis-ci.com/algolia/algoliasearch-client-scala)
