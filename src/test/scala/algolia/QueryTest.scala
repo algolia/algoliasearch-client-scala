@@ -8,7 +8,7 @@ class QueryTest extends AlgoliaTest {
 
   describe("query") {
 
-    it("should search simple query") {
+    it("should search query") {
       val client = new AlgoliaClient("APPID", "KEY")
       //      client.search { into "toto" document Basic}
       //      client.execute {
