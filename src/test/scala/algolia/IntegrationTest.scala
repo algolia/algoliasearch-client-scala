@@ -2,10 +2,6 @@ package algolia
 
 import algolia.AlgoliaDsl._
 import algolia.responses.{Indexes, Search}
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
-import org.scalatest.time.{Seconds, Span}
-import org.json4s._
-import org.json4s.native.JsonMethods._
 
 import scala.concurrent.Future
 
@@ -30,9 +26,9 @@ class IntegrationTest extends AlgoliaTest {
 
   describe("search") {
 
-//    case class Test(name: String,
-//                   age: Int,
-//                   alien: Boolean)
+    //    case class Test(name: String,
+    //                   age: Int,
+    //                   alien: Boolean)
 
     it("should search with a query") {
       val s: Future[Search] = client.execute {
@@ -41,7 +37,19 @@ class IntegrationTest extends AlgoliaTest {
 
       whenReady(s) { result =>
         result.hits should have length 1
-        result.hits.head.values should be(Map("name" -> "algolia", "age" -> 10, "alien" -> false))
+        result.hits.head.values should be(Map(
+          "name" -> "algolia",
+          "age" -> 10,
+          "alien" -> false,
+          "_highlightResult" -> Map(
+            "name" -> Map(
+              "value" -> "<em>a</em>lgolia",
+              "matchLevel" -> "full",
+              "matchedWords" -> List("a")
+            )
+          ),
+          "objectID" -> "563481290"
+        ))
       }
 
     }
