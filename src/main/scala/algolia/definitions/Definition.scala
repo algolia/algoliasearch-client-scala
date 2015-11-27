@@ -1,5 +1,7 @@
 package algolia.definitions
 
-trait Definition[RESULT] {
-  private[algolia] def build(): RESULT
+import algolia.HttpPayload
+
+trait Definition {
+  private[algolia] def build(): HttpPayload
 }

@@ -1,18 +1,37 @@
 package algolia.definitions
 
-import algolia.Index
+import algolia.{HttpPayload, Index}
+import org.json4s.native.Serialization.write
 
-case class IndexDefinition(index: Index) extends Definition[Seq[String]] {
+case class IndexDefinition(index: Index,
+                           objectId: Option[String] = None,
+                           obj: Option[AnyRef] = None,
+                           objects: Option[Seq[AnyRef]] = None,
+                           objectsWithIds: Option[Map[String, AnyRef]] = None) extends Definition {
 
-  def objectId(objectId: String): IndexDefinition = this
 
-  def document[T](id: String, obj: T): IndexDefinition = this
+  def objectId(objectId: String): IndexDefinition =
+    copy(index, objectId = Some(objectId), obj = obj)
 
-  def document[T](obj: T): IndexDefinition = this
+  def document(objectId: String, obj: AnyRef): IndexDefinition =
+    copy(index, objectId = Some(objectId), obj = Some(obj))
 
-  def documents[T](objects: Seq[T]): IndexDefinition = this
+  def document(obj: AnyRef): IndexDefinition =
+    copy(index, objectId = objectId, obj = Some(obj))
 
-  def documents[T](objectsWithIds: Map[String, T]): IndexDefinition = this
+  def documents(objects: Seq[AnyRef]): IndexDefinition = ???
 
-  override private[algolia] def build(): Seq[String] = ???
+  //    copy(index, objects = Some(objects))
+
+  def documents(objectsWithIds: Map[String, AnyRef]): IndexDefinition = ???
+
+  //    copy(index, objectsWithIds = Some(objectsWithIds))
+
+  implicit val formats = org.json4s.DefaultFormats
+
+  override private[algolia] def build(): HttpPayload = {
+    val body: Option[String] = obj.map(o => write(o))
+
+    HttpPayload(Seq("1", "indexes", index.name) ++ objectId, body = body)
+  }
 }

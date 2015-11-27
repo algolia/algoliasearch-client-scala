@@ -1,39 +1,39 @@
 package algolia.responses
 
-import org.json4s.JObject
+import org.json4s._
 
-trait Search {
+case class Search(hits: Seq[JValue],
+                  page: Int,
+                  nbHits: Int,
+                  nbPages: Int,
+                  hitsPerPage: Int,
+                  processingTimeMS: Int,
+                  facets: Option[Map[String, Map[String, Int]]],
+                  exhaustiveFacetsCount: Option[Boolean],
+                  query: String,
+                  params: String) {
 
-  def hits: Seq[JObject]
+  implicit val formats = org.json4s.DefaultFormats
 
-  def page: Int
+  def asHit[T <: Hit : Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  def nbHits: Int
-
-  def nbPages: Int
-
-  def hitsPerPage: Int
-
-  def processingTimeMS: Int
-
-  def facets: Option[Map[String, Map[String, Int]]]
-
-  def exhaustiveFacetsCount: Option[Boolean]
-
-  def query: String
-
-  def params: String
+  def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
 
 }
 
-case class SearchImpl(hits: Seq[JObject],
-                      page: Int,
-                      nbHits: Int,
-                      nbPages: Int,
-                      hitsPerPage: Int,
-                      processingTimeMS: Int,
-                      facets: Option[Map[String, Map[String, Int]]],
-                      exhaustiveFacetsCount: Option[Boolean],
-                      query: String,
-                      params: String) extends Search
+case class Hit(objectID: String,
+               _highlightResult: Option[Map[String, HighlightResult]],
+               _snippetResult: Option[Map[String, SnippetResult]],
+               _rankingInfo: Option[RankingInfo])
 
+case class HighlightResult(value: String, matchLevel: String)
+
+case class SnippetResult(value: String)
+
+case class RankingInfo(nbTypos: Int,
+                       firstMatchedWord: Int,
+                       proximityDistance: Int,
+                       userScore: Int,
+                       geoDistance: Int,
+                       geoPrecision: Int,
+                       nbExactWords: Int)

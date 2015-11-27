@@ -18,7 +18,7 @@
 
 In sbt REPL
     
-    ~ test
+    ~test
     
 ## TODO
     
