@@ -63,7 +63,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     it("no timeout") {
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequest1)
 
-      whenReady(apiClient.get[Result](Seq("/"))) { result =>
+      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
         result should equal(successfulRequest1)
       }
     }
@@ -72,7 +72,7 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-2.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequest2)
 
-      whenReady(apiClient.get[Result](Seq("/"))) { result =>
+      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
         result should equal(successfulRequest2)
       }
     }
@@ -82,7 +82,7 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-2.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-3.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequest3)
 
-      whenReady(apiClient.get[Result](Seq("/"))) { result =>
+      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
         result should equal(successfulRequest3)
       }
     }
@@ -93,7 +93,7 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-3.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-dsn.algolia.net", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequestDsn)
 
-      whenReady(apiClient.get[Result](Seq("/"))) { result =>
+      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
         result should equal(successfulRequestDsn)
       }
 
@@ -105,7 +105,7 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-3.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
       (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-dsn.algolia.net", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
 
-      whenReady(apiClient.get[Result](Seq("/")).failed) { e =>
+      whenReady(apiClient.get[Result](HttpPayload(Seq("/"))).failed) { e =>
         e shouldBe a [TimeoutException]
       }
     }

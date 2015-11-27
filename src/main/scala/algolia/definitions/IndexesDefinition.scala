@@ -1,7 +1,9 @@
 package algolia.definitions
 
-class IndexesDefinition extends Definition[Seq[String]] {
+import algolia.HttpPayload
 
-  override private[algolia] def build() = Seq("1", "indexes")
+class IndexesDefinition extends Definition {
+
+  override private[algolia] def build() = HttpPayload(Seq("1", "indexes"))
 
 }

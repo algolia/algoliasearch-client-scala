@@ -2,9 +2,9 @@ package algolia
 
 import java.util.concurrent.TimeoutException
 
+import algolia.AlgoliaDsl._
 import algolia.definitions.SearchDefinition
-import algolia.responses.{SearchImpl, Search}
-import org.json4s.native.Serialization.write
+import algolia.responses.{Indexes, Search}
 
 import scala.concurrent.Future
 
@@ -40,30 +40,38 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   val httpClient: DispatchHttpClient = DispatchHttpClient
 
-  def search(definition: SearchDefinition): Future[Search] = {
-    implicit val formats = org.json4s.DefaultFormats
-    post[SearchImpl](Seq("1", "indexes", definition.index.name, "query"), body = write(definition.build()))
+  def search(query: SearchDefinition): Future[Search] = {
+    post[Search](query.build())
   }
 
-  def get[T: Manifest](path: Seq[String], queryParameters: Map[String, String] = Map()): Future[T] = {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
-      future.recoverWith {
-        case _ => httpClient get[T](host, path, headers, queryParameters)
-      }
-    }
-  }
-
-  def post[T: Manifest](path: Seq[String], queryParameters: Map[String, String] = Map(), body: String = ""): Future[T] = {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
-      future.recoverWith {
-        case _ => httpClient post[T](host, path, headers, queryParameters, body)
-      }
+  def indexes(): Future[Indexes] = {
+    execute {
+      AlgoliaDsl.indexes
     }
   }
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT]): Future[RESULT] = executable(this, query)
+
+
+  /** * HTTP ***/
+  private[algolia] def get[T: Manifest](payload: HttpPayload): Future[T] = {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
+      future.recoverWith {
+        case _ => httpClient get[T](host, payload.path, headers, payload.queryParameters.getOrElse(Map()))
+      }
+    }
+  }
+
+  private[algolia] def post[T: Manifest](payload: HttpPayload): Future[T] = {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
+      future.recoverWith {
+        case _ => httpClient post[T](host, payload.path, headers, payload.queryParameters.getOrElse(Map()), payload.body.getOrElse(""))
+      }
+    }
+  }
+
 
 }
 
