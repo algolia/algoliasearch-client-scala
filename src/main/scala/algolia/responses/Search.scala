@@ -2,7 +2,7 @@ package algolia.responses
 
 import org.json4s._
 
-case class Search(hits: Seq[JValue],
+case class Search(hits: Seq[JObject],
                   page: Int,
                   nbHits: Int,
                   nbPages: Int,
@@ -21,10 +21,17 @@ case class Search(hits: Seq[JValue],
 
 }
 
-case class Hit(objectID: String,
-               _highlightResult: Option[Map[String, HighlightResult]],
-               _snippetResult: Option[Map[String, SnippetResult]],
-               _rankingInfo: Option[RankingInfo])
+trait Hit {
+
+  val objectID: String
+
+  val _highlightResult: Option[Map[String, HighlightResult]]
+
+  val _snippetResult: Option[Map[String, SnippetResult]]
+
+  val _rankingInfo: Option[RankingInfo]
+
+}
 
 case class HighlightResult(value: String, matchLevel: String)
 

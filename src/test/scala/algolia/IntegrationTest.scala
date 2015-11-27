@@ -1,7 +1,8 @@
 package algolia
 
 import algolia.AlgoliaDsl._
-import algolia.responses.{Indexes, Search}
+import algolia.responses._
+import org.json4s._
 
 import scala.concurrent.Future
 
@@ -26,18 +27,46 @@ class IntegrationTest extends AlgoliaTest {
                         age: Int,
                         alien: Boolean)
 
+  final case class EnhanceTest(name: String,
+                               age: Int,
+                               alien: Boolean,
+                               objectID: String,
+                               _highlightResult: Option[Map[String, HighlightResult]],
+                               _snippetResult: Option[Map[String, SnippetResult]],
+                               _rankingInfo: Option[RankingInfo]) extends Hit
+
   describe("search") {
-    
-    it("should search with a query") {
-      val s: Future[Search] = client.execute {
+
+    var s: Future[Search] = Future.failed(new Exception)
+
+    before {
+      s = client.execute {
         search into Index("test") query "a"
       }
+    }
 
+    it("should return generic object") {
+      whenReady(s) { result =>
+        result.hits should have length 1
+        (result.hits.head \ "name").values should be("algolia")
+        (result.hits.head \ "age").values should be(10)
+        (result.hits.head \ "alien").values shouldBe false
+      }
+    }
+
+    it("should return case class") {
       whenReady(s) { result =>
         result.hits should have length 1
         result.as[Test].head should be(Test("algolia", 10, alien = false))
       }
+    }
 
+    it("should return a hit") {
+      whenReady(s) { result =>
+        result.hits should have length 1
+        val hit = EnhanceTest("algolia", 10, alien = false, "563481290", Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))), None, None)
+        result.asHit[EnhanceTest].head should be(hit)
+      }
     }
   }
 
