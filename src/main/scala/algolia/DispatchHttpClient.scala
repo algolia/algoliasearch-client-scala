@@ -4,7 +4,7 @@ import algolia.http._
 import dispatch.Defaults._
 import dispatch._
 
-trait DispatchHttpClient {
+private[algolia] trait DispatchHttpClient {
   implicit val formats = org.json4s.DefaultFormats
 
   def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload): Future[T] = {
@@ -32,4 +32,4 @@ trait DispatchHttpClient {
 
 }
 
-object DispatchHttpClient extends DispatchHttpClient
+private[algolia] object DispatchHttpClient extends DispatchHttpClient
