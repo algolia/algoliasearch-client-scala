@@ -18,13 +18,13 @@ trait AlgoliaDsl extends SearchDsl with IndexesDsl with IndexDsl {
 
   case object index {
 
-    def into(index: Index): IndexDefinition = IndexDefinition(index)
+    def into(index: Index): IndexingDefinition = IndexingDefinition(index)
 
-    def into(index: String): IndexDefinition = into(Index(index))
+    def into(index: String): IndexingDefinition = into(Index(index))
 
-    def in(index: String): IndexDefinition = into(index)
+    def in(index: String): IndexingDefinition = into(index)
 
-    def in(index: Index): IndexDefinition = into(index)
+    def in(index: Index): IndexingDefinition = into(index)
 
   }
 

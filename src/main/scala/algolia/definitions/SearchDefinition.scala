@@ -1,6 +1,7 @@
 package algolia.definitions
 
-import algolia.{HttpPayload, Index}
+import algolia.{Index, _}
+import algolia.http.HttpPayload
 import org.json4s.native.Serialization.write
 
 case class SearchDefinition(index: Index,
@@ -9,9 +10,9 @@ case class SearchDefinition(index: Index,
 
   def into(index: String): SearchDefinition = this
 
-  def hitsPerPage(h: Int): SearchDefinition = copy(index, hitsPerPage = Some(h))
+  def hitsPerPage(h: Int): SearchDefinition = copy(index, hitsPerPage = Some(h), query = query)
 
-  def query(q: String): SearchDefinition = copy(index, query = Some(q))
+  def query(q: String): SearchDefinition = copy(index, query = Some(q), hitsPerPage = hitsPerPage)
 
   implicit val formats = org.json4s.DefaultFormats
 
@@ -22,7 +23,7 @@ case class SearchDefinition(index: Index,
 
     val body = Map("params" -> params.mkString("&"))
 
-    HttpPayload(Seq("1", "indexes", index.name, "query"), body = Some(write(body)))
+    HttpPayload(http.GET, Seq("1", "indexes", index.name, "query"), body = Some(write(body)))
   }
 }
 

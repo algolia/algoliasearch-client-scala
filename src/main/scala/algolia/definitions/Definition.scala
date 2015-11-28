@@ -1,6 +1,6 @@
 package algolia.definitions
 
-import algolia.HttpPayload
+import algolia.http.HttpPayload
 
 trait Definition {
   private[algolia] def build(): HttpPayload
