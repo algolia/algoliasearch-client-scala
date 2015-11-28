@@ -4,6 +4,7 @@ import java.util.concurrent.TimeoutException
 
 import algolia.AlgoliaDsl._
 import algolia.definitions.SearchDefinition
+import algolia.http.HttpPayload
 import algolia.responses.{Indexes, Search}
 
 import scala.concurrent.Future
@@ -40,39 +41,23 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   val httpClient: DispatchHttpClient = DispatchHttpClient
 
-  def search(query: SearchDefinition): Future[Search] = {
-    post[Search](query.build())
-  }
+  def search(query: SearchDefinition): Future[Search] = request[Search](query.build())
 
-  def indexes(): Future[Indexes] = {
-    execute {
-      AlgoliaDsl.indexes
-    }
+  def indexes(): Future[Indexes] = execute {
+    AlgoliaDsl.indexes
   }
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT]): Future[RESULT] = executable(this, query)
 
-
   /** * HTTP ***/
-  private[algolia] def get[T: Manifest](payload: HttpPayload): Future[T] = {
+  private[algolia] def request[T: Manifest](payload: HttpPayload): Future[T] = {
     import scala.concurrent.ExecutionContext.Implicits.global
     queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
       future.recoverWith {
-        case _ => httpClient get[T](host, payload.path, headers, payload.queryParameters.getOrElse(Map()))
+        case _ => httpClient request[T](host, headers, payload)
       }
     }
   }
-
-  private[algolia] def post[T: Manifest](payload: HttpPayload): Future[T] = {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
-      future.recoverWith {
-        case _ => httpClient post[T](host, payload.path, headers, payload.queryParameters.getOrElse(Map()), payload.body.getOrElse(""))
-      }
-    }
-  }
-
-
 }
 
 

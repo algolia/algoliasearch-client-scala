@@ -17,8 +17,8 @@ class IntegrationTest extends AlgoliaTest {
 
       whenReady(indices) { result =>
         result.nbPages should equal(1)
-        result.items should have size 1
-        result.items.head.name should be("test")
+        result.items should have size 2
+        result.items.map(_.name) should be(Seq("test", "toto"))
       }
     }
   }
@@ -70,4 +70,27 @@ class IntegrationTest extends AlgoliaTest {
     }
   }
 
+  describe("indexing") {
+
+    it("should index a document") {
+      val indexing: Future[Indexing] = client.execute {
+        index into "toto" document Test("test", 1, alien = true)
+      }
+
+      whenReady(indexing) { result =>
+        result.createdAt should not be empty
+        result.objectID should not be empty
+      }
+    }
+
+    it("should index a document with an objectID") {
+      val indexing: Future[Indexing] = client.execute {
+        index into "toto" objectId "truc" document Test("test", 1, alien = true)
+      }
+
+      whenReady(indexing) { result =>
+        result.objectID should be("truc")
+      }
+    }
+  }
 }

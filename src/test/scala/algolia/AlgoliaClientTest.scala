@@ -2,9 +2,7 @@ package algolia
 
 import java.util.concurrent.TimeoutException
 
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{BeforeAndAfter, FunSpec, Matchers}
+import algolia.http.{GET, HttpPayload}
 
 import scala.concurrent.Future
 import scala.reflect._
@@ -44,7 +42,6 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
     val emptyHeaders: Map[String, String] = Map()
-    val emptyParams: Map[String, String] = Map()
 
     case class Result(value: String)
 
@@ -60,53 +57,55 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     val timeoutRequest: Future[Result] = Future.failed(new TimeoutException())
 
-    it("no timeout") {
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequest1)
+    val payload = HttpPayload(GET, Seq("/"), None, None)
 
-      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
+    it("no timeout") {
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-1.algolianet.com", emptyHeaders, payload, *) returning Future.successful(successfulRequest1)
+
+      whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/")))) { result =>
         result should equal(successfulRequest1)
       }
     }
 
     it("timeout on first request") {
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-2.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequest2)
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-1.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-2.algolianet.com", emptyHeaders, payload, *) returning Future.successful(successfulRequest2)
 
-      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
+      whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/")))) { result =>
         result should equal(successfulRequest2)
       }
     }
 
     it("timeout on first and second request") {
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-2.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-3.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequest3)
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-1.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-2.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-3.algolianet.com", emptyHeaders, payload, *) returning Future.successful(successfulRequest3)
 
-      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
+      whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/")))) { result =>
         result should equal(successfulRequest3)
       }
     }
 
     it("timeout on first, second and third requests") {
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-2.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-3.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-dsn.algolia.net", Seq("/"), emptyParams, emptyHeaders, *) returning Future.successful(successfulRequestDsn)
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-1.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-2.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-3.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-dsn.algolia.net", emptyHeaders, payload, *) returning Future.successful(successfulRequestDsn)
 
-      whenReady(apiClient.get[Result](HttpPayload(Seq("/")))) { result =>
+      whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/")))) { result =>
         result should equal(successfulRequestDsn)
       }
 
     }
 
     it("timeout on all requests") {
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-1.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-2.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-3.algolianet.com", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
-      (mockHttpClient.get[Result](_: String, _: Seq[String], _: Map[String, String], _: Map[String, String])(_: Manifest[Result])) expects("https://a-dsn.algolia.net", Seq("/"), emptyParams, emptyHeaders, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-1.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-2.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-3.algolianet.com", emptyHeaders, payload, *) returning timeoutRequest
+      (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result])) expects("https://a-dsn.algolia.net", emptyHeaders, payload, *) returning timeoutRequest
 
-      whenReady(apiClient.get[Result](HttpPayload(Seq("/"))).failed) { e =>
-        e shouldBe a [TimeoutException]
+      whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
+        e shouldBe a[TimeoutException]
       }
     }
   }
