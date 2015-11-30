@@ -22,6 +22,12 @@ case class CopyIndexDefinition(source: String, destination: Option[String] = Non
 
 trait CopyIndexDsl {
 
+  case object copy {
+
+    def index(index: String): CopyIndexDefinition = CopyIndexDefinition(index)
+
+  }
+
   implicit object CopyIndexDefinitionExecutable extends Executable[CopyIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: CopyIndexDefinition): Future[Task] = {
       client request[Task] query.build()

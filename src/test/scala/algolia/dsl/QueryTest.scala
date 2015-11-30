@@ -1,6 +1,7 @@
-package algolia
+package algolia.dsl
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 
 class QueryTest extends AlgoliaTest {
 

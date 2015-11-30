@@ -1,4 +1,9 @@
 package algolia.responses
 
-case class Task(createdAt: Option[String],
-                taskID: Int)
+trait Task {
+
+  def createdAt: Option[String]
+
+  def taskID: Int
+
+}

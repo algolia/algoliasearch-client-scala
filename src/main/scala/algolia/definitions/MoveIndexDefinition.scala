@@ -23,6 +23,12 @@ case class MoveIndexDefinition(source: String, destination: Option[String] = Non
 
 trait MoveIndexDsl {
 
+  case object move {
+
+    def index(index: String): MoveIndexDefinition = MoveIndexDefinition(index)
+
+  }
+
   implicit object MoveIndexDefinitionExecutable extends Executable[MoveIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: MoveIndexDefinition): Future[Task] = {
       client request[Task] query.build()

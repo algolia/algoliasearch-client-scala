@@ -1,7 +1,8 @@
-package algolia
+package algolia.dsl
 
 import algolia.AlgoliaDsl.copy
-import algolia.http.{POST, HttpPayload}
+import algolia.AlgoliaTest
+import algolia.http.{HttpPayload, POST}
 
 class CopyIndexTest extends AlgoliaTest {
 

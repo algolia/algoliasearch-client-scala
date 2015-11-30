@@ -33,6 +33,13 @@ case class SearchDefinition(index: String,
 
 trait SearchDsl {
 
+  case object search {
+
+    def into(index: String): SearchDefinition = SearchDefinition(index)
+
+    def in(index: String): SearchDefinition = into(index)
+  }
+
   implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, Search] {
     override def apply(client: AlgoliaClient, query: SearchDefinition): Future[Search] = {
       client request[Search] query.build()

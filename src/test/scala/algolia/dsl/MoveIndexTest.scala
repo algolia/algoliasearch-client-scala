@@ -1,6 +1,7 @@
-package algolia
+package algolia.dsl
 
 import algolia.AlgoliaDsl.move
+import algolia.AlgoliaTest
 import algolia.http.{HttpPayload, POST}
 
 class MoveIndexTest extends AlgoliaTest {

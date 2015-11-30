@@ -93,4 +93,32 @@ class IntegrationTest extends AlgoliaTest {
       }
     }
   }
+
+  describe("get by object id") {
+
+    it("should get it") {
+      val obj: Future[Get] = client.execute {
+        get / "toto" / "truc"
+      }
+
+      whenReady(obj) { result =>
+        result should be(
+          Get(
+            JObject(
+              List(
+                ("name", JString("test")),
+                ("age", JInt(1)),
+                ("alien", JBool(true)),
+                ("objectID", JString("truc"))
+              )
+            )
+          )
+        )
+
+        result.objectID should be("truc")
+
+        result.as[Test] should be(Test("test", 1, alien = true))
+      }
+    }
+  }
 }

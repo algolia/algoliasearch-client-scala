@@ -15,6 +15,13 @@ case class ClearIndexDefinition(index: String) extends Definition {
 
 trait ClearIndexDsl {
 
+  case object clear {
+
+    def index(index: String): ClearIndexDefinition = ClearIndexDefinition(index)
+
+  }
+
+
   implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: ClearIndexDefinition): Future[Task] = {
       client request[Task] query.build()

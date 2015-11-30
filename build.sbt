@@ -4,13 +4,21 @@ version := "1.0"
 
 scalaVersion := "2.11.7"
 
-libraryDependencies += "com.ning" % "async-http-client" % "1.9.31"
+val dispatchVersion = "0.11.3"
+val json4sVersion = "3.2.11"
 
-libraryDependencies += "net.databinder.dispatch" %% "dispatch-core" % "0.11.3"
-libraryDependencies += "net.databinder.dispatch" %% "dispatch-json4s-native" % "0.11.2"
+val scalaTestVersion = "2.2.4"
+val scalaMockVersion = "3.2"
+
+libraryDependencies += "net.databinder.dispatch" %% "dispatch-core" % dispatchVersion
+libraryDependencies += "net.databinder.dispatch" %% "dispatch-json4s-native" % dispatchVersion
+
+libraryDependencies += "org.json4s" %% "json4s-ast" % json4sVersion
+libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
+libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
 
 //Testing
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
-libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
+libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
