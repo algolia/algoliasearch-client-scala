@@ -119,8 +119,6 @@ client.execute { search into "contacts" query "california paint" }
 client.execute { search into "contacts" query "jimmie paint" }
 ```
 
-
-
 Settings can be customized to tune the search behavior. For example, you can add a custom sort by number of followers to the already great built-in relevance:
 ```scala
 TODO : index.setSettings(new JSONObject().append("customRanking", "desc(followers)"));
@@ -212,22 +210,42 @@ Each entry in an index has a unique identifier called `objectID`. There are two 
 You don't need to explicitly create an index, it will be automatically created the first time you add an object.
 Objects are schema less so you don't need any configuration to start indexing. If you wish to configure things, the settings section provides details about advanced settings.
 
+You only neeed to create a `case class` describing your JSON Object to start indexing:
+
+```scala
+case class Contact(firstname: String,
+                   lastname: String,
+                   followers: Int,
+                   compagny: String)
+```
+
+These `case class` are serialized using `json4s`.
+
+
 Example with automatic `objectID` assignment:
 
 ```scala
-TODO: JSONObject obj = index.addObject(new JSONObject()
-      .put("firstname", "Jimmie")
-      .put("lastname", "Barninger"));
-System.out.println(obj.getString("objectID"));
+val indexing: Future[Indexing] = client.execute {
+    index into "contacts" document Contact("Jimmie", "Barninger", 93, "California Paint")
+}
+
+indexing onComplete {
+    case Success(indexing) => println(indexing.objectID)
+    case Failure(e) =>  println("An error has occured: " + e.getMessage)
+}
 ```
 
 Example with manual `objectID` assignment:
 
 ```scala
-TODO: JSONObject obj = index.addObject(new JSONObject()
-      .put("firstname", "Jimmie")
-      .put("lastname", "Barninger"), "myID");
-System.out.println(obj.getString("objectID"));
+val indexing: Future[Indexing] = client.execute {
+    index into "contacts" objectId "myID" document Contact("Jimmie", "Barninger", 93, "California Paint")
+}
+
+indexing onComplete {
+    case Success(indexing) => println(indexing.objectID)
+    case Failure(e) =>  println("An error has occured: " + e.getMessage)
+}
 ```
 
 Update an existing object in the Index
@@ -250,20 +268,7 @@ TODO
 Get an object
 -------------
 
-You can easily retrieve an object using its `objectID` and optionally specify a comma separated list of attributes you want:
-
-```scala
-TODO: // Retrieves all attributes
-index.getObject("myID");
-// Retrieves only the firstname attribute
-index.getObject("myID", Arrays.asList("firstname"));
-```
-
-You can also retrieve a set of objects:
-
-```scala
-TODO: index.getObjects(Arrays.asList("myObj1", "myObj2"));
-```
+TODO
 
 Delete an object
 -------------
@@ -287,7 +292,12 @@ List indices
 You can list all your indices along with their associated information (number of entries, disk size, etc.) with the `listIndexes` method:
 
 ```scala
-TODO: client.listIndexes();
+val indexes: Future[Indexes] = client.indexes()
+
+//or
+
+val indexes: Future[Indexes] = client.execute { indexes }
+
 ```
 
 Delete an index
