@@ -343,8 +343,24 @@ TODO
 Copy or rename an index
 -------------
 
-TODO
+You can easily copy or rename an existing index using the `copy` and `move` commands.
+**Note**: Move and copy commands overwrite the destination index.
 
+```scala
+// Rename MyIndex in MyIndexNewName
+client.execute { move index "MyIndex" to "MyIndexNewName" }
+// Copy MyIndex in MyIndexCopy
+client.execute { copy index "MyIndex" to "MyIndexNewName" }
+```
+
+The move command is particularly useful if you want to update a big index atomically from one version to another. For example, if you recreate your index `MyIndex` each night from a database by batch, you only need to:
+ 1. Import your database into a new index using [batches](#batch-writes). Let's call this new index `MyNewIndex`.
+ 1. Rename `MyNewIndex` to `MyIndex` using the move command. This will automatically override the old index and new queries will be served on the new one.
+
+```scala
+// Rename MyNewIndex in MyIndex (and overwrite it)
+client.execute { move index "MyIndex" to "MyIndexNewName" }
+```
 
 Backup / Retrieve of all index content
 -------------
