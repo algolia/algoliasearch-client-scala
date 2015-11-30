@@ -2,7 +2,10 @@ package algolia.definitions
 
 import algolia._
 import algolia.http.HttpPayload
+import algolia.responses.Indexing
 import org.json4s.native.Serialization.write
+
+import scala.concurrent.Future
 
 case class IndexingDefinition(index: String,
                               objectId: Option[String] = None,
@@ -39,4 +42,14 @@ case class IndexingDefinition(index: String,
 
     HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body)
   }
+}
+
+trait IndexingDsl {
+
+  implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, Indexing] {
+    override def apply(client: AlgoliaClient, query: IndexingDefinition): Future[Indexing] = {
+      client request[Indexing] query.build()
+    }
+  }
+
 }

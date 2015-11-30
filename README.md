@@ -301,7 +301,15 @@ val indexes: Future[Indexes] = client.execute { indexes }
 Delete an index
 -------------
 
-TODO
+You can delete an index using its name:
+
+```scala
+client.delete("index")
+
+//or
+
+client.execute { delete index "index" }
+```
 
 Clear an index
 -------------

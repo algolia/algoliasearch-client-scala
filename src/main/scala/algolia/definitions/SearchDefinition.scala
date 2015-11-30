@@ -2,7 +2,10 @@ package algolia.definitions
 
 import algolia._
 import algolia.http.HttpPayload
+import algolia.responses.Search
 import org.json4s.native.Serialization.write
+
+import scala.concurrent.Future
 
 case class SearchDefinition(index: String,
                             query: Option[String] = None,
@@ -27,3 +30,13 @@ case class SearchDefinition(index: String,
   }
 }
 
+
+trait SearchDsl {
+
+  implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, Search] {
+    override def apply(client: AlgoliaClient, query: SearchDefinition): Future[Search] = {
+      client request[Search] query.build()
+    }
+  }
+
+}
