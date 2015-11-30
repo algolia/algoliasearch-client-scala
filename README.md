@@ -311,9 +311,10 @@ You can delete the index contents without removing settings and index specific A
 ```scala
 client.clear("index")
 
+
 //or
 
-client.execute { clear("index") }
+client.execute { clear index "index" }
 ```
 
 Wait indexing

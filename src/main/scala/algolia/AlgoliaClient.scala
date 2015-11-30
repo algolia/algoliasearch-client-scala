@@ -5,7 +5,7 @@ import java.util.concurrent.TimeoutException
 import algolia.AlgoliaDsl._
 import algolia.definitions.SearchDefinition
 import algolia.http.HttpPayload
-import algolia.responses.{Task, Indexes, Search}
+import algolia.responses.{Indexes, Search, Task}
 
 import scala.concurrent.Future
 
@@ -47,7 +47,9 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     AlgoliaDsl.indexes
   }
 
-  def clear(index: String): Future[Task] = execute { AlgoliaDsl clear index }
+  def clear(ind: String): Future[Task] = execute {
+    AlgoliaDsl.clear index ind
+  }
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT]): Future[RESULT] = executable(this, query)
 

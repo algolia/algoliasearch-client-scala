@@ -29,7 +29,11 @@ trait AlgoliaDsl extends SearchDsl with IndexesDsl with IndexDsl with ClearIndex
 
   }
 
-  def clear(index: String): ClearIndexDefinition = ClearIndexDefinition(index)
+  case object clear {
+
+    def index(index: String): ClearIndexDefinition = ClearIndexDefinition(index)
+
+  }
 
   case object get {
 
