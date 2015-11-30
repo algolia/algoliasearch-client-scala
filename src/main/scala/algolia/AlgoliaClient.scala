@@ -51,6 +51,10 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     AlgoliaDsl.clear index ind
   }
 
+  def delete(ind: String): Future[Task] = execute {
+    AlgoliaDsl.delete index ind
+  }
+
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT]): Future[RESULT] = executable(this, query)
 
   /** * HTTP ***/

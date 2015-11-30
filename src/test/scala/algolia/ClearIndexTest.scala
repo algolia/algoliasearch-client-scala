@@ -10,7 +10,7 @@ class ClearIndexTest extends AlgoliaTest {
     it("clears index") {
       clear index "toto"
     }
-    
+
     it("should call API") {
       (clear index "toto").build() should be(HttpPayload(POST, Seq("1", "indexes", "toto", "clear")))
     }
