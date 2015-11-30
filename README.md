@@ -306,7 +306,15 @@ TODO
 Clear an index
 -------------
 
-TODO
+You can delete the index contents without removing settings and index specific API keys by using the clearIndex command:
+
+```scala
+client.clear("index")
+
+//or
+
+client.execute { clear("index") }
+```
 
 Wait indexing
 -------------
