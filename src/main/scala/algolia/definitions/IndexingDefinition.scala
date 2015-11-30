@@ -46,6 +46,15 @@ case class IndexingDefinition(index: String,
 
 trait IndexingDsl {
 
+  case object index {
+
+    def into(index: String): IndexingDefinition = IndexingDefinition(index)
+
+    def in(index: String): IndexingDefinition = into(index)
+
+  }
+
+
   implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, Indexing] {
     override def apply(client: AlgoliaClient, query: IndexingDefinition): Future[Indexing] = {
       client request[Indexing] query.build()

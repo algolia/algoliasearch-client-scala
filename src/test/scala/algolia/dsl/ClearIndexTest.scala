@@ -1,6 +1,7 @@
-package algolia
+package algolia.dsl
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 import algolia.http.{HttpPayload, POST}
 
 class ClearIndexTest extends AlgoliaTest {

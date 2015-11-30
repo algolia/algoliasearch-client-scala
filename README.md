@@ -268,7 +268,42 @@ TODO
 Get an object
 -------------
 
-TODO
+You can easily retrieve an object using its `objectID` and optionally specify a comma separated list of attributes you want:
+
+```scala
+// Retrieves all attributes
+get objectId "myId" from "index"
+
+//or
+
+get from "index" objectId "myId"
+
+//or
+
+get("myId") from "index"
+
+//or
+ 
+get("myId") index "index"
+
+//or
+
+from("index") objectId "test"
+
+//or
+
+from index "index" objectId "myId"
+
+//or
+
+get / "index" / "myId"
+```
+
+You can get the object by:
+```scala
+(get / "index" / "myId").map(_.as[Contact])
+```
+
 
 Delete an object
 -------------
