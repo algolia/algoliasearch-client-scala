@@ -1,33 +1,25 @@
 package algolia
 
 import algolia.definitions._
-import algolia.responses.{Indexing, Indexes, Search}
+import algolia.responses.{Indexes, Indexing, Search, Task}
 
 import scala.concurrent.Future
 
-trait AlgoliaDsl extends SearchDsl with IndexesDsl with IndexDsl {
+trait AlgoliaDsl extends SearchDsl with IndexesDsl with IndexDsl with ClearIndexDsl {
 
   case object search {
 
-    def into(index: Index): SearchDefinition = SearchDefinition(index)
-
-    def into(index: String): SearchDefinition = into(Index(index))
+    def into(index: String): SearchDefinition = SearchDefinition(index)
 
     def in(index: String): SearchDefinition = into(index)
-
-    def in(index: Index): SearchDefinition = into(index)
 
   }
 
   case object index {
 
-    def into(index: Index): IndexingDefinition = IndexingDefinition(index)
-
-    def into(index: String): IndexingDefinition = into(Index(index))
+    def into(index: String): IndexingDefinition = IndexingDefinition(index)
 
     def in(index: String): IndexingDefinition = into(index)
-
-    def in(index: Index): IndexingDefinition = into(index)
 
   }
 
@@ -37,9 +29,7 @@ trait AlgoliaDsl extends SearchDsl with IndexesDsl with IndexDsl {
 
   }
 
-  def clear(index: Index): Unit = ???
-
-  def clear(index: String): Unit = clear(Index(index))
+  def clear(index: String): ClearIndexDefinition = ClearIndexDefinition(index)
 
   case object get {
 
@@ -85,6 +75,16 @@ trait IndexDsl {
   implicit object IndexDefinitionExecutable extends Executable[IndexingDefinition, Indexing] {
     override def apply(client: AlgoliaClient, query: IndexingDefinition): Future[Indexing] = {
       client request[Indexing] query.build()
+    }
+  }
+
+}
+
+trait ClearIndexDsl {
+
+  implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
+    override def apply(client: AlgoliaClient, query: ClearIndexDefinition): Future[Task] = {
+      client request[Task] query.build()
     }
   }
 

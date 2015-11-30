@@ -9,7 +9,7 @@ class QueryTest extends AlgoliaTest {
   describe("query") {
 
     it("should search simple query") {
-      search into Index("index") query "toto"
+      search into "index" query "toto"
     }
 
     it("should search a query with options") {
