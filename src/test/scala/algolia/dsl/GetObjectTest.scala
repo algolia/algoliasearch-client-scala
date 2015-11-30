@@ -28,6 +28,10 @@ class GetObjectTest extends AlgoliaTest {
       from("test") objectId "test"
     }
 
+    it("should get less DSL from get") {
+      from("test") get "test"
+    }
+
     it("should get object alias index") {
       from index "test" objectId "myId"
     }
