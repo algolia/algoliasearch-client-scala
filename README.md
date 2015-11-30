@@ -304,12 +304,18 @@ You can get the object by:
 (get / "index" / "myId").map(_.as[Contact])
 ```
 
-
 Delete an object
 -------------
 
-TODO
+You can delete an object using its `objectID`:
 
+```scala
+client.execute { delete from "toto" objectId "oid" }
+
+//or
+
+client.execute { delete / "toto" / "oid" }
+```
 
 Delete by query
 -------------
@@ -328,7 +334,7 @@ You can list all your indices along with their associated information (number of
 ```scala
 val indexes: Future[Indexes] = client.indexes()
 
-//or
+//or    
 
 val indexes: Future[Indexes] = client.execute { indexes }
 ```

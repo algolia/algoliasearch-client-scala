@@ -5,7 +5,7 @@ import algolia.definitions._
 trait AlgoliaDsl
   extends ClearIndexDsl
   with CopyIndexDsl
-  with DeleteIndexDsl
+  with DeleteDsl
   with GetObjectDsl
   with IndexingDsl
   with ListIndexesDsl

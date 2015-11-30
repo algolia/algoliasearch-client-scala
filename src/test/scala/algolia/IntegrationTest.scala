@@ -10,16 +10,13 @@ class IntegrationTest extends AlgoliaTest {
 
   val client = new AlgoliaClient(applicationId, apiKey)
 
-  describe("indexes") {
+  it("should list indexes") {
+    val indices: Future[Indexes] = client.indexes()
 
-    it("should get a response") {
-      val indices: Future[Indexes] = client.indexes()
-
-      whenReady(indices) { result =>
-        result.nbPages should equal(1)
-        result.items should have size 2
-        result.items.map(_.name) should be(Seq("test", "toto"))
-      }
+    whenReady(indices) { result =>
+      result.nbPages should equal(1)
+      result.items should have size 2
+      result.items.map(_.name) should be(Seq("test", "toto"))
     }
   }
 
@@ -94,7 +91,7 @@ class IntegrationTest extends AlgoliaTest {
     }
   }
 
-  describe("get by object id") {
+  describe("get object by id") {
 
     it("should get it") {
       val obj: Future[Get] = client.execute {

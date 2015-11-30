@@ -21,7 +21,6 @@ trait ClearIndexDsl {
 
   }
 
-
   implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: ClearIndexDefinition): Future[Task] = {
       client request[Task] query.build()

@@ -1,13 +1,15 @@
 package algolia.definitions
 
-import algolia.http.{GET, HttpPayload}
+import algolia.http.HttpPayload
 import algolia.responses.Get
-import algolia.{AlgoliaClient, Executable}
+import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.JsonAST.JObject
 
 import scala.concurrent.Future
 
 case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None) extends Definition {
+
+  def get(objectId: String): GetObjectDefinition = copy(index = index, oid = Some(objectId))
 
   def /(objectId: String): GetObjectDefinition = copy(index = index, oid = Some(objectId))
 
@@ -18,7 +20,7 @@ case class GetObjectDefinition(index: Option[String] = None, oid: Option[String]
   def objectId(objectId: String): GetObjectDefinition = copy(index = index, oid = Some(objectId))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(GET, Seq("1", "indexes") ++ index ++ oid)
+    HttpPayload(http.GET, Seq("1", "indexes") ++ index ++ oid)
 }
 
 trait GetObjectDsl {
