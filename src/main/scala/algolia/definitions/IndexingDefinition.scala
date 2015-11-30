@@ -1,10 +1,10 @@
 package algolia.definitions
 
+import algolia._
 import algolia.http.HttpPayload
-import algolia.{Index, _}
 import org.json4s.native.Serialization.write
 
-case class IndexingDefinition(index: Index,
+case class IndexingDefinition(index: String,
                               objectId: Option[String] = None,
                               obj: Option[AnyRef] = None,
                               objects: Option[Seq[AnyRef]] = None,
@@ -37,6 +37,6 @@ case class IndexingDefinition(index: Index,
       case None => http.POST
     }
 
-    HttpPayload(verb, Seq("1", "indexes", index.name) ++ objectId, body = body)
+    HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body)
   }
 }

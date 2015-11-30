@@ -1,10 +1,10 @@
 package algolia.definitions
 
-import algolia.{Index, _}
+import algolia._
 import algolia.http.HttpPayload
 import org.json4s.native.Serialization.write
 
-case class SearchDefinition(index: Index,
+case class SearchDefinition(index: String,
                             query: Option[String] = None,
                             hitsPerPage: Option[Int] = None) extends Definition {
 
@@ -23,7 +23,7 @@ case class SearchDefinition(index: Index,
 
     val body = Map("params" -> params.mkString("&"))
 
-    HttpPayload(http.GET, Seq("1", "indexes", index.name, "query"), body = Some(write(body)))
+    HttpPayload(http.GET, Seq("1", "indexes", index, "query"), body = Some(write(body)))
   }
 }
 

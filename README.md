@@ -281,7 +281,6 @@ Delete by query
 
 TODO
 
-
 Index Settings
 -------------
 
@@ -297,7 +296,6 @@ val indexes: Future[Indexes] = client.indexes()
 //or
 
 val indexes: Future[Indexes] = client.execute { indexes }
-
 ```
 
 Delete an index
@@ -340,6 +338,3 @@ Logs
 -------------
 
 TODO
-
-
-

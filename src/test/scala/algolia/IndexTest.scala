@@ -1,6 +1,7 @@
 package algolia
 
 import algolia.AlgoliaDsl._
+import algolia.http.{POST, HttpPayload}
 
 class IndexTest extends AlgoliaTest {
 
@@ -12,10 +13,6 @@ class IndexTest extends AlgoliaTest {
 
       it("should index case class") {
         index into "toto" document BasicObject("algolia", 2)
-      }
-
-      it("should index case class with index") {
-        index into Index("toto") document BasicObject("algolia", 2)
       }
 
       it("should index objects") {
@@ -34,12 +31,16 @@ class IndexTest extends AlgoliaTest {
         index into "toto" document("1", BasicObject("algolia", 2))
       }
 
-      it("should index case class with index") {
-        index into Index("toto") objectId "1" document BasicObject("algolia", 2)
-      }
-
       it("should index objects") {
 //        index into "toto" documents Map("1" -> BasicObject("algolia", 2))
+      }
+
+    }
+
+    describe("clear") {
+
+      it("should call API") {
+        clear("toto").build() should be(HttpPayload(POST, Seq("1", "indexes", "toto", "clear")))
       }
 
     }

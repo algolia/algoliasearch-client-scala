@@ -41,7 +41,7 @@ class IntegrationTest extends AlgoliaTest {
 
     before {
       s = client.execute {
-        search into Index("test") query "a"
+        search into "test" query "a"
       }
     }
 
