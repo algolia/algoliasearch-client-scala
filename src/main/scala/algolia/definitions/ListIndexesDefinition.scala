@@ -7,16 +7,16 @@ import algolia.{AlgoliaClient, Executable}
 import scala.concurrent.Future
 
 
-class IndexesDefinition extends Definition {
+class ListIndexesDefinition extends Definition {
 
   override private[algolia] def build() = HttpPayload(GET, Seq("1", "indexes"))
 
 }
 
-trait IndexesDsl {
+trait ListIndexesDsl {
 
-  implicit object IndexesDefinitionExecutable extends Executable[IndexesDefinition, Indexes] {
-    override def apply(client: AlgoliaClient, query: IndexesDefinition): Future[Indexes] = {
+  implicit object IndexesDefinitionExecutable extends Executable[ListIndexesDefinition, Indexes] {
+    override def apply(client: AlgoliaClient, query: ListIndexesDefinition): Future[Indexes] = {
       client request[Indexes] query.build()
     }
   }

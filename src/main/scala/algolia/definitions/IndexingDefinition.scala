@@ -23,11 +23,11 @@ case class IndexingDefinition(index: String,
   def document(obj: AnyRef): IndexingDefinition =
     copy(index, objectId = objectId, obj = Some(obj))
 
-  def documents(objects: Seq[AnyRef]): IndexingDefinition = ???
+//  def documents(objects: Seq[AnyRef]): IndexingDefinition = ???
 
   //    copy(index, objects = Some(objects))
 
-  def documents(objectsWithIds: Map[String, AnyRef]): IndexingDefinition = ???
+//  def documents(objectsWithIds: Map[String, AnyRef]): IndexingDefinition = ???
 
   //    copy(index, objectsWithIds = Some(objectsWithIds))
 

@@ -3,11 +3,13 @@ package algolia
 import algolia.definitions._
 
 trait AlgoliaDsl
-  extends SearchDsl
-  with IndexesDsl
+  extends ClearIndexDsl
+  with CopyIndexDsl
+  with DeleteIndexDsl
   with IndexingDsl
-  with ClearIndexDsl
-  with DeleteIndexDsl {
+  with ListIndexesDsl
+  with MoveIndexDsl
+  with SearchDsl {
 
   case object search {
 
@@ -25,7 +27,7 @@ trait AlgoliaDsl
 
   }
 
-  def indexes = new IndexesDefinition
+  def indexes = new ListIndexesDefinition
 
   case object delete {
 
@@ -39,21 +41,32 @@ trait AlgoliaDsl
 
   }
 
-  case object get {
+  case object move {
 
-    def objectId(id: String) = ???
+    def index(index: String): MoveIndexDefinition = MoveIndexDefinition(index)
 
   }
 
-  def get(id: String) = ???
+  case object copy {
 
-  def get(ids: Seq[String]) = ???
+    def index(index: String): CopyIndexDefinition = CopyIndexDefinition(index)
 
-  def /(id: String) = get(id)
+  }
 
-  def /(ids: Seq[String]) = get(ids)
-
-
+//  case object get {
+//
+//    def objectId(id: String) = ???
+//
+//  }
+//
+//  def get(id: String) = ???
+//
+//  def get(ids: Seq[String]) = ???
+//
+//  def /(id: String) = get(id)
+//
+//  def /(ids: Seq[String]) = get(ids)
+//
 }
 
 object AlgoliaDsl extends AlgoliaDsl

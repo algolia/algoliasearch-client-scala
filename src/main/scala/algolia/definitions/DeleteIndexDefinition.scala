@@ -8,7 +8,8 @@ import scala.concurrent.Future
 
 case class DeleteIndexDefinition(index: String) extends Definition {
 
-  override private[algolia] def build(): HttpPayload = HttpPayload(DELETE, Seq("1", "indexes", index))
+  override private[algolia] def build(): HttpPayload =
+    HttpPayload(DELETE, Seq("1", "indexes", index))
 
 }
 
