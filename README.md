@@ -7,7 +7,7 @@
 ## Prerequisite
 
 * Java 8
-* scala 2.10 or 2.11
+* scala 2.11
 * sbt 
 
 ## Build
@@ -16,11 +16,8 @@
     
 ## Tests
 
-In sbt REPL
+    sbt ~test
     
-    ~test
-    
-
 # Algolia Search API Client for Scala
 
 [Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
@@ -37,6 +34,7 @@ Table of Contents
 
 1. [Setup](#setup)
 1. [Quick Start](#quick-start)
+1. [Philosophy of the scala client](#philosophy)
 1. [Online documentation](#documentation)
 1. [Tutorials](#tutorials)
 
@@ -79,7 +77,6 @@ Initialize the client with your Application ID and API Key. You can find them on
 ```scala
 val client = new APIClient("YourApplicationID", "YourAPIKey");
 ```
-
 
 Quick Start
 -------------
@@ -172,6 +169,86 @@ function searchCallback(err, content) {
 </script>
 ```
 
+Philosophy
+==========
+
+DSL
+---
+
+The main goal of this client is to provide a human _accessible_ and _readable_ DSL for using Algolia search.
+
+The entry point of the DSL is the [`algolia.AlgoliaDSL` object](src/main/scala/algolia/AlgoliaDsl).
+This DSL is used in the `execute` method of [`algolia.AlgoliaClient`](src/main/scala/algolia/AlgoliaClient).
+
+As we want to provide human readable DSL, there is more than one way to use this DSL. For example, to get an object by its `objectID`:
+```scala
+client.execute { from index "index" objectId "myId" }
+
+//or
+
+client.execute { get / "index" / "myId" }
+```
+
+Future
+------
+
+The `execute` method always return a [`scala.concurrent.Future`](http://www.scala-lang.org/api/2.11.7/#scala.concurrent.Future). 
+Depending of the operation it will be parametrized by a `case class`. For example:
+```scala
+var future: Future[Search] = 
+    client.execute {
+        search into "index" query "a"
+    }
+```
+
+JSON as case class
+------------------
+Putting or getting objects from the API is wrapped into `case class` automatically by [json4s](http://json4s.org).
+
+If you want to get objects just search for it and unwrap the result:
+```scala
+case class Contact(firstname: String,
+                   lastname: String,
+                   followers: Int,
+                   compagny: String)
+
+var future: Future[Seq[Contact]] = 
+    client
+        .execute {
+            search into "index" query "a"
+        }
+        .map { search =>
+            search.as[Contact]
+        }
+```
+
+If you want to get the full results (with `_highlightResult`, etc.):
+```scala
+case class EnhanceContact(firstname: String,
+                          lastname: String,
+                          followers: Int,
+                          compagny: String,
+                          objectID: String,
+                          _highlightResult: Option[Map[String, HighlightResult]
+                          _snippetResult: Option[Map[String, SnippetResult]],
+                          _rankingInfo: Option[RankingInfo]) extends Hit
+
+var future: Future[Seq[EnhanceContact]] = 
+    client
+        .execute {
+            search into "index" query "a"
+        }
+        .map { search =>
+            search.asHit[EnhanceContact]
+        }
+```
+
+For indexing documents, just pass an instance of your `case class` to the DSL:
+```scala
+client.execute {
+    index into "contacts" document Contact("Jimmie", "Barninger", 93, "California Paint")
+}
+```
 
 Documentation
 ================
