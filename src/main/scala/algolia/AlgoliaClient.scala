@@ -57,11 +57,11 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT]): Future[RESULT] = executable(this, query)
 
-  /** * HTTP ***/
   private[algolia] def request[T: Manifest](payload: HttpPayload): Future[T] = {
     import scala.concurrent.ExecutionContext.Implicits.global
     queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
       future.recoverWith {
+        case e: `4XX` => Future.failed(e) //No retry if 4XX
         case _ => httpClient request[T](host, headers, payload)
       }
     }
