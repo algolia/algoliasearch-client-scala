@@ -22,3 +22,5 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
+
+//http://www.scala-sbt.org/0.13/docs/Using-Sonatype.html
