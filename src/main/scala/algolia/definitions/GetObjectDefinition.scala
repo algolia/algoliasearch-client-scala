@@ -5,7 +5,7 @@ import algolia.responses.Get
 import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.JsonAST.JObject
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None) extends Definition {
 
@@ -49,7 +49,7 @@ trait GetObjectDsl {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    override def apply(client: AlgoliaClient, query: GetObjectDefinition): Future[Get] = {
+    override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[Get] = {
       (client request[JObject] query.build()).map(Get(_))
     }
   }

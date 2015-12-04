@@ -6,7 +6,7 @@ import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.native.Serialization._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class MoveIndexDefinition(source: String, destination: Option[String] = None) extends Definition {
 
@@ -30,7 +30,7 @@ trait MoveIndexDsl {
   }
 
   implicit object MoveIndexDefinitionExecutable extends Executable[MoveIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: MoveIndexDefinition): Future[Task] = {
+    override def apply(client: AlgoliaClient, query: MoveIndexDefinition)(implicit executor: ExecutionContext): Future[Task] = {
       client request[Task] query.build()
     }
   }
