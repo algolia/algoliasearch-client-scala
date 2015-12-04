@@ -7,7 +7,7 @@ import algolia.definitions.SearchDefinition
 import algolia.http.HttpPayload
 import algolia.responses.{Indexes, Search, Task}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClient(applicationId: String, apiKey: String) {
 
@@ -41,27 +41,26 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   val httpClient: DispatchHttpClient = DispatchHttpClient
 
-  def search(query: SearchDefinition): Future[Search] = request[Search](query.build())
+  def search(query: SearchDefinition)(implicit executor: ExecutionContext): Future[Search] = request[Search](query.build())
 
-  def indexes(): Future[Indexes] = execute {
+  def indexes()(implicit executor: ExecutionContext): Future[Indexes] = execute {
     AlgoliaDsl.indexes
   }
 
-  def clear(ind: String): Future[Task] = execute {
+  def clear(ind: String)(implicit executor: ExecutionContext): Future[Task] = execute {
     AlgoliaDsl.clear index ind
   }
 
-  def delete(ind: String): Future[Task] = execute {
+  def delete(ind: String)(implicit executor: ExecutionContext): Future[Task] = execute {
     AlgoliaDsl.delete index ind
   }
 
-  def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT]): Future[RESULT] = executable(this, query)
+  def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
 
-  private[algolia] def request[T: Manifest](payload: HttpPayload): Future[T] = {
-    import scala.concurrent.ExecutionContext.Implicits.global
+  private[algolia] def request[T: Manifest](payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
       future.recoverWith {
-        case e: `4XX` => Future.failed(e) //No retry if 4XX
+        case e: APIClientException => Future.failed(e) //No retry if 4XX
         case _ => httpClient request[T](host, headers, payload)
       }
     }
