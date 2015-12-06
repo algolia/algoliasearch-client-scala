@@ -4,7 +4,7 @@ import algolia.http.{GET, HttpPayload}
 import algolia.responses.Indexes
 import algolia.{AlgoliaClient, Executable}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 case class ListIndexesDefinition() extends Definition {
@@ -18,7 +18,7 @@ trait ListIndexesDsl {
   def indexes = ListIndexesDefinition()
 
   implicit object ListIndexesDefinitionExecutable extends Executable[ListIndexesDefinition, Indexes] {
-    override def apply(client: AlgoliaClient, query: ListIndexesDefinition): Future[Indexes] = {
+    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(implicit executor: ExecutionContext): Future[Indexes] = {
       client request[Indexes] query.build()
     }
   }

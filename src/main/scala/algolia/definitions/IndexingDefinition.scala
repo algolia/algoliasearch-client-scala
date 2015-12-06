@@ -5,7 +5,7 @@ import algolia.http.HttpPayload
 import algolia.responses.Indexing
 import org.json4s.native.Serialization.write
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class IndexingDefinition(index: String,
                               objectId: Option[String] = None,
@@ -56,7 +56,7 @@ trait IndexingDsl {
 
 
   implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, Indexing] {
-    override def apply(client: AlgoliaClient, query: IndexingDefinition): Future[Indexing] = {
+    override def apply(client: AlgoliaClient, query: IndexingDefinition)(implicit executor: ExecutionContext): Future[Indexing] = {
       client request[Indexing] query.build()
     }
   }

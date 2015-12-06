@@ -4,7 +4,7 @@ import algolia.http.{HttpPayload, POST}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class ClearIndexDefinition(index: String) extends Definition {
 
@@ -22,7 +22,7 @@ trait ClearIndexDsl {
   }
 
   implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition): Future[Task] = {
+    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(implicit executor: ExecutionContext): Future[Task] = {
       client request[Task] query.build()
     }
   }
