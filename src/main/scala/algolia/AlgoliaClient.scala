@@ -15,16 +15,15 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
   final private val ALGOLIANET_HOST = "algolia.net"
 
   val httpClient: DispatchHttpClient = DispatchHttpClient
-  val random: Random = Random
+  val random: AlgoliaRandom = AlgoliaRandom
 
-  val indexingHosts: Seq[String] = random.shuffle(Seq(
+  lazy val indexingHosts: Seq[String] = random.shuffle(Seq(
     s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
   )) :+ s"https://$applicationId.$ALGOLIANET_HOST"
 
-
-  val queryHosts: Seq[String] = random.shuffle(Seq(
+  lazy val queryHosts: Seq[String] = random.shuffle(Seq(
     s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
@@ -40,7 +39,6 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     "Content-type" -> "application/json",
     "Accept" -> "application/json"
   )
-
 
   def search(query: SearchDefinition): Future[Search] = request[Search](query.build())
 
