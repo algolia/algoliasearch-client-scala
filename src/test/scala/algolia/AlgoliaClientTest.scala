@@ -9,9 +9,15 @@ import scala.reflect._
 
 class AlgoliaClientTest extends AlgoliaTest {
 
+  object NotSoRandom extends Random {
+    override def shuffle(seq: Seq[String]) = seq
+  }
+
   describe("init") {
 
-    val apiClient = new AlgoliaClient("APPID", "APIKEY")
+    val apiClient = new AlgoliaClient("APPID", "APIKEY") {
+      override val random = NotSoRandom
+    }
 
     it("should set user agent") {
       //For 2.11 AND 2.10
@@ -48,6 +54,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     val apiClient = new AlgoliaClient("a", "b") {
       override val httpClient = mockHttpClient
       override val headers = emptyHeaders
+      override val random = NotSoRandom
     }
 
     val successfulRequest1: Result = Result("1")

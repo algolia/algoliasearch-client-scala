@@ -23,14 +23,6 @@ case class IndexingDefinition(index: String,
   def document(obj: AnyRef): IndexingDefinition =
     copy(index, objectId = objectId, obj = Some(obj))
 
-//  def documents(objects: Seq[AnyRef]): IndexingDefinition = ???
-
-  //    copy(index, objects = Some(objects))
-
-//  def documents(objectsWithIds: Map[String, AnyRef]): IndexingDefinition = ???
-
-  //    copy(index, objectsWithIds = Some(objectsWithIds))
-
   implicit val formats = org.json4s.DefaultFormats
 
   override private[algolia] def build(): HttpPayload = {
