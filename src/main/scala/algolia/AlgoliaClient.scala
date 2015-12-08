@@ -14,19 +14,21 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
   final private val ALGOLIANET_HOST = "algolia.net"
 
-  val indexingHosts: Stream[String] = Stream(
-    s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-3.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId.$ALGOLIANET_HOST"
-  )
+  val httpClient: DispatchHttpClient = DispatchHttpClient
+  val random: Random = Random
 
-  val queryHosts: Seq[String] = Seq(
+  val indexingHosts: Seq[String] = random.shuffle(Seq(
     s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-3.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-dsn.$ALGOLIANET_HOST"
-  )
+    s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+  )) :+ s"https://$applicationId.$ALGOLIANET_HOST"
+
+
+  val queryHosts: Seq[String] = random.shuffle(Seq(
+    s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+    s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+    s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+  )) :+ s"https://$applicationId-dsn.$ALGOLIANET_HOST"
 
   val userAgent = s"Algolia Scala ${util.Properties.versionNumberString}"
 
@@ -39,7 +41,6 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     "Accept" -> "application/json"
   )
 
-  val httpClient: DispatchHttpClient = DispatchHttpClient
 
   def search(query: SearchDefinition): Future[Search] = request[Search](query.build())
 

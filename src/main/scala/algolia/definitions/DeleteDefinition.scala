@@ -34,7 +34,6 @@ trait DeleteDsl {
     //Index
     def index(index: String): DeleteIndexDefinition = DeleteIndexDefinition(index)
 
-
     //Object
     def /(index: String) = from(index)
 
