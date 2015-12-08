@@ -4,7 +4,7 @@ import algolia.http.HttpPayload
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable, _}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[String] = None) extends Definition {
 
@@ -46,13 +46,13 @@ trait DeleteDsl {
   }
 
   implicit object DeleteObjectDefinitionExecutable extends Executable[DeleteObjectDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: DeleteObjectDefinition): Future[Task] = {
+    override def apply(client: AlgoliaClient, query: DeleteObjectDefinition)(implicit executor: ExecutionContext): Future[Task] = {
       client request[Task] query.build()
     }
   }
 
   implicit object DeleteIndexDefinitionExecutable extends Executable[DeleteIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: DeleteIndexDefinition): Future[Task] = {
+    override def apply(client: AlgoliaClient, query: DeleteIndexDefinition)(implicit executor: ExecutionContext): Future[Task] = {
       client request[Task] query.build()
     }
   }
