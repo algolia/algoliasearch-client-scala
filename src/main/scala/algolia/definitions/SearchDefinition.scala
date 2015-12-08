@@ -5,7 +5,7 @@ import algolia.http.HttpPayload
 import algolia.responses.Search
 import org.json4s.native.Serialization.write
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class SearchDefinition(index: String,
                             query: Option[String] = None,
@@ -13,9 +13,9 @@ case class SearchDefinition(index: String,
 
   def into(index: String): SearchDefinition = this
 
-  def hitsPerPage(h: Int): SearchDefinition = copy(index, hitsPerPage = Some(h), query = query)
+  def hitsPerPage(h: Int): SearchDefinition = copy(hitsPerPage = Some(h))
 
-  def query(q: String): SearchDefinition = copy(index, query = Some(q), hitsPerPage = hitsPerPage)
+  def query(q: String): SearchDefinition = copy(query = Some(q))
 
   implicit val formats = org.json4s.DefaultFormats
 
@@ -41,7 +41,7 @@ trait SearchDsl {
   }
 
   implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, Search] {
-    override def apply(client: AlgoliaClient, query: SearchDefinition): Future[Search] = {
+    override def apply(client: AlgoliaClient, query: SearchDefinition)(implicit executor: ExecutionContext): Future[Search] = {
       client request[Search] query.build()
     }
   }

@@ -6,12 +6,12 @@ import dispatch._
 import dispatch.as.json4s._
 import org.json4s._
 
+import scala.concurrent.ExecutionContext
+
 private[algolia] trait DispatchHttpClient {
   implicit val formats = DefaultFormats
 
-  import scala.concurrent.ExecutionContext.Implicits.global
-
-  def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload): Future[T] = {
+  def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     val path = payload.path.foldLeft(url(host).secure) {
       (url, p) => url / p
     }
@@ -23,18 +23,13 @@ private[algolia] trait DispatchHttpClient {
       case DELETE => path.DELETE
     }) <:< headers
 
-    if (payload.queryParameters.isDefined) {
-      request = request <<? payload.queryParameters.get
-    }
-
-    if (payload.body.isDefined) {
-      request = request << payload.body.get
-    }
+    request = payload.queryParameters.map(request <<? _).getOrElse(request)
+    request = payload.body.map(request << _).getOrElse(request)
 
     val responseManager: Response => T = { response =>
       response.getStatusCode / 100 match {
         case 2 => Json(response).extract[T]
-        case 4 => throw `4XX`(response.getStatusCode, (Json(response) \ "message").extract[String])
+        case 4 => throw APIClientException(response.getStatusCode, (Json(response) \ "message").extract[String])
         case _ => throw UnexpectedResponse(response.getStatusCode)
       }
     }
@@ -44,7 +39,7 @@ private[algolia] trait DispatchHttpClient {
 
 }
 
-case class `4XX`(code: Int, message: String) extends Exception("Failure \"%s\", response status: %d".format(message, code))
+case class APIClientException(code: Int, message: String) extends Exception("Failure \"%s\", response status: %d".format(message, code))
 
 case class UnexpectedResponse(code: Int) extends Exception("Unexpected response status: %d".format(code))
 

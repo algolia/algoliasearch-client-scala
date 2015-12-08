@@ -6,7 +6,7 @@ import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.native.Serialization._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 case class CopyIndexDefinition(source: String, destination: Option[String] = None) extends Definition {
   def to(destination: String) = copy(source, Some(destination))
@@ -29,7 +29,7 @@ trait CopyIndexDsl {
   }
 
   implicit object CopyIndexDefinitionExecutable extends Executable[CopyIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: CopyIndexDefinition): Future[Task] = {
+    override def apply(client: AlgoliaClient, query: CopyIndexDefinition)(implicit executor: ExecutionContext): Future[Task] = {
       client request[Task] query.build()
     }
   }
