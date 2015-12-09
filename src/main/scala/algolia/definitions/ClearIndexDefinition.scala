@@ -9,7 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class ClearIndexDefinition(index: String) extends Definition {
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(POST, Seq("1", "indexes", index, "clear"))
+    HttpPayload(POST, Seq("1", "indexes", index, "clear"), isSearch = false)
 
 }
 
