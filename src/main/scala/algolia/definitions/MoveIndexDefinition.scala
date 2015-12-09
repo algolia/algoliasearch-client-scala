@@ -17,7 +17,12 @@ case class MoveIndexDefinition(source: String, destination: Option[String] = Non
   override private[algolia] def build(): HttpPayload = {
     val operation = IndexOperation("move", destination)
 
-    HttpPayload(POST, Seq("1", "indexes", source, "operation"), body = Some(write(operation)))
+    HttpPayload(
+      POST,
+      Seq("1", "indexes", source, "operation"),
+      body = Some(write(operation)),
+      isSearch = false
+    )
   }
 }
 

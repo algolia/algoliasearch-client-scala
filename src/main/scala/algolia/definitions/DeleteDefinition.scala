@@ -17,13 +17,13 @@ case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[Stri
   def objectId(objectId: String): DeleteObjectDefinition = copy(index = index, oid = Some(objectId))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE, Seq("1", "indexes") ++ index ++ oid)
+    HttpPayload(http.DELETE, Seq("1", "indexes") ++ index ++ oid, isSearch = false)
 }
 
 case class DeleteIndexDefinition(index: String) extends Definition {
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE, Seq("1", "indexes", index))
+    HttpPayload(http.DELETE, Seq("1", "indexes", index), isSearch = false)
 
 }
 
