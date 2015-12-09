@@ -47,8 +47,6 @@ trait GetObjectDsl {
 
   implicit object GetObjectDefinitionExecutable extends Executable[GetObjectDefinition, Get] {
 
-    import scala.concurrent.ExecutionContext.Implicits.global
-
     override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[Get] = {
       (client request[JObject] query.build()).map(Get(_))
     }
