@@ -14,4 +14,5 @@ private[algolia] case object DELETE extends HttpVerb
 private[algolia] case class HttpPayload(verb: HttpVerb,
                                         path: Seq[String],
                                         queryParameters: Option[Map[String, String]] = None,
-                                        body: Option[String] = None)
+                                        body: Option[String] = None,
+                                        isSearch: Boolean = true)

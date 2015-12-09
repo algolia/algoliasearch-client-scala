@@ -57,7 +57,9 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
 
   private[algolia] def request[T: Manifest](payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
-    queryHosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
+    val hosts = if (payload.isSearch) queryHosts else indexingHosts
+
+    hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
       future.recoverWith {
         case e: APIClientException => Future.failed(e) //No retry if 4XX
         case _ => httpClient request[T](host, headers, payload)
@@ -65,6 +67,3 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     }
   }
 }
-
-
-
