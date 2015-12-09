@@ -3,21 +3,20 @@ package algolia.definitions
 import algolia._
 import algolia.http.HttpPayload
 import algolia.responses.Search
+import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class SearchDefinition(index: String,
                             query: Option[String] = None,
-                            hitsPerPage: Option[Int] = None) extends Definition {
+                            hitsPerPage: Option[Int] = None)(implicit val formats: Formats) extends Definition {
 
   def into(index: String): SearchDefinition = this
 
   def hitsPerPage(h: Int): SearchDefinition = copy(hitsPerPage = Some(h))
 
   def query(q: String): SearchDefinition = copy(query = Some(q))
-
-  implicit val formats = org.json4s.DefaultFormats
 
   override private[algolia] def build(): HttpPayload = {
     val params = Seq() ++
@@ -32,6 +31,8 @@ case class SearchDefinition(index: String,
 
 
 trait SearchDsl {
+
+  implicit val formats: Formats
 
   case object search {
 
