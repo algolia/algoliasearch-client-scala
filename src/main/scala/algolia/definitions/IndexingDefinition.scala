@@ -32,7 +32,7 @@ case class IndexingDefinition(index: String,
       case None => http.POST
     }
 
-    HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body)
+    HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body, isSearch = false)
   }
 }
 
