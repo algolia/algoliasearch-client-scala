@@ -13,7 +13,13 @@ class DeleteIndexTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (delete index "toto").build() should be(HttpPayload(DELETE, Seq("1", "indexes", "toto"), isSearch = false))
+      (delete index "toto").build() should be(
+        HttpPayload(
+          DELETE,
+          Seq("1", "indexes", "toto"),
+          isSearch = false
+        )
+      )
     }
   }
 
