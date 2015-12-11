@@ -31,6 +31,7 @@ libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaM
 
 
 /** Publishing to Sonatype **/
+//http://www.scala-sbt.org/0.13/docs/Using-Sonatype.html
 
 publishMavenStyle := true
 
@@ -38,8 +39,7 @@ publishArtifact in Test := false
 
 pomIncludeRepository := { _ => false }
 
-pomExtra := (
-  <name>Algolia Search Client</name>
+pomExtra := (<name>Algolia Search Client</name>
   <description>Scala client for Algolia Search API</description>
   <url>https://github.com/algolia/algoliasearch-client-scala</url>
   <licenses>
@@ -62,8 +62,7 @@ pomExtra := (
       <email>contact@algolia.com</email>
       <url>https://github.com/algolia/algoliasearch-client-scala</url>
     </developer>
-  </developers>
-)
+  </developers>)
 
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
