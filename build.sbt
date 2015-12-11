@@ -1,6 +1,8 @@
-name := "algolia-client-scala"
+organization := "com.algolia"
 
-version := "1.0"
+name := "scala-client"
+
+version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
@@ -27,5 +29,46 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
 
+
+/** Publishing to Sonatype **/
 //http://www.scala-sbt.org/0.13/docs/Using-Sonatype.html
+
+publishMavenStyle := true
+
+publishArtifact in Test := false
+
+pomIncludeRepository := { _ => false }
+
+pomExtra := (<name>Algolia Search Client</name>
+  <description>Scala client for Algolia Search API</description>
+  <url>https://github.com/algolia/algoliasearch-client-scala</url>
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git@github.com:algolia/algoliasearch-client-scala.git</connection>
+    <url>scm:git:git@github.com:algolia/algoliasearch-client-scala.git</url>
+    <developerConnection>scm:git:git@github.com:algolia/algoliasearch-client-scala.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <developers>
+    <developer>
+      <id>algolia</id>
+      <name>Algolia SAS</name>
+      <email>contact@algolia.com</email>
+      <url>https://github.com/algolia/algoliasearch-client-scala</url>
+    </developer>
+  </developers>)
+
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (version.value.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
 
