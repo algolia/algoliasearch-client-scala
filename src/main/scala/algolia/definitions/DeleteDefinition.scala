@@ -3,18 +3,24 @@ package algolia.definitions
 import algolia.http.HttpPayload
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable, _}
+import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[String] = None) extends Definition {
+case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[String] = None)(implicit val formats: Formats) extends Definition {
 
-  def /(objectId: String): DeleteObjectDefinition = copy(index = index, oid = Some(objectId))
+  def /(objectId: String): DeleteObjectDefinition = copy(oid = Some(objectId))
 
-  def from(ind: String): DeleteObjectDefinition = copy(index = Some(ind), oid = oid)
+  def from(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
 
-  def index(ind: String): DeleteObjectDefinition = copy(index = Some(ind), oid = oid)
+  def index(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
 
-  def objectId(objectId: String): DeleteObjectDefinition = copy(index = index, oid = Some(objectId))
+  def objectId(objectId: String): DeleteObjectDefinition = copy(oid = Some(objectId))
+
+  def objectIds(objectIds: Seq[String]): BatchDefinition =
+    BatchDefinition(objectIds.map { oid =>
+      DeleteObjectDefinition(index, Some(oid))
+    })
 
   override private[algolia] def build(): HttpPayload =
     HttpPayload(http.DELETE, Seq("1", "indexes") ++ index ++ oid, isSearch = false)
@@ -28,6 +34,8 @@ case class DeleteIndexDefinition(index: String) extends Definition {
 }
 
 trait DeleteDsl {
+
+  implicit val formats: Formats
 
   case object delete {
 

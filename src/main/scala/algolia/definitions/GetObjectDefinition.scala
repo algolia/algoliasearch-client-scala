@@ -9,15 +9,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None) extends Definition {
 
-  def get(objectId: String): GetObjectDefinition = copy(index = index, oid = Some(objectId))
+  def get(objectId: String): GetObjectDefinition = copy(oid = Some(objectId))
 
-  def /(objectId: String): GetObjectDefinition = copy(index = index, oid = Some(objectId))
+  def /(objectId: String): GetObjectDefinition = copy(oid = Some(objectId))
 
-  def from(ind: String): GetObjectDefinition = copy(index = Some(ind), oid = oid)
+  def from(ind: String): GetObjectDefinition = copy(index = Some(ind))
 
-  def index(ind: String): GetObjectDefinition = copy(index = Some(ind), oid = oid)
+  def index(ind: String): GetObjectDefinition = copy(index = Some(ind))
 
-  def objectId(objectId: String): GetObjectDefinition = copy(index = index, oid = Some(objectId))
+  def objectId(objectId: String): GetObjectDefinition = copy(oid = Some(objectId))
 
   override private[algolia] def build(): HttpPayload =
     HttpPayload(http.GET, Seq("1", "indexes") ++ index ++ oid)
