@@ -26,7 +26,7 @@ case class BatchDefinition(definitions: Iterable[Definition])(implicit val forma
         ClearIndexOperation(index)
 
       case DeleteObjectDefinition(Some(index), Some(oid)) =>
-        DeleteObjectOperation(index, ObjectId(oid))
+        DeleteObjectOperation(index, oid)
 
 //      case IndexingBatchDefinition(index, defs) =>
 //        defs.map {

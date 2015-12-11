@@ -128,11 +128,11 @@ class BatchTest extends AlgoliaTest {
             |   "requests":[
             |     {
             |       "indexName":"test1",
-            |       "body":{"objectID":"1"},
+            |       "objectID":"1",
             |       "action":"deleteObject"
             |     },{
             |       "indexName":"test2",
-            |       "body":{"objectID":"2"},
+            |       "objectID":"2",
             |       "action":"deleteObject"
             |     }
             |   ]

@@ -21,10 +21,8 @@ case class UpdateObjectOperation[T <: AnyRef](body: T,
 
 //case class PartialUpdateObjectNoCreateOperation[T <: AnyRef](body: T, override val indexName: Option[String] = None, action: String = "partialUpdateObjectNoCreate") extends BatchOperation[T]
 
-case class ObjectId(objectID: String)
-
 case class DeleteObjectOperation[T <: AnyRef](indexName: String,
-                                              body: ObjectId,
+                                              objectID: String,
                                               action: String = "deleteObject") extends BatchOperation[T]
 
 case class ClearIndexOperation[T <: AnyRef](indexName: String,
