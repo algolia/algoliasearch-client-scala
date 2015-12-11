@@ -11,6 +11,6 @@ trait AlgoliaTest extends FunSpec with BeforeAndAfter with Matchers with MockFac
   val apiKey = "96af8d98d8896d80754ec3cd8f68c356" //System.getenv("ALGOLIA_API_KEY")
 
   implicit val defaultPatience =
-    PatienceConfig(timeout = Span(2, Seconds), interval = Span(15, Millis))
+    PatienceConfig(timeout = Span(5, Seconds), interval = Span(500, Millis))
 
 }
