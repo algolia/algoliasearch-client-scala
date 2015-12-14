@@ -44,7 +44,9 @@ case class Search(hits: Seq[JObject],
 
 }
 
-trait Hit extends ObjectID {
+trait Hit {
+
+  val objectID: String
 
   val _highlightResult: Option[Map[String, HighlightResult]]
 

@@ -25,7 +25,7 @@ package algolia.definitions
 
 import algolia._
 import algolia.http.HttpPayload
-import algolia.responses.Indexing
+import algolia.responses.TaskIndexing
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
@@ -75,9 +75,9 @@ trait IndexingDsl {
 
   }
 
-  implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, Indexing] {
-    override def apply(client: AlgoliaClient, query: IndexingDefinition)(implicit executor: ExecutionContext): Future[Indexing] = {
-      client request[Indexing] query.build()
+  implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, TaskIndexing] {
+    override def apply(client: AlgoliaClient, query: IndexingDefinition)(implicit executor: ExecutionContext): Future[TaskIndexing] = {
+      client request[TaskIndexing] query.build()
     }
   }
 
