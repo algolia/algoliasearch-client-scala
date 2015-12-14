@@ -65,7 +65,7 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   def search(query: SearchDefinition)(implicit executor: ExecutionContext): Future[Search] = request[Search](query.build())
 
-  def indexes()(implicit executor: ExecutionContext): Future[Indexes] = execute {
+  def indices()(implicit executor: ExecutionContext): Future[Indexes] = execute {
     AlgoliaDsl.indexes
   }
 
