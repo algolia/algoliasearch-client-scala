@@ -129,6 +129,17 @@ class IndicesIntegrationTest extends AlgoliaTest {
   }
 
   it("should copy index") {
+    val del = client.execute {
+      clear index "indexToCopy_before"
+    }
+
+    whenReady(del) { result =>
+      result.taskID should not be 0
+    }
+
+    //TODO remove when waitFor is implemented
+    Thread.sleep(2000)
+
     val create: Future[TaskIndexing] = client.execute {
       index into "indexToCopy_before" document Obj("1")
     }
@@ -140,11 +151,11 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val del = client.execute {
+    val copying = client.execute {
       copy index "indexToCopy_before" to "indexToCopy_after"
     }
 
-    whenReady(del) { result =>
+    whenReady(copying) { result =>
       result.taskID should not be 0
     }
 
