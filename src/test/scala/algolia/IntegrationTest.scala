@@ -142,4 +142,24 @@ class IntegrationTest extends AlgoliaTest {
       }
     }
   }
+
+  describe("batches") {
+
+    it("should insert in batch") {
+      val docs = Map(
+        "1" -> Test("1", 1, alien = false),
+        "2" -> Test("2", 2, alien = false),
+        "3" -> Test("3", 3, alien = false)
+      )
+
+      val result: Future[TasksSingleIndex] = client.execute {
+        index into "toto" documents docs
+      }
+
+      whenReady(result) { result =>
+        result.objectIDs should equal(Seq("1", "2", "3"))
+      }
+    }
+
+  }
 }

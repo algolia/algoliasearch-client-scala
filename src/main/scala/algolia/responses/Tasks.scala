@@ -23,18 +23,6 @@
 
 package algolia.responses
 
-trait TasksSingleIndex {
+case class TasksSingleIndex(taskID: Int, objectIDs: Seq[String])
 
-  def taskID: Int
-
-  def objectIDs: Seq[String]
-
-}
-
-trait TasksMultipleIndex {
-
-  def taskID: Map[String, Int]
-
-  def objectIDs: Seq[String]
-
-}
+case class TasksMultipleIndex(taskID: Map[String, Int], objectIDs: Seq[String])
