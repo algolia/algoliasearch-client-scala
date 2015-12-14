@@ -21,10 +21,11 @@
  * THE SOFTWARE.
  */
 
-package algolia
+package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.responses._
+import algolia.{AlgoliaClient, AlgoliaTest}
 import org.json4s._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,16 +34,6 @@ import scala.concurrent.Future
 class IntegrationTest extends AlgoliaTest {
 
   val client = new AlgoliaClient(applicationId, apiKey)
-
-  it("should list indexes") {
-    val indices: Future[Indexes] = client.indexes()
-
-    whenReady(indices) { result =>
-      result.nbPages should equal(1)
-      result.items should have size 2
-      result.items.map(_.name) should be(Seq("test", "toto"))
-    }
-  }
 
   final case class Test(name: String,
                         age: Int,
