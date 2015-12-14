@@ -161,5 +161,19 @@ class IntegrationTest extends AlgoliaTest {
       }
     }
 
+    it("should insert in batch with batch DSL") {
+      val result: Future[TasksMultipleIndex] = client.execute {
+        batch(
+          index into "toto" objectId "4" document Test("4", 4, alien = true),
+          index into "toto" objectId "5" document Test("5", 5, alien = true),
+          index into "toto" objectId "6" document Test("6", 6, alien = true)
+        )
+      }
+
+      whenReady(result) { result =>
+        result.objectIDs should equal(Seq("4", "5", "6"))
+      }
+    }
+
   }
 }
