@@ -23,6 +23,41 @@
 
 package algolia.responses
 
-case class TasksSingleIndex(taskID: Int, objectIDs: Seq[String])
+sealed trait AlgoliaTask {
 
-case class TasksMultipleIndex(taskID: Map[String, Int], objectIDs: Seq[String])
+  protected def idToWaitFor(): Long
+
+  //  def waitFor(baseDelay: Long = 100, maxDelay: Long = 5000) = {
+  //    val id = idToWaitFor()
+  //
+  //  }
+
+  //from http://stackoverflow.com/questions/16359849/scala-scheduledfuture
+  //  private def delay[T](delay: Long)(block: => T): Future[T] = {
+  //    val promise = Promise[T]()
+  //    val t = new Timer()
+  //    t.schedule(new TimerTask {
+  //      override def run(): Unit = {
+  //        promise.complete(Try(block))
+  //      }
+  //    }, delay)
+  //    promise.future
+  //  }
+
+}
+
+case class Task(taskID: Long, createdAt: Option[String]) extends AlgoliaTask {
+  override def idToWaitFor(): Long = taskID
+}
+
+case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String]) extends AlgoliaTask {
+  override def idToWaitFor(): Long = taskID
+}
+
+case class TasksMultipleIndex(taskID: Map[String, Long], objectIDs: Seq[String], createdAt: Option[String]) extends AlgoliaTask {
+  override def idToWaitFor(): Long = taskID.values.max
+}
+
+case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String]) extends AlgoliaTask {
+  override def idToWaitFor(): Long = taskID
+}

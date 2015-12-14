@@ -94,7 +94,7 @@ class IntegrationTest extends AlgoliaTest {
   describe("indexing") {
 
     it("should index a document") {
-      val indexing: Future[Indexing] = client.execute {
+      val indexing: Future[TaskIndexing] = client.execute {
         index into "toto" document Test("test", 1, alien = true)
       }
 
@@ -105,7 +105,7 @@ class IntegrationTest extends AlgoliaTest {
     }
 
     it("should index a document with an objectID") {
-      val indexing: Future[Indexing] = client.execute {
+      val indexing: Future[TaskIndexing] = client.execute {
         index into "toto" objectId "truc" document Test("test", 1, alien = true)
       }
 
