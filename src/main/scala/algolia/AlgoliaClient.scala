@@ -28,7 +28,7 @@ import java.util.concurrent.TimeoutException
 import algolia.AlgoliaDsl._
 import algolia.definitions.SearchDefinition
 import algolia.http.HttpPayload
-import algolia.responses.{Indexes, Search, Task}
+import algolia.responses.{Indexes, Search}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -67,14 +67,6 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   def indices()(implicit executor: ExecutionContext): Future[Indexes] = execute {
     AlgoliaDsl.indexes
-  }
-
-  def clear(ind: String)(implicit executor: ExecutionContext): Future[Task] = execute {
-    AlgoliaDsl.clear index ind
-  }
-
-  def delete(ind: String)(implicit executor: ExecutionContext): Future[Task] = execute {
-    AlgoliaDsl.delete index ind
   }
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
