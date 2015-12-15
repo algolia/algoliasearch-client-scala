@@ -25,7 +25,7 @@ package algolia.responses
 
 sealed trait AlgoliaTask {
 
-  protected def idToWaitFor(): Long
+  protected[algolia] def idToWaitFor(): Long
 
   //  def waitFor(baseDelay: Long = 100, maxDelay: Long = 5000) = {
   //    val id = idToWaitFor()
