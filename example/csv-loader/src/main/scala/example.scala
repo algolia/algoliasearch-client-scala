@@ -1,9 +1,9 @@
 package algolia.example
 
-import java.io.File
+import java.io.InputStreamReader
 
 import algolia.AlgoliaClient
-import algolia.responses.Indexing
+import algolia.responses.TasksSingleIndex
 import com.github.tototoshi.csv._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,28 +28,23 @@ object CSVExample {
     println("Start importing data")
 
     val client = new AlgoliaClient(config.appId, config.secret)
-    val reader = CSVReader.open("example/csv-loader/src/main/resources/top1000libraryParis.utf8.csv")(FileFormat)
+    val reader = CSVReader.open(new InputStreamReader(getClass().getResourceAsStream("/top1000libraryParis.utf8.csv")))(FileFormat)
 
-    val operations:Seq[Future[Indexing]] = reader.toStream()
+    val operations:Iterator[Future[TasksSingleIndex]] = reader.toStream()
       .map {
         case rank :: medium :: reservations :: title :: author :: nil => {
-          println("Yeah or not")
+          println("Data?")
           Reservation(rank.toInt, medium, reservations.toInt, title, author)
         }
         case _ => throw new Exception("can't parse")
       }
-      .map { r: Reservation =>
-        client execute {
-          index into "scala-test" document r
-        }
-      }
-/* This alternative is not working yet...
       .grouped(1000)
       .map { rs: Stream[Reservation] =>
+        println("Yo")
         client execute {
-          index into "scala-test" documents rs
+          index into "scala-test" documents rs.toSeq
         }
-      }*/
+      }
 
     println("Number of operations : " + operations.length)
 
