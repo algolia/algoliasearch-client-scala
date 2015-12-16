@@ -1,14 +1,28 @@
-organization := "com.algolia"
-
-name := "scala-client"
-
-version := "1.0-SNAPSHOT"
-
-scalaVersion := "2.11.7"
-
 coverageHighlighting := false //setting to true crashes the coverage
 
 coverageEnabled := true
+
+lazy val commonSettings = Seq(
+  organization := "com.algolia",
+  version := "1.0-SNAPSHOT",
+  scalaVersion := "2.11.7"
+)
+
+lazy val scalaclient = project
+  .in(file("."))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "scala-client"
+  )
+  .enablePlugins(AutomateHeaderPlugin)
+
+lazy val csvsample = project
+  .in(file("./example/csv-loader"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "algoliassearch-client-scala-csvsample"
+  )
+  .dependsOn(scalaclient)
 
 val dispatchVersion = "0.11.3"
 val json4sVersion = "3.2.11"
@@ -24,6 +38,7 @@ libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
+libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.2.2"
 
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
@@ -64,9 +79,6 @@ headers := Map(
     )
 )
 
-lazy val myProject = project
-  .in(file("."))
-  .enablePlugins(AutomateHeaderPlugin)
 
 publishMavenStyle := true
 
