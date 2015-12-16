@@ -66,7 +66,11 @@ headers := Map(
 
 lazy val myProject = project
   .in(file("."))
-  .enablePlugins(AutomateHeaderPlugin)
+  .enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "algolia"
+  )
 
 publishMavenStyle := true
 

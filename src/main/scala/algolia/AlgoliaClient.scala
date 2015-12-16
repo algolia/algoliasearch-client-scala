@@ -52,7 +52,7 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
   )) :+ s"https://$applicationId-dsn.$ALGOLIANET_HOST"
 
-  val userAgent = s"Algolia Scala ${util.Properties.versionNumberString}"
+  val userAgent = s"Algolia for Scala ${BuildInfo.scalaVersion} API ${BuildInfo.version}"
 
   val headers: Map[String, String] = Map(
     "Accept-Encoding" -> "gzip",

@@ -44,8 +44,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     }
 
     it("should set user agent") {
-      //For 2.11 AND 2.10
-      apiClient.userAgent should startWith("Algolia Scala 2.1")
+      apiClient.userAgent should (startWith("Algolia for Scala 2.11") and include("API 1."))
     }
 
     it("should set indexing hosts") {
