@@ -2,7 +2,9 @@ organization := "com.algolia"
 
 name := "scala-client"
 
-version := "1.0-SNAPSHOT"
+description := "Scala client for Algolia Search API"
+
+version := "1.0.0-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
@@ -30,9 +32,15 @@ libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
 
 
-/** Publishing to Sonatype **/
-//http://www.scala-sbt.org/0.13/docs/Using-Sonatype.html
-//https://github.com/xerial/sbt-sonatype
+/** Publishing to Sonatype & Maven Central
+  *
+  * > sbt publishSigned
+  * > sbt sonatypeRelease
+  *
+  * see: http://www.scala-sbt.org/0.13/docs/Using-Sonatype.html
+  * see: https://github.com/xerial/sbt-sonatype
+  *
+  **/
 
 headers := Map(
   "scala" ->(
@@ -79,8 +87,6 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 pomExtra := {
-  <name>Algolia Search Client</name>
-  <description>Scala client for Algolia Search API</description>
   <url>https://github.com/algolia/algoliasearch-client-scala</url>
   <licenses>
     <license>
