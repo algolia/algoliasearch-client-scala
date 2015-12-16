@@ -31,8 +31,28 @@ import org.json4s._
 
 import scala.concurrent.ExecutionContext
 
-private[algolia] trait DispatchHttpClient {
+object default {
+  val httpReadTimeout = 30000
+  //httpSocketTimeout in HttpClient
+
+  val httpConnectTimeout = 2000
+}
+
+object DispatchHttpClient extends DispatchHttpClient(
+  httpReadTimeout = default.httpReadTimeout,
+  httpConnectTimeout = default.httpConnectTimeout
+)
+
+case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
+                              httpConnectTimeout: Int = default.httpConnectTimeout) {
+
   implicit val formats = DefaultFormats
+
+  lazy val http = Http().configure { builder =>
+    builder
+      .setConnectTimeout(httpConnectTimeout)
+      .setReadTimeout(httpReadTimeout)
+  }
 
   def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     val path = payload.path.foldLeft(url(host).secure) {
@@ -57,7 +77,7 @@ private[algolia] trait DispatchHttpClient {
       }
     }
 
-    Http(request > responseManager)
+    http(request > responseManager)
   }
 
 }
@@ -67,5 +87,3 @@ case class APIClientException(code: Int, message: String) extends Exception("Fai
 case class UnexpectedResponse(code: Int) extends Exception("Unexpected response status: %d".format(code))
 
 private[algolia] case class `4XXResponse`(message: String)
-
-private[algolia] object DispatchHttpClient extends DispatchHttpClient
