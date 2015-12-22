@@ -11,7 +11,7 @@ Our Scala client lets you easily use the [Algolia Search API](https://www.algoli
 
 
 
-[![Build Status](https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-scala) [![GitHub version](https://badge.fury.io/gh/algolia%2Falgoliasearch-client-scala.png)](http://badge.fury.io/gh/algolia%2Falgoliasearch-client-scala) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-scala/badge.png)](https://coveralls.io/r/algolia/algoliasearch-client-scala)[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch/)
+[![Build Status](https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-scala) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-scala/badge.svg?branch=master&service=github)](https://coveralls.io/github/algolia/algoliasearch-client-scala?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala/)
 
 
 
