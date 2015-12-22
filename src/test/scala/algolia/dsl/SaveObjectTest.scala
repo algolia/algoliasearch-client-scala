@@ -37,11 +37,11 @@ class SaveObjectTest extends AlgoliaTest {
     describe("without objectId") {
 
       it("should index case class") {
-        index into "toto" document BasicObject("algolia", 2)
+        index into "toto" `object` BasicObject("algolia", 2)
       }
 
       it("should call API") {
-        (index into "toto" document BasicObject("algolia", 2)).build() should be(
+        (index into "toto" `object` BasicObject("algolia", 2)).build() should be(
           HttpPayload(
             POST,
             List("1", "indexes", "toto"),
@@ -54,11 +54,11 @@ class SaveObjectTest extends AlgoliaTest {
       describe("batch") {
 
         it("should index case classes") {
-          index into "toto" documents Seq(BasicObject("algolia", 2))
+          index into "toto" objects Seq(BasicObject("algolia", 2))
         }
 
         it("without objectID should call API ") {
-          (index into "toto" documents Seq(BasicObject("algolia", 2))).build() should be(
+          (index into "toto" objects Seq(BasicObject("algolia", 2))).build() should be(
             HttpPayload(
               POST,
               List("1", "indexes", "toto", "batch"),
@@ -69,7 +69,7 @@ class SaveObjectTest extends AlgoliaTest {
         }
 
         it("with objectID should call API ") {
-          (index into "toto" documents Seq(BasicObjectWithObjectID("algolia", 2, "id"))).build() should be(
+          (index into "toto" objects Seq(BasicObjectWithObjectID("algolia", 2, "id"))).build() should be(
             HttpPayload(
               POST,
               List("1", "indexes", "toto", "batch"),
@@ -84,15 +84,15 @@ class SaveObjectTest extends AlgoliaTest {
     describe("with objectId") {
 
       it("should index case class") {
-        index into "toto" objectId "1" document BasicObject("algolia", 2)
+        index into "toto" objectId "1" `object` BasicObject("algolia", 2)
       }
 
       it("should index case class with id") {
-        index into "toto" document("1", BasicObject("algolia", 2))
+        index into "toto" `object`("1", BasicObject("algolia", 2))
       }
 
       it("should call API") {
-        (index into "toto" objectId "1" document BasicObject("algolia", 2)).build() should be(
+        (index into "toto" objectId "1" `object` BasicObject("algolia", 2)).build() should be(
           HttpPayload(
             PUT,
             List("1", "indexes", "toto", "1"),
@@ -105,11 +105,11 @@ class SaveObjectTest extends AlgoliaTest {
       describe("batch") {
 
         it("should index case classes") {
-          index into "toto" documents Map("1" -> BasicObject("algolia", 2))
+          index into "toto" objects Map("1" -> BasicObject("algolia", 2))
         }
 
         it("should call API") {
-          (index into "toto" documents Map("1" -> BasicObject("algolia", 2))).build() should be(
+          (index into "toto" objects Map("1" -> BasicObject("algolia", 2))).build() should be(
             HttpPayload(
               POST,
               List("1", "indexes", "toto", "batch"),

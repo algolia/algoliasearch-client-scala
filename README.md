@@ -93,11 +93,11 @@ case class Contact(firstname: String,
                    compagny: String)
 
 val indexing1: Future[Indexing] = client.execute {
-    index into "contacts" document Contact("Jimmie", "Barninger", 93, "California Paint")
+    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
 }
 
 val indexing2: Future[Indexing] = client.execute {
-    index into "contacts" document Contact("Warren", "Speach", 42, "Norwalk Crmc")
+    index into "contacts" `object` Contact("Warren", "Speach", 42, "Norwalk Crmc")
 }
 ```
 
@@ -247,7 +247,7 @@ var future: Future[Seq[EnhanceContact]] =
 For indexing documents, just pass an instance of your `case class` to the DSL:
 ```scala
 client.execute {
-    index into "contacts" document Contact("Jimmie", "Barninger", 93, "California Paint")
+    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
 }
 ```
 
@@ -297,7 +297,7 @@ Example with automatic `objectID` assignment:
 
 ```scala
 val indexing: Future[Indexing] = client.execute {
-    index into "contacts" document Contact("Jimmie", "Barninger", 93, "California Paint")
+    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
 }
 
 indexing onComplete {
@@ -310,7 +310,7 @@ Example with manual `objectID` assignment:
 
 ```scala
 val indexing: Future[Indexing] = client.execute {
-    index into "contacts" objectId "myID" document Contact("Jimmie", "Barninger", 93, "California Paint")
+    index into "contacts" objectId "myID" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
 }
 
 indexing onComplete {
@@ -786,15 +786,15 @@ Example using automatic `objectID` assignment:
 ```scala
 client.execute {
 	batch(
-  	index into "index1" document Contact("Jimmie", "Barninger")
-  	index into "index1" document Contact("Warren", "Speach")
+  	index into "index1" `object` Contact("Jimmie", "Barninger")
+  	index into "index1" `object` Contact("Warren", "Speach")
 	)
 }
 
 //or
 
 client.execute {
-	index into "index1" document Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
+	index into "index1" `object` Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
 }
 ```
 
@@ -802,7 +802,7 @@ client.execute {
 ```scala
 client.execute {
 	batch(
-  	index into "test1" documents Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
+  	index into "test1" objects Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
 	)
 }
 ```
@@ -834,8 +834,8 @@ We expose a method to perform this type of batch:
 ```scala
 client.execute {
 	batch(
-  	index into "index1" document Contact("Jimmie", "Barninger")
-  	index into "index2" document Contact("Warren", "Speach")
+  	index into "index1" `object` Contact("Jimmie", "Barninger")
+  	index into "index2" `object` Contact("Warren", "Speach")
 	)
 }
 ```
