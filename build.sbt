@@ -8,9 +8,9 @@ version := "1.0.0"
 
 scalaVersion := "2.11.7"
 
-coverageHighlighting := false //setting to true crashes the coverage
-
-coverageEnabled := true
+//Wait fix in sbt-coveralls
+ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
+//coverageEnabled := true
 
 val dispatchVersion = "0.11.3"
 val json4sVersion = "3.2.11"
