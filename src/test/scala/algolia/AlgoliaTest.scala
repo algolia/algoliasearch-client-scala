@@ -38,6 +38,6 @@ class AlgoliaTest
   val applicationId = System.getenv("APPLICATION_ID")
   val apiKey = System.getenv("API_KEY")
 
-  implicit val patience = PatienceConfig(timeout = Span(5, Seconds), interval = Span(250, Millis))
+  implicit val patience = PatienceConfig(timeout = Span(10, Seconds), interval = Span(500, Millis))
 
 }

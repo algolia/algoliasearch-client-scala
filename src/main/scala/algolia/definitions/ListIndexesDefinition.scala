@@ -24,7 +24,7 @@
 package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
-import algolia.responses.Indexes
+import algolia.responses.Indices
 import algolia.{AlgoliaClient, Executable}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,9 +42,9 @@ trait ListIndexesDsl {
     def indices = ListIndexesDefinition()
   }
 
-  implicit object ListIndexesDefinitionExecutable extends Executable[ListIndexesDefinition, Indexes] {
-    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(implicit executor: ExecutionContext): Future[Indexes] = {
-      client request[Indexes] query.build()
+  implicit object ListIndexesDefinitionExecutable extends Executable[ListIndexesDefinition, Indices] {
+    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(implicit executor: ExecutionContext): Future[Indices] = {
+      client request[Indices] query.build()
     }
   }
 

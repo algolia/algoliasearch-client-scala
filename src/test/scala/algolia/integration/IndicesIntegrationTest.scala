@@ -65,7 +65,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val indices: Future[Indexes] = client.execute {
+    val indices: Future[Indices] = client.execute {
       list indices
     }
     whenReady(indices) { result =>
@@ -92,7 +92,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val indices: Future[Indexes] = client.execute {
+    val indices: Future[Indices] = client.execute {
       list indices
     }
     whenReady(indices) { result =>
@@ -184,7 +184,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val indices: Future[Indexes] = client.execute {
+    val indices: Future[Indices] = client.execute {
       list indices
     }
 
