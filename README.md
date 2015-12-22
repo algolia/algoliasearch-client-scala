@@ -59,15 +59,34 @@ If you're using Maven, add the following dependency to your `pom.xml` file:
 <dependency>
     <groupId>com.algolia</groupId>
     <artifactId>algoliasearch-scala</artifactId>
-    <version>1</version>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
+```
+
+For Snapshots add the Sonatype repository:
+```xml
+<repositories>
+    <repository>
+        <id>oss-sonatype</id>
+        <name>oss-sonatype</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 ```
 
 Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](http://www.algolia.com/users/edit):
 
 If you're using SBT, add the following dependency to your `build.sbt` file:
 ```scala
-libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "1"
+libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "1.0.0-SNAPSHOT"
+```
+
+For Snapshots add the Sonatype repository:
+```scala
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
 Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](http://www.algolia.com/users/edit):
@@ -571,29 +590,9 @@ get objectId "myId" from "index"
 //or
 
 get from "index" objectId "myId"
-
-//or
-
-get("myId") from "index"
-
-//or
-
-get("myId") index "index"
-
-//or
-
-from("index") objectId "test"
-
-//or
-
-from index "index" objectId "myId"
-
-//or
-
-get / "index" / "myId"
 ```
 
-You can get the object by:
+You can get a case object by:
 ```scala
 (get / "index" / "myId").map(_.as[Contact])
 ```
@@ -611,10 +610,6 @@ You can delete an object using its `objectID`:
 
 ```scala
 client.execute { delete from "toto" objectId "oid" }
-
-//or
-
-client.execute { delete / "toto" / "oid" }
 ```
 
 
@@ -720,10 +715,6 @@ List indices
 You can list all your indices along with their associated information (number of entries, disk size, etc.) with the `` method:
 
 ```scala
-val indexes: Future[Indexes] = client.indexes()
-
-//or
-
 val indexes: Future[Indexes] = client.execute { indexes }
 ```
 
@@ -732,10 +723,6 @@ Delete an index
 You can delete an index using its name:
 
 ```scala
-client.delete("index")
-
-//or
-
 client.execute { delete index "index" }
 ```
 
@@ -744,10 +731,6 @@ Clear an index
 You can delete the index contents without removing settings and index specific API keys by using the clearIndex command:
 
 ```scala
-client.clear("index")
-
-//or
-
 client.execute { clear index "index" }
 ```
 

@@ -71,8 +71,6 @@ trait IndexingDsl {
 
     def into(index: String): IndexingDefinition = IndexingDefinition(index)
 
-    def in(index: String): IndexingDefinition = into(index)
-
   }
 
   implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, TaskIndexing] {

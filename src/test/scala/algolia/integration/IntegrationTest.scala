@@ -110,7 +110,7 @@ class IntegrationTest extends AlgoliaTest {
 
     it("should get it") {
       val obj: Future[Get] = client.execute {
-        get / "toto" / "truc"
+        get from "toto" objectId "truc"
       }
 
       whenReady(obj) { result =>
