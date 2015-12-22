@@ -1,10 +1,10 @@
 organization := "com.algolia"
 
-name := "scala-client"
+name := "algoliasearch-scala"
 
 description := "Scala client for Algolia Search API"
 
-version := "1.0.0-SNAPSHOT"
+version := "1.0.0"
 
 scalaVersion := "2.11.7"
 
