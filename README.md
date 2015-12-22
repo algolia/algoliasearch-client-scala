@@ -144,12 +144,12 @@ client.execute { search into "contacts" query "jimmie paint" }
 
 Settings can be customized to tune the search behavior. For example, you can add a custom sort by number of followers to the already great built-in relevance:
 ```scala
-TODO
+//Not yet implemented
 ```
 
 You can also configure the list of attributes you want to index by order of importance (first = most important):
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Since the engine is designed to suggest results as you type, you'll generally search by prefix. In this case the order of attributes is very important to decide which hit is the best:
@@ -357,7 +357,7 @@ You have three options when updating an existing object:
 Example on how to replace all attributes of an existing object:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 You have many ways to update an object's attributes:
@@ -372,31 +372,31 @@ You have many ways to update an object's attributes:
 Example to update only the city attribute of an existing object:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Example to add a tag:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Example to remove a tag:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Example to add a tag if it doesn't exist:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Example to increment a numeric value:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Note: Here we are incrementing the value by `42`. To increment just by one, put
@@ -405,7 +405,7 @@ Note: Here we are incrementing the value by `42`. To increment just by one, put
 Example to decrement a numeric value:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Note: Here we are decrementing the value by `42`. To decrement just by one, put
@@ -526,7 +526,7 @@ The list of keywords is:
  * **distinct**: If set to 1, enables the distinct feature, disabled by default, if the `attributeForDistinct` index setting is set. This feature is similar to the SQL "distinct" keyword. When enabled in a query with the `distinct=1` parameter, all hits containing a duplicate value for the attributeForDistinct attribute are removed from results. For example, if the chosen attribute is `show_name` and several hits have the same value for `show_name`, then only the best one is kept and the others are removed.
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 The server response will look like:
@@ -574,7 +574,7 @@ Multiple queries
 You can send multiple queries with a single API call using a batch of queries:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 The resulting JSON answer contains a ```results``` array storing the underlying queries answers. The answers order is the same than the requests order.
@@ -607,7 +607,7 @@ You can get a case object by:
 You can also retrieve a set of objects:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Delete an object
@@ -626,7 +626,7 @@ Delete by query
 You can delete all objects matching a single query with the following code. Internally, the API client performs the query, deletes all matching hits, and waits until the deletions have been applied.
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 
@@ -714,7 +714,7 @@ You can decide to have the same priority for two attributes by passing them in t
 You can easily retrieve settings or update them:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 List indices
@@ -756,7 +756,7 @@ You can wait for a task to complete using the `waitTask` method on the `taskID` 
 
 For example, to wait for indexing of a new object:
 ```scala
-TODO
+//Not yet implemented
 ```
 
 If you want to ensure multiple objects have been indexed, you only need to check
@@ -799,7 +799,7 @@ client.execute {
 
 Example with user defined `objectID` (add or update):
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Example that deletes a set of records:
@@ -814,7 +814,7 @@ client.execute {
 
 Example that updates only the `firstname` attribute:
 ```scala
-TODO
+//Not yet implemented
 ```
 
 
@@ -845,7 +845,7 @@ You can also generate user API keys to control security.
 These API keys can be restricted to a set of operations or/and restricted to a given index.
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Each key is defined by a set of permissions that specify the authorized actions. The different permissions are:
@@ -861,7 +861,7 @@ Each key is defined by a set of permissions that specify the authorized actions.
 
 Example of API Key creation:
 ```scala
-TODO
+//Not yet implemented
 ```
 
 You can also create an API Key with advanced settings:
@@ -880,21 +880,21 @@ You can also create an API Key with advanced settings:
 
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Update the permissions of an existing key:
 ```scala
-TODO
+//Not yet implemented
 ```
 Get the permissions of a given key:
 ```scala
-TODO
+//Not yet implemented
 ```
 
 Delete an existing key:
 ```scala
-TODO
+//Not yet implemented
 ```
 
 
@@ -902,7 +902,7 @@ TODO
 You may have a single index containing per user data. In that case, all records should be tagged with their associated user_id in order to add a `tagFilters=user_42` filter at query time to retrieve only what a user has access to. If you're using the [JavaScript client](http://github.com/algolia/algoliasearch-client-js), it will result in a security breach since the user is able to modify the `tagFilters` you've set by modifying the code from the browser. To keep using the JavaScript client (recommended for optimal latency) and target secured records, you can generate a secured API key from your backend:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 This public API key can then be used in your JavaScript code as follow:
@@ -925,7 +925,7 @@ index.search('something', function(err, content) {
 You can mix rate limits and secured API keys by setting a `userToken` query parameter at API key generation time. When set, a unique user will be identified by her `IP + user_token` instead of only by her `IP`. This allows you to restrict a single user to performing a maximum of `N` API calls per hour, even if she shares her `IP` with another user.
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 This public API key can then be used in your JavaScript code as follow:
@@ -993,7 +993,7 @@ that it is not possible to access records beyond the 1,000th on the first call.
 Example:
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 
@@ -1023,7 +1023,7 @@ You can retrieve the logs of your last 1,000 API calls and browse them using the
   * ***error***: Retrieve only the errors (same as ***onlyErrors*** parameters).
 
 ```scala
-TODO
+//Not yet implemented
 ```
 
 
