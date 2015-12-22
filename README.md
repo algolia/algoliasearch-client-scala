@@ -106,6 +106,13 @@ Quick Start
 In 30 seconds, this quick start tutorial will show you how to index and search objects.
 
 ```scala
+//For the DSL
+import algolia.AlgoliaDsl._
+
+//For basic Future support, you might want to change this by your own ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
+
+//case class of your objects
 case class Contact(firstname: String,
                    lastname: String,
                    followers: Int,

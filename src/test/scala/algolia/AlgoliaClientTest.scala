@@ -29,7 +29,6 @@ import algolia.http.{GET, HttpPayload}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
-import scala.reflect._
 
 class AlgoliaClientTest extends AlgoliaTest {
 
