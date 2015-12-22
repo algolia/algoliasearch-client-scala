@@ -756,7 +756,10 @@ You can wait for a task to complete using the `waitTask` method on the `taskID` 
 
 For example, to wait for indexing of a new object:
 ```scala
-//Not yet implemented
+for {
+  t <- client.execute { index into "toto" `object` MyObject("test") }
+  r <- client.execute { waitFor task t from "toto" }
+} yield "indexing is done"
 ```
 
 If you want to ensure multiple objects have been indexed, you only need to check

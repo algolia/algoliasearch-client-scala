@@ -25,7 +25,10 @@ package algolia
 
 import java.util.concurrent.TimeoutException
 
+import algolia.AlgoliaDsl._
+import algolia.definitions.WaitForTimeoutException
 import algolia.http.{GET, HttpPayload}
+import algolia.responses.{Task, TaskStatus}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,15 +67,36 @@ class AlgoliaClientTest extends AlgoliaTest {
       ))
     }
 
+    it("should throw exception if `null` APP_ID") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(null, "APIKEY")
+      thrown.getMessage should equal("'applicationId' is probably too short: 'null'")
+    }
+
+    it("should throw exception if `` APP_ID") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("", "APIKEY")
+      thrown.getMessage should equal("'applicationId' is probably too short: ''")
+    }
+
+    it("should throw exception if `null` APIKEY") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("APP_ID", null)
+      thrown.getMessage should equal("'apiKey' is probably too short: 'null'")
+    }
+
+    it("should throw exception if `` APIKEY") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("APP_ID", "")
+      thrown.getMessage should equal("'apiKey' is probably too short: ''")
+    }
+
+    it("should not throw exception if all good") {
+      new AlgoliaClient("APP_ID", "APIKEY")
+    }
+
   }
 
   describe("requests") {
 
     val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
     val emptyHeaders: Map[String, String] = Map()
-
-    case class Result(value: String)
-
     val timeoutRequest: Future[Result] = Future.failed(new TimeoutException())
 
     describe("search") {
@@ -147,6 +171,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
           e shouldBe a[APIClientException]
+          e should have message "Failure \"404\", response status: 404"
         }
       }
 
@@ -156,6 +181,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
           e shouldBe a[APIClientException]
+          e should have message "Failure \"404\", response status: 404"
         }
       }
 
@@ -166,6 +192,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
           e shouldBe a[APIClientException]
+          e should have message "Failure \"404\", response status: 404"
         }
       }
 
@@ -177,6 +204,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
           e shouldBe a[APIClientException]
+          e should have message "Failure \"404\", response status: 404"
         }
       }
     }
@@ -206,31 +234,84 @@ class AlgoliaClientTest extends AlgoliaTest {
     }
   }
 
-  describe("init") {
+  describe("wait for") {
 
-    it("should throw exception if `null` APP_ID") {
-      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(null, "APIKEY")
-      thrown.getMessage should equal("'applicationId' is probably too short: 'null'")
+    val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
+    val emptyHeaders: Map[String, String] = Map()
+
+    val apiClient = new AlgoliaClient("a", "b") {
+      override val httpClient = mockHttpClient
+      override val headers = emptyHeaders
+      override val random = notSoRandom
     }
 
-    it("should throw exception if `` APP_ID") {
-      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("", "APIKEY")
-      thrown.getMessage should equal("'applicationId' is probably too short: ''")
+    val taskInProgress: TaskStatus = TaskStatus("notPublished", pendingTask = true)
+    val taskPublished: TaskStatus = TaskStatus("published", pendingTask = true)
+    val taskToWait: Task = Task(1L, None)
+
+    val payload = HttpPayload(GET, Seq("1", "indexes", "toto", "task", "1"), None, None, isSearch = false)
+
+    it("task is ready") {
+      (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskPublished)
+
+      val res: Future[TaskStatus] = apiClient.execute {
+        waitFor task taskToWait from "toto"
+      }
+
+      whenReady(res) { result =>
+        result should equal(taskPublished)
+      }
     }
 
-    it("should throw exception if `null` APIKEY") {
-      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("APP_ID", null)
-      thrown.getMessage should equal("'apiKey' is probably too short: 'null'")
+    it("task needs 1 retry to be ready") {
+      (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskPublished)
+
+      val res: Future[TaskStatus] = apiClient.execute {
+        waitFor task taskToWait from "toto"
+      }
+
+      whenReady(res) { result =>
+        result should equal(taskPublished)
+      }
     }
 
-    it("should throw exception if `` APIKEY") {
-      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("APP_ID", "")
-      thrown.getMessage should equal("'apiKey' is probably too short: ''")
+    it("task needs 7 retries to be ready") {
+      /*1*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*2*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*4*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*8*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*16*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskPublished)
+
+      val res: Future[TaskStatus] = apiClient.execute {
+        waitFor task taskToWait from "toto" baseDelay 1 maxDelay 17
+      }
+
+      whenReady(res) { result =>
+        result should equal(taskPublished)
+      }
     }
 
-    it("should not throw exception if all good") {
-      new AlgoliaClient("APP_ID", "APIKEY")
-    }
+    it("future fails after too many retries") {
+      /*1*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*2*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*4*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*8*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*16*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
+      /*32*/ (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskInProgress)
 
+      val res: Future[TaskStatus] = apiClient.execute {
+        waitFor task taskToWait from "toto" baseDelay 1 maxDelay 17
+      }
+
+      whenReady(res.failed) { e =>
+        e shouldBe a[WaitForTimeoutException]
+        e should have message "Waiting for task `1` on index `toto` timeout after 32ms"
+      }
+    }
   }
+
 }
+
+case class Result(value: String)

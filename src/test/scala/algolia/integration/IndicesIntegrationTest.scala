@@ -29,17 +29,44 @@ import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 class IndicesIntegrationTest extends AlgoliaTest {
 
   val client = new AlgoliaClient(applicationId, apiKey)
 
-  final case class Obj(name: String)
-
-  def taskShouldBeCreated(task: Future[AlgoliaTask]) = {
-    whenReady(task) { result =>
+  def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String) = {
+    val t: AlgoliaTask = whenReady(task) { result =>
       result.idToWaitFor should not be 0
+      result //for getting it after
     }
+
+    val waiting = client.execute {
+      waitFor task t from index
+    }
+
+    whenReady(waiting) { result =>
+      result.status should equal("published")
+    }
+  }
+
+  after {
+    val indices = Seq(
+      "index1",
+      "index2",
+      "indexToDelete",
+      "indexToClear",
+      "indexToCopy_before",
+      "indexToCopy_after",
+      "indexToMove_before",
+      "indexToMove_after"
+    )
+
+    val del = client.execute {
+      batch(indices.map { i => delete index i })
+    }
+
+    whenReady(del) { res => res }
   }
 
   it("should create indices") {
@@ -47,7 +74,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
       index into "index1" `object` Obj("1")
     }
 
-    taskShouldBeCreated(create)
+    taskShouldBeCreatedAndWaitForIt(create, "index1")
   }
 
   it("should list indices") {
@@ -58,12 +85,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
       )
     }
 
-    whenReady(create) { result =>
-      result.taskID should have size 2
-    }
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(create, "index2")
 
     val indices: Future[Indices] = client.execute {
       list indices
@@ -78,19 +100,13 @@ class IndicesIntegrationTest extends AlgoliaTest {
       index into "indexToDelete" `object` Obj("1")
     }
 
-    taskShouldBeCreated(create)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(create, "indexToDelete")
 
     val del = client.execute {
       delete index "indexToDelete"
     }
 
-    taskShouldBeCreated(del)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(del, "indexToDelete")
 
     val indices: Future[Indices] = client.execute {
       list indices
@@ -105,19 +121,13 @@ class IndicesIntegrationTest extends AlgoliaTest {
       index into "indexToClear" `object` Obj("1")
     }
 
-    taskShouldBeCreated(create)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(create, "indexToClear")
 
     val del = client.execute {
       clear index "indexToClear"
     }
 
-    taskShouldBeCreated(del)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(del, "indexToClear")
 
     val list: Future[Search] = client.execute {
       search into "indexToClear" query ""
@@ -133,28 +143,19 @@ class IndicesIntegrationTest extends AlgoliaTest {
       clear index "indexToCopy_before"
     }
 
-    taskShouldBeCreated(del)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(del, "indexToCopy_before")
 
     val create: Future[TaskIndexing] = client.execute {
       index into "indexToCopy_before" `object` Obj("1")
     }
 
-    taskShouldBeCreated(create)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(create, "indexToCopy_before")
 
     val copying = client.execute {
       copy index "indexToCopy_before" to "indexToCopy_after"
     }
 
-    taskShouldBeCreated(copying)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(copying, "indexToCopy_after")
 
     val list: Future[Search] = client.execute {
       search into "indexToCopy_before" query ""
@@ -170,19 +171,13 @@ class IndicesIntegrationTest extends AlgoliaTest {
       index into "indexToMove_before" `object` Obj("1")
     }
 
-    taskShouldBeCreated(create)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(create, "indexToMove_before")
 
     val copying: Future[Task] = client.execute {
       move index "indexToMove_before" to "indexToMove_after"
     }
 
-    taskShouldBeCreated(copying)
-
-    //TODO remove when waitFor is implemented
-    Thread.sleep(2000)
+    taskShouldBeCreatedAndWaitForIt(copying, "indexToMove_after")
 
     val indices: Future[Indices] = client.execute {
       list indices
@@ -194,4 +189,6 @@ class IndicesIntegrationTest extends AlgoliaTest {
   }
 
 }
+
+case class Obj(name: String)
 

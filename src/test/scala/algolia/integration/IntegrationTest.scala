@@ -35,18 +35,6 @@ class IntegrationTest extends AlgoliaTest {
 
   val client = new AlgoliaClient(applicationId, apiKey)
 
-  final case class Test(name: String,
-                        age: Int,
-                        alien: Boolean)
-
-  final case class EnhanceTest(name: String,
-                               age: Int,
-                               alien: Boolean,
-                               objectID: String,
-                               _highlightResult: Option[Map[String, HighlightResult]],
-                               _snippetResult: Option[Map[String, SnippetResult]],
-                               _rankingInfo: Option[RankingInfo]) extends Hit
-
   describe("search") {
 
     var s: Future[Search] = Future.failed(new Exception)
@@ -168,3 +156,15 @@ class IntegrationTest extends AlgoliaTest {
 
   }
 }
+
+case class Test(name: String,
+                age: Int,
+                alien: Boolean)
+
+case class EnhanceTest(name: String,
+                       age: Int,
+                       alien: Boolean,
+                       objectID: String,
+                       _highlightResult: Option[Map[String, HighlightResult]],
+                       _snippetResult: Option[Map[String, SnippetResult]],
+                       _rankingInfo: Option[RankingInfo]) extends Hit

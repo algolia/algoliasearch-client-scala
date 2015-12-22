@@ -27,7 +27,7 @@ import algolia.http.{HttpPayload, POST}
 import algolia.inputs._
 import algolia.responses.TasksMultipleIndex
 import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
+import org.json4s.{JValue, Formats}
 import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class BatchDefinition(definitions: Traversable[Definition])(implicit val formats: Formats) extends Definition with BatchOperationUtils {
 
   override private[algolia] def build(): HttpPayload = {
-    val operations = definitions.map {
+    val operations: Seq[BatchOperation[_ <: JValue] with Product with Serializable] = definitions.map {
       case IndexingDefinition(index, None, Some(obj)) =>
         hasObjectId(obj) match {
           case (true, o) => UpdateObjectOperation(o, Some(index))
@@ -50,6 +50,9 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
 
       case DeleteObjectDefinition(Some(index), Some(oid)) =>
         DeleteObjectOperation(index, oid)
+
+      case DeleteIndexDefinition(index) =>
+        DeleteIndexOperation(index)
 
       //      case IndexingBatchDefinition(index, defs) =>
       //        defs.map {

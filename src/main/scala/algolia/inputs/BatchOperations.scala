@@ -50,3 +50,6 @@ case class DeleteObjectOperation[T <: AnyRef](indexName: String,
 
 case class ClearIndexOperation[T <: AnyRef](indexName: String,
                                             action: String = "clear") extends BatchOperation[T]
+
+case class DeleteIndexOperation[T <: AnyRef](indexName: String,
+                                             action: String = "delete") extends BatchOperation[T]

@@ -31,6 +31,7 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
 
+scalacOptions ++= Seq("-feature", "-unchecked")
 
 /** Publishing to Sonatype & Maven Central
   *
@@ -113,9 +114,10 @@ pomExtra := {
 
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
+  if (version.value.trim.endsWith("SNAPSHOT")) {
     Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
+  } else {
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
+  }
 }
 
