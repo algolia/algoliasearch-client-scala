@@ -25,14 +25,20 @@ package algolia
 
 import java.util.concurrent.TimeoutException
 
-import algolia.AlgoliaDsl._
-import algolia.definitions.SearchDefinition
 import algolia.http.HttpPayload
-import algolia.responses.{Indices, Search}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClient(applicationId: String, apiKey: String) {
+
+  if (applicationId == null || applicationId.isEmpty) {
+    throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
+  }
+
+  if (apiKey == null || apiKey.isEmpty) {
+    throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
+  }
+
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
   final private val ALGOLIANET_HOST = "algolia.net"
@@ -76,3 +82,5 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     }
   }
 }
+
+case class AlgoliaClientException(message: String) extends Exception(message)

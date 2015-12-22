@@ -206,4 +206,32 @@ class AlgoliaClientTest extends AlgoliaTest {
       }
     }
   }
+
+  describe("init") {
+
+    it("should throw exception if `null` APP_ID") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(null, "APIKEY")
+      thrown.getMessage should equal("'applicationId' is probably too short: 'null'")
+    }
+
+    it("should throw exception if `` APP_ID") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("", "APIKEY")
+      thrown.getMessage should equal("'applicationId' is probably too short: ''")
+    }
+
+    it("should throw exception if `null` APIKEY") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("APP_ID", null)
+      thrown.getMessage should equal("'apiKey' is probably too short: 'null'")
+    }
+
+    it("should throw exception if `` APIKEY") {
+      val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient("APP_ID", "")
+      thrown.getMessage should equal("'apiKey' is probably too short: ''")
+    }
+
+    it("should not throw exception if all good") {
+      new AlgoliaClient("APP_ID", "APIKEY")
+    }
+
+  }
 }
