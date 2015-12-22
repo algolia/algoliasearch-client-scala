@@ -35,19 +35,15 @@ class DeleteObjectTest extends AlgoliaTest {
       delete from "toto" objectId "oid"
     }
 
-    it("deletes object with DSL \"/\"") {
-      delete / "toto" / "oid"
-    }
-
     it("deletes object with inverse DSL") {
       delete objectId "oid" from "toto"
     }
 
     it("should call API") {
-      (delete from "toto").build() should be(
+      (delete from "toto" objectId "oid").build() should be(
         HttpPayload(
           DELETE,
-          Seq("1", "indexes", "toto"),
+          Seq("1", "indexes", "toto", "oid"),
           isSearch = false
         )
       )

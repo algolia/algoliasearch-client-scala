@@ -38,7 +38,9 @@ case class ListIndexesDefinition() extends Definition {
 
 trait ListIndexesDsl {
 
-  def indexes = ListIndexesDefinition()
+  case object list {
+    def indices = ListIndexesDefinition()
+  }
 
   implicit object ListIndexesDefinitionExecutable extends Executable[ListIndexesDefinition, Indexes] {
     override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(implicit executor: ExecutionContext): Future[Indexes] = {

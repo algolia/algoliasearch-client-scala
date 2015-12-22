@@ -65,8 +65,10 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val list: Future[Indexes] = client.indices()
-    whenReady(list) { result =>
+    val indices: Future[Indexes] = client.execute {
+      list indices
+    }
+    whenReady(indices) { result =>
       result.items.map(_.name) should (contain("index1") and contain("index2"))
     }
   }
@@ -90,8 +92,10 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val list: Future[Indexes] = client.indices()
-    whenReady(list) { result =>
+    val indices: Future[Indexes] = client.execute {
+      list indices
+    }
+    whenReady(indices) { result =>
       result.items.map(_.name) should not contain "indexToDelete"
     }
   }
@@ -180,9 +184,11 @@ class IndicesIntegrationTest extends AlgoliaTest {
     //TODO remove when waitFor is implemented
     Thread.sleep(2000)
 
-    val list: Future[Indexes] = client.indices()
+    val indices: Future[Indexes] = client.execute {
+      list indices
+    }
 
-    whenReady(list) { result =>
+    whenReady(indices) { result =>
       result.items.map(_.name) should (contain("indexToMove_after") and not contain "indexToMove_before")
     }
   }

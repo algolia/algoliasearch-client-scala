@@ -63,12 +63,6 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     "Accept" -> "application/json"
   )
 
-  def search(query: SearchDefinition)(implicit executor: ExecutionContext): Future[Search] = request[Search](query.build())
-
-  def indices()(implicit executor: ExecutionContext): Future[Indexes] = execute {
-    AlgoliaDsl.indexes
-  }
-
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
 
   private[algolia] def request[T: Manifest](payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
