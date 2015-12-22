@@ -32,7 +32,7 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BatchDefinition(definitions: Iterable[Definition])(implicit val formats: Formats) extends Definition with BatchOperationUtils {
+case class BatchDefinition(definitions: Traversable[Definition])(implicit val formats: Formats) extends Definition with BatchOperationUtils {
 
   override private[algolia] def build(): HttpPayload = {
     val operations = definitions.map {
@@ -51,17 +51,17 @@ case class BatchDefinition(definitions: Iterable[Definition])(implicit val forma
       case DeleteObjectDefinition(Some(index), Some(oid)) =>
         DeleteObjectOperation(index, oid)
 
-//      case IndexingBatchDefinition(index, defs) =>
-//        defs.map {
-//          case IndexingDefinition(_, None, Some(obj)) =>
-//            hasObjectId(obj) match {
-//              case (true, o) => UpdateObjectOperation(o)
-//              case (false, o) => AddObjectOperation(o)
-//            }
-//
-//          case IndexingDefinition(_, Some(objectId), Some(obj)) =>
-//            UpdateObjectOperation(addObjectId(obj, objectId))
-//        }
+      //      case IndexingBatchDefinition(index, defs) =>
+      //        defs.map {
+      //          case IndexingDefinition(_, None, Some(obj)) =>
+      //            hasObjectId(obj) match {
+      //              case (true, o) => UpdateObjectOperation(o)
+      //              case (false, o) => AddObjectOperation(o)
+      //            }
+      //
+      //          case IndexingDefinition(_, Some(objectId), Some(obj)) =>
+      //            UpdateObjectOperation(addObjectId(obj, objectId))
+      //        }
 
     }.toSeq
 
@@ -79,7 +79,7 @@ trait BatchDefinitionDsl {
 
   implicit val formats: Formats
 
-  def batch(batches: Iterable[Definition]): BatchDefinition = {
+  def batch(batches: Traversable[Definition]): BatchDefinition = {
     BatchDefinition(batches)
   }
 

@@ -28,7 +28,7 @@ import java.util.concurrent.TimeoutException
 import algolia.AlgoliaDsl._
 import algolia.definitions.SearchDefinition
 import algolia.http.HttpPayload
-import algolia.responses.{Indexes, Search}
+import algolia.responses.{Indices, Search}
 
 import scala.concurrent.{ExecutionContext, Future}
 

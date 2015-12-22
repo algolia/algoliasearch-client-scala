@@ -23,7 +23,7 @@
 
 package algolia.responses
 
-case class Indexes(items: Seq[Index], nbPages: Int)
+case class Indices(items: Seq[Index], nbPages: Int)
 
 case class Index(name: String,
                  createdAt: String,

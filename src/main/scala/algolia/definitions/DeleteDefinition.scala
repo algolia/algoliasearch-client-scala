@@ -38,7 +38,7 @@ case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[Stri
 
   def objectId(objectId: String): DeleteObjectDefinition = copy(oid = Some(objectId))
 
-  def objectIds(objectIds: Seq[String]): BatchDefinition =
+  def objectIds(objectIds: Traversable[String]): BatchDefinition =
     BatchDefinition(objectIds.map { oid =>
       DeleteObjectDefinition(index, Some(oid))
     })
@@ -63,11 +63,11 @@ trait DeleteDsl {
     //Index
     def index(index: String): DeleteIndexDefinition = DeleteIndexDefinition(index)
 
+    //Object
     def objectId(objectId: String) = DeleteObjectDefinition(oid = Some(objectId))
 
+    //Object
     def from(index: String) = DeleteObjectDefinition(index = Some(index))
-
-    def apply(oid: String) = objectId(oid)
 
   }
 

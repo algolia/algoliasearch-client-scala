@@ -33,7 +33,7 @@ import org.json4s.native.Serialization._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class IndexingBatchDefinition(index: String,
-                                   definitions: Seq[Definition] = Seq())(implicit val formats: Formats) extends Definition with BatchOperationUtils {
+                                   definitions: Traversable[Definition] = Traversable())(implicit val formats: Formats) extends Definition with BatchOperationUtils {
 
   override private[algolia] def build(): HttpPayload = {
     val operations = definitions.map {

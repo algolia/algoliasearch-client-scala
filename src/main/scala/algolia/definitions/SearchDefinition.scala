@@ -61,7 +61,6 @@ trait SearchDsl {
 
     def into(index: String): SearchDefinition = SearchDefinition(index)
 
-    def in(index: String): SearchDefinition = into(index)
   }
 
   implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, Search] {
