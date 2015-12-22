@@ -21,23 +21,30 @@
  * THE SOFTWARE.
  */
 
-package algolia
+package algolia.dsl
 
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, FunSpec, Matchers}
+import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
+import algolia.http.{GET, HttpPayload}
+import algolia.responses.Task
 
-class AlgoliaTest
-  extends FunSpec
-  with Matchers
-  with BeforeAndAfter
-  with ScalaFutures
-  with MockFactory {
+class WaitForTaskTest extends AlgoliaTest {
 
-  val applicationId = System.getenv("APPLICATION_ID")
-  val apiKey = System.getenv("API_KEY")
+  describe("waitFor") {
 
-  implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
+    it("wait for a task") {
+      waitFor task Task(1L, None) from "toto" baseDelay 5 maxDelay 100
+    }
+
+    it("should call API") {
+      (waitFor task Task(1L, None) from "toto").build() should be(
+        HttpPayload(
+          GET,
+          Seq("1", "indexes", "toto", "task", "1"),
+          isSearch = false
+        )
+      )
+    }
+  }
 
 }

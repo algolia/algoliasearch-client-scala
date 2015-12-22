@@ -26,7 +26,8 @@ package algolia
 import algolia.definitions._
 
 trait AlgoliaDsl
-  extends BatchDefinitionDsl
+  extends Object //Just to have all Dsl as ordered `with`
+  with BatchDefinitionDsl
   with ClearIndexDsl
   with CopyIndexDsl
   with DeleteDsl
@@ -36,6 +37,7 @@ trait AlgoliaDsl
   with ListIndexesDsl
   with MoveIndexDsl
   with SearchDsl
+  with WaitForTaskDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 

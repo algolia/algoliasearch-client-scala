@@ -33,8 +33,8 @@ import scala.concurrent.ExecutionContext
 
 object default {
   val httpReadTimeout = 30000
-  //httpSocketTimeout in HttpClient
 
+  //httpSocketTimeout in HttpClient
   val httpConnectTimeout = 2000
 }
 

@@ -27,23 +27,6 @@ sealed trait AlgoliaTask {
 
   protected[algolia] def idToWaitFor(): Long
 
-  //  def waitFor(baseDelay: Long = 100, maxDelay: Long = 5000) = {
-  //    val id = idToWaitFor()
-  //
-  //  }
-
-  //from http://stackoverflow.com/questions/16359849/scala-scheduledfuture
-  //  private def delay[T](delay: Long)(block: => T): Future[T] = {
-  //    val promise = Promise[T]()
-  //    val t = new Timer()
-  //    t.schedule(new TimerTask {
-  //      override def run(): Unit = {
-  //        promise.complete(Try(block))
-  //      }
-  //    }, delay)
-  //    promise.future
-  //  }
-
 }
 
 case class Task(taskID: Long, createdAt: Option[String]) extends AlgoliaTask {
