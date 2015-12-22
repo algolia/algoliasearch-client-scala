@@ -37,18 +37,18 @@ class BatchTest extends AlgoliaTest {
 
       it("should index multiple objects") {
         batch(
-          index into "test" document BasicObject("name1", 1),
+          index into "test" `object` BasicObject("name1", 1),
 //          index into "tutu" documents Seq(BasicObject("name2", 2)),
-          index into "test" objectId "oid1" document BasicObject("name3", 3)
+          index into "test" objectId "oid1" `object` BasicObject("name3", 3)
 //          index into "tutu" documents Map("oid2" -> BasicObject("name4", 4))
         )
       }
 
       it("should call the API") {
         val build = batch(
-          index into "test" document BasicObject("name1", 1),
+          index into "test" `object` BasicObject("name1", 1),
 //          index into "tutu" documents Seq(BasicObject("name2", 2)),
-          index into "test" objectId "oid1" document BasicObject("name3", 3)
+          index into "test" objectId "oid1" `object` BasicObject("name3", 3)
 //          index into "tutu" documents Map("oid2" -> Seq(BasicObject("name4", 4)))
         ).build()
 

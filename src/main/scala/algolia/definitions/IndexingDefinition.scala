@@ -35,21 +35,21 @@ case class IndexingDefinition(index: String,
                               objectId: Option[String] = None,
                               obj: Option[AnyRef] = None)(implicit val formats: Formats) extends Definition {
 
-  def documents(objectsWithIds: Map[String, AnyRef]): IndexingBatchDefinition =
+  def objects(objectsWithIds: Map[String, AnyRef]): IndexingBatchDefinition =
     IndexingBatchDefinition(index, objectsWithIds.map { case (oid, o) =>
       IndexingDefinition(index, Some(oid), Some(o))
     }.toSeq)
 
-  def documents(objects: Seq[AnyRef]): IndexingBatchDefinition =
+  def objects(objects: Seq[AnyRef]): IndexingBatchDefinition =
     IndexingBatchDefinition(index, objects.map { obj => copy(obj = Some(obj)) })
 
   def objectId(objectId: String): IndexingDefinition =
     copy(objectId = Some(objectId))
 
-  def document(objectId: String, obj: AnyRef): IndexingDefinition =
+  def `object`(objectId: String, obj: AnyRef): IndexingDefinition =
     copy(objectId = Some(objectId), obj = Some(obj))
 
-  def document(obj: AnyRef): IndexingDefinition =
+  def `object`(obj: AnyRef): IndexingDefinition =
     copy(obj = Some(obj))
 
   override private[algolia] def build(): HttpPayload = {

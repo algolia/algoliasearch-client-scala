@@ -86,7 +86,7 @@ class IntegrationTest extends AlgoliaTest {
 
     it("should index a document") {
       val indexing: Future[TaskIndexing] = client.execute {
-        index into "toto" document Test("test", 1, alien = true)
+        index into "toto" `object` Test("test", 1, alien = true)
       }
 
       whenReady(indexing) { result =>
@@ -97,7 +97,7 @@ class IntegrationTest extends AlgoliaTest {
 
     it("should index a document with an objectID") {
       val indexing: Future[TaskIndexing] = client.execute {
-        index into "toto" objectId "truc" document Test("test", 1, alien = true)
+        index into "toto" objectId "truc" `object` Test("test", 1, alien = true)
       }
 
       whenReady(indexing) { result =>
@@ -144,7 +144,7 @@ class IntegrationTest extends AlgoliaTest {
       )
 
       val result: Future[TasksSingleIndex] = client.execute {
-        index into "toto" documents docs
+        index into "toto" objects docs
       }
 
       whenReady(result) { result =>
@@ -155,9 +155,9 @@ class IntegrationTest extends AlgoliaTest {
     it("should insert in batch with batch DSL") {
       val result: Future[TasksMultipleIndex] = client.execute {
         batch(
-          index into "toto" objectId "4" document Test("4", 4, alien = true),
-          index into "toto" objectId "5" document Test("5", 5, alien = true),
-          index into "toto" objectId "6" document Test("6", 6, alien = true)
+          index into "toto" objectId "4" `object` Test("4", 4, alien = true),
+          index into "toto" objectId "5" `object` Test("5", 5, alien = true),
+          index into "toto" objectId "6" `object` Test("6", 6, alien = true)
         )
       }
 

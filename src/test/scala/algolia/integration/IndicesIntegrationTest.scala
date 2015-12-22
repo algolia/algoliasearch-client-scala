@@ -44,7 +44,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
   it("should create indices") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index1" document Obj("1")
+      index into "index1" `object` Obj("1")
     }
 
     taskShouldBeCreated(create)
@@ -53,8 +53,8 @@ class IndicesIntegrationTest extends AlgoliaTest {
   it("should list indices") {
     val create: Future[TasksMultipleIndex] = client.execute {
       batch(
-        index into "index1" document Obj("1"),
-        index into "index2" document Obj("1")
+        index into "index1" `object` Obj("1"),
+        index into "index2" `object` Obj("1")
       )
     }
 
@@ -73,7 +73,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
   it("should delete an index") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "indexToDelete" document Obj("1")
+      index into "indexToDelete" `object` Obj("1")
     }
 
     taskShouldBeCreated(create)
@@ -98,7 +98,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
   it("should clear index") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "indexToClear" document Obj("1")
+      index into "indexToClear" `object` Obj("1")
     }
 
     taskShouldBeCreated(create)
@@ -135,7 +135,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
     Thread.sleep(2000)
 
     val create: Future[TaskIndexing] = client.execute {
-      index into "indexToCopy_before" document Obj("1")
+      index into "indexToCopy_before" `object` Obj("1")
     }
 
     taskShouldBeCreated(create)
@@ -163,7 +163,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
   it("should move index") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "indexToMove_before" document Obj("1")
+      index into "indexToMove_before" `object` Obj("1")
     }
 
     taskShouldBeCreated(create)
