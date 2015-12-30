@@ -23,10 +23,14 @@
 
 package algolia
 
+import algolia.AlgoliaDsl._
+import algolia.responses.AlgoliaTask
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, FunSpec, Matchers}
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaTest
   extends FunSpec
@@ -39,5 +43,21 @@ class AlgoliaTest
   val apiKey = System.getenv("API_KEY")
 
   implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
+
+  def taskShouldBeCreatedAndWaitForIt(client: AlgoliaClient, task: Future[AlgoliaTask], index: String)(implicit ec: ExecutionContext) = {
+    val t: AlgoliaTask = whenReady(task) { result =>
+      result.idToWaitFor should not be 0
+      result //for getting it after
+    }
+
+    val waiting = client.execute {
+      waitFor task t from index
+    }
+
+    whenReady(waiting) { result =>
+      result.status should equal("published")
+    }
+  }
+
 
 }

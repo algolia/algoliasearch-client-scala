@@ -21,27 +21,6 @@
  * THE SOFTWARE.
  */
 
-package algolia
+package algolia.inputs
 
-import algolia.definitions._
-
-trait AlgoliaDsl
-  extends Object //Just to have all trait DSL ordered `with`
-  with BatchDefinitionDsl
-  with ClearIndexDsl
-  with CopyIndexDsl
-  with DeleteDsl
-  with GetObjectDsl
-  with IndexingDsl
-  with IndexingBatchDsl
-  with ListIndexesDsl
-  with MoveIndexDsl
-  with PartialUpdateObjectDsl
-  with SearchDsl
-  with WaitForTaskDsl
-
-object AlgoliaDsl extends AlgoliaDsl {
-
-  implicit val formats = org.json4s.DefaultFormats
-
-}
+case class PartialUpdateObject(_operation: String, value: Option[Any])
