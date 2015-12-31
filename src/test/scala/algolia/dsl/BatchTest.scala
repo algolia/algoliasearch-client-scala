@@ -38,18 +38,18 @@ class BatchTest extends AlgoliaTest {
       it("should index multiple objects") {
         batch(
           index into "test" `object` BasicObject("name1", 1),
-//          index into "tutu" documents Seq(BasicObject("name2", 2)),
+          //          index into "tutu" documents Seq(BasicObject("name2", 2)),
           index into "test" objectId "oid1" `object` BasicObject("name3", 3)
-//          index into "tutu" documents Map("oid2" -> BasicObject("name4", 4))
+          //          index into "tutu" documents Map("oid2" -> BasicObject("name4", 4))
         )
       }
 
       it("should call the API") {
         val build = batch(
           index into "test" `object` BasicObject("name1", 1),
-//          index into "tutu" documents Seq(BasicObject("name2", 2)),
+          //          index into "tutu" documents Seq(BasicObject("name2", 2)),
           index into "test" objectId "oid1" `object` BasicObject("name3", 3)
-//          index into "tutu" documents Map("oid2" -> Seq(BasicObject("name4", 4)))
+          //          index into "tutu" documents Map("oid2" -> Seq(BasicObject("name4", 4)))
         ).build()
 
         val body =
@@ -157,6 +157,110 @@ class BatchTest extends AlgoliaTest {
             |       "indexName":"test2",
             |       "objectID":"2",
             |       "action":"deleteObject"
+            |     }
+            |   ]
+            | }
+          """.stripMargin.split("\n").map(_.trim).mkString
+
+        build should be(
+          HttpPayload(
+            POST,
+            List("1", "indexes", "*", "batch"),
+            body = Some(body),
+            isSearch = false
+          )
+        )
+      }
+
+    }
+
+    describe("partial update object") {
+
+      it("should update fields") {
+        batch(
+          increment attribute "toto" by 1 from "index1" ofObjectId "myId",
+          decrement attribute "toto" by 1 ofObjectId "myId" from "index2",
+          add value "truc" inAttribute "toto" ofObjectId "myId" from "index3",
+          remove value "truc" inAttribute "toto" ofObjectId "myId" from "index4",
+          addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index5",
+          increment attribute "toto" by 1 from "index6" ofObjectId "1" createIfNotExists false
+        )
+      }
+
+      it("should call the API") {
+        val build = batch(
+          increment attribute "att1" by 1 from "index1" ofObjectId "1",
+          decrement attribute "att2" by 1 ofObjectId "2" from "index2",
+          add value "truc" inAttribute "att3" ofObjectId "3" from "index3",
+          remove value "truc" inAttribute "att4" ofObjectId "4" from "index4",
+          addUnique value "truc" inAttribute "att5" ofObjectId "5" from "index5",
+          increment attribute "att6" by 1 from "index6" ofObjectId "6" createIfNotExists false
+        ).build()
+
+        val body =
+          """
+            | {
+            |   "requests":[
+            |     {
+            |       "body":{
+            |         "objectID":"1",
+            |         "att1":{
+            |           "_operation":"Increment",
+            |           "value":1
+            |         }
+            |       },
+            |       "indexName":"index1",
+            |       "action":"partialUpdateObject"
+            |     },{
+            |       "body":{
+            |         "objectID":"2",
+            |         "att2":{
+            |           "_operation":"Decrement",
+            |           "value":1
+            |         }
+            |       },
+            |       "indexName":"index2",
+            |       "action":"partialUpdateObject"
+            |     },{
+            |       "body":{
+            |         "objectID":"3",
+            |         "att3":{
+            |           "_operation":"Add",
+            |           "value":"truc"
+            |         }
+            |       },
+            |       "indexName":"index3",
+            |       "action":"partialUpdateObject"
+            |     },{
+            |       "body":{
+            |         "objectID":"4",
+            |         "att4":{
+            |           "_operation":"Remove",
+            |           "value":"truc"
+            |         }
+            |       },
+            |       "indexName":"index4",
+            |       "action":"partialUpdateObject"
+            |     },{
+            |       "body":{
+            |         "objectID":"5",
+            |         "att5":{
+            |           "_operation":"AddUnique",
+            |           "value":"truc"
+            |         }
+            |       },
+            |       "indexName":"index5",
+            |       "action":"partialUpdateObject"
+            |     },{
+            |       "body":{
+            |         "objectID":"6",
+            |         "att6":{
+            |           "_operation":"Increment",
+            |           "value":1
+            |         }
+            |       },
+            |       "indexName":"index6",
+            |       "action":"partialUpdateObjectNoCreate"
             |     }
             |   ]
             | }

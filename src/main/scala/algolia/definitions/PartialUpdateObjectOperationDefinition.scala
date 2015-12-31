@@ -60,9 +60,12 @@ case class PartialUpdateObjectOperationDefinition(operation: Operation,
                                                   index: Option[String] = None,
                                                   objectId: Option[String] = None,
                                                   attribute: Option[String] = None,
-                                                  value: Option[Any] = None)(implicit val formats: Formats) extends Definition {
+                                                  value: Option[Any] = None,
+                                                  createNotExists: Boolean = true)(implicit val formats: Formats) extends Definition {
 
   def ofObjectId(objectId: String): PartialUpdateObjectOperationDefinition = copy(objectId = Some(objectId))
+
+  def inAttribute(attr: String): PartialUpdateObjectOperationDefinition = attribute(attr)
 
   def attribute(attribute: String): PartialUpdateObjectOperationDefinition = copy(attribute = Some(attribute))
 
@@ -72,14 +75,23 @@ case class PartialUpdateObjectOperationDefinition(operation: Operation,
 
   def from(index: String): PartialUpdateObjectOperationDefinition = copy(index = Some(index))
 
+  def createIfNotExists(createNotExists: Boolean = false): PartialUpdateObjectOperationDefinition = copy(createNotExists = createNotExists)
+
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
       attribute.get -> PartialUpdateObject(operation.name, value)
     )
 
+    val queryParameters = if (createNotExists) {
+      None
+    } else {
+      Some(Map("createIfNotExists" -> "false"))
+    }
+
     HttpPayload(
       POST,
       Seq("1", "indexes") ++ index ++ objectId :+ "partial",
+      queryParameters = queryParameters,
       body = Some(write(body)),
       isSearch = false
     )
@@ -93,8 +105,6 @@ case class PartialUpdateObjectDefinition(index: Option[String] = None,
                                          value: Option[Any] = None)(implicit val formats: Formats) extends Definition {
 
   def ofObjectId(objectId: String): PartialUpdateObjectDefinition = copy(objectId = Some(objectId))
-
-  def attribute(attribute: String): PartialUpdateObjectDefinition = copy(attribute = Some(attribute))
 
   def value(value: Any): PartialUpdateObjectDefinition = copy(value = Some(value))
 
@@ -121,72 +131,43 @@ trait PartialUpdateObjectDsl {
 
   case object increment {
 
-    def ofObjectId(objectId: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Increment, objectId = Some(objectId))
+    def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(Increment, attribute = Some(attribute))
 
-    def attribute(attribute: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Increment, attribute = Some(attribute))
-
-    def by(inc: Int): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Increment, value = Some(inc))
-
-    def from(index: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Increment, index = Some(index))
   }
 
   case object decrement {
 
-    def objectId(objectId: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Decrement, objectId = Some(objectId))
-
-    def attribute(attribute: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Decrement, attribute = Some(attribute))
-
-    def by(dec: Int): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Decrement, value = Some(dec))
-
-    def from(index: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Decrement, index = Some(index))
+    def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(Decrement, attribute = Some(attribute))
 
   }
 
   case object add {
 
-    def objectId(objectId: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Add, objectId = Some(objectId))
-
-    def inAttribute(attribute: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Add, attribute = Some(attribute))
-
-    def value(value: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Add, value = Some(value))
-
-    def from(index: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Add, index = Some(index))
+    def value(value: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(Add, value = Some(value))
 
   }
 
   case object addUnique {
 
-    def objectId(objectId: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(AddUnique, objectId = Some(objectId))
-
-    def inAttribute(attribute: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(AddUnique, attribute = Some(attribute))
-
-    def value(value: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(AddUnique, value = Some(value))
-
-    def from(index: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(AddUnique, index = Some(index))
+    def value(value: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(AddUnique, value = Some(value))
 
   }
 
   case object remove {
 
-    def objectId(objectId: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Remove, objectId = Some(objectId))
-
-    def inAttribute(attribute: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Remove, attribute = Some(attribute))
-
-    def value(value: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Remove, value = Some(value))
-
-    def from(index: String): PartialUpdateObjectOperationDefinition = PartialUpdateObjectOperationDefinition(Remove, index = Some(index))
+    def value(value: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(Remove, value = Some(value))
 
   }
 
   case object update {
 
-    def objectId(objectId: String): PartialUpdateObjectDefinition = PartialUpdateObjectDefinition(objectId = Some(objectId))
-
-    def attribute(attribute: String): PartialUpdateObjectDefinition = PartialUpdateObjectDefinition(attribute = Some(attribute))
-
-    def value(value: Any): PartialUpdateObjectDefinition = PartialUpdateObjectDefinition(value = Some(value))
-
-    def from(index: String): PartialUpdateObjectDefinition = PartialUpdateObjectDefinition(index = Some(index))
+    def attribute(attribute: String): PartialUpdateObjectDefinition =
+      PartialUpdateObjectDefinition(attribute = Some(attribute))
 
   }
 

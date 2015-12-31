@@ -32,11 +32,11 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("increment value") {
 
     it("should increment") {
-      increment ofObjectId "myId" attribute "toto" by 1 from "index"
+      increment attribute "toto" ofObjectId "myId" by 1 from "index"
     }
 
     it("should call API") {
-      (increment ofObjectId "myId" attribute "toto" by 1 from "index").build() should be(
+      (increment attribute "toto" ofObjectId "myId" by 1 from "index").build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
@@ -70,11 +70,11 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("add value") {
 
     it("should add value") {
-      add inAttribute "toto" value "truc" ofObjectId "myId" from "index"
+      add value "truc" inAttribute "toto" ofObjectId "myId" from "index"
     }
 
     it("should call API") {
-      (add inAttribute "toto" value "truc" ofObjectId "myId" from "index").build() should be(
+      (add value "truc" inAttribute "toto" ofObjectId "myId" from "index").build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
@@ -89,11 +89,11 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("remove value") {
 
     it("remove add value") {
-      remove inAttribute "toto" value "truc" ofObjectId "myId" from "index"
+      remove value "truc" inAttribute "toto" ofObjectId "myId" from "index"
     }
 
     it("should call API") {
-      (remove inAttribute "toto" value "truc" ofObjectId "myId" from "index").build() should be(
+      (remove value "truc" inAttribute "toto" ofObjectId "myId" from "index").build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
@@ -108,11 +108,11 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("addUnique value") {
 
     it("should add unique value") {
-      addUnique inAttribute "toto" value "truc" ofObjectId "myId" from "index"
+      addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index"
     }
 
     it("should call API") {
-      (addUnique inAttribute "toto" value "truc" ofObjectId "myId" from "index").build() should be(
+      (addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index").build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
@@ -143,5 +143,24 @@ class PartialUpdateObjectTest extends AlgoliaTest {
 
   }
 
+  describe("create if not exists") {
+
+    it("should do not create if no exists") {
+      increment attribute "toto" ofObjectId "myId" by 1 from "index" createIfNotExists false
+    }
+
+    it("should call API") {
+      (increment attribute "toto" ofObjectId "myId" by 1 from "index" createIfNotExists false).build() should be(
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "index", "myId", "partial"),
+          queryParameters = Some(Map("createIfNotExists" -> "false")),
+          body = Some("{\"toto\":{\"_operation\":\"Increment\",\"value\":1}}"),
+          isSearch = false
+        )
+      )
+    }
+
+  }
 
 }
