@@ -98,7 +98,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
     taskShouldBeCreatedAndWaitForIt(client, create, "index_partial")
 
     val adding: Future[Task] = client.execute {
-      add inAttribute "values" value "2" ofObjectId "add" from "index_partial"
+      add value "2" inAttribute "values" ofObjectId "add" from "index_partial"
     }
 
     taskShouldBeCreatedAndWaitForIt(client, adding, "index_partial")
@@ -120,7 +120,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
     taskShouldBeCreatedAndWaitForIt(client, create, "index_partial")
 
     val removing: Future[Task] = client.execute {
-      remove inAttribute "values" value "1" ofObjectId "remove" from "index_partial"
+      remove value "1" inAttribute "values" ofObjectId "remove" from "index_partial"
     }
 
     taskShouldBeCreatedAndWaitForIt(client, removing, "index_partial")
@@ -142,7 +142,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
     taskShouldBeCreatedAndWaitForIt(client, create, "index_partial")
 
     val addingUnique: Future[Task] = client.execute {
-      addUnique inAttribute "values" value "1" ofObjectId "addUnique" from "index_partial"
+      addUnique value "1" inAttribute "values" ofObjectId "addUnique" from "index_partial"
     }
 
     taskShouldBeCreatedAndWaitForIt(client, addingUnique, "index_partial")

@@ -357,7 +357,9 @@ You have three options when updating an existing object:
 Example on how to replace all attributes of an existing object:
 
 ```scala
-//Not yet implemented
+val indexing: Future[Indexing] = client.execute {
+    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
+}
 ```
 
 You have many ways to update an object's attributes:
@@ -372,31 +374,41 @@ You have many ways to update an object's attributes:
 Example to update only the city attribute of an existing object:
 
 ```scala
-//Not yet implemented
+client.execute {
+	update attribute "city" value "San Francisco" ofObjectId "myId" from "index"
+}
 ```
 
 Example to add a tag:
 
 ```scala
-//Not yet implemented
+client.execute {
+	add inAttribute "_tags" value "MyTags" ofObjectId "myId" from "index"
+}
 ```
 
 Example to remove a tag:
 
 ```scala
-//Not yet implemented
+client.execute {
+	remove inAttribute "_tags" value "MyTags" ofObjectId "myId" from "index"
+}
 ```
 
 Example to add a tag if it doesn't exist:
 
 ```scala
-//Not yet implemented
+client.execute {
+	addUnique inAttribute "_tags" value "MyTags" ofObjectId "myId" from "index"
+}
 ```
 
 Example to increment a numeric value:
 
 ```scala
-//Not yet implemented
+client.execute {
+	increment attribute "price" by 42 ofObjectId "myId" from "index"
+}
 ```
 
 Note: Here we are incrementing the value by `42`. To increment just by one, put
@@ -405,7 +417,9 @@ Note: Here we are incrementing the value by `42`. To increment just by one, put
 Example to decrement a numeric value:
 
 ```scala
-//Not yet implemented
+client.execute {
+	decrement attribute "price" by 42 ofObjectId "myId" from "index"
+}
 ```
 
 Note: Here we are decrementing the value by `42`. To decrement just by one, put
@@ -802,7 +816,14 @@ client.execute {
 
 Example with user defined `objectID` (add or update):
 ```scala
-//Not yet implemented
+client.execute {
+	batch(
+    update attribute "firstname" value "Jimmie" ofObjectId "SFO" from "index",
+    update attribute "lastname" value "Barninger" ofObjectId "SFO" from "index",
+    update attribute "firstname" value "Warren" ofObjectId "LA" from "index",
+    update attribute "lastname" value "Speach" ofObjectId "LA" from "index"
+  )
+}
 ```
 
 Example that deletes a set of records:
@@ -817,7 +838,9 @@ client.execute {
 
 Example that updates only the `firstname` attribute:
 ```scala
-//Not yet implemented
+client.execute {
+  update attribute "firstname" value "Jimmie" ofObjectId "SFO" from "index",
+}
 ```
 
 
