@@ -59,7 +59,7 @@ If you're using Maven, add the following dependency to your `pom.xml` file:
 <dependency>
     <groupId>com.algolia</groupId>
     <artifactId>algoliasearch-scala_2.11</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -81,7 +81,7 @@ Initialize the client with your Application ID and API Key. You can find them on
 
 If you're using SBT, add the following dependency to your `build.sbt` file:
 ```scala
-libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "1.0.0"
+libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "1.1.0"
 ```
 
 For Snapshots add the Sonatype repository:
