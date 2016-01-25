@@ -1,5 +1,22 @@
 # Change Log
 
+## [1.1.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.1.0) (2016-01-25)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.0.0...1.1.0)
+
+**Implemented enhancements:**
+
+- Partial Update Object No Create, on single object [\#69](https://github.com/algolia/algoliasearch-client-scala/issues/69)
+- Batch partialUpdateObjects/partialUpdateObjectNoCreate [\#31](https://github.com/algolia/algoliasearch-client-scala/issues/31)
+- Wait indexing [\#11](https://github.com/algolia/algoliasearch-client-scala/issues/11)
+- Partial object update [\#4](https://github.com/algolia/algoliasearch-client-scala/issues/4)
+
+**Merged pull requests:**
+
+- Partial update objects [\#70](https://github.com/algolia/algoliasearch-client-scala/pull/70) ([ElPicador](https://github.com/ElPicador))
+- Add partial update object [\#68](https://github.com/algolia/algoliasearch-client-scala/pull/68) ([ElPicador](https://github.com/ElPicador))
+- Wait for task [\#66](https://github.com/algolia/algoliasearch-client-scala/pull/66) ([ElPicador](https://github.com/ElPicador))
+- Coveralls plugins [\#65](https://github.com/algolia/algoliasearch-client-scala/pull/65) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.0.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.0.0) (2015-12-22)
 **Implemented enhancements:**
 
