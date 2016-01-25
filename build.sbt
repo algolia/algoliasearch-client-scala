@@ -4,7 +4,7 @@ name := "algoliasearch-scala"
 
 description := "Scala client for Algolia Search API"
 
-version := "1.0.0"
+version := "1.1.0"
 
 scalaVersion := "2.11.7"
 
@@ -33,8 +33,11 @@ libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaM
 
 scalacOptions ++= Seq("-feature", "-unchecked")
 
-/** Publishing to Sonatype & Maven Central
+/**
+  * Publishing to Sonatype & Maven Central
   *
+  * > gem install github_changelog_generator
+  * > github_changelog_generator -t YOUR_GITHUB_TOKEN --no-unreleased
   * > sbt publishSigned
   * > sbt sonatypeRelease
   *
