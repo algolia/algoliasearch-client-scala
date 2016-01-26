@@ -25,7 +25,7 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.http.{GET, HttpPayload}
+import algolia.http.{GET, HttpPayload, POST}
 
 class GetObjectTest extends AlgoliaTest {
 
@@ -40,8 +40,38 @@ class GetObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (get objectId "myId" from "test").build() eq HttpPayload(GET, Seq("1", "indexes", "test", "myId"))
+      val payload = HttpPayload(GET, Seq("1", "indexes", "test", "myId"))
+      (get objectId "myId" from "test").build() should be(payload)
     }
+
+  }
+
+  describe("get multiple objects") {
+
+    it("should get objects by ids") {
+      get from "test" objectIds Seq("myId1", "myId2")
+    }
+
+    it("should call API") {
+      val body =
+        """
+          |{
+          | "requests":[
+          |   {
+          |     "indexName":"test",
+          |     "objectID":"myId1"
+          |   },{
+          |     "indexName":"test",
+          |     "objectID":"myId2"
+          |   }
+          |  ]
+          |}
+        """.stripMargin.split("\n").map(_.trim).mkString
+
+      val payload = HttpPayload(POST, Seq("1", "indexes", "*", "objects"), body = Some(body))
+      (get from "test" objectIds Seq("myId1", "myId2")).build() should be(payload)
+    }
+
 
   }
 

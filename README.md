@@ -22,7 +22,7 @@ Table of Contents
 
 1. [Setup](#setup)
 1. [Quick Start](#quick-start)
-1. [Philosophy of the scala client](#philosophy) 
+1. [Philosophy of the scala client](#philosophy)
 1. [Online documentation](#documentation)
 1. [Tutorials](#tutorials)
 
@@ -219,10 +219,10 @@ client.execute { get / "index" / "myId" }
 Future
 ------
 
-The `execute` method always return a [`scala.concurrent.Future`](http://www.scala-lang.org/api/2.11.7/#scala.concurrent.Future). 
+The `execute` method always return a [`scala.concurrent.Future`](http://www.scala-lang.org/api/2.11.7/#scala.concurrent.Future).
 Depending of the operation it will be parametrized by a `case class`. For example:
 ```scala
-var future: Future[Search] = 
+var future: Future[Search] =
     client.execute {
         search into "index" query "a"
     }
@@ -239,7 +239,7 @@ case class Contact(firstname: String,
                    followers: Int,
                    compagny: String)
 
-var future: Future[Seq[Contact]] = 
+var future: Future[Seq[Contact]] =
     client
         .execute {
             search into "index" query "a"
@@ -260,7 +260,7 @@ case class EnhanceContact(firstname: String,
                           _snippetResult: Option[Map[String, SnippetResult]],
                           _rankingInfo: Option[RankingInfo]) extends Hit
 
-var future: Future[Seq[EnhanceContact]] = 
+var future: Future[Seq[EnhanceContact]] =
     client
         .execute {
             search into "index" query "a"
@@ -606,22 +606,40 @@ You can easily retrieve an object using its `objectID` and optionally specify a 
 
 ```scala
 // Retrieves all attributes
-get objectId "myId" from "index"
+client.execute {
+	get objectId "myId" from "index"
+}
 
 //or
-
-get from "index" objectId "myId"
+client.execute {
+	get from "index" objectId "myId"
+}
 ```
 
 You can get a case object by:
 ```scala
-(get / "index" / "myId").map(_.as[Contact])
+val result = client.execute {
+	get / "index" / "myId"
+}
+
+result.map(_.as[Contact])
 ```
 
 You can also retrieve a set of objects:
 
 ```scala
-//Not yet implemented
+client.execute {
+	get from "index" objectIds Seq("myId", "myOtherId")
+}
+```
+
+You can get a case object by:
+```scala
+val result = client.execute {
+	get from "index" objectIds Seq("myId", "myOtherId")
+}
+
+result.map(_.as[Contact])
 ```
 
 Delete an object
@@ -709,7 +727,7 @@ You can decide to have the same priority for two attributes by passing them in t
  * **advancedSyntax**: Enable the advanced query syntax. Defaults to 0 (false).
 
   * **Phrase query:** a phrase query defines a particular sequence of terms. A phrase query is build by Algolia's query parser for words surrounded by `"`. For example, `"search engine"` will retrieve records having `search` next to `engine` only. Typo-tolerance is disabled on phrase queries.
-  
+
   * **Prohibit operator:** The prohibit operator excludes records that contain the term after the `-` symbol. For example `search -engine` will retrieve records containing `search` but not `engine`.
  * **replaceSynonymsInHighlight**: (boolean) If set to false, words matched via synonyms expansion will not be replaced by the matched synonym in the highlighted result. Default to true.
  * **maxValuesPerFacet**: (integer) Limit the number of facet values returned for each facet. For example: `maxValuesPerFacet=10` will retrieve max 10 values per facet.
@@ -1010,7 +1028,7 @@ are still returned ranked by attributes and custom ranking.
 
 
 It will return a `cursor` alongside your data, that you can then use to retrieve
-the next chunk of your records. 
+the next chunk of your records.
 
 You can specify custom parameters (like `page` or `hitsPerPage`) on your first
 `browse` call, and these parameters will then be included in the `cursor`. Note
@@ -1051,6 +1069,8 @@ You can retrieve the logs of your last 1,000 API calls and browse them using the
 ```scala
 //Not yet implemented
 ```
+
+
 
 
 

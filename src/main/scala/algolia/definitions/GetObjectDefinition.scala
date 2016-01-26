@@ -24,13 +24,18 @@
 package algolia.definitions
 
 import algolia.http.HttpPayload
-import algolia.responses.Get
+import algolia.inputs.{Request, Requests}
+import algolia.responses.{Get, Results}
 import algolia.{AlgoliaClient, Executable, _}
+import org.json4s.Formats
 import org.json4s.JsonAST.JObject
+import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None) extends Definition {
+case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None)(implicit val formats: Formats) extends Definition {
+
+  def objectIds(oids: Seq[String]): GetObjectsDefinition = GetObjectsDefinition(index, oids)
 
   def from(ind: String): GetObjectDefinition = copy(index = Some(ind))
 
@@ -40,7 +45,25 @@ case class GetObjectDefinition(index: Option[String] = None, oid: Option[String]
     HttpPayload(http.GET, Seq("1", "indexes") ++ index ++ oid)
 }
 
+case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq())(implicit val formats: Formats) extends Definition {
+
+  override private[algolia] def build(): HttpPayload = {
+    val requests = oids.map { oid =>
+      Request(index, oid)
+    }
+
+    HttpPayload(
+      http.POST,
+      Seq("1", "indexes", "*", "objects"),
+      body = Some(write(Requests(requests)))
+    )
+  }
+
+}
+
 trait GetObjectDsl {
+
+  implicit val formats: Formats
 
   case object get {
 
@@ -54,6 +77,13 @@ trait GetObjectDsl {
 
     override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[Get] = {
       (client request[JObject] query.build()).map(Get(_))
+    }
+  }
+
+  implicit object GetObjectsDefinitionExecutable extends Executable[GetObjectsDefinition, Results] {
+
+    override def apply(client: AlgoliaClient, query: GetObjectsDefinition)(implicit executor: ExecutionContext): Future[Results] = {
+      client request[Results] query.build()
     }
   }
 
