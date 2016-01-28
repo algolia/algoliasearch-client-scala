@@ -38,18 +38,16 @@ class BatchTest extends AlgoliaTest {
       it("should index multiple objects") {
         batch(
           index into "test" `object` BasicObject("name1", 1),
-          //          index into "tutu" documents Seq(BasicObject("name2", 2)),
-          index into "test" objectId "oid1" `object` BasicObject("name3", 3)
-          //          index into "tutu" documents Map("oid2" -> BasicObject("name4", 4))
+          index into "tutu" objects Seq(BasicObject("name2", 2)),
+          index into "test" objectId "oid1" `object` BasicObject("name3", 3),
+          index into "tutu" objects Map("oid2" -> BasicObject("name4", 4))
         )
       }
 
       it("should call the API") {
         val build = batch(
           index into "test" `object` BasicObject("name1", 1),
-          //          index into "tutu" documents Seq(BasicObject("name2", 2)),
           index into "test" objectId "oid1" `object` BasicObject("name3", 3)
-          //          index into "tutu" documents Map("oid2" -> Seq(BasicObject("name4", 4)))
         ).build()
 
         val body =
@@ -86,6 +84,45 @@ class BatchTest extends AlgoliaTest {
         )
       }
 
+      it("should call the API for batches of batches") {
+        val build = batch(
+          index into "tutu" objects Seq(BasicObject("name2", 2)),
+          index into "tutu" objects Map("oid4" -> BasicObject("name4", 4))
+        ).build()
+
+        val body =
+          """
+            | {
+            |   "requests":[
+            |     {
+            |       "body":{
+            |         "name":"name2",
+            |         "age":2
+            |       },
+            |       "indexName":"tutu",
+            |       "action":"addObject"
+            |     },{
+            |       "body":{
+            |         "objectID":"oid4",
+            |         "name":"name4",
+            |         "age":4
+            |       },
+            |       "indexName":"tutu",
+            |       "action":"updateObject"
+            |     }
+            |   ]
+            | }
+          """.stripMargin.split("\n").map(_.trim).mkString
+
+        build should be(
+          HttpPayload(
+            POST,
+            List("1", "indexes", "*", "batch"),
+            body = Some(body),
+            isSearch = false
+          )
+        )
+      }
     }
 
     describe("clear index") {

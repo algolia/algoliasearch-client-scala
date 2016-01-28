@@ -27,54 +27,61 @@ import algolia.http.{HttpPayload, POST}
 import algolia.inputs._
 import algolia.responses.TasksMultipleIndex
 import algolia.{AlgoliaClient, Executable}
+import org.json4s.JsonAST.JValue
 import org.json4s.native.Serialization._
-import org.json4s.{Extraction, Formats, JValue}
+import org.json4s.{Extraction, Formats}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class BatchDefinition(definitions: Traversable[Definition])(implicit val formats: Formats) extends Definition with BatchOperationUtils {
 
   override private[algolia] def build(): HttpPayload = {
-    val operations: Seq[BatchOperation[_ <: JValue]] = definitions.map {
+    HttpPayload(
+      POST,
+      Seq("1", "indexes", "*", "batch"),
+      body = Some(write(BatchOperations(definitions.flatMap(transform)))),
+      isSearch = false
+    )
+  }
+
+  private def transform(definition: Definition): Traversable[BatchOperation[JValue]] = {
+    definition match {
       case IndexingDefinition(index, None, Some(obj)) =>
         hasObjectId(obj) match {
-          case (true, o) => UpdateObjectOperation(o, Some(index))
-          case (false, o) => AddObjectOperation(o, Some(index))
+          case (true, o) => Traversable(UpdateObjectOperation(o, Some(index)))
+          case (false, o) => Traversable(AddObjectOperation(o, Some(index)))
         }
 
       case IndexingDefinition(index, Some(objectId), Some(obj)) =>
-        UpdateObjectOperation(addObjectId(obj, objectId), Some(index))
+        Traversable(UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
 
       case ClearIndexDefinition(index) =>
-        ClearIndexOperation(index)
+        Traversable(ClearIndexOperation(index))
 
       case DeleteObjectDefinition(Some(index), Some(oid)) =>
-        DeleteObjectOperation(index, oid)
+        Traversable(DeleteObjectOperation(index, oid))
 
       case DeleteIndexDefinition(index) =>
-        DeleteIndexOperation(index)
+        Traversable(DeleteIndexOperation(index))
 
       case PartialUpdateObjectOperationDefinition(operation, index, Some(objectId), Some(attribute), value, true) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
-        PartialUpdateObjectOperation(Extraction.decompose(body), index)
+        Traversable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
 
       case PartialUpdateObjectOperationDefinition(operation, index, Some(objectId), Some(attribute), value, false) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
-        PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index)
-    }.toSeq
+        Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
 
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", "*", "batch"),
-      body = Some(write(BatchOperations(operations))),
-      isSearch = false
-    )
+      case IndexingBatchDefinition(_, defs) =>
+        defs.flatMap(transform)
+
+    }
   }
 }
 

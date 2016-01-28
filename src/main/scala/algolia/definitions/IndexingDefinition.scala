@@ -38,10 +38,10 @@ case class IndexingDefinition(index: String,
   def objects(objectsWithIds: Map[String, AnyRef]): IndexingBatchDefinition =
     IndexingBatchDefinition(index, objectsWithIds.map { case (oid, o) =>
       IndexingDefinition(index, Some(oid), Some(o))
-    }.toSeq)
+    })
 
   def objects(objects: Traversable[AnyRef]): IndexingBatchDefinition =
-    IndexingBatchDefinition(index, objects.map { obj => copy(obj = Some(obj)) })
+    IndexingBatchDefinition(index, objects.map { obj => copy(index = index, obj = Some(obj)) })
 
   def objectId(objectId: String): IndexingDefinition =
     copy(objectId = Some(objectId))
