@@ -59,7 +59,7 @@ If you're using Maven, add the following dependency to your `pom.xml` file:
 <dependency>
     <groupId>com.algolia</groupId>
     <artifactId>algoliasearch-scala_2.11</artifactId>
-    <version>1.1.0</version>
+    <version>[1,)</version>
 </dependency>
 ```
 
@@ -81,7 +81,7 @@ Initialize the client with your Application ID and API Key. You can find them on
 
 If you're using SBT, add the following dependency to your `build.sbt` file:
 ```scala
-libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "1.1.0"
+libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "[1,)"
 ```
 
 For Snapshots add the Sonatype repository:
@@ -455,7 +455,6 @@ You can use the following optional arguments:
   * **none**: No specific processing is done when a query does not return any results (default behavior).
  * **minWordSizefor1Typo**: The minimum number of characters in a query word to accept one typo in this word.<br/>Defaults to 4.
  * **minWordSizefor2Typos**: The minimum number of characters in a query word to accept two typos in this word.<br/>Defaults to 8.
- * **allowTyposOnNumericTokens**: If set to false, it disables typo tolerance on numeric tokens (numbers). Defaults to false.
  * **typoTolerance**: This option allows you to control the number of typos in the result set:
   * **true**: The typo tolerance is enabled and all matching hits are retrieved (default behavior).
   * **false**: The typo tolerance is disabled. For example, if one result matches without typos, then all results with typos will be hidden.
