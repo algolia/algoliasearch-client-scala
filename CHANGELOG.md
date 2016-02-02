@@ -1,5 +1,21 @@
 # Change Log
 
+## [1.2.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.2.0) (2016-01-28)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.1.0...1.2.0)
+
+**Implemented enhancements:**
+
+- Get multiple objects [\#34](https://github.com/algolia/algoliasearch-client-scala/issues/34)
+
+**Fixed bugs:**
+
+- Can not do batches on batches [\#32](https://github.com/algolia/algoliasearch-client-scala/issues/32)
+
+**Merged pull requests:**
+
+- Fix: batches of batches [\#72](https://github.com/algolia/algoliasearch-client-scala/pull/72) ([ElPicador](https://github.com/ElPicador))
+- Multiple get objets [\#71](https://github.com/algolia/algoliasearch-client-scala/pull/71) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.1.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.1.0) (2016-01-25)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.0.0...1.1.0)
 
