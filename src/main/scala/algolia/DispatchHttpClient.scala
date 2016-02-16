@@ -46,7 +46,7 @@ object DispatchHttpClient extends DispatchHttpClient(
 case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
                               httpConnectTimeout: Int = default.httpConnectTimeout) {
 
-  implicit val formats = DefaultFormats
+  implicit val formats: Formats = AlgoliaDsl.formats
 
   lazy val http = Http().configure { builder =>
     builder

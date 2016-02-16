@@ -29,23 +29,38 @@ import algolia.{AlgoliaClient, AlgoliaTest}
 import org.json4s._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-class IntegrationTest extends AlgoliaTest {
+class SearchIntegrationTest extends AlgoliaTest {
 
   val client = new AlgoliaClient(applicationId, apiKey)
 
+  after {
+    val indices = Seq(
+      "indexToSearch"
+    )
+
+    val del = client.execute {
+      batch(indices.map { i => delete index i })
+    }
+
+    whenReady(del) { res => res }
+  }
+
   describe("search") {
 
-    var s: Future[Search] = Future.failed(new Exception)
-
     before {
-      s = client.execute {
-        search into "test" query "a"
+      val insert = client.execute {
+        index into "indexToSearch" objectId "563481290" `object` Test("algolia", 10, alien = false)
       }
+
+      taskShouldBeCreatedAndWaitForIt(client, insert, "indexToSearch")
     }
 
     it("should return generic object") {
+      val s = client.execute {
+        search into "indexToSearch" query "a"
+      }
+
       whenReady(s) { result =>
         result.hits should have length 1
         (result.hits.head \ "name").values should be("algolia")
@@ -55,6 +70,10 @@ class IntegrationTest extends AlgoliaTest {
     }
 
     it("should return case class") {
+      val s = client.execute {
+        search into "indexToSearch" query "a"
+      }
+
       whenReady(s) { result =>
         result.hits should have length 1
         result.as[Test].head should be(Test("algolia", 10, alien = false))
@@ -62,6 +81,11 @@ class IntegrationTest extends AlgoliaTest {
     }
 
     it("should return a hit") {
+      val s = client.execute {
+        search into "indexToSearch" query "a"
+      }
+
+
       whenReady(s) { result =>
         result.hits should have length 1
         val hit = EnhanceTest("algolia", 10, alien = false, "563481290", Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))), None, None)
@@ -70,91 +94,6 @@ class IntegrationTest extends AlgoliaTest {
     }
   }
 
-  describe("indexing") {
-
-    it("should index a document") {
-      val indexing: Future[TaskIndexing] = client.execute {
-        index into "toto" `object` Test("test", 1, alien = true)
-      }
-
-      whenReady(indexing) { result =>
-        result.createdAt should not be empty
-        result.objectID should not be empty
-      }
-    }
-
-    it("should index a document with an objectID") {
-      val indexing: Future[TaskIndexing] = client.execute {
-        index into "toto" objectId "truc" `object` Test("test", 1, alien = true)
-      }
-
-      whenReady(indexing) { result =>
-        result.objectID should be("truc")
-      }
-    }
-  }
-
-  describe("get object by id") {
-
-    it("should get it") {
-      val obj: Future[Get] = client.execute {
-        get from "toto" objectId "truc"
-      }
-
-      whenReady(obj) { result =>
-        result should be(
-          Get(
-            JObject(
-              List(
-                ("name", JString("test")),
-                ("age", JInt(1)),
-                ("alien", JBool(true)),
-                ("objectID", JString("truc"))
-              )
-            )
-          )
-        )
-
-        result.objectID should be("truc")
-
-        result.as[Test] should be(Test("test", 1, alien = true))
-      }
-    }
-  }
-
-  describe("batches") {
-
-    it("should insert in batch") {
-      val docs = Map(
-        "1" -> Test("1", 1, alien = false),
-        "2" -> Test("2", 2, alien = false),
-        "3" -> Test("3", 3, alien = false)
-      )
-
-      val result: Future[TasksSingleIndex] = client.execute {
-        index into "toto" objects docs
-      }
-
-      whenReady(result) { result =>
-        result.objectIDs should equal(Seq("1", "2", "3"))
-      }
-    }
-
-    it("should insert in batch with batch DSL") {
-      val result: Future[TasksMultipleIndex] = client.execute {
-        batch(
-          index into "toto" objectId "4" `object` Test("4", 4, alien = true),
-          index into "toto" objectId "5" `object` Test("5", 5, alien = true),
-          index into "toto" objectId "6" `object` Test("6", 6, alien = true)
-        )
-      }
-
-      whenReady(result) { result =>
-        result.objectIDs should equal(Seq("4", "5", "6"))
-      }
-    }
-
-  }
 }
 
 case class Test(name: String,
