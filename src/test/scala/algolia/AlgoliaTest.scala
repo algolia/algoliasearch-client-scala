@@ -28,7 +28,7 @@ import algolia.responses.AlgoliaTask
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, FunSpec, Matchers}
+import org.scalatest.{BeforeAndAfter, FunSpec, Inside, Matchers}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,6 +37,7 @@ class AlgoliaTest
     with Matchers
     with BeforeAndAfter
     with ScalaFutures
+    with Inside
     with MockFactory {
 
   val applicationId = System.getenv("APPLICATION_ID")
