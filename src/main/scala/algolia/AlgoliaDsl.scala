@@ -40,6 +40,7 @@ trait AlgoliaDsl
     with IndexingDsl
     with IndexSettingsDsl
     with ListIndexesDsl
+    with LogsDsl
     with MoveIndexDsl
     with PartialUpdateObjectDsl
     with SearchDsl
