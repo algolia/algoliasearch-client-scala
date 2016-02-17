@@ -4,9 +4,9 @@
 
 
 
-[Algolia Search](http://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
+[Algolia Search](https://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
 
-Our Scala client lets you easily use the [Algolia Search API](https://www.algolia.com/doc/rest_api) from your backend. It wraps the [Algolia Search REST API](http://www.algolia.com/doc/rest_api).
+Our Scala client lets you easily use the [Algolia Search API](https://www.algolia.com/doc/rest) from your backend. It wraps the [Algolia Search REST API](https://www.algolia.com/doc/rest).
 
 
 
@@ -77,7 +77,7 @@ For Snapshots add the Sonatype repository:
 </repositories>
 ```
 
-Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](http://www.algolia.com/users/edit):
+Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](https://www.algolia.com/users/edit):
 
 If you're using SBT, add the following dependency to your `build.sbt` file:
 ```scala
@@ -89,7 +89,7 @@ For Snapshots add the Sonatype repository:
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](http://www.algolia.com/users/edit):
+Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](https://www.algolia.com/users/edit):
 
 
 ```scala
@@ -280,25 +280,25 @@ client.execute {
 
 Documentation
 ================
-Check our [online documentation](http://www.algolia.com/doc/guides/scala):
- * [Initial Import](http://www.algolia.com/doc/guides/scala#InitialImport)
- * [Ranking &amp; Relevance](http://www.algolia.com/doc/guides/scala#RankingRelevance)
- * [Indexing](http://www.algolia.com/doc/guides/scala#Indexing)
- * [Search](http://www.algolia.com/doc/guides/scala#Search)
- * [Sorting](http://www.algolia.com/doc/guides/scala#Sorting)
- * [Filtering](http://www.algolia.com/doc/guides/scala#Filtering)
- * [Faceting](http://www.algolia.com/doc/guides/scala#Faceting)
- * [Geo-Search](http://www.algolia.com/doc/guides/scala#Geo-Search)
- * [Security](http://www.algolia.com/doc/guides/scala#Security)
- * [REST API](http://www.algolia.com/doc/rest)
+Check our [online documentation](https://www.algolia.com/doc/scala):
+ * [Initial Import](https://www.algolia.com/doc/scala#initial-import)
+ * [Ranking &amp; Relevance](https://www.algolia.com/doc/scala#ranking--relevance)
+ * [Indexing](https://www.algolia.com/doc/scala#indexing)
+ * [Search](https://www.algolia.com/doc/scala#search)
+ * [Sorting](https://www.algolia.com/doc/scala#sorting)
+ * [Filtering](https://www.algolia.com/doc/scala#filtering)
+ * [Faceting](https://www.algolia.com/doc/scala#faceting)
+ * [Geo-Search](https://www.algolia.com/doc/scala#geo-search)
+ * [Security](https://www.algolia.com/doc/scala#security)
+ * [REST API](https://www.algolia.com/doc/rest)
 
 Tutorials
 ================
 
-Check out our [tutorials](http://www.algolia.com/doc/tutorials):
- * [Search bar with autocomplete menu](http://www.algolia.com/doc/tutorials/auto-complete)
- * [Search bar with multi category autocomplete menu](http://www.algolia.com/doc/tutorials/multi-auto-complete)
- * [Instant search result pages](http://www.algolia.com/doc/tutorials/instant-search)
+Check out our [tutorials](https://www.algolia.com/doc/tutorials):
+ * [Search bar with autocomplete menu](https://www.algolia.com/doc/tutorials/auto-complete)
+ * [Search bar with multi category autocomplete menu](https://www.algolia.com/doc/tutorials/multi-auto-complete)
+ * [Instant search result pages](https://www.algolia.com/doc/tutorials/instant-search)
 
 
 
@@ -593,7 +593,7 @@ You can send multiple queries with a single API call using a batch of queries:
 
 The resulting JSON answer contains a ```results``` array storing the underlying queries answers. The answers order is the same than the requests order.
 
-You can specify a strategy to optimize your multiple queries:
+You can specify a `strategy` parameter to optimize your multiple queries:
 - **none**: Execute the sequence of queries until the end.
 - **stopIfEnoughMatches**: Execute the sequence of queries until the number of hits is reached by the sum of hits.
 
@@ -746,7 +746,37 @@ You can decide to have the same priority for two attributes by passing them in t
 You can easily retrieve settings or update them:
 
 ```scala
-//Not yet implemented
+val result: Future[IndexSettings] = client.execute {
+  settings of "myIndex"
+}
+```
+
+```scala
+val result: Future[Task] = client.execute {
+  changeSettings of "myIndex" `with` IndexSettings(
+    attributesToIndex = Some(Seq(AttributesToIndex.attribute("att1"), AttributesToIndex.attributes("att2", "att3"), AttributesToIndex.unordered("att4"))),
+    numericAttributesToIndex = Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
+    ranking = Some(Seq(
+      Ranking.typo,
+      Ranking.geo,
+      Ranking.words,
+      Ranking.proximity,
+      Ranking.attribute,
+      Ranking.exact,
+      Ranking.custom,
+      Ranking.asc("att6"),
+      Ranking.desc("att7")
+    )),
+    customRanking = Some(Seq(
+      CustomRanking.asc("att8"),
+      CustomRanking.desc("att9")
+    )),
+    synonyms = Some(Seq(Seq("black", "dark"), Seq("small", "little", "mini"))),
+    placeholders = Some(Map("<streetnumber>" -> Seq("1", "2", "3", "4", "5"))),
+    altCorrections = Some(Seq(AltCorrection("foot", "feet", 1))),
+    typoTolerance = Some(TypoTolerance.strict)
+  )
+}
 ```
 
 List indices
