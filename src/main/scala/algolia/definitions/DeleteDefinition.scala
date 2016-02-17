@@ -69,6 +69,8 @@ trait DeleteDsl {
     //Object
     def from(index: String) = DeleteObjectDefinition(index = Some(index))
 
+    def key(keyName: String) = DeleteApiKeyDefinition(keyName)
+
   }
 
   implicit object DeleteObjectDefinitionExecutable extends Executable[DeleteObjectDefinition, Task] {

@@ -30,6 +30,7 @@ import org.json4s.JsonAST.JString
 
 trait AlgoliaDsl
   extends Object //Just to have all trait DSL ordered `with`
+    with ApiKeyDefinitionDsl
     with BatchDefinitionDsl
     with ClearIndexDsl
     with CopyIndexDsl
@@ -53,7 +54,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new RankingSerializer +
       new CustomRankingSerializer +
       new QueryTypeSerializer +
-      new TypoToleranceSerializer
+      new TypoToleranceSerializer +
+      new AclSerializer
 
   val attributesToIndexUnordered = """^unordered\(([\w-]+)\)$""".r
   val attributesToIndexAttributes = """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
@@ -127,6 +129,28 @@ object AlgoliaDsl extends AlgoliaDsl {
     case TypoTolerance.`false` => JString("false")
     case TypoTolerance.min => JString("min")
     case TypoTolerance.strict => JString("strict")
+  }))
+
+  class AclSerializer extends CustomSerializer[Acl](format => ( {
+    case JString("search") => Acl.search
+    case JString("browse") => Acl.browse
+    case JString("addObject") => Acl.addObject
+    case JString("deleteObject") => Acl.deleteObject
+    case JString("deleteIndex") => Acl.deleteIndex
+    case JString("settings") => Acl.settings
+    case JString("editSettings") => Acl.editSettings
+    case JString("analytics") => Acl.analytics
+    case JString("listIndexes") => Acl.listIndexes
+  }, {
+    case Acl.search => JString("search")
+    case Acl.browse => JString("browse")
+    case Acl.addObject => JString("addObject")
+    case Acl.deleteObject => JString("deleteObject")
+    case Acl.deleteIndex => JString("deleteIndex")
+    case Acl.settings => JString("settings")
+    case Acl.editSettings => JString("editSettings")
+    case Acl.analytics => JString("analytics")
+    case Acl.listIndexes => JString("listIndexes")
   }))
 
 }
