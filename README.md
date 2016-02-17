@@ -1175,7 +1175,15 @@ You can retrieve the logs of your last 1,000 API calls and browse them using the
   * ***error***: Retrieve only the errors (same as ***onlyErrors*** parameters).
 
 ```scala
-//Not yet implemented
+// Get last 10 log entries
+client.execute {
+	logs
+}
+
+// Get last 100 log entries
+client.execute {
+	logs lenght 100
+}
 ```
 
 
