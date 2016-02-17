@@ -919,7 +919,15 @@ You can also generate user API keys to control security.
 These API keys can be restricted to a set of operations or/and restricted to a given index.
 
 ```scala
-//Not yet implemented
+//global
+client.execute {
+	get allKeys
+}
+
+//index
+client.execute {
+	get allKeysFrom "myIndex"
+}
 ```
 
 Each key is defined by a set of permissions that specify the authorized actions. The different permissions are:
@@ -935,7 +943,20 @@ Each key is defined by a set of permissions that specify the authorized actions.
 
 Example of API Key creation:
 ```scala
-//Not yet implemented
+// Creates a new global API key that can only perform search actions
+val apiKey = ApiKey(
+	acl = Some(Seq(Acl.search)),
+)
+
+//global
+client.execute {
+	add key apiKey
+}
+
+//for an index
+client.execute {
+	add key apiKey to "myIndex"
+}
 ```
 
 You can also create an API Key with advanced settings:
@@ -954,21 +975,78 @@ You can also create an API Key with advanced settings:
 
 
 ```scala
-//Not yet implemented
+// Creates a new global API key that is valid for 300 seconds
+val apiKey = ApiKey(
+	acl = Some(Seq(Acl.search)),
+	maxHitsPerQuery = Some(20)),
+	maxQueriesPerIPPerHour = Some(100),
+	validity = Some(300),
+	indexes = Some(Seq("myIndex")),
+	referers = Some(Seq("algolia.com/*")),
+	queryParameters = Some(Seq("typoTolerance=strict&ignorePlurals=false")),
+	description = Some("Limited search only API key for algolia.com")
+)
+
+//global
+client.execute {
+	add key apiKey
+}
+
+//for an index
+client.execute {
+	add key apiKey to "myIndex"
+}
 ```
 
 Update the permissions of an existing key:
+
 ```scala
-//Not yet implemented
+// Creates a new global API key that is valid for 300 seconds
+client.execute {
+	update key "myAPIKey" `with` ApiKey(
+		acl = Some(Seq(Acl.search)),
+		maxHitsPerQuery = Some(0)),
+		maxQueriesPerIPPerHour = Some(0),
+		validity = Some(300)
+	)
+}
+
+// Update a index specific API key valid for 300 seconds, with a rate limit of 100 calls per hour per IP and a
+val apiKey = ApiKey(
+	acl = Some(Seq(Acl.search)),
+	maxHitsPerQuery = Some(100)),
+	maxQueriesPerIPPerHour = Some(100),
+	validity = Some(300)
+)
+
+client.execute {
+	update key "myAPIKey" `with` apiKey from "myIndex"
+}
 ```
 Get the permissions of a given key:
 ```scala
-//Not yet implemented
+//global
+client.execute {
+	get key "f420238212c54dcfad07ea0aa6d5c45f"
+}
+
+//index
+client.execute {
+	get key "f420238212c54dcfad07ea0aa6d5c45f" from "myIndex"
+}
 ```
 
 Delete an existing key:
 ```scala
-//Not yet implemented
+//global
+client.execute {
+	delete key "f420238212c54dcfad07ea0aa6d5c45f"
+}
+
+//for an index
+client.execute {
+	delete key "f420238212c54dcfad07ea0aa6d5c45f" from "myIndex"
+}
 ```
 
 

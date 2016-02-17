@@ -25,7 +25,7 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.PartialUpdateObject
-import algolia.responses.Task
+import algolia.responses.{ApiKey, Task}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
@@ -148,6 +148,8 @@ trait PartialUpdateObjectDsl {
     def value(value: String): PartialUpdateObjectOperationDefinition =
       PartialUpdateObjectOperationDefinition(Add, value = Some(value))
 
+    def key(key: ApiKey) = AddApiKeyDefinition(key)
+
   }
 
   case object addUnique {
@@ -168,6 +170,8 @@ trait PartialUpdateObjectDsl {
 
     def attribute(attribute: String): PartialUpdateObjectDefinition =
       PartialUpdateObjectDefinition(attribute = Some(attribute))
+
+    def key(keyName: String) = UpdateApiKeyDefinition(keyName)
 
   }
 

@@ -71,6 +71,12 @@ trait GetObjectDsl {
 
     def from(index: String) = GetObjectDefinition(index = Some(index))
 
+    def key(keyName: String) = GetApiKeyDefinition(keyName)
+
+    def allKeys() = GetAllApiKeyDefinition()
+
+    def allKeysFrom(indexName: String) = GetAllApiKeyDefinition(indexName = Some(indexName))
+
   }
 
   implicit object GetObjectDefinitionExecutable extends Executable[GetObjectDefinition, Get] {
