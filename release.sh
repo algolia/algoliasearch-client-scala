@@ -3,10 +3,19 @@
 #rbenv install 2.1.2
 #gem install github_changelog_generator
 
-echo "Version number to bump:"
-read VERSION
+read -p "Have you set \$GITHUB_TOKEN? (y/n) " OK
+case "$OK" in
+  y|Y ) ;;
+  * ) echo "Set it and relaunch"; exit 1;
+esac
 
-rbenv shell 2.1.2
+read -p "Is the gem 'github_changelog_generator' available? (y/n) " OK
+case "$OK" in
+  y|Y ) ;;
+  * ) echo "Install it and relaunch"; exit 1;
+esac
+
+read -p "Version number to bump (ex: 1.3.1): " VERSION
 
 git tag ${VERSION}
 git push --tags
@@ -28,8 +37,7 @@ git push --tags --force
 sbt publishSigned
 sbt sonatypeRelease
 
-echo "Next version number:"
-read NEXT_VERSION
+read -p "Next version number, without SNAPSHOT (ex: 1.4.0): " NEXT_VERSION
 
 sed -i '' "s/^version \:=.*\$/version := \"${NEXT_VERSION}-SNAPSHOT\"/" build.sbt
 git add build.sbt
