@@ -24,6 +24,7 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.objects.Query
 import algolia.responses._
 import algolia.{AlgoliaClient, AlgoliaTest}
 
@@ -114,8 +115,8 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, del, "indexToClear")
 
-    val list: Future[Search] = client.execute {
-      search into "indexToClear" query ""
+    val list: Future[SearchResult] = client.execute {
+      search into "indexToClear" query Query(query = Some(""))
     }
 
     whenReady(list) { result =>
@@ -142,8 +143,8 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, copying, "indexToCopy_after")
 
-    val list: Future[Search] = client.execute {
-      search into "indexToCopy_before" query ""
+    val list: Future[SearchResult] = client.execute {
+      search into "indexToCopy_before" query Query(query = Some(""))
     }
 
     whenReady(list) { result =>

@@ -24,6 +24,8 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.objects.Query
+import algolia.responses.LogType.query
 import algolia.responses._
 import algolia.{AlgoliaClient, AlgoliaTest}
 import org.json4s._
@@ -58,7 +60,7 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return generic object") {
       val s = client.execute {
-        search into "indexToSearch" query "a"
+        search into "indexToSearch" query Query(query = Some("a"))
       }
 
       whenReady(s) { result =>
@@ -71,7 +73,7 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return case class") {
       val s = client.execute {
-        search into "indexToSearch" query "a"
+        search into "indexToSearch" query Query(query = Some("a"))
       }
 
       whenReady(s) { result =>
@@ -82,7 +84,7 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return a hit") {
       val s = client.execute {
-        search into "indexToSearch" query "a"
+        search into "indexToSearch" query Query(query = Some("a"))
       }
 
 

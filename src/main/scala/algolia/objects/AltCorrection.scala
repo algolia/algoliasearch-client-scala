@@ -21,12 +21,6 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
-
-case class CreateUpdateKey(key: String, createdAt: Option[String])
-
-case class DeleteKey(deletedAt: String)
-
-case class AllKeys(keys: Seq[ApiKey])
+case class AltCorrection(word: String, correction: String, nbTypos: Int)

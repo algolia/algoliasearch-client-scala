@@ -25,7 +25,7 @@ package algolia.definitions
 
 import algolia.http.HttpPayload
 import algolia.inputs.{Request, Requests}
-import algolia.responses.{Get, Results}
+import algolia.responses.{GetObject, Results}
 import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.Formats
 import org.json4s.JsonAST.JObject
@@ -79,10 +79,10 @@ trait GetObjectDsl {
 
   }
 
-  implicit object GetObjectDefinitionExecutable extends Executable[GetObjectDefinition, Get] {
+  implicit object GetObjectDefinitionExecutable extends Executable[GetObjectDefinition, GetObject] {
 
-    override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[Get] = {
-      (client request[JObject] query.build()).map(Get(_))
+    override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[GetObject] = {
+      (client request[JObject] query.build()).map(GetObject(_))
     }
   }
 

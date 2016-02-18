@@ -25,16 +25,16 @@ package algolia.responses
 
 import org.json4s._
 
-case class Search(hits: Seq[JObject],
-                  page: Int,
-                  nbHits: Int,
-                  nbPages: Int,
-                  hitsPerPage: Int,
-                  processingTimeMS: Int,
-                  facets: Option[Map[String, Map[String, Int]]],
-                  exhaustiveFacetsCount: Option[Boolean],
-                  query: String,
-                  params: String) {
+case class SearchResult(hits: Seq[JObject],
+                        page: Int,
+                        nbHits: Int,
+                        nbPages: Int,
+                        hitsPerPage: Int,
+                        processingTimeMS: Int,
+                        facets: Option[Map[String, Map[String, Int]]],
+                        exhaustiveFacetsCount: Option[Boolean],
+                        query: String,
+                        params: String) {
 
   implicit val formats = org.json4s.DefaultFormats
 

@@ -21,25 +21,10 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.objects
 
-import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
+case class AroundLatLng(lat: String, lng: String) {
 
-class QueryTest extends AlgoliaTest {
-
-  case class Nothing()
-
-  describe("query") {
-
-    it("should search simple query") {
-      search into "index" query "toto"
-    }
-
-    it("should search a query with options") {
-      search into "index" query "toto" hitsPerPage 1
-    }
-
-  }
+  override def toString = s"$lat,$lng"
 
 }

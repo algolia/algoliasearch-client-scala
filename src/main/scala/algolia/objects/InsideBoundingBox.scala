@@ -21,15 +21,10 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import org.json4s.JsonAST.JObject
+case class InsideBoundingBox(p1Lat: String, p1Lng: String, p2Lat: String, p2Lng: String) {
 
-case class Get(private val res: JObject) {
+  override def toString = s"$p1Lat,$p1Lng,$p2Lat,$p2Lng"
 
-  implicit val formats = org.json4s.DefaultFormats
-
-  val objectID: String = (res \ "objectID").extractOpt[String].get
-
-  def as[T <: AnyRef : Manifest]: T = res.extract[T]
 }

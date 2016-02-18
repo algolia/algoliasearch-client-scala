@@ -24,7 +24,8 @@
 package algolia.definitions
 
 import algolia.http._
-import algolia.responses.{AllKeys, ApiKey, CreateUpdateKey, DeleteKey}
+import algolia.objects.ApiKey
+import algolia.responses.{AllKeys, CreateUpdateKey, DeleteKey}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization._

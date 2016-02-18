@@ -21,12 +21,12 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
+sealed trait NumericAttributesToIndex
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+object NumericAttributesToIndex {
 
-case class DeleteKey(deletedAt: String)
+  case class equalOnly(attribute: String) extends NumericAttributesToIndex
 
-case class AllKeys(keys: Seq[ApiKey])
+}

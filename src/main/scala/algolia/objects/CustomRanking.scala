@@ -21,12 +21,14 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
+sealed trait CustomRanking
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+object CustomRanking {
 
-case class DeleteKey(deletedAt: String)
+  case class asc(attribute: String) extends CustomRanking
 
-case class AllKeys(keys: Seq[ApiKey])
+  case class desc(attribute: String) extends CustomRanking
+
+}

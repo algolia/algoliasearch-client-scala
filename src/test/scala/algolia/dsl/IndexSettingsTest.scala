@@ -26,6 +26,7 @@ package algolia.dsl
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http.{GET, HttpPayload, PUT}
+import algolia.objects._
 import algolia.responses._
 import org.json4s._
 import org.json4s.native.JsonMethods._

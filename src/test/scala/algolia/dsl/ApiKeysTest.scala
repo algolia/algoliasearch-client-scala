@@ -26,6 +26,7 @@ package algolia.dsl
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http._
+import algolia.objects.{Acl, ApiKey}
 import algolia.responses._
 import org.json4s.native.JsonMethods._
 import org.json4s.native.Serialization._

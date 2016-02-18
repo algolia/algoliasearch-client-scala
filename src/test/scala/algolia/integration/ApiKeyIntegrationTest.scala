@@ -24,7 +24,8 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
-import algolia.responses.{CreateUpdateKey, Acl, AllKeys, ApiKey}
+import algolia.objects.{Acl, ApiKey}
+import algolia.responses.{CreateUpdateKey, AllKeys}
 import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
