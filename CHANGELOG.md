@@ -1,6 +1,26 @@
 # Change Log
 
-## [1.2.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.2.0) (2016-01-28)
+## [1.3.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.3.0) (2016-02-18)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.2.0...1.3.0)
+
+**Implemented enhancements:**
+
+- Logs [\#16](https://github.com/algolia/algoliasearch-client-scala/issues/16)
+- Security / User API Keys [\#13](https://github.com/algolia/algoliasearch-client-scala/issues/13)
+- Configure a index [\#3](https://github.com/algolia/algoliasearch-client-scala/issues/3)
+
+**Closed issues:**
+
+- Add doc for index settings [\#74](https://github.com/algolia/algoliasearch-client-scala/issues/74)
+
+**Merged pull requests:**
+
+- Fetch logs [\#77](https://github.com/algolia/algoliasearch-client-scala/pull/77) ([ElPicador](https://github.com/ElPicador))
+- Add configure/add/etc. api keys [\#76](https://github.com/algolia/algoliasearch-client-scala/pull/76) ([ElPicador](https://github.com/ElPicador))
+- Doc: Configure index [\#75](https://github.com/algolia/algoliasearch-client-scala/pull/75) ([ElPicador](https://github.com/ElPicador))
+- Configure an index [\#73](https://github.com/algolia/algoliasearch-client-scala/pull/73) ([ElPicador](https://github.com/ElPicador))
+
+## [1.2.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.2.0) (2016-02-02)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.1.0...1.2.0)
 
 **Implemented enhancements:**
