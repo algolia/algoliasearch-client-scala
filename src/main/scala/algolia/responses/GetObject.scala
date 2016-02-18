@@ -23,10 +23,13 @@
 
 package algolia.responses
 
-import algolia.objects.ApiKey
+import org.json4s.JsonAST.JObject
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+case class GetObject(private val res: JObject) {
 
-case class DeleteKey(deletedAt: String)
+  implicit val formats = org.json4s.DefaultFormats
 
-case class AllKeys(keys: Seq[ApiKey])
+  val objectID: String = (res \ "objectID").extractOpt[String].get
+
+  def as[T <: AnyRef : Manifest]: T = res.extract[T]
+}

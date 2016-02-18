@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
 case class IndexSettings(/* INDEXING PARAMETERS */
                          attributesToIndex: Option[Seq[AttributesToIndex]] = None,
@@ -64,84 +64,6 @@ case class IndexSettings(/* INDEXING PARAMETERS */
                          removeStopWords: Option[Boolean] = None,
                          snippetEllipsisText: Option[String] = None)
 
-case class AltCorrection(word: String, correction: String, nbTypos: Int)
 
-sealed trait AttributesToIndex
 
-object AttributesToIndex {
 
-  case class unordered(attribute: String) extends AttributesToIndex
-
-  case class attribute(attribute: String) extends AttributesToIndex
-
-  case class attributes(attributes: String*) extends AttributesToIndex
-
-}
-
-sealed trait NumericAttributesToIndex
-
-object NumericAttributesToIndex {
-
-  case class equalOnly(attribute: String) extends NumericAttributesToIndex
-
-}
-
-sealed trait Ranking
-
-object Ranking {
-
-  case class asc(attribute: String) extends Ranking
-
-  case class desc(attribute: String) extends Ranking
-
-  case object typo extends Ranking
-
-  case object geo extends Ranking
-
-  case object words extends Ranking
-
-  case object proximity extends Ranking
-
-  case object attribute extends Ranking
-
-  case object exact extends Ranking
-
-  case object custom extends Ranking
-
-}
-
-sealed trait CustomRanking
-
-object CustomRanking {
-
-  case class asc(attribute: String) extends CustomRanking
-
-  case class desc(attribute: String) extends CustomRanking
-
-}
-
-sealed trait QueryType
-
-object QueryType {
-
-  case object prefixAll extends QueryType
-
-  case object prefixLast extends QueryType
-
-  case object prefixNone extends QueryType
-
-}
-
-sealed trait TypoTolerance
-
-object TypoTolerance {
-
-  case object `true` extends TypoTolerance
-
-  case object `false` extends TypoTolerance
-
-  case object min extends TypoTolerance
-
-  case object strict extends TypoTolerance
-
-}

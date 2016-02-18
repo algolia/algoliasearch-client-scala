@@ -21,37 +21,28 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-case class ApiKey(validity: Option[Int] = None,
-                  maxQueriesPerIPPerHour: Option[Int] = None,
-                  maxHitsPerQuery: Option[Int] = None,
-                  acl: Option[Seq[Acl]] = None,
-                  indexes: Option[Seq[String]] = None,
-                  referers: Option[Seq[String]] = None,
-                  queryParameters: Option[String] = None,
-                  description: Option[String] = None)
+sealed trait Ranking
 
-sealed trait Acl
+object Ranking {
 
-object Acl {
+  case class asc(attribute: String) extends Ranking
 
-  case object search extends Acl
+  case class desc(attribute: String) extends Ranking
 
-  case object browse extends Acl
+  case object typo extends Ranking
 
-  case object addObject extends Acl
+  case object geo extends Ranking
 
-  case object deleteObject extends Acl
+  case object words extends Ranking
 
-  case object deleteIndex extends Acl
+  case object proximity extends Ranking
 
-  case object settings extends Acl
+  case object attribute extends Ranking
 
-  case object editSettings extends Acl
+  case object exact extends Ranking
 
-  case object analytics extends Acl
-
-  case object listIndexes extends Acl
+  case object custom extends Ranking
 
 }

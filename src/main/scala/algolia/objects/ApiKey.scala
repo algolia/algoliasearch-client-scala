@@ -21,12 +21,13 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
-
-case class CreateUpdateKey(key: String, createdAt: Option[String])
-
-case class DeleteKey(deletedAt: String)
-
-case class AllKeys(keys: Seq[ApiKey])
+case class ApiKey(validity: Option[Int] = None,
+                  maxQueriesPerIPPerHour: Option[Int] = None,
+                  maxHitsPerQuery: Option[Int] = None,
+                  acl: Option[Seq[Acl]] = None,
+                  indexes: Option[Seq[String]] = None,
+                  referers: Option[Seq[String]] = None,
+                  queryParameters: Option[String] = None,
+                  description: Option[String] = None)

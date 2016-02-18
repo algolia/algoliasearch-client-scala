@@ -25,7 +25,8 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.PartialUpdateObject
-import algolia.responses.{ApiKey, Task}
+import algolia.objects.ApiKey
+import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write

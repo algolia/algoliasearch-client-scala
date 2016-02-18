@@ -24,7 +24,7 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
-import algolia.responses.{Get, Task, TaskIndexing}
+import algolia.responses.{GetObject, Task, TaskIndexing}
 import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -59,7 +59,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, inc, "index_partial")
 
-    val s: Future[Get] = client.execute {
+    val s: Future[GetObject] = client.execute {
       get from "index_partial" objectId "increment"
     }
 
@@ -81,7 +81,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, dec, "index_partial")
 
-    val s: Future[Get] = client.execute {
+    val s: Future[GetObject] = client.execute {
       get from "index_partial" objectId "decrement"
     }
 
@@ -103,7 +103,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, adding, "index_partial")
 
-    val s: Future[Get] = client.execute {
+    val s: Future[GetObject] = client.execute {
       get from "index_partial" objectId "add"
     }
 
@@ -125,7 +125,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, removing, "index_partial")
 
-    val s: Future[Get] = client.execute {
+    val s: Future[GetObject] = client.execute {
       get from "index_partial" objectId "remove"
     }
 
@@ -147,7 +147,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, addingUnique, "index_partial")
 
-    val s: Future[Get] = client.execute {
+    val s: Future[GetObject] = client.execute {
       get from "index_partial" objectId "addUnique"
     }
 
@@ -169,7 +169,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, updating, "index_partial")
 
-    val s: Future[Get] = client.execute {
+    val s: Future[GetObject] = client.execute {
       get from "index_partial" objectId "updateValue"
     }
 

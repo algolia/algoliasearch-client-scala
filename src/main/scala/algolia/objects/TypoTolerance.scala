@@ -21,12 +21,31 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
+sealed trait TypoTolerance {
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+  def name: String
 
-case class DeleteKey(deletedAt: String)
+}
 
-case class AllKeys(keys: Seq[ApiKey])
+
+object TypoTolerance {
+
+  case object `true` extends TypoTolerance {
+    override def name: String = "true"
+  }
+
+  case object `false` extends TypoTolerance {
+    override def name: String = "false"
+  }
+
+  case object min extends TypoTolerance {
+    override def name: String = "min"
+  }
+
+  case object strict extends TypoTolerance {
+    override def name: String = "strict"
+  }
+
+}

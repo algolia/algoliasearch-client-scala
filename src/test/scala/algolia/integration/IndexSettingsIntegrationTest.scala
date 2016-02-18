@@ -24,6 +24,7 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.objects.{AttributesToIndex, IndexSettings}
 import algolia.responses._
 import algolia.{AlgoliaClient, AlgoliaTest}
 

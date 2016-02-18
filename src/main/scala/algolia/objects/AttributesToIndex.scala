@@ -21,12 +21,16 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
+sealed trait AttributesToIndex
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+object AttributesToIndex {
 
-case class DeleteKey(deletedAt: String)
+  case class unordered(attribute: String) extends AttributesToIndex
 
-case class AllKeys(keys: Seq[ApiKey])
+  case class attribute(attribute: String) extends AttributesToIndex
+
+  case class attributes(attributes: String*) extends AttributesToIndex
+
+}

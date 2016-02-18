@@ -24,6 +24,7 @@
 package algolia
 
 import algolia.definitions._
+import algolia.objects._
 import algolia.responses._
 import org.json4s.CustomSerializer
 import org.json4s.JsonAST.JString

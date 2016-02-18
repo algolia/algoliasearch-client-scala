@@ -21,12 +21,28 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
+sealed trait Acl
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+object Acl {
 
-case class DeleteKey(deletedAt: String)
+  case object search extends Acl
 
-case class AllKeys(keys: Seq[ApiKey])
+  case object browse extends Acl
+
+  case object addObject extends Acl
+
+  case object deleteObject extends Acl
+
+  case object deleteIndex extends Acl
+
+  case object settings extends Acl
+
+  case object editSettings extends Acl
+
+  case object analytics extends Acl
+
+  case object listIndexes extends Acl
+
+}

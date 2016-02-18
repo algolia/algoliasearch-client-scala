@@ -21,12 +21,17 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.objects
 
-import algolia.objects.ApiKey
+case class InsidePolygon(p1Lat: String,
+                         p1Lng: String,
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+                         p2Lat: String,
+                         p2Lng: String,
 
-case class DeleteKey(deletedAt: String)
+                         p3Lat: String,
+                         p3Lng: String) {
 
-case class AllKeys(keys: Seq[ApiKey])
+  override def toString = s"$p1Lat,$p1Lng,$p2Lat,$p2Lng,$p3Lat,$p3Lng"
+
+}

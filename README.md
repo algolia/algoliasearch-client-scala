@@ -130,32 +130,40 @@ val indexing2: Future[Indexing] = client.execute {
 You can now search for contacts using firstname, lastname, company, etc. (even with typos):
 ```scala
 // search by firstname
-client.execute { search into "contacts" query "jimmie" }
+client.execute { search into "contacts" query Query(query = Some("jimmie")) }
 
 // search a firstname with typo
-client.execute { search into "contacts" query "jimie" }
+client.execute { search into "contacts" query Query(query = Some("jimie")) }
 
 // search for a company
-client.execute { search into "contacts" query "california paint" }
+client.execute { search into "contacts" query Query(query = Some("california paint")) }
 
 // search for a firstname & company
-client.execute { search into "contacts" query "jimmie paint" }
+client.execute { search into "contacts" query Query(query = Some("jimmie paint")) }
 ```
 
 Settings can be customized to tune the search behavior. For example, you can add a custom sort by number of followers to the already great built-in relevance:
 ```scala
-//Not yet implemented
+client.execute {
+	changeSettings of "myIndex" `with` IndexSettings(
+		customRanking = Some(Seq(CustomRanking.desc("followers")))
+	)
+}
 ```
 
 You can also configure the list of attributes you want to index by order of importance (first = most important):
 ```scala
-//Not yet implemented
+client.execute {
+	changeSettings of "myIndex" `with` IndexSettings(
+		attributesToIndex = Some(Seq("lastname", "firstname", "company"))
+	)
+}
 ```
 
 Since the engine is designed to suggest results as you type, you'll generally search by prefix. In this case the order of attributes is very important to decide which hit is the best:
 ```scala
-client.execute { search into "contacts" query "or" }
-client.execute { search into "contacts" query "jim" }
+client.execute { search into "contacts" query Query(query = Some("or")) }
+client.execute { search into "contacts" query Query(query = Some("jim")) }
 ```
 
 
@@ -540,7 +548,13 @@ The list of keywords is:
  * **distinct**: If set to 1, enables the distinct feature, disabled by default, if the `attributeForDistinct` index setting is set. This feature is similar to the SQL "distinct" keyword. When enabled in a query with the `distinct=1` parameter, all hits containing a duplicate value for the attributeForDistinct attribute are removed from results. For example, if the chosen attribute is `show_name` and several hits have the same value for `show_name`, then only the best one is kept and the others are removed.
 
 ```scala
-//Not yet implemented
+client.execute {
+	search into "myIndex" query Query(
+		query = Some("query string"),
+		attributesToRetrieve = Some(Seq("firstname", "lastname")),
+		hitsPerPage = Some(50)
+	)
+}
 ```
 
 The server response will look like:

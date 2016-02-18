@@ -24,7 +24,8 @@
 package algolia.definitions
 
 import algolia.http.{GET, HttpPayload, PUT}
-import algolia.responses.{IndexSettings, Task}
+import algolia.objects.IndexSettings
+import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization._

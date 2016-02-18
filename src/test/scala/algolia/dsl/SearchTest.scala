@@ -21,12 +21,43 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.dsl
 
-import algolia.objects.ApiKey
+import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
+import algolia.http._
+import algolia.objects.{Query, QueryType}
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+class SearchTest extends AlgoliaTest {
 
-case class DeleteKey(deletedAt: String)
+  describe("search") {
+    it("should search") {
+      search into "indexName" query Query()
+    }
 
-case class AllKeys(keys: Seq[ApiKey])
+    it("should call the API") {
+      (search into "indexName" query Query(query = Some("a"))).build() should be(
+        HttpPayload(
+          POST,
+          List("1", "indexes", "indexName", "query"),
+          body = Some("""{"params":"query=a"}"""),
+          isSearch = true
+        )
+      )
+    }
+  }
+
+  describe("Query toParam") {
+
+    it("should parametrize stuff") {
+      val q = Query(
+        query = Some("a&b"),
+        queryType = Some(QueryType.prefixAll)
+      )
+
+      q.toParam should be("query=a%26b&queryType=prefixAll")
+    }
+
+  }
+
+}

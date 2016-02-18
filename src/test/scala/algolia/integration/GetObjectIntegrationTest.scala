@@ -24,7 +24,7 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
-import algolia.responses.{Get, Results, TasksMultipleIndex}
+import algolia.responses.{GetObject, Results, TasksMultipleIndex}
 import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -55,7 +55,7 @@ class GetObjectIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(client, create, "indexToGet")
 
-    val request: Future[Get] = client.execute {
+    val request: Future[GetObject] = client.execute {
       get from "indexToGet" objectId "1"
     }
 
