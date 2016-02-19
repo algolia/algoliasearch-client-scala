@@ -82,7 +82,10 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  aroundPrecision: Option[Int] = None,
                  minimumAroundRadius: Option[Int] = None,
                  insideBoundingBox: Option[InsideBoundingBox] = None,
-                 insidePolygon: Option[InsidePolygon] = None) {
+                 insidePolygon: Option[InsidePolygon] = None,
+
+                 /* SECURED API KEYS */
+                 userToken: Option[String] = None) {
 
   def toParam: String = {
     val params: Map[String, Option[String]] = Map(
@@ -143,7 +146,10 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "aroundPrecision" -> aroundPrecision.map(_.toString),
       "minimumAroundRadius" -> minimumAroundRadius.map(_.toString),
       "insideBoundingBox" -> insideBoundingBox.map(_.toString),
-      "insidePolygon" -> insidePolygon.map(_.toString)
+      "insidePolygon" -> insidePolygon.map(_.toString),
+
+      /* SECURED API KEYS */
+      "userToken" -> userToken
     )
 
     params

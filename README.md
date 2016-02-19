@@ -1068,7 +1068,9 @@ client.execute {
 You may have a single index containing per user data. In that case, all records should be tagged with their associated user_id in order to add a `tagFilters=user_42` filter at query time to retrieve only what a user has access to. If you're using the [JavaScript client](http://github.com/algolia/algoliasearch-client-js), it will result in a security breach since the user is able to modify the `tagFilters` you've set by modifying the code from the browser. To keep using the JavaScript client (recommended for optimal latency) and target secured records, you can generate a secured API key from your backend:
 
 ```scala
-//Not yet implemented
+// generate a public API key for user 42. Here, records are tagged with:
+//  - 'user_XXXX' if they are visible by user XXXX
+String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(tagFilters = Some(Seq("user_42"))))
 ```
 
 This public API key can then be used in your JavaScript code as follow:
@@ -1091,7 +1093,9 @@ index.search('something', function(err, content) {
 You can mix rate limits and secured API keys by setting a `userToken` query parameter at API key generation time. When set, a unique user will be identified by her `IP + user_token` instead of only by her `IP`. This allows you to restrict a single user to performing a maximum of `N` API calls per hour, even if she shares her `IP` with another user.
 
 ```scala
-//Not yet implemented
+// generate a public API key for user 42. Here, records are tagged with:
+//  - 'user_XXXX' if they are visible by user XXXX
+String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(tagFilters = Some(Seq("user_42"))), Some("42"))
 ```
 
 This public API key can then be used in your JavaScript code as follow:

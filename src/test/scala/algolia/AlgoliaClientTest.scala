@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException
 import algolia.AlgoliaDsl._
 import algolia.definitions.WaitForTimeoutException
 import algolia.http.{GET, HttpPayload}
+import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -312,6 +313,21 @@ class AlgoliaClientTest extends AlgoliaTest {
     }
   }
 
+  describe("secured api keys") {
+
+    val apiClient = new AlgoliaClient("APPID", "APIKEY")
+
+    it("should generate a secured api key") {
+      val secureApiKey = apiClient.generateSecuredApiKey("PRIVATE_API_KEY", Query(tagFilters = Some(Seq("user_42"))))
+      secureApiKey should be("ZWRjMDQyY2Y0MDM1OThiZjM0MmEyM2VlNjVmOWY2YTczYzc3YWJiMzdhMjIzMDY5M2VmY2RjNmQ0MmI5NWU3NHRhZ0ZpbHRlcnM9dXNlcl80Mg==")
+    }
+
+    it("should generate a secured api key with user key") {
+      val secureApiKey = apiClient.generateSecuredApiKey("PRIVATE_API_KEY", Query(tagFilters = Some(Seq("user_42"))), Some("userToken"))
+      secureApiKey should be("MDc3N2VlNzkwNDY1MjRjOGFmNGJhYmVmOWI1YTM1YzYxOGQ1NWMzNjBlYWMwM2FmODY0N2VmNjMyOTE5YTAwYnRhZ0ZpbHRlcnM9dXNlcl80MiZ1c2VyVG9rZW49dXNlclRva2Vu")
+    }
+
+  }
 }
 
 case class Result(value: String)

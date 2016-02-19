@@ -23,9 +23,14 @@
 
 package algolia
 
+import java.nio.charset.Charset
+import java.util.Base64
 import java.util.concurrent.TimeoutException
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 import algolia.http.HttpPayload
+import algolia.objects.Query
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,22 +47,18 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
   final private val ALGOLIANET_HOST = "algolia.net"
-
-  val httpClient: DispatchHttpClient = DispatchHttpClient
-  val random: AlgoliaRandom = AlgoliaRandom
-
   lazy val indexingHosts: Seq[String] = random.shuffle(Seq(
     s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
   )) :+ s"https://$applicationId.$ALGOLIANET_HOST"
-
   lazy val queryHosts: Seq[String] = random.shuffle(Seq(
     s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
     s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
   )) :+ s"https://$applicationId-dsn.$ALGOLIANET_HOST"
-
+  val httpClient: DispatchHttpClient = DispatchHttpClient
+  val random: AlgoliaRandom = AlgoliaRandom
   val userAgent = s"Algolia for Scala ${BuildInfo.scalaVersion} API ${BuildInfo.version}"
 
   val headers: Map[String, String] = Map(
@@ -68,8 +69,26 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     "Content-type" -> "application/json",
     "Accept" -> "application/json"
   )
+  private val HMAC_SHA256 = "HmacSHA256"
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
+
+  def generateSecuredApiKey(privateApiKey: String, query: Query, userToken: Option[String] = None): String = {
+    val queryStr = query.copy(userToken = userToken).toParam
+    val key = hmac(privateApiKey, queryStr)
+
+    new String(Base64.getEncoder.encode(s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
+  }
+
+  private def hmac(key: String, msg: String): String = {
+    val algorithm = Mac.getInstance(HMAC_SHA256)
+    algorithm.init(new SecretKeySpec(key.getBytes(), HMAC_SHA256))
+
+    algorithm
+      .doFinal(msg.getBytes())
+      .map("%02x".format(_))
+      .mkString
+  }
 
   private[algolia] def request[T: Manifest](payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) queryHosts else indexingHosts
