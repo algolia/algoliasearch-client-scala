@@ -21,45 +21,26 @@
  * THE SOFTWARE.
  */
 
-package algolia
+package algolia.objects
 
-import algolia.AlgoliaDsl._
-import algolia.responses.AlgoliaTask
-import org.scalamock.scalatest.MockFactory
-import org.scalatest._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Seconds, Span}
+object MultiQueries {
 
-import scala.concurrent.{ExecutionContext, Future}
+  sealed trait Strategy {
 
-class AlgoliaTest
-  extends FunSpec
-    with Matchers
-    with BeforeAndAfter
-    with Inspectors
-    with ScalaFutures
-    with Inside
-    with MockFactory {
+    val name: String
 
-  val applicationId = System.getenv("APPLICATION_ID")
-  val apiKey = System.getenv("API_KEY")
-
-  implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
-
-  def taskShouldBeCreatedAndWaitForIt(client: AlgoliaClient, task: Future[AlgoliaTask], index: String)(implicit ec: ExecutionContext) = {
-    val t: AlgoliaTask = whenReady(task) { result =>
-      result.idToWaitFor should not be 0
-      result //for getting it after
-    }
-
-    val waiting = client.execute {
-      waitFor task t from index maxDelay (60 * 1000) //60 seconds
-    }
-
-    whenReady(waiting) { result =>
-      result.status should equal("published")
-    }
   }
 
+  object Strategy {
+
+    object none extends Strategy {
+      override val name: String = "none"
+    }
+
+    object stopIfEnoughMatches extends Strategy {
+      override val name: String = "stopIfEnoughMatches"
+    }
+
+  }
 
 }

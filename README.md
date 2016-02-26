@@ -602,7 +602,17 @@ Multiple queries
 You can send multiple queries with a single API call using a batch of queries:
 
 ```scala
-//Not yet implemented
+// perform 3 queries in a single API call:
+//  - 1st query targets index `categories`
+//  - 2nd and 3rd queries target index `products`
+
+val result: Future[MultiQueriesResult] = client.execute {
+	multiQueries(
+		search into "categories" query Query(query = myQueryString, hitsPerPage = Some(3)),
+		search into "products" query Query(query = myQueryString, hitsPerPage = Some(3), tagFilters = Some(Seq("promotion"))),
+		search into "products" query Query(query = myQueryString, hitsPerPage = Some(10))
+	) strategy MultiQueries.Strategy.stopIfEnoughMatches
+}
 ```
 
 The resulting JSON answer contains a ```results``` array storing the underlying queries answers. The answers order is the same than the requests order.
