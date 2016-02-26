@@ -26,11 +26,12 @@ package algolia.dsl
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http._
-import algolia.objects.{Query, QueryType}
+import algolia.objects._
 
 class SearchTest extends AlgoliaTest {
 
   describe("search") {
+
     it("should search") {
       search into "indexName" query Query()
     }
@@ -41,6 +42,62 @@ class SearchTest extends AlgoliaTest {
           POST,
           List("1", "indexes", "indexName", "query"),
           body = Some("""{"params":"query=a"}"""),
+          isSearch = true
+        )
+      )
+    }
+
+    it("should call the API with a full search") {
+      val q = Query(
+        query = Some("query"),
+        queryType = Some(QueryType.prefixAll),
+        typoTolerance = Some(TypoTolerance.strict),
+        minWordSizefor1Typo = Some(1),
+        minWordSizefor2Typos = Some(2),
+        allowTyposOnNumericTokens = Some(true),
+        ignorePlurals = Some(false),
+        restrictSearchableAttributes = Some(Seq("att1", "att2")),
+        advancedSyntax = Some(true),
+        analytics = Some(true),
+        analyticsTags = Some(Seq("a", "b")),
+        synonyms = Some(true),
+        replaceSynonymsInHighlight = Some(false),
+        optionalWords = Some(Seq("le", "la")),
+        minProximity = Some(10),
+        removeWordsIfNoResults = Some(RemoveWordsIfNoResults.allOptional),
+        disableTypoToleranceOnAttributes = Some(Seq("att2", "att3")),
+        removeStopWords = Some(false),
+        page = Some(1),
+        hitsPerPage = Some(19),
+        attributesToRetrieve = Some(Seq("att4")),
+        attributesToHighlight = Some(Seq("att5")),
+        attributesToSnippet = Some(Seq(("att6", 1))),
+        getRankingInfo = Some(18),
+        highlightPreTag = Some("<em>"),
+        highlightPostTag = Some("</em>"),
+        snippetEllipsisText = Some("…"),
+        numericFilters = Some("1"),
+        tagFilters = Some(Seq("tag1")),
+        distinct = Some(1),
+        facets = Some(Seq("facet1")),
+        facetFilters = Some(Seq("facet2")),
+        maxValuesPerFacet = Some(1),
+        filters = Some("filter"),
+        aroundLatLng = Some(AroundLatLng("1", "2")),
+        aroundLatLngViaIP = Some(true),
+        aroundRadius = Some(10),
+        aroundPrecision = Some(20),
+        minimumAroundRadius = Some(30),
+        insideBoundingBox = Some(InsideBoundingBox("1", "2", "3", "4")),
+        insidePolygon = Some(InsidePolygon("1", "2", "3", "4", "5", "6")),
+        userToken = Some("userToken")
+      )
+
+      (search into "indexName" query q).build() should be(
+        HttpPayload(
+          POST,
+          List("1", "indexes", "indexName", "query"),
+          body = Some("""{"params":"numericFilters=1&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=18&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&replaceSynonymsInHighlight=false&aroundRadius=10&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=1%2C2%2C3%2C4%2C5%2C6&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=1%2C2%2C3%2C4&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
           isSearch = true
         )
       )
