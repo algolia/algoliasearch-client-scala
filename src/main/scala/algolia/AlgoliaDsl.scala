@@ -43,6 +43,7 @@ trait AlgoliaDsl
     with ListIndexesDsl
     with LogsDsl
     with MoveIndexDsl
+    with MultiQueriesDefinitionDsl
     with PartialUpdateObjectDsl
     with SearchDsl
     with WaitForTaskDsl

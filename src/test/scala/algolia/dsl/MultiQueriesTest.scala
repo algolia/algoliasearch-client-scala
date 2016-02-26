@@ -21,45 +21,40 @@
  * THE SOFTWARE.
  */
 
-package algolia
+package algolia.dsl
 
 import algolia.AlgoliaDsl._
-import algolia.responses.AlgoliaTask
-import org.scalamock.scalatest.MockFactory
-import org.scalatest._
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Seconds, Span}
+import algolia.AlgoliaTest
+import algolia.http._
+import algolia.objects.{MultiQueries, Query}
 
-import scala.concurrent.{ExecutionContext, Future}
+class MultiQueriesTest extends AlgoliaTest {
 
-class AlgoliaTest
-  extends FunSpec
-    with Matchers
-    with BeforeAndAfter
-    with Inspectors
-    with ScalaFutures
-    with Inside
-    with MockFactory {
+  describe("multi queries") {
 
-  val applicationId = System.getenv("APPLICATION_ID")
-  val apiKey = System.getenv("API_KEY")
-
-  implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
-
-  def taskShouldBeCreatedAndWaitForIt(client: AlgoliaClient, task: Future[AlgoliaTask], index: String)(implicit ec: ExecutionContext) = {
-    val t: AlgoliaTask = whenReady(task) { result =>
-      result.idToWaitFor should not be 0
-      result //for getting it after
+    it("should do multi queries") {
+      multiQueries(
+        search into "indexName" query Query(),
+        search into "indexName2" query Query()
+      ) strategy MultiQueries.Strategy.stopIfEnoughMatches
     }
 
-    val waiting = client.execute {
-      waitFor task t from index maxDelay (60 * 1000) //60 seconds
-    }
+    it("should call the API") {
+      val m = multiQueries(
+        search into "indexName1" query Query(query = Some("a")),
+        search into "indexName2" query Query(query = Some("b"))
+      ) strategy MultiQueries.Strategy.stopIfEnoughMatches
 
-    whenReady(waiting) { result =>
-      result.status should equal("published")
+      m.build() should be(
+        HttpPayload(
+          POST,
+          List("1", "indexes", "*", "queries"),
+          queryParameters = Some(Map("strategy" -> "stopIfEnoughMatches")),
+          body = Some("""{"requests":[{"indexName":"indexName1","params":"query=a"},{"indexName":"indexName2","params":"query=b"}]}"""),
+          isSearch = true
+        )
+      )
     }
   }
-
 
 }

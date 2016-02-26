@@ -25,12 +25,12 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.objects.Query
-import algolia.responses.LogType.query
 import algolia.responses._
 import algolia.{AlgoliaClient, AlgoliaTest}
 import org.json4s._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class SearchIntegrationTest extends AlgoliaTest {
 
@@ -38,7 +38,8 @@ class SearchIntegrationTest extends AlgoliaTest {
 
   after {
     val indices = Seq(
-      "indexToSearch"
+      "indexToSearch",
+      "indexToSearch2"
     )
 
     val del = client.execute {
@@ -48,15 +49,21 @@ class SearchIntegrationTest extends AlgoliaTest {
     whenReady(del) { res => res }
   }
 
-  describe("search") {
-
-    before {
-      val insert = client.execute {
-        index into "indexToSearch" objectId "563481290" `object` Test("algolia", 10, alien = false)
-      }
-
-      taskShouldBeCreatedAndWaitForIt(client, insert, "indexToSearch")
+  before {
+    val insert1 = client.execute {
+      index into "indexToSearch" objectId "563481290" `object` Test("algolia", 10, alien = false)
     }
+
+    taskShouldBeCreatedAndWaitForIt(client, insert1, "indexToSearch")
+
+    val insert2 = client.execute {
+      index into "indexToSearch2" `object` Test("algolia2", 10, alien = false)
+    }
+
+    taskShouldBeCreatedAndWaitForIt(client, insert2, "indexToSearch2")
+  }
+
+  describe("search") {
 
     it("should return generic object") {
       val s = client.execute {
@@ -92,6 +99,62 @@ class SearchIntegrationTest extends AlgoliaTest {
         result.hits should have length 1
         val hit = EnhanceTest("algolia", 10, alien = false, "563481290", Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))), None, None)
         result.asHit[EnhanceTest].head should be(hit)
+      }
+    }
+  }
+
+  describe("multi queries") {
+
+    it("should return generic object") {
+      val s = client.execute {
+        multiQueries(
+          search into "indexToSearch" query Query(query = Some("a")),
+          search into "indexToSearch2" query Query(query = Some("a"))
+        )
+      }
+
+      whenReady(s) { r =>
+        r.results should have length 2
+        forAll(r.results) { result =>
+          (result.hits.head \ "name").values.toString should startWith("algolia")
+          (result.hits.head \ "age").values should be(10)
+          (result.hits.head \ "alien").values shouldBe false
+        }
+      }
+    }
+
+    it("should return case class") {
+      val s = client.execute {
+        multiQueries(
+          search into "indexToSearch" query Query(query = Some("a")),
+          search into "indexToSearch2" query Query(query = Some("a"))
+        )
+      }
+
+      whenReady(s) { r =>
+        r.results should have length 2
+        forAll(r.results) { result =>
+          result.hits should have length 1
+          result.as[Test].head shouldBe a[Test]
+        }
+      }
+    }
+
+    it("should return a hit") {
+      val s = client.execute {
+        multiQueries(
+          search into "indexToSearch" query Query(query = Some("a")),
+          search into "indexToSearch2" query Query(query = Some("a"))
+        )
+      }
+
+
+      whenReady(s) { r =>
+        r.results should have length 2
+        forAll(r.results) { result =>
+          result.hits should have length 1
+          result.asHit[EnhanceTest].head shouldBe a[EnhanceTest]
+        }
       }
     }
   }

@@ -44,6 +44,8 @@ case class SearchResult(hits: Seq[JObject],
 
 }
 
+case class MultiQueriesResult(results: Seq[SearchResult])
+
 trait Hit {
 
   val objectID: String
