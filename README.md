@@ -35,7 +35,6 @@ Table of Contents
 1. [Multiple queries](#multiple-queries)
 1. [Get an object](#get-an-object)
 1. [Delete an object](#delete-an-object)
-1. [Delete by query](#delete-by-query)
 1. [Index settings](#index-settings)
 1. [List indices](#list-indices)
 1. [Delete an index](#delete-an-index)
@@ -676,15 +675,6 @@ client.execute { delete from "toto" objectId "oid" }
 ```
 
 
-Delete by query
--------------
-
-You can delete all objects matching a single query with the following code. Internally, the API client performs the query, deletes all matching hits, and waits until the deletions have been applied.
-
-```scala
-//Not yet implemented
-```
-
 
 Index Settings
 -------------
@@ -1173,7 +1163,9 @@ that it is not possible to access records beyond the 1,000th on the first call.
 Example:
 
 ```scala
-//Not yet implemented
+client.execute {
+	browse index "myIndex" from "cursor"
+}
 ```
 
 

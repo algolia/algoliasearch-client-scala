@@ -33,6 +33,7 @@ trait AlgoliaDsl
   extends Object //Just to have all trait DSL ordered `with`
     with ApiKeyDefinitionDsl
     with BatchDefinitionDsl
+    with BrowseIndexDsl
     with ClearIndexDsl
     with CopyIndexDsl
     with DeleteDsl
