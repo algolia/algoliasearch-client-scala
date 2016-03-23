@@ -26,6 +26,7 @@ package algolia.dsl
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http.{GET, HttpPayload}
+import algolia.objects.Query
 
 class BrowseIndexTest extends AlgoliaTest {
 
@@ -35,12 +36,38 @@ class BrowseIndexTest extends AlgoliaTest {
       browse index "toto" from "cursor"
     }
 
+    it("browses index with query") {
+      browse index "toto" query Query(query = Some("q"))
+    }
+
     it("should call API") {
       (browse index "toto" from "cursor1").build() should be(
         HttpPayload(
           GET,
           Seq("1", "indexes", "toto", "browse"),
           queryParameters = Some(Map("cursor" -> "cursor1")),
+          isSearch = true
+        )
+      )
+    }
+
+    it("should call API with query") {
+      (browse index "toto" query Query(query = Some("q"))).build() should be(
+        HttpPayload(
+          GET,
+          Seq("1", "indexes", "toto", "browse"),
+          queryParameters = Some(Map("query" -> "q")),
+          isSearch = true
+        )
+      )
+    }
+
+    it("should call API with query and cursor") {
+      (browse index "toto" query Query(query = Some("q")) from "cursor1").build() should be(
+        HttpPayload(
+          GET,
+          Seq("1", "indexes", "toto", "browse"),
+          queryParameters = Some(Map("query" -> "q", "cursor" -> "cursor1")),
           isSearch = true
         )
       )

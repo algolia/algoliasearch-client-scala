@@ -1162,9 +1162,21 @@ that it is not possible to access records beyond the 1,000th on the first call.
 Example:
 
 ```scala
-client.execute {
-	browse index "myIndex" from "cursor"
+val q = Query(query = Some("text"), numericFilters = Some("i<42"))
+
+// Iterate with a filter over the index
+val result: Future[BrowseResult] = client.execute {
+	browse index "myIndex" query q
 }
+
+result
+	.map(_.cursor) // Retrieve the next cursor
+	.flatMap { cursor =>
+		client.execute {
+			//continue the browse with the cursor
+			browse index "myIndex" from cursor
+		}
+	}
 ```
 
 
