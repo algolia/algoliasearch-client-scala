@@ -27,10 +27,6 @@ import org.json4s.JObject
 
 case class BrowseResult(cursor: Option[String],
                         hits: Seq[JObject],
-                        page: Int,
-                        nbHits: Int,
-                        nbPages: Int,
-                        hitsPerPage: Int,
                         processingTimeMS: Int,
                         query: String,
                         params: String) {

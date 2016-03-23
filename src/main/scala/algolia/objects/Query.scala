@@ -85,10 +85,19 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  insidePolygon: Option[InsidePolygon] = None,
 
                  /* SECURED API KEYS */
-                 userToken: Option[String] = None) {
+                 userToken: Option[String] = None,
+
+                 /* BROWSE */
+                 cursor: Option[String] = None) {
 
   def toParam: String = {
-    val params: Map[String, Option[String]] = Map(
+    toQueryParam
+      .map { case (k, v) => s"$k=${URLEncoder.encode(v, "UTF-8")}" }
+      .mkString("&")
+  }
+
+  def toQueryParam: Map[String, String] = {
+    Map(
       /* FULL TEXT SEARCH PARAMETERS */
       "query" -> query,
       "queryType" -> queryType.map(_.name),
@@ -149,12 +158,12 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "insidePolygon" -> insidePolygon.map(_.toString),
 
       /* SECURED API KEYS */
-      "userToken" -> userToken
-    )
+      "userToken" -> userToken,
 
-    params
+      /* BROWSE */
+      "cursor" -> cursor
+    )
       .filter { case (k, v) => v.isDefined }
-      .map { case (k, v) => s"$k=${URLEncoder.encode(v.get, "UTF-8")}" }
-      .mkString("&")
+      .map { case (k, v) => k -> v.get }
   }
 }
