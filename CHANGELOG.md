@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.6.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.6.0) (2016-03-23)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.5...1.6.0)
+
+**Closed issues:**
+
+- Search: Ability to return \> 1000 or Browse: Add custom query parameter\(s\) [\#86](https://github.com/algolia/algoliasearch-client-scala/issues/86)
+
+**Merged pull requests:**
+
+- Browse by query [\#87](https://github.com/algolia/algoliasearch-client-scala/pull/87) ([ElPicador](https://github.com/ElPicador))
+- Doc: fix list indices [\#85](https://github.com/algolia/algoliasearch-client-scala/pull/85) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.5](https://github.com/algolia/algoliasearch-client-scala/tree/1.5) (2016-03-09)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.4.0...1.5)
 
