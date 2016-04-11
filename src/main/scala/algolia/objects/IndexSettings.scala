@@ -36,9 +36,6 @@ case class IndexSettings(/* INDEXING PARAMETERS */
                          allowCompressionOfIntegerArray: Option[Boolean] = None,
 
                          /* QUERY EXPANSION */
-                         synonyms: Option[Seq[Seq[String]]] = None,
-                         placeholders: Option[Map[String, Seq[String]]] = None,
-                         altCorrections: Option[Seq[AltCorrection]] = None,
                          disableTypoToleranceOnWords: Option[Seq[String]] = None,
                          disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
 
@@ -63,7 +60,3 @@ case class IndexSettings(/* INDEXING PARAMETERS */
                          typoTolerance: Option[TypoTolerance] = None,
                          removeStopWords: Option[Boolean] = None,
                          snippetEllipsisText: Option[String] = None)
-
-
-
-

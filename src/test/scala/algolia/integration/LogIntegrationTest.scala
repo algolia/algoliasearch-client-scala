@@ -32,9 +32,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class LogIntegrationTest  extends AlgoliaTest {
 
-  val client = new AlgoliaClient(applicationId, apiKey)
-
-  it("gets the logs") {
+  it("should get the logs") {
     val result: Future[Logs] = client.execute {
       logs offset 0 length 10 `type` LogType.all
     }

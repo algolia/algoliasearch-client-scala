@@ -23,8 +23,9 @@
 
 package algolia.definitions
 
+import algolia.AlgoliaDsl.In
 import algolia._
-import algolia.http.{POST, HttpPayload}
+import algolia.http.{HttpPayload, POST}
 import algolia.objects.Query
 import algolia.responses.SearchResult
 import org.json4s.Formats
@@ -56,7 +57,9 @@ trait SearchDsl {
 
   case object search {
 
-    def into(index: String): SearchDefinition = SearchDefinition(index)
+    def into(index: String) = SearchDefinition(index)
+
+    def synonyms(i: In): SearchSynonymsDefinition = SearchSynonymsDefinition()
 
   }
 

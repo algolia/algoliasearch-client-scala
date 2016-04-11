@@ -24,29 +24,20 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 import algolia.objects.Query
 import algolia.responses._
-import algolia.{AlgoliaClient, AlgoliaTest}
 import org.json4s._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class SearchIntegrationTest extends AlgoliaTest {
 
-  val client = new AlgoliaClient(applicationId, apiKey)
-
   after {
-    val indices = Seq(
+    clearIndices(
       "indexToSearch",
       "indexToSearch2"
     )
-
-    val del = client.execute {
-      batch(indices.map { i => delete index i })
-    }
-
-    whenReady(del) { res => res }
   }
 
   before {
@@ -54,13 +45,13 @@ class SearchIntegrationTest extends AlgoliaTest {
       index into "indexToSearch" objectId "563481290" `object` Test("algolia", 10, alien = false)
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, insert1, "indexToSearch")
+    taskShouldBeCreatedAndWaitForIt(insert1, "indexToSearch")
 
     val insert2 = client.execute {
       index into "indexToSearch2" `object` Test("algolia2", 10, alien = false)
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, insert2, "indexToSearch2")
+    taskShouldBeCreatedAndWaitForIt(insert2, "indexToSearch2")
   }
 
   describe("search") {

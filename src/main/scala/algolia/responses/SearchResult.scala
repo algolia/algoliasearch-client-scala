@@ -23,6 +23,7 @@
 
 package algolia.responses
 
+import algolia.objects.AbstractSynonym
 import org.json4s._
 
 case class SearchResult(hits: Seq[JObject],
@@ -43,6 +44,9 @@ case class SearchResult(hits: Seq[JObject],
   def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
 
 }
+
+case class SearchSynonymResult(hits: Seq[AbstractSynonym],
+                               nbHits: Int)
 
 case class MultiQueriesResult(results: Seq[SearchResult])
 

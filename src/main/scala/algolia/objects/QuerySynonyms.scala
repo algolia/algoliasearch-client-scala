@@ -23,4 +23,7 @@
 
 package algolia.objects
 
-case class AltCorrection(word: String, correction: String, nbTypos: Int)
+case class QuerySynonyms(query: String,
+                         types: Option[Seq[SynonymType]] = None,
+                         page: Option[Int] = None,
+                         hitsPerPage: Option[Int] = None)

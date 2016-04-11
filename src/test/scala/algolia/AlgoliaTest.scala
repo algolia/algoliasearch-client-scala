@@ -30,6 +30,7 @@ import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaTest
@@ -43,10 +44,11 @@ class AlgoliaTest
 
   val applicationId = System.getenv("APPLICATION_ID")
   val apiKey = System.getenv("API_KEY")
+  val client = new AlgoliaClient(applicationId, apiKey)
 
   implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
 
-  def taskShouldBeCreatedAndWaitForIt(client: AlgoliaClient, task: Future[AlgoliaTask], index: String)(implicit ec: ExecutionContext) = {
+  def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(implicit ec: ExecutionContext) = {
     val t: AlgoliaTask = whenReady(task) { result =>
       result.idToWaitFor should not be 0
       result //for getting it after
@@ -61,5 +63,12 @@ class AlgoliaTest
     }
   }
 
+  def clearIndices(indices: String*) = {
+    val del = client.execute {
+      batch(indices.map { i => delete index i })
+    }
+
+    whenReady(del) { res => res }
+  }
 
 }
