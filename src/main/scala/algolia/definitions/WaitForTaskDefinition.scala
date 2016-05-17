@@ -46,7 +46,7 @@ case class WaitForTaskDefinition(taskId: Long,
     HttpPayload(
       GET,
       Seq("1", "indexes") ++ index ++ Seq("task", taskId.toString),
-      isSearch = false
+      isSearch = true
     )
   }
 }

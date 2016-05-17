@@ -23,7 +23,7 @@
 
 package algolia.definitions
 
-import algolia.http.HttpPayload
+import algolia.http.{GET, HttpPayload, POST}
 import algolia.inputs.{Request, Requests}
 import algolia.responses.{GetObject, Results}
 import algolia.{AlgoliaClient, Executable, _}
@@ -42,7 +42,11 @@ case class GetObjectDefinition(index: Option[String] = None, oid: Option[String]
   def objectId(objectId: String): GetObjectDefinition = copy(oid = Some(objectId))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.GET, Seq("1", "indexes") ++ index ++ oid)
+    HttpPayload(
+      GET,
+      Seq("1", "indexes") ++ index ++ oid,
+      isSearch = true
+    )
 }
 
 case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq())(implicit val formats: Formats) extends Definition {
@@ -53,9 +57,10 @@ case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq()
     }
 
     HttpPayload(
-      http.POST,
+      POST,
       Seq("1", "indexes", "*", "objects"),
-      body = Some(write(Requests(requests)))
+      body = Some(write(Requests(requests))),
+      isSearch = true
     )
   }
 
