@@ -50,7 +50,7 @@ class IndexSettingsTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      val payload = HttpPayload(GET, Seq("1", "indexes", "test", "settings"), isSearch = false)
+      val payload = HttpPayload(GET, Seq("1", "indexes", "test", "settings"), isSearch = true)
       (settings of "test").build() should be(payload)
     }
 

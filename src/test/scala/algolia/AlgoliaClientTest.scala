@@ -254,7 +254,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     val taskPublished: TaskStatus = TaskStatus("published", pendingTask = true)
     val taskToWait: Task = Task(1L, None)
 
-    val payload = HttpPayload(GET, Seq("1", "indexes", "toto", "task", "1"), None, None, isSearch = false)
+    val payload = HttpPayload(GET, Seq("1", "indexes", "toto", "task", "1"), None, None, isSearch = true)
 
     it("task is ready") {
       (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[TaskStatus], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(taskPublished)
