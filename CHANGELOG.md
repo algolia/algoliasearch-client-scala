@@ -1,5 +1,19 @@
 # Change Log
 
+## [1.6.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.6.1) (2016-05-17)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.6.0...1.6.1)
+
+**Fixed bugs:**
+
+- Fix the order of the hosts fallbacks [\#93](https://github.com/algolia/algoliasearch-client-scala/issues/93)
+
+**Merged pull requests:**
+
+- Fix targeted hosts for WaitForTask, IndexSettings and GetObject\(s\) [\#98](https://github.com/algolia/algoliasearch-client-scala/pull/98) ([ElPicador](https://github.com/ElPicador))
+- Fix hosts automatic fallback [\#97](https://github.com/algolia/algoliasearch-client-scala/pull/97) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#95](https://github.com/algolia/algoliasearch-client-scala/pull/95) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update readme [\#94](https://github.com/algolia/algoliasearch-client-scala/pull/94) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.6.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.6.0) (2016-03-23)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.5...1.6.0)
 
