@@ -44,19 +44,25 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
   }
 
-
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
   final private val ALGOLIANET_HOST = "algolia.net"
-  lazy val indexingHosts: Seq[String] = random.shuffle(Seq(
-    s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-  )) :+ s"https://$applicationId.$ALGOLIANET_HOST"
-  lazy val queryHosts: Seq[String] = random.shuffle(Seq(
-    s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-    s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-  )) :+ s"https://$applicationId-dsn.$ALGOLIANET_HOST"
+
+  lazy val indexingHosts: Seq[String] =
+    s"https://$applicationId.$ALGOLIANET_HOST" +:
+    random.shuffle(Seq(
+      s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+      s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+      s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+    ))
+
+  lazy val queryHosts: Seq[String] =
+    s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
+    random.shuffle(Seq(
+      s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+      s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+      s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+    ))
+
   val httpClient: DispatchHttpClient = DispatchHttpClient
   val random: AlgoliaRandom = AlgoliaRandom
   val userAgent = s"Algolia for Scala ${BuildInfo.scalaVersion} API ${BuildInfo.version}"
@@ -69,6 +75,7 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     "Content-type" -> "application/json",
     "Accept" -> "application/json"
   )
+
   private val HMAC_SHA256 = "HmacSHA256"
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
