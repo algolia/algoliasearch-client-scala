@@ -32,19 +32,23 @@ import org.json4s._
 import scala.concurrent.ExecutionContext
 
 object default {
-  val httpReadTimeout = 30000
+  val httpReadTimeout = 2000
 
   //httpSocketTimeout in HttpClient
   val httpConnectTimeout = 2000
+
+  val httpRequestTimeout = 2000
 }
 
 object DispatchHttpClient extends DispatchHttpClient(
   httpReadTimeout = default.httpReadTimeout,
-  httpConnectTimeout = default.httpConnectTimeout
+  httpConnectTimeout = default.httpConnectTimeout,
+  httpRequestTimeout = default.httpRequestTimeout
 )
 
 case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
-                              httpConnectTimeout: Int = default.httpConnectTimeout) {
+                              httpConnectTimeout: Int = default.httpConnectTimeout,
+                              httpRequestTimeout: Int = default.httpRequestTimeout) {
 
   implicit val formats: Formats = AlgoliaDsl.formats
 
@@ -52,6 +56,7 @@ case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
     builder
       .setConnectTimeout(httpConnectTimeout)
       .setReadTimeout(httpReadTimeout)
+      .setRequestTimeout(httpRequestTimeout)
   }
 
   def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {

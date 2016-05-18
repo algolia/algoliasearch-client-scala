@@ -18,6 +18,7 @@ val json4sVersion = "3.2.11"
 val scalaTestVersion = "2.2.4"
 val scalaMockVersion = "3.2"
 
+libraryDependencies += "com.ning" % "async-http-client" % "1.9.38"
 libraryDependencies += "net.databinder.dispatch" %% "dispatch-core" % dispatchVersion
 libraryDependencies += "net.databinder.dispatch" %% "dispatch-json4s-native" % dispatchVersion
 

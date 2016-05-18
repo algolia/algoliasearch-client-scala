@@ -30,10 +30,11 @@ import algolia.definitions.WaitForTimeoutException
 import algolia.http.{GET, HttpPayload}
 import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
-import org.scalamock.CallHandler5
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
+import scala.util.{Failure, Success}
 
 class AlgoliaClientTest extends AlgoliaTest {
 
@@ -231,9 +232,33 @@ class AlgoliaClientTest extends AlgoliaTest {
         (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result], _: ExecutionContext)) expects("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning timeoutRequest
         (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result], _: ExecutionContext)) expects("https://a-2.algolianet.com", emptyHeaders, payload, *, *) returning timeoutRequest
         (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result], _: ExecutionContext)) expects("https://a-3.algolianet.com", emptyHeaders, payload, *, *) returning Future.successful(successfulRequest)
-        
+
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = false))) { result =>
           result should equal(successfulRequest)
+        }
+      }
+    }
+
+    describe("failing DNS") {
+
+      val apiClient = new AlgoliaClient(applicationId, apiKey) {
+        override lazy val queryHosts: Seq[String] = Seq(
+          s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
+          s"https://$applicationId-1.algolianet.com"
+        )
+      }
+
+      it("should answer within X seconds") {
+        val result = apiClient.execute { list.indices }
+
+        result.isReadyWithin(22.seconds) should be(true) //TODO: to be fixed by changing the HTTP client to https://github.com/AsyncHttpClient/async-http-client v2
+      }
+
+      it("should get a result") {
+        val result = apiClient.execute { list.indices }
+
+        whenReady(result) { res =>
+          res.items shouldNot be(empty)
         }
       }
     }
