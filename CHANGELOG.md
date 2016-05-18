@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.6.2](https://github.com/algolia/algoliasearch-client-scala/tree/1.6.2) (2016-05-18)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.6.1...1.6.2)
+
+**Fixed bugs:**
+
+- Handle errors of DNS in the fallback [\#96](https://github.com/algolia/algoliasearch-client-scala/issues/96)
+
+**Merged pull requests:**
+
+- Fixing timeout on DNS, and SNI support [\#99](https://github.com/algolia/algoliasearch-client-scala/pull/99) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.6.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.6.1) (2016-05-17)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.6.0...1.6.1)
 
