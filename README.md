@@ -1267,7 +1267,7 @@ You can send multiple queries with a single API call using a batch of queries:
 val result: Future[MultiQueriesResult] = client.execute {
 	multiQueries(
 		search into "categories" query Query(query = myQueryString, hitsPerPage = Some(3)),
-		search into "products" query Query(query = myQueryString, hitsPerPage = Some(3), tagFilters = Some(Seq("promotion"))),
+		search into "products" query Query(query = myQueryString, hitsPerPage = Some(3), filters = Some("promotion")),
 		search into "products" query Query(query = myQueryString, hitsPerPage = Some(10))
 	) strategy MultiQueries.Strategy.stopIfEnoughMatches
 }
@@ -2172,7 +2172,7 @@ that it is not possible to access records beyond the 1,000th on the first call.
 Example:
 
 ```scala
-val q = Query(query = Some("text"), numericFilters = Some("i<42"))
+val q = Query(query = Some("text"), filters = Some("i<42"))
 
 // Iterate with a filter over the index
 val result: Future[BrowseResult] = client.execute {
@@ -2457,7 +2457,7 @@ You may have a single index containing **per user** data. In that case, all reco
 ```scala
 // generate a public API key for user 42. Here, records are tagged with:
 //  - 'user_XXXX' if they are visible by user XXXX
-String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(tagFilters = Some(Seq("user_42"))))
+String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(filters = Some("user_42")))
 ```
 
 This public API key can then be used in your JavaScript code as follow:
@@ -2482,7 +2482,7 @@ You can mix rate limits and secured API keys by setting a `userToken` query para
 ```scala
 // generate a public API key for user 42. Here, records are tagged with:
 //  - 'user_XXXX' if they are visible by user XXXX
-String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(tagFilters = Some(Seq("user_42"))), Some("42"))
+String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(filters = Some("user_42")), Some("42"))
 ```
 
 This public API key can then be used in your JavaScript code as follow:
