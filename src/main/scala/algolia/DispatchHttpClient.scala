@@ -48,7 +48,7 @@ case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
                               httpConnectTimeout: Int = default.httpConnectTimeout,
                               httpRequestTimeout: Int = default.httpRequestTimeout) {
 
-  lazy val http = Http().configure { builder =>
+  lazy val http = Http.configure { builder =>
     builder
       .setConnectTimeout(httpConnectTimeout)
       .setReadTimeout(httpReadTimeout)
@@ -71,7 +71,9 @@ case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
     request = payload.queryParameters.map(request <<? _).getOrElse(request)
     request = payload.body.map(request << _).getOrElse(request)
 
+    val start = System.currentTimeMillis()
     val responseManager: Response => T = { response =>
+      println(s"querying $host took ${System.currentTimeMillis() - start}ms")
       response.getStatusCode / 100 match {
         case 2 => Json(response).extract[T]
         case 4 => throw APIClientException(response.getStatusCode, (Json(response) \ "message").extract[String])
@@ -87,5 +89,3 @@ case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
 case class APIClientException(code: Int, message: String) extends Exception("Failure \"%s\", response status: %d".format(message, code))
 
 case class UnexpectedResponse(code: Int) extends Exception("Unexpected response status: %d".format(code))
-
-private[algolia] case class `4XXResponse`(message: String)

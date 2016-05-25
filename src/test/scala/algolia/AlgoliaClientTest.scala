@@ -32,9 +32,8 @@ import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClientTest extends AlgoliaTest {
 
@@ -109,7 +108,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     describe("search") {
 
       val apiClient = new AlgoliaClient("a", "b") {
-        override val httpClient = mockHttpClient
+        override lazy val httpClient = mockHttpClient
         override val headers = emptyHeaders
         override val random = notSoRandom
       }
@@ -222,7 +221,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     describe("indexing") {
 
       val apiClient = new AlgoliaClient("a", "b") {
-        override val httpClient = mockHttpClient
+        override lazy val httpClient = mockHttpClient
         override val headers = emptyHeaders
         override val random = notSoRandom
       }
@@ -246,22 +245,30 @@ class AlgoliaClientTest extends AlgoliaTest {
     describe("failing DNS") {
 
       val apiClient = new AlgoliaClient(applicationId, apiKey) {
+        override lazy val httpClient: DispatchHttpClient = DispatchHttpClient(201, 202, 203)
+
         override lazy val queryHosts: Seq[String] = Seq(
           s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
           s"https://$applicationId-1.algolianet.com"
         )
       }
 
-      it("should answer within X seconds") {
-        val result = apiClient.execute { list.indices }
+      it("should answer within 1 second") {
+        val result = apiClient.execute {
+          list.indices
+        }
 
-        result.isReadyWithin(3.seconds) should be(true) //TODO: to be fixed by changing the HTTP client to https://github.com/AsyncHttpClient/async-http-client v2
+        result.isReadyWithin(1.second) should be(true)
       }
 
       it("should get a result") {
-        val result = apiClient.execute { list.indices }
+        val start = System.currentTimeMillis()
+        val result = apiClient.execute {
+          list.indices
+        }
 
         whenReady(result) { res =>
+          println(s"took: ${System.currentTimeMillis() - start}")
           res.items shouldNot be(empty)
         }
       }
@@ -274,7 +281,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     val emptyHeaders: Map[String, String] = Map()
 
     val apiClient = new AlgoliaClient("a", "b") {
-      override val httpClient = mockHttpClient
+      override lazy val httpClient = mockHttpClient
       override val headers = emptyHeaders
       override val random = notSoRandom
     }

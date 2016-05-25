@@ -25,7 +25,6 @@ package algolia.http
 
 import java.util.{concurrent => juc}
 
-import io.netty.util.HashedWheelTimer
 import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder
 import org.asynchttpclient._
 
@@ -33,44 +32,25 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.Try
 
 /** Http executor with defaults */
-case class Http(
-                 client: AsyncHttpClient = InternalDefaults.client
-               ) extends HttpExecutor {
+case class Http(client: AsyncHttpClient) extends HttpExecutor
 
-  /** Replaces `client` with a new instance configured using the withBuilder
-    * function. The current client config is the builder's prototype.  */
+object Http {
+
   def configure(withBuilder: Builder => Builder) =
-    copy(client =
-      new DefaultAsyncHttpClient(withBuilder(
-        new DefaultAsyncHttpClientConfig.Builder(InternalDefaults.config)
-      ).build)
-    )
-}
-
-/** Singleton default Http executor, can be used directly or altered
-  * with its case-class `copy` */
-object Http extends Http(
-  InternalDefaults.client
-)
-
-object InternalDefaults {
-  lazy val timer = underlying.timer
-  lazy val config = underlying.builder.build()
-  private lazy val underlying = BasicDefaults
-
-  def client = new DefaultAsyncHttpClient(config)
-
-  /** Sets a user agent, no timeout for requests  */
-  private object BasicDefaults {
-    lazy val timer = new HashedWheelTimer()
-
-    def builder =
-      new DefaultAsyncHttpClientConfig
-      .Builder()
-        .setRequestTimeout(-1) // don't timeout streaming connections
-  }
+    Http(client = new DefaultAsyncHttpClient(withBuilder(new DefaultAsyncHttpClientConfig.Builder()).build))
 
 }
+
+//object InternalDefaults {
+//  def client = new DefaultAsyncHttpClient(config)
+//
+//  /** Sets a user agent, no timeout for requests  */
+//  private object BasicDefaults {
+//    lazy val timer = new HashedWheelTimer()
+//
+//  }
+//
+//}
 
 
 trait HttpExecutor {

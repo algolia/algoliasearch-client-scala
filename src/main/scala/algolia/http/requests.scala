@@ -25,7 +25,7 @@ package algolia.http
 
 import java.net.URI
 
-import org.asynchttpclient.{Request, RequestBuilder, Response}
+import org.asynchttpclient.{AsyncCompletionHandler, Request, RequestBuilder, Response}
 
 object url extends (String => Req) {
   def apply(url: String) = {
@@ -33,9 +33,7 @@ object url extends (String => Req) {
   }
 }
 
-case class Req(
-                run: RequestBuilder => RequestBuilder
-              )
+case class Req(run: RequestBuilder => RequestBuilder)
   extends MethodVerbs
     with UrlVerbs
     with ParamVerbs
@@ -46,7 +44,9 @@ case class Req(
   def underlying(next: RequestBuilder => RequestBuilder) =
     Req(run andThen next)
 
-  def >[T](f: Response => T) = (toRequest, new FunctionHandler(f))
+  def >[T](f: Response => T) = (toRequest, new AsyncCompletionHandler[T] {
+    override def onCompleted(response: Response) = f(response)
+  })
 
   def toRequest: Request = toRequestBuilder.build
 
@@ -95,14 +95,13 @@ trait ParamVerbs extends RequestVerbs {
     }
 }
 
-case class RawUri(
-                   scheme: Option[String],
-                   userInfo: Option[String],
-                   host: Option[String],
-                   port: Option[Int],
-                   path: Option[String],
-                   query: Option[String],
-                   fragment: Option[String]
+case class RawUri(scheme: Option[String],
+                  userInfo: Option[String],
+                  host: Option[String],
+                  port: Option[Int],
+                  path: Option[String],
+                  query: Option[String],
+                  fragment: Option[String]
                  ) {
   override def toString = toUri.toASCIIString
 
@@ -159,11 +158,11 @@ trait UrlVerbs extends RequestVerbs {
     subject.setUrl(uri.copy(path = rawPath, query = None).toString)
   }
 
-  def url = subject.toRequest.getUrl
-
   def secure = {
     subject.setUrl(RawUri(url).copy(scheme = Some("https")).toString)
   }
+
+  def url = subject.toRequest.getUrl
 }
 
 object UriEncode {
