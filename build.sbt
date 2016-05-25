@@ -12,15 +12,14 @@ scalaVersion := "2.11.7"
 ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
 //coverageEnabled := true
 
-val dispatchVersion = "0.11.3"
+val asyncHttpClientVersion = "2.0.3"
+
 val json4sVersion = "3.2.11"
 
 val scalaTestVersion = "2.2.4"
 val scalaMockVersion = "3.2"
 
-libraryDependencies += "com.ning" % "async-http-client" % "1.9.38"
-libraryDependencies += "net.databinder.dispatch" %% "dispatch-core" % dispatchVersion
-libraryDependencies += "net.databinder.dispatch" %% "dispatch-json4s-native" % dispatchVersion
+libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
 
 libraryDependencies += "org.json4s" %% "json4s-ast" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion

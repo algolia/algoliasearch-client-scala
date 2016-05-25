@@ -23,13 +23,11 @@
 
 package algolia
 
-import algolia.http._
-import com.ning.http.client.Response
-import dispatch._
-import dispatch.as.json4s._
+import algolia.http.{DELETE, GET, Http, HttpPayload, Json, POST, PUT, url}
+import org.asynchttpclient.Response
 import org.json4s._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object default {
   val httpReadTimeout = 2000
@@ -50,14 +48,13 @@ case class DispatchHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
                               httpConnectTimeout: Int = default.httpConnectTimeout,
                               httpRequestTimeout: Int = default.httpRequestTimeout) {
 
-  implicit val formats: Formats = AlgoliaDsl.formats
-
   lazy val http = Http().configure { builder =>
     builder
       .setConnectTimeout(httpConnectTimeout)
       .setReadTimeout(httpReadTimeout)
       .setRequestTimeout(httpRequestTimeout)
   }
+  implicit val formats: Formats = AlgoliaDsl.formats
 
   def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     val path = payload.path.foldLeft(url(host).secure) {
