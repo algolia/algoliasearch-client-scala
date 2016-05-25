@@ -255,7 +255,7 @@ class AlgoliaClientTest extends AlgoliaTest {
       it("should answer within X seconds") {
         val result = apiClient.execute { list.indices }
 
-        result.isReadyWithin(22.seconds) should be(true) //TODO: to be fixed by changing the HTTP client to https://github.com/AsyncHttpClient/async-http-client v2
+        result.isReadyWithin(3.seconds) should be(true) //TODO: to be fixed by changing the HTTP client to https://github.com/AsyncHttpClient/async-http-client v2
       }
 
       it("should get a result") {
