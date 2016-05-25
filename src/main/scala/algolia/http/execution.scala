@@ -25,11 +25,11 @@ package algolia.http
 
 import java.util.{concurrent => juc}
 
-import io.netty.util.{HashedWheelTimer, Timer}
+import io.netty.util.HashedWheelTimer
 import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder
 import org.asynchttpclient._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.Try
 
 /** Http executor with defaults */
@@ -60,18 +60,14 @@ object InternalDefaults {
 
   def client = new DefaultAsyncHttpClient(config)
 
-  private trait Defaults {
-    def builder: DefaultAsyncHttpClientConfig.Builder
-
-    def timer: Timer
-  }
-
   /** Sets a user agent, no timeout for requests  */
-  private object BasicDefaults extends Defaults {
+  private object BasicDefaults {
     lazy val timer = new HashedWheelTimer()
 
-    def builder = new DefaultAsyncHttpClientConfig.Builder()
-      .setRequestTimeout(-1) // don't timeout streaming connections
+    def builder =
+      new DefaultAsyncHttpClientConfig
+      .Builder()
+        .setRequestTimeout(-1) // don't timeout streaming connections
   }
 
 }
@@ -81,31 +77,26 @@ trait HttpExecutor {
   self =>
   def client: AsyncHttpClient
 
-  def apply(req: Req)
-           (implicit executor: ExecutionContext): Future[Response] =
-    apply(req.toRequest -> new FunctionHandler(identity))
-
-  def apply[T](pair: (Request, AsyncHandler[T]))
-              (implicit executor: ExecutionContext): Future[T] =
+  def apply[T](pair: (Request, AsyncHandler[T]))(implicit executor: ExecutionContext): Future[T] =
     apply(pair._1, pair._2)
 
-  def apply[T]
-  (request: Request, handler: AsyncHandler[T])
-  (implicit executor: ExecutionContext): Future[T] = {
+  def apply[T](request: Request, handler: AsyncHandler[T])
+              (implicit executor: ExecutionContext): Future[T] = {
     val lfut = client.executeRequest(request, handler)
-    val promise = scala.concurrent.Promise[T]()
-    lfut.addListener(
-      () => promise.complete(Try(lfut.get())),
-      new juc.Executor {
-        def execute(runnable: Runnable) {
-          executor.execute(runnable)
-        }
+    val promise = Promise[T]()
+    val runnable = new java.lang.Runnable {
+      def run() {
+        promise.complete(Try(lfut.get()))
       }
-    )
+    }
+    val exec = new juc.Executor {
+      def execute(runnable: Runnable) {
+        executor.execute(runnable)
+      }
+    }
+
+    lfut.addListener(runnable, exec)
     promise.future
   }
 
-  def shutdown() {
-    client.close()
-  }
 }

@@ -23,7 +23,7 @@
 
 package algolia
 
-import algolia.http.{DELETE, GET, Http, HttpPayload, Json, POST, PUT, url}
+import algolia.http._
 import org.asynchttpclient.Response
 import org.json4s._
 

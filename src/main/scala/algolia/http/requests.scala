@@ -24,11 +24,8 @@
 package algolia.http
 
 import java.net.URI
-import java.nio.charset.Charset
-import java.util
 
-import org.asynchttpclient.{Request, RequestBuilder}
-import org.asynchttpclient.request.body.generator.BodyGenerator
+import org.asynchttpclient.{Request, RequestBuilder, Response}
 
 object url extends (String => Req) {
   def apply(url: String) = {
@@ -37,8 +34,7 @@ object url extends (String => Req) {
 }
 
 case class Req(
-                run: RequestBuilder => RequestBuilder,
-                props: Req.Properties = Req.Properties()
+                run: RequestBuilder => RequestBuilder
               )
   extends MethodVerbs
     with UrlVerbs
@@ -48,34 +44,15 @@ case class Req(
   def subject = this
 
   def underlying(next: RequestBuilder => RequestBuilder) =
-    Req(run andThen next, props)
+    Req(run andThen next)
 
-  def underlying(nextReq: RequestBuilder => RequestBuilder,
-                 nextProps: Req.Properties => Req.Properties) =
-    Req(run andThen nextReq, nextProps(props))
+  def >[T](f: Response => T) = (toRequest, new FunctionHandler(f))
 
   def toRequest: Request = toRequestBuilder.build
 
   def toRequestBuilder = run(new RequestBuilder)
 }
 
-object Req {
-
-  trait BodyType
-
-  final case class Properties(bodyType: BodyType = NoBody)
-
-  case object NoBody extends BodyType
-
-  case object StringBody extends BodyType
-
-  case object ByteArrayBody extends BodyType
-
-  case object EntityWriterBody extends BodyType
-
-  case object FileBody extends BodyType
-
-}
 
 trait HeaderVerbs extends RequestVerbs {
   def <:<(hs: Traversable[(String, String)]) =
@@ -96,15 +73,6 @@ trait MethodVerbs extends RequestVerbs {
 }
 
 trait ParamVerbs extends RequestVerbs {
-
-  /** Adds `params` to the request body. Sets request method
-    * to POST if it is currently GET. */
-  def <<(params: Traversable[(String, String)]) = {
-    (defaultMethod("POST") /: params) {
-      case (s, (key, value)) =>
-        s.addParameter(key, value)
-    }
-  }
 
   /** Set request body to a given string,
     * - set method to POST if currently GET,
@@ -180,13 +148,6 @@ trait RequestVerbs {
 }
 
 trait UrlVerbs extends RequestVerbs {
-  def /(segment: AnyVal): Req = segment match {
-    case unit: Unit => subject
-    case other => this / other.toString
-  }
-
-  def /?(segmentOpt: Option[String]): Req =
-    segmentOpt.map(this / _) getOrElse subject
 
   def /(segment: String) = {
     val uri = RawUri(url)
@@ -264,8 +225,6 @@ object UriEncode {
 
 trait RequestBuilderVerbs extends RequestVerbs {
 
-  import scala.collection.JavaConverters._
-
   def addHeader(name: String, value: String) =
     subject.underlying {
       _.addHeader(name, value)
@@ -281,63 +240,9 @@ trait RequestBuilderVerbs extends RequestVerbs {
       _.addQueryParam(name, value)
     }
 
-  def setQueryParameters(params: Map[String, Seq[String]]) =
-    subject.underlying {
-      _.setQueryParams(params.mapValues(_.toList.asJava).asJava)
-    }
-
-  def setBody(data: Array[Byte]) =
-    subject.underlying(
-      rb => rb.setBody(data), p => p.copy(bodyType = Req.ByteArrayBody))
-
-  def setBody(dataWriter: BodyGenerator, length: Long) =
-    subject.underlying(rb => rb.setBody(dataWriter),
-      p => p.copy(bodyType = Req.EntityWriterBody))
-
-  def setBody(dataWriter: BodyGenerator) =
-    subject.underlying(rb => rb.setBody(dataWriter),
-      p => p.copy(bodyType = Req.EntityWriterBody))
-
   def setBody(data: String) =
-    subject.underlying(
-      rb => rb.setBody(data), p => p.copy(bodyType = Req.StringBody))
-
-  def setBody(file: java.io.File) =
-    subject.underlying(
-      rb => rb.setBody(file), p => p.copy(bodyType = Req.FileBody))
-
-  def setBodyEncoding(charset: Charset) =
     subject.underlying {
-      _.setCharset(charset)
-    }
-
-  def setContentType(mediaType: String, charset: Charset) =
-    subject.underlying {
-      _.setHeader("Content-Type", mediaType + "; charset=" + charset)
-        .setCharset(charset)
-    }
-
-  def setHeader(name: String, value: String) =
-    subject.underlying {
-      _.setHeader(name, value)
-    }
-
-  def setHeaders(headers: Map[String, Seq[String]]) =
-    subject.underlying {
-      _.setHeaders(
-        headers.mapValues {
-          _.asJava: util.Collection[String]
-        }.asJava
-      )
-    }
-
-  def setParameters(parameters: Map[String, Seq[String]]) =
-    subject.underlying {
-      _.setFormParams(
-        parameters.mapValues {
-          _.asJava: java.util.List[String]
-        }.asJava
-      )
+      _.setBody(data)
     }
 
   def setMethod(method: String) =

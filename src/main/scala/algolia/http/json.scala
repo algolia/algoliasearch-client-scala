@@ -23,32 +23,11 @@
 
 package algolia.http
 
-import java.nio.charset.Charset
-
 import org.asynchttpclient.Response
 import org.json4s.native.JsonMethods._
 import org.json4s.{StringInput, _}
 
 object Json extends (Response => JValue) {
-  def apply(r: Response) =
-    (String andThen (s => parse(StringInput(s), useBigDecimalForDouble = true))) (r)
+  def apply(r: Response) = parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
 }
 
-object Response {
-  def apply[T](f: Response => T) = f
-}
-
-object String extends (Response => String) {
-  /** @return response body as a string decoded as either the charset provided by
-    *         Content-Type header of the response or ISO-8859-1 */
-  def apply(r: Response) = r.getResponseBody
-
-  /** @return a function that will return response body decoded in the provided charset */
-  case class charset(set: Charset) extends (Response => String) {
-    def apply(r: Response) = r.getResponseBody(set)
-  }
-
-  /** @return a function that will return response body as a utf8 decoded string */
-  object utf8 extends charset(Charset.forName("utf8"))
-
-}
