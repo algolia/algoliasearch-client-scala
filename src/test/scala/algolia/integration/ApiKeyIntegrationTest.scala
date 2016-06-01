@@ -24,16 +24,14 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 import algolia.objects.{Acl, ApiKey}
-import algolia.responses.{CreateUpdateKey, AllKeys}
-import algolia.{AlgoliaClient, AlgoliaTest}
+import algolia.responses.{AllKeys, CreateUpdateKey}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ApiKeyIntegrationTest extends AlgoliaTest {
-
-  val client = new AlgoliaClient(applicationId, apiKey)
 
   describe("global keys") {
 
@@ -59,7 +57,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
       }
 
       Thread.sleep(5000) //ok let's wait propagation
-      
+
       val getKey = client.execute {
         get key keyName
       }
@@ -93,19 +91,11 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
         index into "indexToTestKeys" `object` ObjectToGet("1", "toto")
       }
 
-      taskShouldBeCreatedAndWaitForIt(client, pushObject, "indexToTestKeys")
+      taskShouldBeCreatedAndWaitForIt(pushObject, "indexToTestKeys")
     }
 
     after {
-      val indices = Seq(
-        "indexToTestKeys"
-      )
-
-      val del = client.execute {
-        batch(indices.map { i => delete index i })
-      }
-
-      whenReady(del) { res => res }
+      clearIndices("indexToTestKeys")
     }
 
     it("should list keys") {

@@ -71,6 +71,8 @@ trait DeleteDsl {
 
     def key(keyName: String) = DeleteApiKeyDefinition(keyName)
 
+    def synonym(synId: String) = DeleteSynonymDefinition(synId = synId)
+
   }
 
   implicit object DeleteObjectDefinitionExecutable extends Executable[DeleteObjectDefinition, Task] {

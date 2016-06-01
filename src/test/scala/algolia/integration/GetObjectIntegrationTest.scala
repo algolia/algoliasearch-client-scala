@@ -24,26 +24,16 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 import algolia.responses.{GetObject, Results, TasksMultipleIndex}
-import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class GetObjectIntegrationTest extends AlgoliaTest {
 
-  val client = new AlgoliaClient(applicationId, apiKey)
-
   after {
-    val indices = Seq(
-      "indexToGet"
-    )
-
-    val del = client.execute {
-      batch(indices.map { i => delete index i })
-    }
-
-    whenReady(del) { res => res }
+    clearIndices("indexToGet")
   }
 
   it("should get object") {
@@ -53,7 +43,7 @@ class GetObjectIntegrationTest extends AlgoliaTest {
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, create, "indexToGet")
+    taskShouldBeCreatedAndWaitForIt(create, "indexToGet")
 
     val request: Future[GetObject] = client.execute {
       get from "indexToGet" objectId "1"
@@ -72,7 +62,7 @@ class GetObjectIntegrationTest extends AlgoliaTest {
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, create, "indexToGet")
+    taskShouldBeCreatedAndWaitForIt(create, "indexToGet")
 
     val request: Future[Results] = client.execute {
       get from "indexToGet" objectIds Seq("1", "2")

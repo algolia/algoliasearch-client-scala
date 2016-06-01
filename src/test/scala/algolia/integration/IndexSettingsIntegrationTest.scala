@@ -24,27 +24,17 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 import algolia.objects.{AttributesToIndex, IndexSettings}
 import algolia.responses._
-import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class IndexSettingsIntegrationTest extends AlgoliaTest {
 
-  val client = new AlgoliaClient(applicationId, apiKey)
-
   after {
-    val indices = Seq(
-      "indexToChangeSettings"
-    )
-
-    val del = client.execute {
-      batch(indices.map { i => delete index i })
-    }
-
-    whenReady(del) { res => res }
+    clearIndices("indexToChangeSettings")
   }
 
   it("should get settings") {
@@ -54,14 +44,14 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, create, "indexToChangeSettings")
+    taskShouldBeCreatedAndWaitForIt(create, "indexToChangeSettings")
 
     val request: Future[IndexSettings] = client.execute {
       settings of "indexToChangeSettings"
     }
 
     whenReady(request) { result =>
-      result shouldBe a [IndexSettings] //just checking it deserialize
+      result shouldBe a[IndexSettings] //just checking it deserialize
     }
   }
 
@@ -72,7 +62,7 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, change, "indexToChangeSettings")
+    taskShouldBeCreatedAndWaitForIt(change, "indexToChangeSettings")
 
     val request: Future[IndexSettings] = client.execute {
       settings of "indexToChangeSettings"

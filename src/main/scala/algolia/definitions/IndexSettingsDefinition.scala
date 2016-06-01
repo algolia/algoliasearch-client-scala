@@ -40,6 +40,7 @@ case class IndexSettingsDefinition(index: String)(implicit val formats: Formats)
     HttpPayload(
       GET,
       Seq("1", "indexes", index, "settings"),
+      queryParameters = Some(Map("getVersion" -> "2")),
       isSearch = true
     )
   }

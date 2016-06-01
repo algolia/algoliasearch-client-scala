@@ -23,9 +23,11 @@
 
 package algolia.definitions
 
+import algolia.AlgoliaDsl.Of
 import algolia.http.{HttpPayload, POST}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
+import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,11 +38,15 @@ case class ClearIndexDefinition(index: String) extends Definition {
 
 }
 
-trait ClearIndexDsl {
+trait ClearDsl {
+
+  implicit val formats: Formats
 
   case object clear {
 
     def index(index: String): ClearIndexDefinition = ClearIndexDefinition(index)
+
+    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
 
   }
 

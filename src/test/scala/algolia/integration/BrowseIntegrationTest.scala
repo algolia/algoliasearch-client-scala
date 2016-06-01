@@ -24,27 +24,17 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
 import algolia.objects.Query
 import algolia.responses.TasksMultipleIndex
-import algolia.{AlgoliaClient, AlgoliaTest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class BrowseIntegrationTest extends AlgoliaTest {
 
-  val client = new AlgoliaClient(applicationId, apiKey)
-
   after {
-    val indices = Seq(
-      "indexToBrowse"
-    )
-
-    val del = client.execute {
-      batch(indices.map { i => delete index i })
-    }
-
-    whenReady(del) { res => res }
+    clearIndices("indexToBrowse")
   }
 
   before {
@@ -57,7 +47,7 @@ class BrowseIntegrationTest extends AlgoliaTest {
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(client, b, "indexToBrowse")
+    taskShouldBeCreatedAndWaitForIt(b, "indexToBrowse")
   }
 
   describe("browse") {
