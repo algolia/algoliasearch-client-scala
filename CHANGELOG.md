@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.7.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.7.0) (2016-06-01)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.6.2...1.7.0)
+
+**Implemented enhancements:**
+
+- Synonym v2 integration [\#88](https://github.com/algolia/algoliasearch-client-scala/issues/88)
+
+**Merged pull requests:**
+
+- Update README [\#102](https://github.com/algolia/algoliasearch-client-scala/pull/102) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Synonyms v2 [\#91](https://github.com/algolia/algoliasearch-client-scala/pull/91) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.6.2](https://github.com/algolia/algoliasearch-client-scala/tree/1.6.2) (2016-05-18)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.6.1...1.6.2)
 
