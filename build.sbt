@@ -4,7 +4,7 @@ name := "algoliasearch-scala"
 
 description := "Scala client for Algolia Search API"
 
-version := "1.7.0"
+version := "1.8.0-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
