@@ -12,12 +12,13 @@ scalaVersion := "2.11.7"
 ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
 //coverageEnabled := true
 
-val asyncHttpClientVersion = "2.0.3"
+val asyncHttpClientVersion = "2.0.4"
 
 val json4sVersion = "3.2.11"
 
-val scalaTestVersion = "2.2.4"
+val scalaTestVersion = "2.2.6"
 val scalaMockVersion = "3.2"
+val scalacheckVersion = "1.12.1"
 
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
 
@@ -27,8 +28,11 @@ libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
 
+libraryDependencies += "com.netaporter" %% "scala-uri" % "0.4.14"
+
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
 
 scalacOptions ++= Seq("-feature", "-unchecked")

@@ -5,5 +5,5 @@ scala:
 jdk:
   - oraclejdk8
 
-script: "sbt clean coverage test"
-after_success: "sbt coverageReport coveralls"
+script: "sbt ++$TRAVIS_SCALA_VERSION -J-Dsun.net.maxDatagramSockets=2048 clean coverage test"
+after_success: "sbt ++$TRAVIS_SCALA_VERSION coverageReport coveralls"

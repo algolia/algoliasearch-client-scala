@@ -23,19 +23,50 @@
 
 package algolia.http
 
+import java.net.InetAddress
+
+import io.netty.resolver.NameResolver
+import com.netaporter.uri.dsl._
+import org.asynchttpclient.{Request, RequestBuilder}
+
 private[algolia] sealed trait HttpVerb
 
+private[algolia] case object GET extends HttpVerb {
+  override def toString: String = "GET"
+}
 
-private[algolia] case object GET extends HttpVerb
+private[algolia] case object POST extends HttpVerb {
+  override def toString: String = "POST"
+}
 
-private[algolia] case object POST extends HttpVerb
+private[algolia] case object PUT extends HttpVerb {
+  override def toString: String = "PUT"
+}
 
-private[algolia] case object PUT extends HttpVerb
-
-private[algolia] case object DELETE extends HttpVerb
+private[algolia] case object DELETE extends HttpVerb {
+  override def toString: String = "DELETE"
+}
 
 private[algolia] case class HttpPayload(verb: HttpVerb,
                                         path: Seq[String],
                                         queryParameters: Option[Map[String, String]] = None,
                                         body: Option[String] = None,
-                                        isSearch: Boolean = true)
+                                        isSearch: Boolean = true) {
+
+  def apply(host: String, headers: Map[String, String], dnsNameResolver: NameResolver[InetAddress]): Request = {
+    val uri = path.foldLeft(host)((url, p) => url / p)
+
+    var builder: RequestBuilder = new RequestBuilder().setMethod(verb.toString).setUrl(uri)
+
+    headers.foreach { case (k, v) => builder = builder.addHeader(k, v) }
+
+    queryParameters.foreach(
+      _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }
+    )
+
+    body.foreach(b => builder = builder.setBody(b))
+
+    builder.setNameResolver(dnsNameResolver).build()
+  }
+
+}

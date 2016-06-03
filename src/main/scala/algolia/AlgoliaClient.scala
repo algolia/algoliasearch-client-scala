@@ -49,21 +49,21 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
 
   lazy val indexingHosts: Seq[String] =
     s"https://$applicationId.$ALGOLIANET_HOST" +:
-    random.shuffle(Seq(
-      s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-      s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-      s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-    ))
+      random.shuffle(Seq(
+        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+      ))
 
   lazy val queryHosts: Seq[String] =
     s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
-    random.shuffle(Seq(
-      s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-      s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-      s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-    ))
+      random.shuffle(Seq(
+        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+      ))
 
-  lazy val httpClient: DispatchHttpClient = DispatchHttpClient
+  val httpClient: AlgoliaHttpClient = AlgoliaHttpClient()
   val random: AlgoliaRandom = AlgoliaRandom
   val userAgent = s"Algolia for Scala ${BuildInfo.scalaVersion} API ${BuildInfo.version}"
 
@@ -101,14 +101,9 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     val hosts = if (payload.isSearch) queryHosts else indexingHosts
 
     hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
-      val start = System.currentTimeMillis()
       future.recoverWith {
-        case e: APIClientException =>
-          println(s"querying $host took ${System.currentTimeMillis() - start}ms")
-          Future.failed(e) //No retry if 4XX
-        case _ =>
-          println(s"querying $host took ${System.currentTimeMillis() - start}ms")
-          httpClient request[T](host, headers, payload)
+        case e: APIClientException => Future.failed(e) //No retry if 4XX
+        case _ => httpClient.request[T](host, headers, payload)
       }
     }
   }

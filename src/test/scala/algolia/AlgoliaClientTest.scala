@@ -101,14 +101,14 @@ class AlgoliaClientTest extends AlgoliaTest {
 
   describe("requests") {
 
-    val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
+    val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
     val emptyHeaders: Map[String, String] = Map()
     val timeoutRequest: Future[Result] = Future.failed(new TimeoutException())
 
     describe("search") {
 
       val apiClient = new AlgoliaClient("a", "b") {
-        override lazy val httpClient = mockHttpClient
+        override val httpClient = mockHttpClient
         override val headers = emptyHeaders
         override val random = notSoRandom
       }
@@ -221,7 +221,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     describe("indexing") {
 
       val apiClient = new AlgoliaClient("a", "b") {
-        override lazy val httpClient = mockHttpClient
+        override val httpClient = mockHttpClient
         override val headers = emptyHeaders
         override val random = notSoRandom
       }
@@ -245,7 +245,12 @@ class AlgoliaClientTest extends AlgoliaTest {
     describe("failing DNS") {
 
       val apiClient = new AlgoliaClient(applicationId, apiKey) {
-        override lazy val httpClient: DispatchHttpClient = DispatchHttpClient(201, 202, 203)
+        override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
+          httpReadTimeout = 201,
+          httpConnectTimeout = 202,
+          httpRequestTimeout = 203,
+          dnsTimeout = 204
+        )
 
         override lazy val queryHosts: Seq[String] = Seq(
           s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
@@ -268,7 +273,6 @@ class AlgoliaClientTest extends AlgoliaTest {
         }
 
         whenReady(result) { res =>
-          println(s"took: ${System.currentTimeMillis() - start}")
           res.items shouldNot be(empty)
         }
       }
@@ -277,11 +281,11 @@ class AlgoliaClientTest extends AlgoliaTest {
 
   describe("wait for") {
 
-    val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
+    val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
     val emptyHeaders: Map[String, String] = Map()
 
     val apiClient = new AlgoliaClient("a", "b") {
-      override lazy val httpClient = mockHttpClient
+      override val httpClient = mockHttpClient
       override val headers = emptyHeaders
       override val random = notSoRandom
     }
