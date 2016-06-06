@@ -52,6 +52,10 @@ class AlgoliaClientTest extends AlgoliaTest {
       apiClient.userAgent should (startWith("Algolia for Scala 2.11") and include("API 1."))
     }
 
+    it("should set Content-Type header") {
+      apiClient.headers should contain("Content-Type" -> "application/json; charset=UTF-8")
+    }
+
     it("should set indexing hosts") {
       apiClient.indexingHosts should equal(Seq(
         "https://APPID.algolia.net",

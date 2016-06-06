@@ -55,6 +55,22 @@ class IndicesIntegrationTest extends AlgoliaTest {
     taskShouldBeCreatedAndWaitForIt(create, "index1")
   }
 
+  it("should index UTF-8 strings") {
+    val create: Future[TaskIndexing] = client.execute {
+      index into "index1" `object` Obj("Bézier")
+    }
+
+    taskShouldBeCreatedAndWaitForIt(create, "index1")
+
+    val query: Future[SearchResult] = client.execute {
+      search into "index1" query Query(query = Some("Bézier"))
+    }
+
+    whenReady(query) { result =>
+      result.as[Obj].map(_.name) should contain("Bézier")
+    }
+  }
+
   it("should list indices") {
     val create: Future[TasksMultipleIndex] = client.execute {
       batch(

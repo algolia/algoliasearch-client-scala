@@ -72,7 +72,7 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
     "X-Algolia-Application-Id" -> applicationId,
     "X-Algolia-API-Key" -> apiKey,
     "User-Agent" -> userAgent,
-    "Content-type" -> "application/json",
+    "Content-Type" -> "application/json; charset=UTF-8",
     "Accept" -> "application/json"
   )
 
