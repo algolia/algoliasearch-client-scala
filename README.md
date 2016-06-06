@@ -106,7 +106,7 @@ Initialize the client with your Application ID and API Key. You can find them on
 
 
 ```scala
-val client = new APIClient("YourApplicationID", "YourAPIKey")
+val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
 ```
 
 
