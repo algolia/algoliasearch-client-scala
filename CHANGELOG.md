@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.8.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.8.0) (2016-06-06)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.7.2...1.8.0)
+
+**Closed issues:**
+
+- Migrate to AsyncHttpClient v2 [\#100](https://github.com/algolia/algoliasearch-client-scala/issues/100)
+
+**Merged pull requests:**
+
+- Update README [\#109](https://github.com/algolia/algoliasearch-client-scala/pull/109) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Feat/remove dependency to dispatch [\#105](https://github.com/algolia/algoliasearch-client-scala/pull/105) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.7.2](https://github.com/algolia/algoliasearch-client-scala/tree/1.7.2) (2016-06-06)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.7.1...1.7.2)
 
