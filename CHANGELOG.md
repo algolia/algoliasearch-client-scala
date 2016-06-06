@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.7.2](https://github.com/algolia/algoliasearch-client-scala/tree/1.7.2) (2016-06-06)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.7.1...1.7.2)
+
 ## [1.7.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.7.1) (2016-06-06)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.7.0...1.7.1)
 
