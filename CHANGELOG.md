@@ -1,5 +1,14 @@
 # Change Log
 
+## [1.7.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.7.1) (2016-06-06)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.7.0...1.7.1)
+
+**Merged pull requests:**
+
+- Update README [\#108](https://github.com/algolia/algoliasearch-client-scala/pull/108) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Specify UTF-8 character set in Content-Type request header [\#107](https://github.com/algolia/algoliasearch-client-scala/pull/107) ([abhalla-atl](https://github.com/abhalla-atl))
+- Update README [\#104](https://github.com/algolia/algoliasearch-client-scala/pull/104) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.7.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.7.0) (2016-06-01)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.6.2...1.7.0)
 
