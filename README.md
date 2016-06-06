@@ -23,8 +23,13 @@ Our Scala client lets you easily use the [Algolia Search API](https://www.algoli
 [![Build Status](https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-scala) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-scala/badge.svg?branch=master&service=github)](https://coveralls.io/github/algolia/algoliasearch-client-scala?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/)
 
 
+**WARNING:** 
+The JVM has an infinite cache on successful DNS resolution. As our hostnames points to multiple IPs, the load could be not evenly spread among our machines, and you might also target a dead machine.
 
-**WARNING:** The JVM does not allow to configure timeouts on DNS resolution, it uses the value of the OS. See: https://github.com/algolia/algoliasearch-client-scala/issues/100
+You should change this TTL by setting the property `networkaddress.cache.ttl`. For example to set the cache to 60 seconds:
+```java
+java.security.Security.setProperty("networkaddress.cache.ttl", "60");
+```
 
 
 
