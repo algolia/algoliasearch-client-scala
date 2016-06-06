@@ -32,9 +32,8 @@ import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClientTest extends AlgoliaTest {
 
@@ -102,7 +101,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
   describe("requests") {
 
-    val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
+    val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
     val emptyHeaders: Map[String, String] = Map()
     val timeoutRequest: Future[Result] = Future.failed(new TimeoutException())
 
@@ -246,20 +245,32 @@ class AlgoliaClientTest extends AlgoliaTest {
     describe("failing DNS") {
 
       val apiClient = new AlgoliaClient(applicationId, apiKey) {
+        override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
+          httpReadTimeout = 201,
+          httpConnectTimeout = 202,
+          httpRequestTimeout = 203,
+          dnsTimeout = 204
+        )
+
         override lazy val queryHosts: Seq[String] = Seq(
           s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
           s"https://$applicationId-1.algolianet.com"
         )
       }
 
-      it("should answer within X seconds") {
-        val result = apiClient.execute { list.indices }
+      it("should answer within 1 second") {
+        val result = apiClient.execute {
+          list.indices
+        }
 
-        result.isReadyWithin(22.seconds) should be(true) //TODO: to be fixed by changing the HTTP client to https://github.com/AsyncHttpClient/async-http-client v2
+        result.isReadyWithin(1.second) should be(true)
       }
 
       it("should get a result") {
-        val result = apiClient.execute { list.indices }
+        val start = System.currentTimeMillis()
+        val result = apiClient.execute {
+          list.indices
+        }
 
         whenReady(result) { res =>
           res.items shouldNot be(empty)
@@ -270,7 +281,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
   describe("wait for") {
 
-    val mockHttpClient: DispatchHttpClient = mock[DispatchHttpClient]
+    val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
     val emptyHeaders: Map[String, String] = Map()
 
     val apiClient = new AlgoliaClient("a", "b") {
