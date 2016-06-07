@@ -37,4 +37,6 @@ case class BrowseResult(cursor: Option[String],
 
   def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
 
+  def asWithObjectID[T <: ObjectID : Manifest]: Seq[T] = hits.map(_.extract[T])
+
 }

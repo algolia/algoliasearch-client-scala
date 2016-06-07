@@ -43,6 +43,8 @@ case class SearchResult(hits: Seq[JObject],
 
   def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
 
+  def asWithObjectID[T <: ObjectID : Manifest]: Seq[T] = hits.map(_.extract[T])
+
 }
 
 case class SearchSynonymResult(hits: Seq[AbstractSynonym],
@@ -50,9 +52,13 @@ case class SearchSynonymResult(hits: Seq[AbstractSynonym],
 
 case class MultiQueriesResult(results: Seq[SearchResult])
 
-trait Hit {
+trait ObjectID {
 
   val objectID: String
+
+}
+
+trait Hit extends ObjectID {
 
   val _highlightResult: Option[Map[String, HighlightResult]]
 
