@@ -33,9 +33,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class BrowseIndexDefinition(source: String, query: Option[Query] = None, cursor: Option[String] = None)(implicit val formats: Formats) extends Definition {
 
-  def from(cursor: String) = copy(source, query = query, Some(cursor))
+  def from(cursor: String) = copy(cursor = Some(cursor))
 
-  def query(query: Query) = copy(source, query = Some(query))
+  def query(query: Query) = copy(query = Some(query))
 
   override private[algolia] def build(): HttpPayload = {
     val q = query.getOrElse(Query()).copy(cursor = cursor)
