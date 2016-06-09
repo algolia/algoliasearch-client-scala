@@ -1340,6 +1340,18 @@ You can delete an object using its `objectID`:
 client.execute { delete from "toto" objectId "oid" }
 ```
 
+Delete by query
+==================
+
+You can delete all objects matching a single query with the following code. Internally, the API client performs the query, deletes all matching hits, and waits until the deletions have been applied.
+
+As the delete by query calls the browse API in sequence, this functionnality is provided in a helper class.
+
+```scala
+val helper = AlgoliaSyncHelper(client)
+val query = Query(filters = Some("price > 10"))
+val delete = helper.deleteByQuery[MyCaseClass]("myIndex", query)
+```
 
 
 Index Settings
