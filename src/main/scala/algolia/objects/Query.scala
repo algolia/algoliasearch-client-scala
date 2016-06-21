@@ -43,7 +43,9 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  minProximity: Option[Int] = None,
                  removeWordsIfNoResults: Option[RemoveWordsIfNoResults] = None,
                  disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
-                 removeStopWords: Option[Boolean] = None,
+                 removeStopWords: Option[RemoveStopWords] = None,
+                 exactOnSingleWordQuery: Option[String] = None,
+                 alternativesAsExact: Option[String] = None,
 
                  /* PAGINATION PARAMETERS */
                  page: Option[Int] = None,
@@ -78,7 +80,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  /* GEO-SEARCH PARAMETERS */
                  aroundLatLng: Option[AroundLatLng] = None,
                  aroundLatLngViaIP: Option[Boolean] = None,
-                 aroundRadius: Option[Int] = None,
+                 aroundRadius: Option[AroundRadius] = None,
                  aroundPrecision: Option[Int] = None,
                  minimumAroundRadius: Option[Int] = None,
                  insideBoundingBox: Option[InsideBoundingBox] = None,
@@ -116,7 +118,9 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "minProximity" -> minProximity.map(_.toString),
       "removeWordsIfNoResults" -> removeWordsIfNoResults.map(_.name),
       "disableTypoToleranceOnAttributes" -> disableTypoToleranceOnAttributes.map(_.mkString(",")),
-      "removeStopWords" -> removeStopWords.map(_.toString),
+      "removeStopWords" -> removeStopWords.map(_.value),
+      "exactOnSingleWordQuery" -> exactOnSingleWordQuery.map(_.toString),
+      "alternativesAsExact" -> alternativesAsExact.map(_.toString),
 
       /* PAGINATION PARAMETERS */
       "page" -> page.map(_.toString),
@@ -151,7 +155,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       /* GEO-SEARCH PARAMETERS */
       "aroundLatLng" -> aroundLatLng.map(_.toString),
       "aroundLatLngViaIP" -> aroundLatLngViaIP.map(_.toString),
-      "aroundRadius" -> aroundRadius.map(_.toString),
+      "aroundRadius" -> aroundRadius.map(_.name),
       "aroundPrecision" -> aroundPrecision.map(_.toString),
       "minimumAroundRadius" -> minimumAroundRadius.map(_.toString),
       "insideBoundingBox" -> insideBoundingBox.map(_.toString),
