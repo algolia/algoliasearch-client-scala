@@ -1,5 +1,31 @@
 # Change Log
 
+## [1.10.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.10.0) (2016-06-21)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.9.0...1.10.0)
+
+**Closed issues:**
+
+- Support of new query parameters [\#115](https://github.com/algolia/algoliasearch-client-scala/issues/115)
+
+**Merged pull requests:**
+
+- Support for new query parameters & forwardToSlaves in changeSettings [\#116](https://github.com/algolia/algoliasearch-client-scala/pull/116) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#114](https://github.com/algolia/algoliasearch-client-scala/pull/114) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
+## [1.9.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.9.0) (2016-06-09)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.8.0...1.9.0)
+
+**Closed issues:**
+
+- Support deleting by query [\#92](https://github.com/algolia/algoliasearch-client-scala/issues/92)
+
+**Merged pull requests:**
+
+- Update README [\#113](https://github.com/algolia/algoliasearch-client-scala/pull/113) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#112](https://github.com/algolia/algoliasearch-client-scala/pull/112) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Add browse sync and delete by query [\#111](https://github.com/algolia/algoliasearch-client-scala/pull/111) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#110](https://github.com/algolia/algoliasearch-client-scala/pull/110) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.8.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.8.0) (2016-06-06)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.7.2...1.8.0)
 
