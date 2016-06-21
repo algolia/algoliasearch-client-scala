@@ -66,7 +66,9 @@ class SearchTest extends AlgoliaTest {
         minProximity = Some(10),
         removeWordsIfNoResults = Some(RemoveWordsIfNoResults.allOptional),
         disableTypoToleranceOnAttributes = Some(Seq("att2", "att3")),
-        removeStopWords = Some(false),
+        removeStopWords = Some(RemoveStopWords.`false`),
+        exactOnSingleWordQuery = Some("e"),
+        alternativesAsExact = Some("true"),
         page = Some(1),
         hitsPerPage = Some(19),
         attributesToRetrieve = Some(Seq("att4")),
@@ -85,7 +87,7 @@ class SearchTest extends AlgoliaTest {
         filters = Some("filter"),
         aroundLatLng = Some(AroundLatLng("1", "2")),
         aroundLatLngViaIP = Some(true),
-        aroundRadius = Some(10),
+        aroundRadius = Some(AroundRadius.integer(0)),
         aroundPrecision = Some(20),
         minimumAroundRadius = Some(30),
         insideBoundingBox = Some(InsideBoundingBox("1", "2", "3", "4")),
@@ -97,7 +99,7 @@ class SearchTest extends AlgoliaTest {
         HttpPayload(
           POST,
           List("1", "indexes", "indexName", "query"),
-          body = Some("""{"params":"numericFilters=1&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=18&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&replaceSynonymsInHighlight=false&aroundRadius=10&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=1%2C2%2C3%2C4%2C5%2C6&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=1%2C2%2C3%2C4&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
+          body = Some("""{"params":"numericFilters=1&alternativesAsExact=true&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=18&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=1%2C2%2C3%2C4%2C5%2C6&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=1%2C2%2C3%2C4&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
           isSearch = true
         )
       )

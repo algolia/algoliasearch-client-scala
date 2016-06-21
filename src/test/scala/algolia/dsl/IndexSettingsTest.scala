@@ -63,12 +63,19 @@ class IndexSettingsTest extends AlgoliaTest {
   describe("change settings") {
 
     it("should get settings") {
-      changeSettings of "index" `with` IndexSettings()
+      changeSettings of "index" `with` IndexSettings() and forwardToSlaves
     }
 
     it("should call API") {
-      val payload = HttpPayload(PUT, Seq("1", "indexes", "test", "settings"), body = Some("{}"), isSearch = false)
-      (changeSettings of "test" `with` IndexSettings()).build() should be(payload)
+      val payload = HttpPayload(
+        PUT,
+        Seq("1", "indexes", "test", "settings"),
+        queryParameters = Some(Map("forwardToSlaves" -> "true")),
+        body = Some("{}"),
+        isSearch = false
+      )
+
+      (changeSettings of "test" `with` IndexSettings() and forwardToSlaves).build() should be(payload)
     }
 
   }
