@@ -1451,6 +1451,15 @@ val result: Future[Task] = client.execute {
 }
 ```
 
+## Slave settings
+
+You can forward all settings updates to the slaves of an index by using the `forwardToSlaves` option:
+
+```scala
+val result: Future[IndexSettings] = client.execute {
+  changeSettings of "myIndex" `with` IndexSettings(customRanking = Some(Seq("desc(followers)"))) and forwardToSlaves
+}
+```
 
 ## Indexing parameters
 
