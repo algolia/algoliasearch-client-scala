@@ -41,7 +41,8 @@ Table of Contents
 
 1. [Setup](#setup)
 1. [Quick Start](#quick-start)
-1. [Philosophy of the scala client](#philosophy)1. [Guides & Tutorials](#guides-tutorials)
+1. [Philosophy of the scala client](#philosophy)
+1. [Guides & Tutorials](#guides-tutorials)
 
 
 **Commands Reference**
