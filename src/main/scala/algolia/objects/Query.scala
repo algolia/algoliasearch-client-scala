@@ -88,6 +88,8 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
 
                  /* SECURED API KEYS */
                  userToken: Option[String] = None,
+                 validUntil: Option[Int] = None,
+                 restrictIndices: Option[Seq[String]] = None,
 
                  /* BROWSE */
                  cursor: Option[String] = None) {
@@ -163,6 +165,8 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
 
       /* SECURED API KEYS */
       "userToken" -> userToken,
+      "validUntil" -> validUntil.map(_.toString),
+      "restrictIndices" -> restrictIndices.map(_.mkString(",")),
 
       /* BROWSE */
       "cursor" -> cursor

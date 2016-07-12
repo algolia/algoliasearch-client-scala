@@ -54,6 +54,7 @@ case class IndexSettings(/* INDEXING PARAMETERS */
                          allowTyposOnNumericTokens: Option[Boolean] = None,
                          ignorePlurals: Option[Boolean] = None,
                          advancedSyntax: Option[Boolean] = None,
+                         removeWordsIfNoResults: Option[String] = None,
                          replaceSynonymsInHighlight: Option[Boolean] = None,
                          maxValuesPerFacet: Option[Int] = None,
                          distinct: Option[Int] = None,
