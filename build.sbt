@@ -8,10 +8,6 @@ version := "1.12.0-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
-//Wait fix in sbt-coveralls
-ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
-//coverageEnabled := true
-
 val asyncHttpClientVersion = "2.0.4"
 
 val json4sVersion = "3.2.11"
