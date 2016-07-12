@@ -1,4 +1,6 @@
 /*
+ * The MIT License (MIT)
+ *
  * Copyright (c) 2016 Algolia
  * http://www.algolia.com/
  *
