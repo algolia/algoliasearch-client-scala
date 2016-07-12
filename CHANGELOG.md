@@ -1,5 +1,14 @@
 # Change Log
 
+## [1.11.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.11.0) (2016-07-05)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.10.0...1.11.0)
+
+**Merged pull requests:**
+
+- Update README [\#120](https://github.com/algolia/algoliasearch-client-scala/pull/120) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#119](https://github.com/algolia/algoliasearch-client-scala/pull/119) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#118](https://github.com/algolia/algoliasearch-client-scala/pull/118) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.10.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.10.0) (2016-06-21)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.9.0...1.10.0)
 
