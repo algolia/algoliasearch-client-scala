@@ -94,7 +94,10 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  restrictIndices: Option[Seq[String]] = None,
 
                  /* BROWSE */
-                 cursor: Option[String] = None) {
+                 cursor: Option[String] = None,
+
+                 /* CUSTOM */
+                 customParameters: Option[Map[String, String]] = None) {
 
   def toParam: String = {
     toQueryParam
@@ -103,7 +106,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
   }
 
   def toQueryParam: Map[String, String] = {
-    Map(
+    val queryParam = Map(
       /* FULL TEXT SEARCH PARAMETERS */
       "query" -> query,
       "queryType" -> queryType.map(_.name),
@@ -175,5 +178,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
     )
       .filter { case (k, v) => v.isDefined }
       .map { case (k, v) => k -> v.get }
+
+    customParameters.fold(queryParam)(c => queryParam ++ c)
   }
 }
