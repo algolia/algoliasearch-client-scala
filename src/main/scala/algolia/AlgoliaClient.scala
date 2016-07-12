@@ -36,7 +36,14 @@ import algolia.objects.Query
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AlgoliaClient(applicationId: String, apiKey: String) {
+/**
+  * The AlgoliaClient to query Algolia
+  *
+  * @param applicationId The APP_ID of your Algolia account
+  * @param apiKey The API KEY of your Algolia account
+  * @param customHeader Custom headers to add to every requests
+  */
+class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[String, String] = Map.empty) {
 
   if (applicationId == null || applicationId.isEmpty) {
     throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
@@ -69,7 +76,7 @@ class AlgoliaClient(applicationId: String, apiKey: String) {
   val random: AlgoliaRandom = AlgoliaRandom
   val userAgent = s"Algolia for Scala ${BuildInfo.scalaVersion} API ${BuildInfo.version}"
 
-  val headers: Map[String, String] = Map(
+  val headers: Map[String, String] = customHeader ++ Map(
     "Accept-Encoding" -> "gzip",
     "X-Algolia-Application-Id" -> applicationId,
     "X-Algolia-API-Key" -> apiKey,
