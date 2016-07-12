@@ -106,6 +106,22 @@ class SearchTest extends AlgoliaTest {
         )
       )
     }
+
+    it("should call the API with a search with custom parameters") {
+      val q = Query(
+        query = Some("query"),
+        customParameters = Some(Map("my" -> "parameter"))
+      )
+
+      (search into "indexName" query q).build() should be(
+        HttpPayload(
+          POST,
+          List("1", "indexes", "indexName", "query"),
+          body = Some("""{"params":"query=query&my=parameter"}"""),
+          isSearch = true
+        )
+      )
+    }
   }
 
   describe("Query toParam") {
