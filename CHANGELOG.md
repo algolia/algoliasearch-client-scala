@@ -1,10 +1,28 @@
 # Change Log
 
-## [1.11.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.11.0) (2016-07-05)
+## [1.12.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.12.0) (2016-07-13)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.12...1.12.0)
+
+## [1.12](https://github.com/algolia/algoliasearch-client-scala/tree/1.12) (2016-07-13)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.11.0...1.12)
+
+**Implemented enhancements:**
+
+- Allow extra index settings String to be specified [\#124](https://github.com/algolia/algoliasearch-client-scala/issues/124)
+- Allow extra query String parameters to be specified [\#90](https://github.com/algolia/algoliasearch-client-scala/issues/90)
+- Add custom HEADERS to the request [\#89](https://github.com/algolia/algoliasearch-client-scala/issues/89)
+
+**Merged pull requests:**
+
+- Add custom query parameters [\#125](https://github.com/algolia/algoliasearch-client-scala/pull/125) ([ElPicador](https://github.com/ElPicador))
+- Add custom HEADERS to the requests [\#123](https://github.com/algolia/algoliasearch-client-scala/pull/123) ([ElPicador](https://github.com/ElPicador))
+
+## [1.11.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.11.0) (2016-07-12)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.10.0...1.11.0)
 
 **Merged pull requests:**
 
+- Add missing query parameters & index settings [\#121](https://github.com/algolia/algoliasearch-client-scala/pull/121) ([ElPicador](https://github.com/ElPicador))
 - Update README [\#120](https://github.com/algolia/algoliasearch-client-scala/pull/120) ([algoliareadmebot](https://github.com/algoliareadmebot))
 - Update README [\#119](https://github.com/algolia/algoliasearch-client-scala/pull/119) ([algoliareadmebot](https://github.com/algoliareadmebot))
 - Update README [\#118](https://github.com/algolia/algoliasearch-client-scala/pull/118) ([algoliareadmebot](https://github.com/algoliareadmebot))
