@@ -99,6 +99,11 @@ class AlgoliaClientTest extends AlgoliaTest {
       new AlgoliaClient("APP_ID", "APIKEY")
     }
 
+    it("should add custom headers") {
+      val client = new AlgoliaClient("APP_ID", "APIKEY", Map("my" -> "header"))
+      client.headers should contain("my" -> "header")
+    }
+
   }
 
   describe("requests") {
