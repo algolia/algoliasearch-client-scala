@@ -44,61 +44,61 @@ java.security.Security.setProperty("networkaddress.cache.ttl", "60");
 
 Getting started
 
-1. [Install](##install)
+1. [Install](#install)
 
 Search
 
-1. [Search in an index](##search-in-an-index---search)
-1. [Find by IDs](##find-by-ids---get-from-index)
+1. [Search in an index](#search-in-an-index---search)
+1. [Find by IDs](#find-by-ids---get-from-index)
 
 Indexing
 
-1. [Add objects](##add-objects---index-into)
-1. [Update objects](##update-objects---index-into)
-1. [Partial update](##partial-update---index-into)
-1. [Delete objects](##delete-objects---index-into)
+1. [Add objects](#add-objects---index-into)
+1. [Update objects](#update-objects---index-into)
+1. [Partial update](#partial-update---update-attribute)
+1. [Delete objects](#delete-objects---delete-from)
 
 Settings
 
-1. [Get settings](##get-settings---settings)
-1. [Set settings](##set-settings---changesettings)
+1. [Get settings](#get-settings---settings)
+1. [Set settings](#set-settings---changesettings)
 
 Manage Indices
 
-1. [List indices](##list-indices---list.indices)
-1. [Delete index](##delete-index---delete-index)
-1. [Clear index](##clear-index---clear-index)
-1. [Copy index](##copy-index---copy-index)
-1. [Move index](##move-index---move-index)
+1. [List indices](#list-indices---list.indices)
+1. [Delete index](#delete-index---delete-index)
+1. [Clear index](#clear-index---clear-index)
+1. [Copy index](#copy-index---copy-index)
+1. [Move index](#move-index---move-index)
 
 Api Keys
 
-1. [Generate key](##generate-key---generatesecuredapikey)
+1. [Generate key](#generate-key---generatesecuredapikey)
 
 
 Synonyms
 
-1. [Save synonym](##save-synonym---savesynonym)
-1. [Batch synonyms](##batch-synonyms---batchsynonyms)
+1. [Save synonym](#save-synonym---save-synonym)
+1. [Batch synonyms](#batch-synonyms---save-synonyms)
 1. [Editing Synonyms](#editing-synonyms)
-1. [Delete Synonyms](##delete-synonyms---delete_synonyms)
-1. [Clear all synonyms](##clear-all-synonyms---clearsynonyms)
-1. [Get synonym](##get-synonym---getsynonym)
-1. [Search synonyms](##search-synonyms---searchsynonyms)
+1. [Delete Synonyms](#delete-synonyms---delete-synonym)
+1. [Clear all synonyms](#clear-all-synonyms---clear-synonyms-of-index)
+1. [Get synonym](#get-synonym---get-synonym)
+1. [Search synonyms](#search-synonyms---search-synonyms-of)
 
 
 Advanced
 
-1. [Custom batch](##custom-batch---batch)
-1. [Wait for operations](##wait-for-operations---waittask)
-1. [Multiple queries](##multiple-queries---multiplequeries)
-1. [Backup / Export an index](##backup--export-an-index---browse)
-1. [List api keys](##list-api-keys---list-keys)
-1. [Add user key](##add-user-key---add-key)
-1. [Update user key](##update-user-key---update-key)
-1. [Delete user key](##delete-user-key---delete-key)
-1. [Get key permissions](##get-key-permissions---getuserkeyacl)
-1. [Get Logs](##get-logs---getlogs)
+1. [Custom batch](#custom-batch---batch)
+1. [Wait for operations](#wait-for-operations---waitfor-task)
+1. [Multiple queries](#multiple-queries---multiqueries)
+1. [Backup / Export an index](#backup--export-an-index---browse-index)
+1. [List api keys](#list-api-keys---get-allkeys)
+1. [Add user key](#add-user-key---add-key)
+1. [Update user key](#update-user-key---update-key)
+1. [Delete user key](#delete-user-key---delete-key)
+1. [Get key permissions](#get-key-permissions---get-key)
+1. [Get Logs](#get-logs---logs)
 
 
 
@@ -586,7 +586,7 @@ val indexing: Future[Indexing] = client.execute {
 }
 ```
 
-### Partial update - `index into`
+### Partial update - `update attribute`
 
 You have many ways to update an object's attributes:
 
@@ -652,7 +652,7 @@ Note: Here we are decrementing the value by `42`. To decrement just by one, put
 `value:1`.
 
 
-### Delete objects - `index into`
+### Delete objects - `delete from`
 
 You can delete an object using its `objectID`:
 
@@ -674,7 +674,7 @@ val query = Query(filters = Some("price > 10"))
 val delete = helper.deleteByQuery[MyCaseClass]("myIndex", query)
 ```
 
-### Wait for operations - `waitTask`
+### Wait for operations - `waitFor task`
 
 All write operations in Algolia are asynchronous by design.
 
@@ -1876,7 +1876,7 @@ index.search('another query', function(err, content) {
 
 ## Synonyms
 
-### Save synonym - `saveSynonym`
+### Save synonym - `save synonym`
 
 This method saves a single synonym record into the index.
 
@@ -1889,7 +1889,7 @@ client.execute {
 }
 ```
 
-### Batch synonyms - `batchSynonyms`
+### Batch synonyms - `save synonyms`
 
 Use the batch method to create a large number of synonyms at once,
 forward them to slave indices if desired,
@@ -1918,7 +1918,7 @@ false is the default value).
 Otherwise, the entire synonym list will be replaced only partially with the records
 in the batch update.
 
-### Delete Synonyms - `delete_synonyms`
+### Delete Synonyms - `delete synonym`
 
 Use the normal index delete method to delete synonyms,
 specifying the objectID of the synonym record you want to delete.
@@ -1931,7 +1931,7 @@ client.execute {
 }
 ```
 
-### Clear all synonyms - `clearSynonyms`
+### Clear all synonyms - `clear synonyms of index`
 
 This is a convenience method to delete all synonyms at once.
 It should not be used on a production index to then push a new list of synonyms:
@@ -1948,7 +1948,7 @@ client.execute {
 }
 ```
 
-### Get synonym - `getSynonym`
+### Get synonym - `get synonym`
 
 Search for synonym records by their objectID or by the text they contain.
 Both methods are covered here.
@@ -1959,7 +1959,7 @@ var synonym: Future[Synonym] = client.execute {
 }
 ```
 
-### Search synonyms - `searchSynonyms`
+### Search synonyms - `search synonyms of`
 
 Search for synonym records similar to how you’d search normally.
 
@@ -1986,8 +1986,8 @@ You may want to perform multiple operations with one API call to reduce latency.
 We expose four methods to perform batch operations:
  * Add objects - `index into`: Add an array of objects using automatic `objectID` assignment.
  * Update objects - `index into`: Add or update an array of objects that contains an `objectID` attribute.
- * Delete objects - `index into`: Delete an array of objectIDs.
- * Partial update - `index into`: Partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated).
+ * Delete objects - `delete from`: Delete an array of objectIDs.
+ * Partial update - `update attribute`: Partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated).
 
 Example using automatic `objectID` assignment:
 ```scala
@@ -2063,7 +2063,7 @@ The attribute **action** can have these values:
 - partialUpdateObjectNoCreate
 - deleteObject
 
-### Backup / Export an index - `browse`
+### Backup / Export an index - `browse index`
 
 The `search` method cannot return more than 1,000 results. If you need to
 retrieve all the content of your index (for backup, SEO purposes or for running
@@ -2105,7 +2105,7 @@ result
 
 
 
-### List api keys - `list keys`
+### List api keys - `get allKeys`
 
 To list existing keys, you can use:
 
@@ -2351,7 +2351,7 @@ client.execute {
 }
 ```
 
-### Get key permissions - `getUserKeyACL`
+### Get key permissions - `get key`
 
 
 
@@ -2368,7 +2368,7 @@ client.execute {
 }
 ```
 
-### Multiple queries - `multipleQueries`
+### Multiple queries - `multiQueries`
 
 You can send multiple queries with a single API call using a batch of queries:
 
@@ -2394,7 +2394,7 @@ You can specify a `strategy` parameter to optimize your multiple queries:
 
 
 
-### Get Logs - `getLogs`
+### Get Logs - `logs`
 
 You can retrieve the latest logs via this API. Each log entry contains:
  * Timestamp in ISO-8601 format
