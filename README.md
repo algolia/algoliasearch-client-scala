@@ -45,6 +45,7 @@ java.security.Security.setProperty("networkaddress.cache.ttl", "60");
 Getting started
 
 1. [Install](#install)
+1. [Install](#install)
 
 Search
 
@@ -134,7 +135,9 @@ Check our [online guides](https://www.algolia.com/doc):
 
 ### Install
 
+
 If you're using Maven, add the following dependency to your `pom.xml` file:
+
 ```xml
 <dependency>
     <groupId>com.algolia</groupId>
@@ -157,9 +160,9 @@ For Snapshots add the Sonatype repository:
 </repositories>
 ```
 
-Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](https://www.algolia.com/users/edit):
 
 If you're using SBT, add the following dependency to your `build.sbt` file:
+
 ```scala
 libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "[1,)"
 ```
@@ -169,13 +172,17 @@ For Snapshots add the Sonatype repository:
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-Initialize the client with your Application ID and API Key. You can find them on [your Algolia account](https://www.algolia.com/users/edit):
 
+
+
+
+### Install
+
+To initialize the client you need your ApplicationID and API-Key. You can find all of them on [your Algolia account](http://www.algolia.com/users/edit)
 
 ```scala
 val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
 ```
-
 
 
 
