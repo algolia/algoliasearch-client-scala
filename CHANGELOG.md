@@ -1,5 +1,39 @@
 # Change Log
 
+## [1.13.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.13.1) (2016-08-03)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.13.0...1.13.1)
+
+**Closed issues:**
+
+- Migrate `User-Agent` header to new conventions [\#140](https://github.com/algolia/algoliasearch-client-scala/issues/140)
+
+**Merged pull requests:**
+
+- Migrate user agent to new format [\#143](https://github.com/algolia/algoliasearch-client-scala/pull/143) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#142](https://github.com/algolia/algoliasearch-client-scala/pull/142) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#141](https://github.com/algolia/algoliasearch-client-scala/pull/141) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- docs\(README\): automatic update [\#139](https://github.com/algolia/algoliasearch-client-scala/pull/139) ([CBaptiste](https://github.com/CBaptiste))
+- Update README [\#136](https://github.com/algolia/algoliasearch-client-scala/pull/136) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
+## [1.13.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.13.0) (2016-07-26)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.12.0...1.13.0)
+
+**Closed issues:**
+
+- numberOfPendingTask should be removed [\#134](https://github.com/algolia/algoliasearch-client-scala/issues/134)
+- Confusing documentation: variable naming [\#127](https://github.com/algolia/algoliasearch-client-scala/issues/127)
+- Confusing documentation: missing imports [\#126](https://github.com/algolia/algoliasearch-client-scala/issues/126)
+
+**Merged pull requests:**
+
+- Indices -\> numberOfPendingTask is removed [\#135](https://github.com/algolia/algoliasearch-client-scala/pull/135) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#133](https://github.com/algolia/algoliasearch-client-scala/pull/133) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#132](https://github.com/algolia/algoliasearch-client-scala/pull/132) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#131](https://github.com/algolia/algoliasearch-client-scala/pull/131) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#130](https://github.com/algolia/algoliasearch-client-scala/pull/130) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#129](https://github.com/algolia/algoliasearch-client-scala/pull/129) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#128](https://github.com/algolia/algoliasearch-client-scala/pull/128) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.12.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.12.0) (2016-07-13)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.12...1.12.0)
 
