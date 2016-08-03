@@ -46,11 +46,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[String, String] = Map.empty) {
 
   if (applicationId == null || applicationId.isEmpty) {
-    throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
+    throw AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
   }
 
   if (apiKey == null || apiKey.isEmpty) {
-    throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
+    throw AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
   }
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
@@ -74,7 +74,7 @@ class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[Str
 
   val httpClient: AlgoliaHttpClient = AlgoliaHttpClient()
   val random: AlgoliaRandom = AlgoliaRandom
-  val userAgent = s"Algolia for Scala ${BuildInfo.scalaVersion} API ${BuildInfo.version}"
+  val userAgent = s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
 
   val headers: Map[String, String] = customHeader ++ Map(
     "Accept-Encoding" -> "gzip",
