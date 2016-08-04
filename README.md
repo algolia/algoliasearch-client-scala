@@ -858,6 +858,10 @@ val result: Future[Task] = client.execute {
 }
 ```
 
+**Warning**
+
+Performance wise, it's better to do a `changeSettings` before pushing the data
+
 #### Slave settings
 
 You can forward all settings updates to the slaves of an index by using the `forwardToSlaves` option:
@@ -1956,7 +1960,7 @@ The move index method will overwrite the destination index, and delete the tempo
 
 **Warning**
 
-The move index` operation will override all settings of the destination,
+The move index operation will override all settings of the destination,
 There is one exception for the [slaves](#slaves) parameter which is not impacted.
 
 For example, if you want to fully update your index `MyIndex` every night, we recommend the following process:
