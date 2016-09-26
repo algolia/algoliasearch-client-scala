@@ -72,7 +72,7 @@ object AlgoliaDsl extends AlgoliaDsl {
   val asc = """^asc\(([\w-]+)\)$""".r
   val desc = """^desc\(([\w-]+)\)$""".r
 
-  sealed trait ForwardToSlave
+  sealed trait ForwardToReplicas
 
   sealed trait ReplaceExistingSynonyms
 
@@ -203,7 +203,9 @@ object AlgoliaDsl extends AlgoliaDsl {
     case Synonym.Placeholder(oid, p, r) => ("objectID" -> oid) ~ ("placeholder" -> p) ~ ("replacements" -> r) ~ ("type" -> "placeholder")
   }))
 
-  case object forwardToSlaves extends ForwardToSlave
+  case object forwardToSlaves extends ForwardToReplicas
+
+  case object forwardToReplicas extends ForwardToReplicas
 
   case object replaceExistingSynonyms extends ReplaceExistingSynonyms
 

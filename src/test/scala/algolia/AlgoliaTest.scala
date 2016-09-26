@@ -46,7 +46,9 @@ class AlgoliaTest
 
   val applicationId = System.getenv("APPLICATION_ID")
   val apiKey = System.getenv("API_KEY")
-  val client = new AlgoliaClient(applicationId, apiKey)
+  val client = new AlgoliaClient(applicationId, apiKey) {
+    override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(10000, 10000, 10000, 10000)
+  }
 
   implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
 
@@ -57,7 +59,7 @@ class AlgoliaTest
     }
 
     val waiting = client.execute {
-      waitFor task t from index maxDelay (60 * 1000) //60 seconds
+      waitFor task t from index maxDelay (60 * 10 * 1000) //600 seconds
     }
 
     whenReady(waiting) { result =>

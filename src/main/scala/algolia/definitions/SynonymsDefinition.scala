@@ -25,7 +25,7 @@
 
 package algolia.definitions
 
-import algolia.AlgoliaDsl.{ForwardToSlave, ReplaceExistingSynonyms}
+import algolia.AlgoliaDsl.{ForwardToReplicas, ReplaceExistingSynonyms}
 import algolia.http._
 import algolia.objects.{AbstractSynonym, QuerySynonyms}
 import algolia.responses.{SearchSynonymResult, Task}
@@ -49,15 +49,15 @@ case class GetSynonymDefinition(synId: String, index: Option[String] = None)(imp
 
 }
 
-case class DeleteSynonymDefinition(synId: String, index: Option[String] = None, option: Option[ForwardToSlave] = None)(implicit val formats: Formats) extends Definition {
+case class DeleteSynonymDefinition(synId: String, index: Option[String] = None, option: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
 
   def from(index: String) = copy(index = Some(index))
 
-  def and(option: ForwardToSlave) = copy(option = Some(option))
+  def and(option: ForwardToReplicas) = copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
     val queryParameters = if (option.isDefined) {
-      Some(Map("forwardToSlaves" -> "true"))
+      Some(Map("forwardToReplicas" -> "true"))
     } else {
       None
     }
@@ -72,17 +72,17 @@ case class DeleteSynonymDefinition(synId: String, index: Option[String] = None, 
 
 }
 
-case class ClearSynonymsDefinition(index: Option[String] = None, option: Option[ForwardToSlave] = None)(implicit val formats: Formats) extends Definition {
+case class ClearSynonymsDefinition(index: Option[String] = None, option: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
 
   def index(index: String) = copy(index = Some(index))
 
-  def and(option: ForwardToSlave) = copy(option = Some(option))
+  def and(option: ForwardToReplicas) = copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", "clear")
 
     val queryParameters = if (option.isDefined) {
-      Some(Map("forwardToSlaves" -> "true"))
+      Some(Map("forwardToReplicas" -> "true"))
     } else {
       None
     }
@@ -96,17 +96,17 @@ case class ClearSynonymsDefinition(index: Option[String] = None, option: Option[
   }
 }
 
-case class SaveSynonymDefinition(synonym: AbstractSynonym, index: Option[String] = None, option: Option[ForwardToSlave] = None)(implicit val formats: Formats) extends Definition {
+case class SaveSynonymDefinition(synonym: AbstractSynonym, index: Option[String] = None, option: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
 
   def inIndex(index: String) = copy(index = Some(index))
 
-  def and(option: ForwardToSlave) = copy(option = Some(option))
+  def and(option: ForwardToReplicas) = copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", synonym.objectID)
 
     val queryParameters = if (option.isDefined) {
-      Some(Map("forwardToSlaves" -> "true"))
+      Some(Map("forwardToReplicas" -> "true"))
     } else {
       None
     }
@@ -121,11 +121,11 @@ case class SaveSynonymDefinition(synonym: AbstractSynonym, index: Option[String]
   }
 }
 
-case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym], index: Option[String] = None, forward: Option[ForwardToSlave] = None, replace: Option[ReplaceExistingSynonyms] = None)(implicit val formats: Formats) extends Definition {
+case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym], index: Option[String] = None, forward: Option[ForwardToReplicas] = None, replace: Option[ReplaceExistingSynonyms] = None)(implicit val formats: Formats) extends Definition {
 
   def inIndex(index: String) = copy(index = Some(index))
 
-  def and(forward: ForwardToSlave) = copy(forward = Some(forward))
+  def and(forward: ForwardToReplicas) = copy(forward = Some(forward))
 
   def and(replace: ReplaceExistingSynonyms) = copy(replace = Some(replace))
 
@@ -133,7 +133,7 @@ case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym], index: O
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", "batch")
 
     var queryParameters = Map.empty[String, String]
-    forward.foreach(_ => queryParameters += ("forwardToSlaves" -> "true"))
+    forward.foreach(_ => queryParameters += ("forwardToReplicas" -> "true"))
     replace.foreach(_ => queryParameters += ("replaceExistingSynonyms" -> "true"))
 
     HttpPayload(
