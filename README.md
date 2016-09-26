@@ -56,7 +56,7 @@ Indexing
 
 1. [Add objects](#add-objects---index-into)
 1. [Update objects](#update-objects---index-into)
-1. [Partial update](#partial-update---update-attribute)
+1. [Partial update objects](#partial-update-objects---update-attribute)
 1. [Delete objects](#delete-objects---delete-from)
 
 Settings
@@ -716,26 +716,65 @@ result.map(_.as[Contact])
 
 Each entry in an index has a unique identifier called `objectID`. There are two ways to add an entry to the index:
 
- 1. Using automatic `objectID` assignment. You will be able to access it in the answer.
- 2. Supplying your own `objectID`.
+ 1. Supplying your own `objectID`.
+ 2. Using automatic `objectID` assignment. You will be able to access it in the answer.
 
 You don't need to explicitly create an index, it will be automatically created the first time you add an object.
 Objects are schema less so you don't need any configuration to start indexing. If you wish to configure things, the settings section provides details about advanced settings.
 
-Example with automatic `objectID` assignment:
+Example with automatic `objectID` assignments:
 
 ```scala
-val indexing: Future[Indexing] = client.execute {
-    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
+client.execute {
+	batch(
+  	index into "index1" `object` Contact("Jimmie", "Barninger")
+  	index into "index1" `object` Contact("Warren", "Speach")
+	)
 }
 
-indexing onComplete {
-    case Success(indexing) => println(indexing.objectID)
-    case Failure(e) =>  println("An error has occured: " + e.getMessage)
+//or
+
+client.execute {
+	index into "index1" `object` Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
 }
 ```
 
-Example with manual `objectID` assignment:
+/!\ This does not (yet)[https://github.com/algolia/algoliasearch-client-scala/issues/32] work. /!\
+```scala
+client.execute {
+	batch(
+  	index into "test1" objects Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
+	)
+}
+```
+
+Example with manual `objectID` assignments:
+
+```scala
+client.execute {
+	batch(
+  	index into "index1" `object` Contact(1, "Jimmie", "Barninger")
+  	index into "index1" `object` Contact(2, "Warren", "Speach")
+	)
+}
+
+//or
+
+client.execute {
+	index into "index1" `object` Seq(Contact(1, "Jimmie", "Barninger"), Contact(2, "Warren", "Speach"))
+}
+```
+
+/!\ This does not (yet)[https://github.com/algolia/algoliasearch-client-scala/issues/32] work. /!\
+```scala
+client.execute {
+	batch(
+  	index into "test1" objects Seq(Contact(1, "Jimmie", "Barninger"), Contact(2, "Warren", "Speach"))
+	)
+}
+```
+
+To add a single object, use the `[Add object](#add-object---index-into)` method:
 
 ```scala
 val indexing: Future[Indexing] = client.execute {
@@ -748,7 +787,6 @@ indexing onComplete {
 }
 ```
 
-
 ### Update objects - `index into`
 
 You have three options when updating an existing object:
@@ -757,7 +795,20 @@ You have three options when updating an existing object:
  2. Replace only some attributes.
  3. Apply an operation to some attributes.
 
-Example on how to replace all attributes of an existing object:
+Example on how to replace all attributes existing objects:
+
+```scala
+client.execute {
+	batch(
+    update attribute "firstname" value "Jimmie" ofObjectId "SFO" from "index",
+    update attribute "lastname" value "Barninger" ofObjectId "SFO" from "index",
+    update attribute "firstname" value "Warren" ofObjectId "LA" from "index",
+    update attribute "lastname" value "Speach" ofObjectId "LA" from "index"
+  )
+}
+```
+
+To update a single object, you can use the `[Update object](#update-object---index-into) method:
 
 ```scala
 val indexing: Future[Indexing] = client.execute {
@@ -765,7 +816,8 @@ val indexing: Future[Indexing] = client.execute {
 }
 ```
 
-### Partial update - `update attribute`
+
+### Partial update objects - `update attribute`
 
 You have many ways to update an object's attributes:
 
@@ -830,10 +882,29 @@ client.execute {
 Note: Here we are decrementing the value by `42`. To decrement just by one, put
 `value:1`.
 
+To partial update multiple objects using one API call, you can use the `[Partial update objects](#partial-update-objects---update-attribute)` method:
+
+```scala
+client.execute {
+  update attribute "firstname" value "Jimmie" ofObjectId "SFO" from "index",
+}
+```
+
 
 ### Delete objects - `delete from`
 
-You can delete an object using its `objectID`:
+You can delete objects using their `objectID`:
+
+```scala
+client.execute {
+	batch(
+  	delete from "test1" objectId "1",
+  	delete from "test2" objectId "2"
+	)
+}
+```
+
+To delete a single object, you can use the `[Delete object](#delete-object---delete-from)` method:
 
 ```scala
 client.execute { delete from "toto" objectId "oid" }
@@ -2429,70 +2500,6 @@ var results = client.execute {
 ### Custom batch - `batch`
 
 You may want to perform multiple operations with one API call to reduce latency.
-We expose four methods to perform batch operations:
-
-* Add objects - `index into`: Add an array of objects using automatic `objectID` assignment.
-* Update objects - `index into`: Add or update an array of objects that contains an `objectID` attribute.
-* Delete objects - `delete from`: Delete an array of objectIDs.
-* Partial update - `update attribute`: Partially update an array of objects that contain an `objectID` attribute (only specified attributes will be updated).
-
-Example using automatic `objectID` assignment:
-
-```scala
-client.execute {
-	batch(
-  	index into "index1" `object` Contact("Jimmie", "Barninger")
-  	index into "index1" `object` Contact("Warren", "Speach")
-	)
-}
-
-//or
-
-client.execute {
-	index into "index1" `object` Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
-}
-```
-
-/!\ This does not (yet)[https://github.com/algolia/algoliasearch-client-scala/issues/32] work. /!\
-```scala
-client.execute {
-	batch(
-  	index into "test1" objects Seq(Contact("Jimmie", "Barninger"), Contact("Warren", "Speach"))
-	)
-}
-```
-
-Example with user defined `objectID` (add or update):
-
-```scala
-client.execute {
-	batch(
-    update attribute "firstname" value "Jimmie" ofObjectId "SFO" from "index",
-    update attribute "lastname" value "Barninger" ofObjectId "SFO" from "index",
-    update attribute "firstname" value "Warren" ofObjectId "LA" from "index",
-    update attribute "lastname" value "Speach" ofObjectId "LA" from "index"
-  )
-}
-```
-
-Example that deletes a set of records:
-
-```scala
-client.execute {
-	batch(
-  	delete from "test1" objectId "1",
-  	delete from "test2" objectId "2"
-	)
-}
-```
-
-Example that updates only the `firstname` attribute:
-
-```scala
-client.execute {
-  update attribute "firstname" value "Jimmie" ofObjectId "SFO" from "index",
-}
-```
 
 
 
