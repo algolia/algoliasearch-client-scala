@@ -25,7 +25,7 @@
 
 package algolia.definitions
 
-import algolia.AlgoliaDsl.ForwardToSlave
+import algolia.AlgoliaDsl.ForwardToReplicas
 import algolia.http.{GET, HttpPayload, PUT}
 import algolia.objects.IndexSettings
 import algolia.responses.Task
@@ -50,13 +50,13 @@ case class IndexSettingsDefinition(index: String)(implicit val formats: Formats)
 
 }
 
-case class IndexChangeSettingsDefinition(index: String, settings: IndexSettings, forward: Option[ForwardToSlave] = None)(implicit val formats: Formats) extends Definition {
+case class IndexChangeSettingsDefinition(index: String, settings: IndexSettings, forward: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
 
-  def and(forward: ForwardToSlave) = copy(forward = Some(forward))
+  def and(forward: ForwardToReplicas) = copy(forward = Some(forward))
 
   override private[algolia] def build(): HttpPayload = {
     val queryParameters = if (forward.isDefined) {
-      Some(Map("forwardToSlaves" -> "true"))
+      Some(Map("forwardToReplicas" -> "true"))
     } else {
       None
     }

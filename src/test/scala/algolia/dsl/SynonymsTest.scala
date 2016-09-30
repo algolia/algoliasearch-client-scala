@@ -57,14 +57,15 @@ class SynonymsTest extends AlgoliaTest {
 
       it("should get synonym by id") {
         delete synonym "syn_id" from "toto" and forwardToSlaves
+        delete synonym "syn_id" from "toto" and forwardToReplicas
       }
 
       it("should call API") {
-        (delete synonym "syn_id" from "toto" and forwardToSlaves).build() should be(
+        (delete synonym "syn_id" from "toto" and forwardToReplicas).build() should be(
           HttpPayload(
             DELETE,
             Seq("1", "indexes", "toto", "synonyms", "syn_id"),
-            queryParameters = Some(Map("forwardToSlaves" -> "true")),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
             isSearch = false
           )
         )
@@ -77,14 +78,15 @@ class SynonymsTest extends AlgoliaTest {
       it("should clear synonyms of an index") {
         //the `AlgoliaDsl.` is needed as the mixin trait Matchers already contains a `of` method
         clear synonyms AlgoliaDsl.of index "toto" and forwardToSlaves
+        clear synonyms AlgoliaDsl.of index "toto" and forwardToReplicas
       }
 
       it("should call API") {
-        (clear synonyms AlgoliaDsl.of index "toto" and forwardToSlaves).build() should be(
+        (clear synonyms AlgoliaDsl.of index "toto" and forwardToReplicas).build() should be(
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "synonyms", "clear"),
-            queryParameters = Some(Map("forwardToSlaves" -> "true")),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
             isSearch = false
           )
         )
@@ -115,14 +117,15 @@ class SynonymsTest extends AlgoliaTest {
 
       it("should save synonyms of an index") {
         save synonym Placeholder("oid", "1", Seq("2", "3")) inIndex "toto" and forwardToSlaves
+        save synonym Placeholder("oid", "1", Seq("2", "3")) inIndex "toto" and forwardToReplicas
       }
 
       it("should call API") {
-        (save synonym Placeholder("oid", "1", Seq("2", "3")) inIndex "toto" and forwardToSlaves).build() should be(
+        (save synonym Placeholder("oid", "1", Seq("2", "3")) inIndex "toto" and forwardToReplicas).build() should be(
           HttpPayload(
             PUT,
             Seq("1", "indexes", "toto", "synonyms", "oid"),
-            queryParameters = Some(Map("forwardToSlaves" -> "true")),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some("""{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}"""),
             isSearch = false
           )
@@ -135,14 +138,16 @@ class SynonymsTest extends AlgoliaTest {
 
       it("should save batches synonyms of an index") {
         save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToSlaves and replaceExistingSynonyms
+        save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and replaceExistingSynonyms
+
       }
 
       it("should call API") {
-        (save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToSlaves and replaceExistingSynonyms).build() should be(
+        (save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and replaceExistingSynonyms).build() should be(
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "synonyms", "batch"),
-            queryParameters = Some(Map("forwardToSlaves" -> "true", "replaceExistingSynonyms" -> "true")),
+            queryParameters = Some(Map("forwardToReplicas" -> "true", "replaceExistingSynonyms" -> "true")),
             body = Some("""[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""),
             isSearch = false
           )

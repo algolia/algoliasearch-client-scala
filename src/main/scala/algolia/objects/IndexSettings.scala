@@ -34,6 +34,7 @@ case class IndexSettings(/* INDEXING PARAMETERS */
                          customRanking: Option[Seq[CustomRanking]] = None,
                          separatorsToIndex: Option[String] = None,
                          slaves: Option[Seq[String]] = None,
+                         replicas: Option[Seq[String]] = None,
                          unretrievableAttributes: Option[Seq[String]] = None,
                          allowCompressionOfIntegerArray: Option[Boolean] = None,
 
