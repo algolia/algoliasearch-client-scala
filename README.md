@@ -2387,6 +2387,12 @@ even if he shares his `IP` with another user.
 String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(filters = Some("_tags:user_42")), Some("42"))
 ```
 
+#### Network restriction
+
+For more protection against API key leaking and reuse you can restrict the key to be valid only from specific IPv4 networks
+
+
+
 
 
 
