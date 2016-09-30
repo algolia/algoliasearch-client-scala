@@ -2391,7 +2391,9 @@ String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(fi
 
 For more protection against API key leaking and reuse you can restrict the key to be valid only from specific IPv4 networks
 
-
+```scala
+String publicKey = client.generateSecuredApiKey("YourSearchOnlyApiKey", Query(restrictSources = Some("192.168.1.0/24")))
+```
 
 
 
