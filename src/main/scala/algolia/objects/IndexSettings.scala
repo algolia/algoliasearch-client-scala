@@ -27,6 +27,7 @@ package algolia.objects
 
 case class IndexSettings(/* INDEXING PARAMETERS */
                          attributesToIndex: Option[Seq[AttributesToIndex]] = None,
+                         searchableAttributes: Option[Seq[SearchableAttributes]] = None,
                          numericAttributesToIndex: Option[Seq[NumericAttributesToIndex]] = None,
                          attributesForFaceting: Option[Seq[String]] = None,
                          attributeForDistinct: Option[String] = None,

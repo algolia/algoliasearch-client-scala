@@ -56,6 +56,7 @@ object AlgoliaDsl extends AlgoliaDsl {
 
   implicit val formats =
     org.json4s.DefaultFormats +
+      new SearchableAttributesSerializer +
       new AttributesToIndexSerializer +
       new NumericAttributesToIndexSerializer +
       new RankingSerializer +
@@ -66,8 +67,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new QuerySynonymsSerializer +
       new AbstractSynonymSerializer
 
-  val attributesToIndexUnordered = """^unordered\(([\w-]+)\)$""".r
-  val attributesToIndexAttributes = """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
+  val searchableAttributesUnordered = """^unordered\(([\w-]+)\)$""".r
+  val searchableAttributesAttributes = """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
   val numericAttributesToIndexEqualOnly = """^equalOnly\(([\w-]+)\)$""".r
   val asc = """^asc\(([\w-]+)\)$""".r
   val desc = """^desc\(([\w-]+)\)$""".r
@@ -81,13 +82,23 @@ object AlgoliaDsl extends AlgoliaDsl {
   sealed trait In
 
   class AttributesToIndexSerializer extends CustomSerializer[AttributesToIndex](format => ( {
-    case JString(attributesToIndexUnordered(attr)) => AttributesToIndex.unordered(attr)
-    case JString(attributesToIndexAttributes(attrs)) => AttributesToIndex.attributes(attrs.split(","): _*)
+    case JString(searchableAttributesUnordered(attr)) => AttributesToIndex.unordered(attr)
+    case JString(searchableAttributesAttributes(attrs)) => AttributesToIndex.attributes(attrs.split(","): _*)
     case JString(attr) => AttributesToIndex.attribute(attr)
   }, {
     case AttributesToIndex.unordered(attr) => JString(s"unordered($attr)")
     case AttributesToIndex.attribute(attr) => JString(attr)
     case AttributesToIndex.attributes(attributes@_*) => JString(attributes.mkString(","))
+  }))
+
+  class SearchableAttributesSerializer extends CustomSerializer[SearchableAttributes](format => ( {
+    case JString(searchableAttributesUnordered(attr)) => SearchableAttributes.unordered(attr)
+    case JString(searchableAttributesAttributes(attrs)) => SearchableAttributes.attributes(attrs.split(","): _*)
+    case JString(attr) => SearchableAttributes.attribute(attr)
+  }, {
+    case SearchableAttributes.unordered(attr) => JString(s"unordered($attr)")
+    case SearchableAttributes.attribute(attr) => JString(attr)
+    case SearchableAttributes.attributes(attributes@_*) => JString(attributes.mkString(","))
   }))
 
   class NumericAttributesToIndexSerializer extends CustomSerializer[NumericAttributesToIndex](format => ( {

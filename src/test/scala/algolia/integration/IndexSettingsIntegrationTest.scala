@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.objects.{AttributesToIndex, IndexSettings}
+import algolia.objects.{SearchableAttributes, IndexSettings}
 import algolia.responses._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,7 +60,7 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
   it("should update settings") {
     val change: Future[Task] = client.execute {
       changeSettings of "indexToChangeSettings" `with` IndexSettings(
-        attributesToIndex = Some(Seq(AttributesToIndex.attribute("att")))
+        searchableAttributes = Some(Seq(SearchableAttributes.attribute("att")))
       )
     }
 
@@ -71,7 +71,7 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
     }
 
     whenReady(request) { result =>
-      result.attributesToIndex should be(Some(Seq(AttributesToIndex.attribute("att"))))
+      result.searchableAttributes should be(Some(Seq(SearchableAttributes.attribute("att"))))
     }
   }
 
