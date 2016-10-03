@@ -32,4 +32,5 @@ case class ApiKey(validity: Option[Int] = None,
                   indexes: Option[Seq[String]] = None,
                   referers: Option[Seq[String]] = None,
                   queryParameters: Option[String] = None,
-                  description: Option[String] = None)
+                  description: Option[String] = None,
+                  restrictSources: Option[String] = None)
