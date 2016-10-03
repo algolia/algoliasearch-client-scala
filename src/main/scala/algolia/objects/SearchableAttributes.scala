@@ -25,8 +25,28 @@
 
 package algolia.objects
 
+sealed trait SearchableAttributes
+
+object SearchableAttributes {
+
+  case class unordered(attribute: String) extends SearchableAttributes
+
+  case class attribute(attribute: String) extends SearchableAttributes
+
+  case class attributes(attributes: String*) extends SearchableAttributes
+
+}
+
+/**
+  * Use SearchableAttributes
+  */
+@Deprecated
 sealed trait AttributesToIndex
 
+/**
+  * Use SearchableAttributes
+  */
+@Deprecated
 object AttributesToIndex {
 
   case class unordered(attribute: String) extends AttributesToIndex

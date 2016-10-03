@@ -35,15 +35,6 @@ import org.json4s.native.Serialization.writePretty
 
 class IndexSettingsTest extends AlgoliaTest {
 
-  implicit val formats =
-    org.json4s.DefaultFormats +
-      new AttributesToIndexSerializer +
-      new NumericAttributesToIndexSerializer +
-      new RankingSerializer +
-      new CustomRankingSerializer +
-      new QueryTypeSerializer +
-      new TypoToleranceSerializer
-
   describe("get settings") {
 
     it("should get settings") {
@@ -92,6 +83,11 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "att2,att3",
         |    "unordered(att4)"
         |  ],
+        |  "searchableAttributes":[
+        |    "att1",
+        |    "att2,att3",
+        |    "unordered(att4)"
+        |  ],
         |  "numericAttributesToIndex":[
         |    "equalOnly(att5)"
         |  ],
@@ -120,6 +116,11 @@ class IndexSettingsTest extends AlgoliaTest {
           AttributesToIndex.attributes("att2", "att3"),
           AttributesToIndex.unordered("att4"))
         ))
+        i.searchableAttributes should be(Some(Seq(
+          SearchableAttributes.attribute("att1"),
+          SearchableAttributes.attributes("att2", "att3"),
+          SearchableAttributes.unordered("att4"))
+        ))
         i.numericAttributesToIndex should be(Some(Seq(
           NumericAttributesToIndex.equalOnly("att5")
         )))
@@ -145,6 +146,7 @@ class IndexSettingsTest extends AlgoliaTest {
     it("should serialize json") {
       val i = IndexSettings(
         attributesToIndex = Some(Seq(AttributesToIndex.attribute("att1"), AttributesToIndex.attributes("att2", "att3"), AttributesToIndex.unordered("att4"))),
+        searchableAttributes = Some(Seq(SearchableAttributes.attribute("att1"), SearchableAttributes.attributes("att2", "att3"), SearchableAttributes.unordered("att4"))),
         numericAttributesToIndex = Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
         ranking = Some(Seq(
           Ranking.typo,
