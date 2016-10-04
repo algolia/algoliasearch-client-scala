@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 case class WaitForTaskDefinition(taskId: Long,
                                  index: Option[String] = None,
                                  baseDelay: Long = 100,
-                                 maxDelay: Long = 5000) extends Definition {
+                                 maxDelay: Long = Long.MaxValue) extends Definition {
 
   def from(index: String): WaitForTaskDefinition = copy(index = Some(index))
 
@@ -71,6 +71,7 @@ trait WaitForTaskDsl {
       *  800 * 2 = 1600ms
       * 1600 * 2 = 3200ms
       * 3200 * 2 = 6400ms
+      * etc...
       *
       */
     override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(implicit executor: ExecutionContext): Future[TaskStatus] = {
@@ -80,7 +81,7 @@ trait WaitForTaskDsl {
         if (res.status == "published") {
           Future.successful(res)
         } else if (d > query.maxDelay) {
-          Future.failed(new WaitForTimeoutException(s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
+          Future.failed(WaitForTimeoutException(s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
         } else {
           request(d * 2)
         }
