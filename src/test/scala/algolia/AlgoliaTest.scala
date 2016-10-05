@@ -42,7 +42,8 @@ class AlgoliaTest
     with Inspectors
     with ScalaFutures
     with Inside
-    with MockFactory {
+    with MockFactory
+    with EitherValues {
 
   val applicationId = System.getenv("APPLICATION_ID")
   val apiKey = System.getenv("API_KEY")
