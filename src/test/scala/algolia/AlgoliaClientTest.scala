@@ -131,7 +131,7 @@ class AlgoliaClientTest extends AlgoliaTest {
       def mockRequest2 = (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result], _: ExecutionContext)) expects("https://a-2.algolianet.com", emptyHeaders, payload, *, *)
       def mockRequest3 = (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(_: Manifest[Result], _: ExecutionContext)) expects("https://a-3.algolianet.com", emptyHeaders, payload, *, *)
 
-      val `4XXRequest`: Future[Result] = Future.failed(new APIClientException(404, "404"))
+      val `4XXRequest`: Future[Result] = Future.failed(APIClientException(404, "404"))
 
       it("no timeout") {
         mockRequestDsn returning Future.successful(successfulRequestDsn)
@@ -178,7 +178,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest3 returning timeoutRequest
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
-          e shouldBe a[TimeoutException]
+          e shouldBe a[AlgoliaClientException]
         }
       }
 
@@ -186,7 +186,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequestDsn returning `4XXRequest`
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
-          e shouldBe a[APIClientException]
+          e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
       }
@@ -196,7 +196,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest1 returning `4XXRequest`
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
-          e shouldBe a[APIClientException]
+          e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
       }
@@ -207,7 +207,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest2 returning `4XXRequest`
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
-          e shouldBe a[APIClientException]
+          e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
       }
@@ -219,7 +219,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest3 returning `4XXRequest`
 
         whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) { e =>
-          e shouldBe a[APIClientException]
+          e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
       }
@@ -249,41 +249,6 @@ class AlgoliaClientTest extends AlgoliaTest {
       }
     }
 
-    describe("failing DNS") {
-
-      val apiClient = new AlgoliaClient(applicationId, apiKey) {
-        override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
-          httpReadTimeout = 201,
-          httpConnectTimeout = 202,
-          httpRequestTimeout = 203,
-          dnsTimeout = 204
-        )
-
-        override lazy val queryHosts: Seq[String] = Seq(
-          s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
-          s"https://$applicationId-1.algolianet.com"
-        )
-      }
-
-      it("should answer within 1 second") {
-        val result = apiClient.execute {
-          list.indices
-        }
-
-        result.isReadyWithin(1.second) should be(true)
-      }
-
-      it("should get a result") {
-        val start = System.currentTimeMillis()
-        val result = apiClient.execute {
-          list.indices
-        }
-
-        whenReady(result) { res =>
-          res.items shouldNot be(empty)
-        }
-      }
-    }
   }
 
   describe("wait for") {

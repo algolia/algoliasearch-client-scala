@@ -34,7 +34,7 @@ import javax.crypto.spec.SecretKeySpec
 import algolia.http.HttpPayload
 import algolia.objects.Query
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 /**
   * The AlgoliaClient to query Algolia
@@ -46,11 +46,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[String, String] = Map.empty) {
 
   if (applicationId == null || applicationId.isEmpty) {
-    throw AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
+    throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
   }
 
   if (apiKey == null || apiKey.isEmpty) {
-    throw AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
+    throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
   }
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
@@ -109,13 +109,28 @@ class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[Str
   private[algolia] def request[T: Manifest](payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) queryHosts else indexingHosts
 
-    hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
+    val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
       future.recoverWith {
         case e: APIClientException => Future.failed(e) //No retry if 4XX
         case _ => httpClient.request[T](host, headers, payload)
       }
     }
+
+    result.recoverWith {
+      case e: APIClientException => Future.failed(new AlgoliaClientException(e.getMessage, e.getCause))
+      case e: AlgoliaClientException => Future.failed(e)
+      case e: Throwable => Future.failed(new AlgoliaClientException("Failed on last retry", e))
+    }
   }
 }
 
-case class AlgoliaClientException(message: String) extends Exception(message)
+class AlgoliaClientException(message: String, exception: Throwable) extends Exception(message, exception) {
+
+  def this(message: String) = {
+    this(message, null)
+  }
+
+  def this(exception: Throwable) = {
+    this(null, exception)
+  }
+}
