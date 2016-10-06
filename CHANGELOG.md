@@ -1,10 +1,39 @@
 # Change Log
 
+## [1.15.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.15.0) (2016-10-06)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.14.0...1.15.0)
+
+**Fixed bugs:**
+
+- WaitTask support only indexing faster than 13 seconds [\#148](https://github.com/algolia/algoliasearch-client-scala/issues/148)
+
+**Closed issues:**
+
+- Add support for restrictSources [\#166](https://github.com/algolia/algoliasearch-client-scala/issues/166)
+- Rename of attributesToIndex to searchableAttributes [\#164](https://github.com/algolia/algoliasearch-client-scala/issues/164)
+- Replace master/slaves by primary/replicas [\#163](https://github.com/algolia/algoliasearch-client-scala/issues/163)
+- Index: implement getObjects with attributesToRetrieve [\#150](https://github.com/algolia/algoliasearch-client-scala/issues/150)
+
+**Merged pull requests:**
+
+- Improve error handling if all retries failed [\#174](https://github.com/algolia/algoliasearch-client-scala/pull/174) ([ElPicador](https://github.com/ElPicador))
+- waitFor task now waits Infinity [\#173](https://github.com/algolia/algoliasearch-client-scala/pull/173) ([ElPicador](https://github.com/ElPicador))
+- Secure ApiKeys: Add support for restrictSources [\#172](https://github.com/algolia/algoliasearch-client-scala/pull/172) ([ElPicador](https://github.com/ElPicador))
+- Rename of attributesToIndex to searchableAttributes [\#170](https://github.com/algolia/algoliasearch-client-scala/pull/170) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#169](https://github.com/algolia/algoliasearch-client-scala/pull/169) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#168](https://github.com/algolia/algoliasearch-client-scala/pull/168) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Rename \*slaves to \*replicas [\#165](https://github.com/algolia/algoliasearch-client-scala/pull/165) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#162](https://github.com/algolia/algoliasearch-client-scala/pull/162) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#152](https://github.com/algolia/algoliasearch-client-scala/pull/152) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#151](https://github.com/algolia/algoliasearch-client-scala/pull/151) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.14.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.14.0) (2016-08-19)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.13.1...1.14.0)
 
 **Merged pull requests:**
 
+- Upgrade Json4s to 3.4.0 [\#149](https://github.com/algolia/algoliasearch-client-scala/pull/149) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#147](https://github.com/algolia/algoliasearch-client-scala/pull/147) ([algoliareadmebot](https://github.com/algoliareadmebot))
 - Update README [\#145](https://github.com/algolia/algoliasearch-client-scala/pull/145) ([algoliareadmebot](https://github.com/algoliareadmebot))
 
 ## [1.13.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.13.1) (2016-08-03)
