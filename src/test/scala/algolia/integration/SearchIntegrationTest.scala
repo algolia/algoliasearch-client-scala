@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.objects.Query
+import algolia.objects.{IndexSettings, Query}
 import algolia.responses._
 import org.json4s._
 
@@ -38,7 +38,8 @@ class SearchIntegrationTest extends AlgoliaTest {
   after {
     clearIndices(
       "indexToSearch",
-      "indexToSearch2"
+      "indexToSearch2",
+      "indexToSearchFacet"
     )
   }
 
@@ -152,6 +153,36 @@ class SearchIntegrationTest extends AlgoliaTest {
     }
   }
 
+  describe("search in facet") {
+
+    it("should search in facets") {
+      val change = client.execute {
+        changeSettings of "indexToSearchFacet" `with` IndexSettings(
+          attributesForFaceting = Some(Seq("searchable(series)"))
+        )
+      }
+
+      taskShouldBeCreatedAndWaitForIt(change, "indexToSearchFacet")
+
+      val add = client.execute {
+        index into "indexToSearchFacet" objects Seq(
+          Character("snoopy", "Peanuts"),
+          Character("woodstock", "Peanuts"),
+          Character("Calvin", "Calvin & Hobbes")
+        )
+      }
+      taskShouldBeCreatedAndWaitForIt(add, "indexToSearchFacet")
+
+      val facetSearch = client.execute {
+        search into "indexToSearchFacet" facet "series" facetQuery "Peanuts"
+      }
+
+      whenReady(facetSearch) { r =>
+        r.facetHits
+      }
+    }
+
+  }
 }
 
 case class Test(name: String,
@@ -165,3 +196,6 @@ case class EnhanceTest(name: String,
                        _highlightResult: Option[Map[String, HighlightResult]],
                        _snippetResult: Option[Map[String, SnippetResult]],
                        _rankingInfo: Option[RankingInfo]) extends Hit
+
+case class Character(name: String,
+                     series: String)

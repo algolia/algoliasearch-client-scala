@@ -29,6 +29,7 @@ import java.net.URLEncoder
 
 case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  query: Option[String] = None,
+                 private[algolia] val facetQuery: Option[String] = None,
                  queryType: Option[QueryType] = None,
                  typoTolerance: Option[TypoTolerance] = None,
                  minWordSizefor1Typo: Option[Int] = None,
@@ -110,6 +111,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
     val queryParam = Map(
       /* FULL TEXT SEARCH PARAMETERS */
       "query" -> query,
+      "facetQuery" -> facetQuery,
       "queryType" -> queryType.map(_.name),
       "typoTolerance" -> typoTolerance.map(_.name),
       "minWordSizefor1Typo" -> minWordSizefor1Typo.map(_.toString),
