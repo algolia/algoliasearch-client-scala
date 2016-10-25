@@ -35,8 +35,9 @@ import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class SearchDefinition(index: String,
-                            query: Option[Query] = None)(implicit val formats: Formats) extends Definition {
+case class SearchDefinition(index: String, query: Option[Query] = None)(
+    implicit val formats: Formats)
+    extends Definition {
   def facet(facetName: String) = SearchFacetDefinition(index, facetName, "")
 
   def query(q: Query): SearchDefinition = copy(query = Some(q))
@@ -45,35 +46,38 @@ case class SearchDefinition(index: String,
     val body = Map("params" -> query.map(_.toParam))
 
     HttpPayload(
-      POST,
-      Seq("1", "indexes", index, "query"),
-      body = Some(write(body)),
-      isSearch = true
+        POST,
+        Seq("1", "indexes", index, "query"),
+        body = Some(write(body)),
+        isSearch = true
     )
   }
 }
 
-case class SearchFacetDefinition(index: String,
-                                 facetName: String,
-                                 facetQuery: String,
-                                 query: Query = Query())(implicit val formats: Formats) extends Definition {
+case class SearchFacetDefinition(
+    index: String,
+    facetName: String,
+    facetQuery: String,
+    query: Query = Query())(implicit val formats: Formats)
+    extends Definition {
 
-  def facetQuery(facetQuery: String): SearchFacetDefinition = copy(facetQuery = facetQuery)
+  def facetQuery(facetQuery: String): SearchFacetDefinition =
+    copy(facetQuery = facetQuery)
 
   def query(q: Query): SearchFacetDefinition = copy(query = q)
 
   override private[algolia] def build(): HttpPayload = {
-    val body = Map("params" -> query.copy(facetQuery = Some(facetQuery)).toParam)
+    val body = Map(
+        "params" -> query.copy(facetQuery = Some(facetQuery)).toParam)
 
     HttpPayload(
-      POST,
-      Seq("1", "indexes", index, "facets", facetName, "query"),
-      body = Some(write(body)),
-      isSearch = true
+        POST,
+        Seq("1", "indexes", index, "facets", facetName, "query"),
+        body = Some(write(body)),
+        isSearch = true
     )
   }
 }
-
 
 trait SearchDsl {
 
@@ -87,15 +91,19 @@ trait SearchDsl {
 
   }
 
-  implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, SearchResult] {
-    override def apply(client: AlgoliaClient, query: SearchDefinition)(implicit executor: ExecutionContext): Future[SearchResult] = {
-      client request[SearchResult] query.build()
+  implicit object SearchDefinitionExecutable
+      extends Executable[SearchDefinition, SearchResult] {
+    override def apply(client: AlgoliaClient, query: SearchDefinition)(
+        implicit executor: ExecutionContext): Future[SearchResult] = {
+      client request [SearchResult] query.build()
     }
   }
 
-  implicit object SearchFacetDefinitionExecutable extends Executable[SearchFacetDefinition, SearchFacetResult] {
-    override def apply(client: AlgoliaClient, query: SearchFacetDefinition)(implicit executor: ExecutionContext): Future[SearchFacetResult] = {
-      client request[SearchFacetResult] query.build()
+  implicit object SearchFacetDefinitionExecutable
+      extends Executable[SearchFacetDefinition, SearchFacetResult] {
+    override def apply(client: AlgoliaClient, query: SearchFacetDefinition)(
+        implicit executor: ExecutionContext): Future[SearchFacetResult] = {
+      client request [SearchFacetResult] query.build()
     }
   }
 }

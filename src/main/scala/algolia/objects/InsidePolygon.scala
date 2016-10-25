@@ -27,10 +27,8 @@ package algolia.objects
 
 case class InsidePolygon(p1Lat: String,
                          p1Lng: String,
-
                          p2Lat: String,
                          p2Lng: String,
-
                          p3Lat: String,
                          p3Lng: String) {
 

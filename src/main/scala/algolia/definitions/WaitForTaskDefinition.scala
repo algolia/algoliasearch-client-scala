@@ -36,7 +36,8 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 case class WaitForTaskDefinition(taskId: Long,
                                  index: Option[String] = None,
                                  baseDelay: Long = 100,
-                                 maxDelay: Long = Long.MaxValue) extends Definition {
+                                 maxDelay: Long = Long.MaxValue)
+    extends Definition {
 
   def from(index: String): WaitForTaskDefinition = copy(index = Some(index))
 
@@ -46,9 +47,9 @@ case class WaitForTaskDefinition(taskId: Long,
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-      GET,
-      Seq("1", "indexes") ++ index ++ Seq("task", taskId.toString),
-      isSearch = true
+        GET,
+        Seq("1", "indexes") ++ index ++ Seq("task", taskId.toString),
+        isSearch = true
     )
   }
 }
@@ -56,10 +57,12 @@ case class WaitForTaskDefinition(taskId: Long,
 trait WaitForTaskDsl {
 
   case object waitFor {
-    def task(task: AlgoliaTask): WaitForTaskDefinition = WaitForTaskDefinition(task.idToWaitFor())
+    def task(task: AlgoliaTask): WaitForTaskDefinition =
+      WaitForTaskDefinition(task.idToWaitFor())
   }
 
-  implicit object WaitForTaskDefinitionExecutable extends Executable[WaitForTaskDefinition, TaskStatus] {
+  implicit object WaitForTaskDefinitionExecutable
+      extends Executable[WaitForTaskDefinition, TaskStatus] {
 
     /**
       * Wait for the completion of a task
@@ -74,18 +77,22 @@ trait WaitForTaskDsl {
       * etc...
       *
       */
-    override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(implicit executor: ExecutionContext): Future[TaskStatus] = {
-      def request(d: Long): Future[TaskStatus] = delay[TaskStatus](d) {
-        client request[TaskStatus] query.build()
-      }.flatMap { res =>
-        if (res.status == "published") {
-          Future.successful(res)
-        } else if (d > query.maxDelay) {
-          Future.failed(WaitForTimeoutException(s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
-        } else {
-          request(d * 2)
+    override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(
+        implicit executor: ExecutionContext): Future[TaskStatus] = {
+      def request(d: Long): Future[TaskStatus] =
+        delay[TaskStatus](d) {
+          client request [TaskStatus] query.build()
+        }.flatMap { res =>
+          if (res.status == "published") {
+            Future.successful(res)
+          } else if (d > query.maxDelay) {
+            Future.failed(
+                WaitForTimeoutException(
+                    s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
+          } else {
+            request(d * 2)
+          }
         }
-      }
 
       request(query.baseDelay)
     }
@@ -102,7 +109,6 @@ trait WaitForTaskDsl {
       promise.future
     }
   }
-
 
 }
 

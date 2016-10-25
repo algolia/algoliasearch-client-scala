@@ -54,44 +54,57 @@ class HttpPayloadTest extends AlgoliaTest {
   describe("HttpPayload request builder") {
 
     val defaultPayload = HttpPayload(
-      GET,
-      Seq("1", "indexes"),
-      None,
-      None,
-      isSearch = true
+        GET,
+        Seq("1", "indexes"),
+        None,
+        None,
+        isSearch = true
     )
 
     it("should set the URI") {
-      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getUrl should be("https://algolia.com/1/indexes")
+      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getUrl should be(
+          "https://algolia.com/1/indexes")
     }
 
     it("should set the headers") {
-      defaultPayload("https://algolia.com", Map("header" -> "value"), dnsNameResolver).getHeaders.entries().toString should be("[header=value]")
+      defaultPayload("https://algolia.com",
+                     Map("header" -> "value"),
+                     dnsNameResolver).getHeaders.entries().toString should be(
+          "[header=value]")
     }
 
     it("should set the dns timeout") {
-      defaultPayload("https://algolia.com", Map("header" -> "value"), dnsNameResolver).getNameResolver should be(dnsNameResolver)
+      defaultPayload("https://algolia.com",
+                     Map("header" -> "value"),
+                     dnsNameResolver).getNameResolver should be(
+          dnsNameResolver)
     }
 
     it("should set the parameters if Some") {
-      val parametersPayload = defaultPayload.copy(queryParameters = Some(Map("param" -> "value")))
-      val params = parametersPayload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams
+      val parametersPayload =
+        defaultPayload.copy(queryParameters = Some(Map("param" -> "value")))
+      val params = parametersPayload("https://algolia.com",
+                                     Map.empty,
+                                     dnsNameResolver).getQueryParams
       params should have size 1
       params.get(0).getName should be("param")
       params.get(0).getValue should be("value")
     }
 
     it("should not set the parameters if None") {
-      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams should be(empty)
+      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams should be(
+          empty)
     }
 
     it("should set the body if Some") {
       val bodyPayload = defaultPayload.copy(body = Some("{}"))
-      bodyPayload("https://algolia.com", Map.empty, dnsNameResolver).getStringData should be("{}")
+      bodyPayload("https://algolia.com", Map.empty, dnsNameResolver).getStringData should be(
+          "{}")
     }
 
     it("should not set the body if None") {
-      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getByteData should be(null)
+      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getByteData should be(
+          null)
     }
 
   }

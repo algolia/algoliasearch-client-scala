@@ -13,3 +13,6 @@ addSbtPlugin("de.heikoseeberger" % "sbt-header" % "1.5.1")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.5.0")
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2")
+
+//Formatter
+addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.2.11")

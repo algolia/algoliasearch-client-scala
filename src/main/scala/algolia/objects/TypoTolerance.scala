@@ -31,7 +31,6 @@ sealed trait TypoTolerance {
 
 }
 
-
 object TypoTolerance {
 
   case object `true` extends TypoTolerance {

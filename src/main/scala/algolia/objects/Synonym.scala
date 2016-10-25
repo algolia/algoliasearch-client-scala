@@ -44,12 +44,14 @@ object Synonym {
       "word4"
    ]
   }
-  */
+   */
   case class OneWaySynonym(objectID: String,
                            input: String,
-                           synonyms: Seq[String]) extends AbstractSynonym {
+                           synonyms: Seq[String])
+      extends AbstractSynonym {
 
-    override private[algolia] val `type`: SynonymType = SynonymType.oneWaySynonym
+    override private[algolia] val `type`: SynonymType =
+      SynonymType.oneWaySynonym
   }
 
   /*
@@ -62,8 +64,9 @@ object Synonym {
       "word4"
     ]
    }
-  */
-  case class Synonym(objectID: String, synonyms: Seq[String]) extends AbstractSynonym {
+   */
+  case class Synonym(objectID: String, synonyms: Seq[String])
+      extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType = SynonymType.synonym
   }
@@ -78,19 +81,23 @@ object Synonym {
       "word3"
     ]
   }
-  */
+   */
   case class AltCorrection1(objectID: String,
                             word: String,
-                            corrections: Seq[String]) extends AbstractSynonym {
+                            corrections: Seq[String])
+      extends AbstractSynonym {
 
-    override private[algolia] val `type`: SynonymType = SynonymType.altCorrection1
+    override private[algolia] val `type`: SynonymType =
+      SynonymType.altCorrection1
   }
 
   case class AltCorrection2(objectID: String,
                             word: String,
-                            corrections: Seq[String]) extends AbstractSynonym {
+                            corrections: Seq[String])
+      extends AbstractSynonym {
 
-    override private[algolia] val `type`: SynonymType = SynonymType.altCorrection2
+    override private[algolia] val `type`: SynonymType =
+      SynonymType.altCorrection2
   }
 
   /*
@@ -104,10 +111,11 @@ object Synonym {
     "3"
     ]
   }
-  */
+   */
   case class Placeholder(objectID: String,
                          placeholder: String,
-                         replacements: Seq[String]) extends AbstractSynonym {
+                         replacements: Seq[String])
+      extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType = SynonymType.placeholder
   }

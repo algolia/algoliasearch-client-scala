@@ -35,23 +35,31 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None)(implicit val formats: Formats) extends Definition {
+case class GetObjectDefinition(
+    index: Option[String] = None,
+    oid: Option[String] = None)(implicit val formats: Formats)
+    extends Definition {
 
-  def objectIds(oids: Seq[String]): GetObjectsDefinition = GetObjectsDefinition(index, oids)
+  def objectIds(oids: Seq[String]): GetObjectsDefinition =
+    GetObjectsDefinition(index, oids)
 
   def from(ind: String): GetObjectDefinition = copy(index = Some(ind))
 
-  def objectId(objectId: String): GetObjectDefinition = copy(oid = Some(objectId))
+  def objectId(objectId: String): GetObjectDefinition =
+    copy(oid = Some(objectId))
 
   override private[algolia] def build(): HttpPayload =
     HttpPayload(
-      GET,
-      Seq("1", "indexes") ++ index ++ oid,
-      isSearch = true
+        GET,
+        Seq("1", "indexes") ++ index ++ oid,
+        isSearch = true
     )
 }
 
-case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq())(implicit val formats: Formats) extends Definition {
+case class GetObjectsDefinition(
+    index: Option[String],
+    oids: Seq[String] = Seq())(implicit val formats: Formats)
+    extends Definition {
 
   override private[algolia] def build(): HttpPayload = {
     val requests = oids.map { oid =>
@@ -59,10 +67,10 @@ case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq()
     }
 
     HttpPayload(
-      POST,
-      Seq("1", "indexes", "*", "objects"),
-      body = Some(write(Requests(requests))),
-      isSearch = true
+        POST,
+        Seq("1", "indexes", "*", "objects"),
+        body = Some(write(Requests(requests))),
+        isSearch = true
     )
   }
 
@@ -82,24 +90,29 @@ trait GetDsl {
 
     def allKeys() = GetAllApiKeyDefinition()
 
-    def allKeysFrom(indexName: String) = GetAllApiKeyDefinition(indexName = Some(indexName))
+    def allKeysFrom(indexName: String) =
+      GetAllApiKeyDefinition(indexName = Some(indexName))
 
     def synonym(synId: String) = GetSynonymDefinition(synId = synId)
 
   }
 
-  implicit object GetObjectDefinitionExecutable extends Executable[GetObjectDefinition, GetObject] {
+  implicit object GetObjectDefinitionExecutable
+      extends Executable[GetObjectDefinition, GetObject] {
 
-    override def apply(client: AlgoliaClient, query: GetObjectDefinition)(implicit executor: ExecutionContext): Future[GetObject] = {
-      (client request[JObject] query.build()).map(GetObject(_))
+    override def apply(client: AlgoliaClient, query: GetObjectDefinition)(
+        implicit executor: ExecutionContext): Future[GetObject] = {
+      (client request [JObject] query.build()).map(GetObject(_))
     }
 
   }
 
-  implicit object GetObjectsDefinitionExecutable extends Executable[GetObjectsDefinition, Results] {
+  implicit object GetObjectsDefinitionExecutable
+      extends Executable[GetObjectsDefinition, Results] {
 
-    override def apply(client: AlgoliaClient, query: GetObjectsDefinition)(implicit executor: ExecutionContext): Future[Results] = {
-      client request[Results] query.build()
+    override def apply(client: AlgoliaClient, query: GetObjectsDefinition)(
+        implicit executor: ExecutionContext): Future[Results] = {
+      client request [Results] query.build()
     }
 
   }

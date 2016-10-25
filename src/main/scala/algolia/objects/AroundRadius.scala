@@ -41,5 +41,4 @@ object AroundRadius {
     override val name: String = "all"
   }
 
-
 }

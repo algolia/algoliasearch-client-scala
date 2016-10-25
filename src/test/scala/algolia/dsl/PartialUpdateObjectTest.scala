@@ -38,13 +38,15 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (increment attribute "toto" ofObjectId "myId" by 1 from "index").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some("{\"toto\":{\"_operation\":\"Increment\",\"value\":1}}"),
-          isSearch = false
-        )
+      (increment attribute "toto" ofObjectId "myId" by 1 from "index")
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              body =
+                Some("{\"toto\":{\"_operation\":\"Increment\",\"value\":1}}"),
+              isSearch = false
+          )
       )
     }
 
@@ -57,13 +59,15 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (decrement attribute "toto" by 1 ofObjectId "myId" from "index").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some("{\"toto\":{\"_operation\":\"Decrement\",\"value\":1}}"),
-          isSearch = false
-        )
+      (decrement attribute "toto" by 1 ofObjectId "myId" from "index")
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              body =
+                Some("{\"toto\":{\"_operation\":\"Decrement\",\"value\":1}}"),
+              isSearch = false
+          )
       )
     }
 
@@ -76,13 +80,15 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (add value "truc" inAttribute "toto" ofObjectId "myId" from "index").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some("{\"toto\":{\"_operation\":\"Add\",\"value\":\"truc\"}}"),
-          isSearch = false
-        )
+      (add value "truc" inAttribute "toto" ofObjectId "myId" from "index")
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              body =
+                Some("{\"toto\":{\"_operation\":\"Add\",\"value\":\"truc\"}}"),
+              isSearch = false
+          )
       )
     }
 
@@ -95,13 +101,15 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (remove value "truc" inAttribute "toto" ofObjectId "myId" from "index").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some("{\"toto\":{\"_operation\":\"Remove\",\"value\":\"truc\"}}"),
-          isSearch = false
-        )
+      (remove value "truc" inAttribute "toto" ofObjectId "myId" from "index")
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              body = Some(
+                  "{\"toto\":{\"_operation\":\"Remove\",\"value\":\"truc\"}}"),
+              isSearch = false
+          )
       )
     }
 
@@ -114,13 +122,15 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some("{\"toto\":{\"_operation\":\"AddUnique\",\"value\":\"truc\"}}"),
-          isSearch = false
-        )
+      (addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index")
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              body = Some(
+                  "{\"toto\":{\"_operation\":\"AddUnique\",\"value\":\"truc\"}}"),
+              isSearch = false
+          )
       )
     }
 
@@ -133,13 +143,14 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (update attribute "toto" value "truc" ofObjectId "myId" from "index").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some("{\"toto\":\"truc\"}"),
-          isSearch = false
-        )
+      (update attribute "toto" value "truc" ofObjectId "myId" from "index")
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              body = Some("{\"toto\":\"truc\"}"),
+              isSearch = false
+          )
       )
     }
 
@@ -152,14 +163,16 @@ class PartialUpdateObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (increment attribute "toto" ofObjectId "myId" by 1 from "index" createIfNotExists false).build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "index", "myId", "partial"),
-          queryParameters = Some(Map("createIfNotExists" -> "false")),
-          body = Some("{\"toto\":{\"_operation\":\"Increment\",\"value\":1}}"),
-          isSearch = false
-        )
+      (increment attribute "toto" ofObjectId "myId" by 1 from "index" createIfNotExists false)
+        .build() should be(
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "index", "myId", "partial"),
+              queryParameters = Some(Map("createIfNotExists" -> "false")),
+              body =
+                Some("{\"toto\":{\"_operation\":\"Increment\",\"value\":1}}"),
+              isSearch = false
+          )
       )
     }
 

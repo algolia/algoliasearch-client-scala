@@ -40,10 +40,11 @@ class LogsTest extends AlgoliaTest {
 
     it("should call API") {
       val payload = HttpPayload(
-        GET,
-        Seq("1", "logs"),
-        queryParameters = Some(Map("offset" -> "1", "length" -> "1", "type" -> "error")),
-        isSearch = false
+          GET,
+          Seq("1", "logs"),
+          queryParameters =
+            Some(Map("offset" -> "1", "length" -> "1", "type" -> "error")),
+          isSearch = false
       )
 
       (logs offset 1 length 1 `type` LogType.error).build() should be(payload)

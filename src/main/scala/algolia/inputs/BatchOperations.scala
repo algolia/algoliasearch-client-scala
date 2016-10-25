@@ -33,29 +33,37 @@ sealed trait BatchOperation[T <: AnyRef] {
 
 }
 
-
 case class AddObjectOperation[T <: AnyRef](body: T,
                                            indexName: Option[String] = None,
-                                           action: String = "addObject") extends BatchOperation[T]
+                                           action: String = "addObject")
+    extends BatchOperation[T]
 
 case class UpdateObjectOperation[T <: AnyRef](body: T,
                                               indexName: Option[String] = None,
-                                              action: String = "updateObject") extends BatchOperation[T]
+                                              action: String = "updateObject")
+    extends BatchOperation[T]
 
-case class PartialUpdateObjectOperation[T <: AnyRef](body: T,
-                                                     indexName: Option[String] = None,
-                                                     action: String = "partialUpdateObject") extends BatchOperation[T]
+case class PartialUpdateObjectOperation[T <: AnyRef](
+    body: T,
+    indexName: Option[String] = None,
+    action: String = "partialUpdateObject")
+    extends BatchOperation[T]
 
-case class PartialUpdateObjectNoCreateOperation[T <: AnyRef](body: T,
-                                                             indexName: Option[String] = None,
-                                                             action: String = "partialUpdateObjectNoCreate") extends BatchOperation[T]
+case class PartialUpdateObjectNoCreateOperation[T <: AnyRef](
+    body: T,
+    indexName: Option[String] = None,
+    action: String = "partialUpdateObjectNoCreate")
+    extends BatchOperation[T]
 
 case class DeleteObjectOperation[T <: AnyRef](indexName: String,
                                               objectID: String,
-                                              action: String = "deleteObject") extends BatchOperation[T]
+                                              action: String = "deleteObject")
+    extends BatchOperation[T]
 
 case class ClearIndexOperation[T <: AnyRef](indexName: String,
-                                            action: String = "clear") extends BatchOperation[T]
+                                            action: String = "clear")
+    extends BatchOperation[T]
 
 case class DeleteIndexOperation[T <: AnyRef](indexName: String,
-                                             action: String = "delete") extends BatchOperation[T]
+                                             action: String = "delete")
+    extends BatchOperation[T]

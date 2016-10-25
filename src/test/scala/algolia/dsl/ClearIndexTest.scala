@@ -39,11 +39,11 @@ class ClearIndexTest extends AlgoliaTest {
 
     it("should call API") {
       (clear index "toto").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "toto", "clear"),
-          isSearch = false
-        )
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "toto", "clear"),
+              isSearch = false
+          )
       )
     }
   }

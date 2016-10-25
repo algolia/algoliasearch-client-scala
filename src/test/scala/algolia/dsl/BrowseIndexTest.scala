@@ -44,34 +44,36 @@ class BrowseIndexTest extends AlgoliaTest {
 
     it("should call API") {
       (browse index "toto" from "cursor1").build() should be(
-        HttpPayload(
-          GET,
-          Seq("1", "indexes", "toto", "browse"),
-          queryParameters = Some(Map("cursor" -> "cursor1")),
-          isSearch = true
-        )
+          HttpPayload(
+              GET,
+              Seq("1", "indexes", "toto", "browse"),
+              queryParameters = Some(Map("cursor" -> "cursor1")),
+              isSearch = true
+          )
       )
     }
 
     it("should call API with query") {
       (browse index "toto" query Query(query = Some("q"))).build() should be(
-        HttpPayload(
-          GET,
-          Seq("1", "indexes", "toto", "browse"),
-          queryParameters = Some(Map("query" -> "q")),
-          isSearch = true
-        )
+          HttpPayload(
+              GET,
+              Seq("1", "indexes", "toto", "browse"),
+              queryParameters = Some(Map("query" -> "q")),
+              isSearch = true
+          )
       )
     }
 
     it("should call API with query and cursor") {
-      (browse index "toto" query Query(query = Some("q")) from "cursor1").build() should be(
-        HttpPayload(
-          GET,
-          Seq("1", "indexes", "toto", "browse"),
-          queryParameters = Some(Map("query" -> "q", "cursor" -> "cursor1")),
-          isSearch = true
-        )
+      (browse index "toto" query Query(query = Some("q")) from "cursor1")
+        .build() should be(
+          HttpPayload(
+              GET,
+              Seq("1", "indexes", "toto", "browse"),
+              queryParameters =
+                Some(Map("query" -> "q", "cursor" -> "cursor1")),
+              isSearch = true
+          )
       )
     }
   }

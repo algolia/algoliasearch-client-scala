@@ -49,21 +49,25 @@ private[algolia] case object DELETE extends HttpVerb {
   override def toString: String = "DELETE"
 }
 
-private[algolia] case class HttpPayload(verb: HttpVerb,
-                                        path: Seq[String],
-                                        queryParameters: Option[Map[String, String]] = None,
-                                        body: Option[String] = None,
-                                        isSearch: Boolean = true) {
+private[algolia] case class HttpPayload(
+    verb: HttpVerb,
+    path: Seq[String],
+    queryParameters: Option[Map[String, String]] = None,
+    body: Option[String] = None,
+    isSearch: Boolean = true) {
 
-  def apply(host: String, headers: Map[String, String], dnsNameResolver: NameResolver[InetAddress]): Request = {
+  def apply(host: String,
+            headers: Map[String, String],
+            dnsNameResolver: NameResolver[InetAddress]): Request = {
     val uri = path.foldLeft(host)((url, p) => url / p)
 
-    var builder: RequestBuilder = new RequestBuilder().setMethod(verb.toString).setUrl(uri)
+    var builder: RequestBuilder =
+      new RequestBuilder().setMethod(verb.toString).setUrl(uri)
 
     headers.foreach { case (k, v) => builder = builder.addHeader(k, v) }
 
     queryParameters.foreach(
-      _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }
+        _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }
     )
 
     body.foreach(b => builder = builder.setBody(b))

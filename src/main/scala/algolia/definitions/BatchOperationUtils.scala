@@ -43,7 +43,8 @@ trait BatchOperationUtils {
     val json: JValue = Extraction.decompose(obj)
 
     json \ "objectID" match {
-      case JNothing => JObject(JField("objectID", JString(objectId))) merge json
+      case JNothing =>
+        JObject(JField("objectID", JString(objectId))) merge json
       case _ => json
     }
   }

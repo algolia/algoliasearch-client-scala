@@ -33,5 +33,5 @@ case class GetObject(private val res: JObject) {
 
   val objectID: String = (res \ "objectID").extractOpt[String].get
 
-  def as[T <: AnyRef : Manifest]: T = res.extract[T]
+  def as[T <: AnyRef: Manifest]: T = res.extract[T]
 }
