@@ -31,13 +31,12 @@ import algolia.{AlgoliaClient, Executable}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 case class ListIndexesDefinition() extends Definition {
 
   override private[algolia] def build() = HttpPayload(
-    GET,
-    Seq("1", "indexes"),
-    isSearch = true
+      GET,
+      Seq("1", "indexes"),
+      isSearch = true
   )
 
 }
@@ -48,9 +47,11 @@ trait ListIndexesDsl {
     def indices = ListIndexesDefinition()
   }
 
-  implicit object ListIndexesDefinitionExecutable extends Executable[ListIndexesDefinition, Indices] {
-    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(implicit executor: ExecutionContext): Future[Indices] = {
-      client request[Indices] query.build()
+  implicit object ListIndexesDefinitionExecutable
+      extends Executable[ListIndexesDefinition, Indices] {
+    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
+        implicit executor: ExecutionContext): Future[Indices] = {
+      client request [Indices] query.build()
     }
   }
 

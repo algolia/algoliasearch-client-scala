@@ -42,7 +42,7 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
   it("should get settings") {
     val create = client.execute {
       batch(
-        index into "indexToChangeSettings" `object` ObjectToGet("1", "toto")
+          index into "indexToChangeSettings" `object` ObjectToGet("1", "toto")
       )
     }
 
@@ -60,7 +60,8 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
   it("should update settings") {
     val change: Future[Task] = client.execute {
       changeSettings of "indexToChangeSettings" `with` IndexSettings(
-        searchableAttributes = Some(Seq(SearchableAttributes.attribute("att")))
+          searchableAttributes =
+            Some(Seq(SearchableAttributes.attribute("att")))
       )
     }
 
@@ -71,7 +72,8 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
     }
 
     whenReady(request) { result =>
-      result.searchableAttributes should be(Some(Seq(SearchableAttributes.attribute("att"))))
+      result.searchableAttributes should be(
+          Some(Seq(SearchableAttributes.attribute("att"))))
     }
   }
 

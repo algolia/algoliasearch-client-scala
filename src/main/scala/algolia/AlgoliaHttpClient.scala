@@ -47,45 +47,54 @@ object default {
   val dnsTimeout = httpConnectTimeout / 10
 }
 
-case class AlgoliaHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
-                             httpConnectTimeout: Int = default.httpConnectTimeout,
-                             httpRequestTimeout: Int = default.httpRequestTimeout,
-                             dnsTimeout: Int = default.dnsTimeout) {
+case class AlgoliaHttpClient(
+    httpReadTimeout: Int = default.httpReadTimeout,
+    httpConnectTimeout: Int = default.httpConnectTimeout,
+    httpRequestTimeout: Int = default.httpRequestTimeout,
+    dnsTimeout: Int = default.dnsTimeout) {
 
-  val asyncClientConfig =
-    new DefaultAsyncHttpClientConfig
-      .Builder()
-      .setConnectTimeout(httpConnectTimeout)
-      .setReadTimeout(httpReadTimeout)
-      .setRequestTimeout(httpRequestTimeout)
-      .build
+  val asyncClientConfig = new DefaultAsyncHttpClientConfig.Builder()
+    .setConnectTimeout(httpConnectTimeout)
+    .setReadTimeout(httpReadTimeout)
+    .setRequestTimeout(httpRequestTimeout)
+    .build
 
-  val dnsNameResolver =
-    new DnsNameResolverBuilder(new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
-      .channelType(classOf[NioDatagramChannel])
-      .queryTimeoutMillis(dnsTimeout)
-      .build
+  val dnsNameResolver = new DnsNameResolverBuilder(
+      new NioEventLoopGroup(1)
+        .next()) //We only need 1 thread for DNS resolution
+    .channelType(classOf[NioDatagramChannel])
+    .queryTimeoutMillis(dnsTimeout)
+    .build
 
   val _httpClient = new DefaultAsyncHttpClient(asyncClientConfig)
 
   implicit val formats: Formats = AlgoliaDsl.formats
 
-  def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
+  def request[T: Manifest](
+      host: String,
+      headers: Map[String, String],
+      payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
     val request = payload(host, headers, dnsNameResolver)
     makeRequest(request, responseHandler)
   }
 
   def responseHandler[T: Manifest] = new AsyncCompletionHandler[T] {
-    override def onCompleted(response: Response) = response.getStatusCode / 100 match {
-      case 2 => toJson(response).extract[T]
-      case 4 => throw APIClientException(response.getStatusCode, (toJson(response) \ "message").extract[String])
-      case _ => throw UnexpectedResponse(response.getStatusCode)
-    }
+    override def onCompleted(response: Response) =
+      response.getStatusCode / 100 match {
+        case 2 => toJson(response).extract[T]
+        case 4 =>
+          throw APIClientException(
+              response.getStatusCode,
+              (toJson(response) \ "message").extract[String])
+        case _ => throw UnexpectedResponse(response.getStatusCode)
+      }
   }
 
-  def toJson(r: Response) = parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
+  def toJson(r: Response) =
+    parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
 
-  def makeRequest[T](request: Request, handler: AsyncHandler[T])(implicit executor: ExecutionContext): Future[T] = {
+  def makeRequest[T](request: Request, handler: AsyncHandler[T])(
+      implicit executor: ExecutionContext): Future[T] = {
     val javaFuture = _httpClient.executeRequest(request, handler)
     val promise = Promise[T]()
     val runnable = new java.lang.Runnable {
@@ -105,6 +114,9 @@ case class AlgoliaHttpClient(httpReadTimeout: Int = default.httpReadTimeout,
 
 }
 
-case class APIClientException(code: Int, message: String) extends Exception("Failure \"%s\", response status: %d".format(message, code))
+case class APIClientException(code: Int, message: String)
+    extends Exception(
+        "Failure \"%s\", response status: %d".format(message, code))
 
-case class UnexpectedResponse(code: Int) extends Exception("Unexpected response status: %d".format(code))
+case class UnexpectedResponse(code: Int)
+    extends Exception("Unexpected response status: %d".format(code))

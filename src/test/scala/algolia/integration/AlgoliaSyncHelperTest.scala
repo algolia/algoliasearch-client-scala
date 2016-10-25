@@ -50,14 +50,15 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
   after {
     clearIndices("testBrowseSync")
   }
-  
+
   describe("browse") {
 
     val query = Query(hitsPerPage = Some(10))
 
     it("should browse in sync") {
 
-      val res: Iterator[Seq[Value]] = helper.browse[Value]("testBrowseSync", query)
+      val res: Iterator[Seq[Value]] =
+        helper.browse[Value]("testBrowseSync", query)
 
       res should have size 10
       forAll(res.toIterable) { r =>
@@ -77,12 +78,16 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     it("should delete with a query") {
       val delete = helper.deleteByQuery[Value]("testBrowseSync", query)
       val tasksToWait = whenReady(delete) { res =>
-        Future.traverse(res)(i => client.execute(waitFor task i from "testBrowseSync"))
+        Future.traverse(res)(i =>
+              client.execute(waitFor task i from "testBrowseSync"))
       }
 
-      whenReady(tasksToWait) { res => res }
+      whenReady(tasksToWait) { res =>
+        res
+      }
 
-      val res: Iterator[Seq[Value]] = helper.browse[Value]("testBrowseSync", query)
+      val res: Iterator[Seq[Value]] =
+        helper.browse[Value]("testBrowseSync", query)
 
       res should have size 1
       forAll(res.toIterable) { r =>

@@ -35,21 +35,27 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetSynonymDefinition(synId: String, index: Option[String] = None)(implicit val formats: Formats) extends Definition {
+case class GetSynonymDefinition(synId: String, index: Option[String] = None)(
+    implicit val formats: Formats)
+    extends Definition {
 
   def from(index: String) = copy(index = Some(index))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-      GET,
-      Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
-      isSearch = true
+        GET,
+        Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
+        isSearch = true
     )
   }
 
 }
 
-case class DeleteSynonymDefinition(synId: String, index: Option[String] = None, option: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
+case class DeleteSynonymDefinition(
+    synId: String,
+    index: Option[String] = None,
+    option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    extends Definition {
 
   def from(index: String) = copy(index = Some(index))
 
@@ -63,16 +69,19 @@ case class DeleteSynonymDefinition(synId: String, index: Option[String] = None, 
     }
 
     HttpPayload(
-      DELETE,
-      Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
-      queryParameters = queryParameters,
-      isSearch = false
+        DELETE,
+        Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
+        queryParameters = queryParameters,
+        isSearch = false
     )
   }
 
 }
 
-case class ClearSynonymsDefinition(index: Option[String] = None, option: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
+case class ClearSynonymsDefinition(
+    index: Option[String] = None,
+    option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    extends Definition {
 
   def index(index: String) = copy(index = Some(index))
 
@@ -88,22 +97,27 @@ case class ClearSynonymsDefinition(index: Option[String] = None, option: Option[
     }
 
     HttpPayload(
-      POST,
-      path,
-      queryParameters = queryParameters,
-      isSearch = false
+        POST,
+        path,
+        queryParameters = queryParameters,
+        isSearch = false
     )
   }
 }
 
-case class SaveSynonymDefinition(synonym: AbstractSynonym, index: Option[String] = None, option: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
+case class SaveSynonymDefinition(
+    synonym: AbstractSynonym,
+    index: Option[String] = None,
+    option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    extends Definition {
 
   def inIndex(index: String) = copy(index = Some(index))
 
   def and(option: ForwardToReplicas) = copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
-    val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", synonym.objectID)
+    val path = Seq("1", "indexes") ++ index ++ Seq("synonyms",
+                                                   synonym.objectID)
 
     val queryParameters = if (option.isDefined) {
       Some(Map("forwardToReplicas" -> "true"))
@@ -112,16 +126,21 @@ case class SaveSynonymDefinition(synonym: AbstractSynonym, index: Option[String]
     }
 
     HttpPayload(
-      PUT,
-      path,
-      queryParameters = queryParameters,
-      body = Some(write(synonym)),
-      isSearch = false
+        PUT,
+        path,
+        queryParameters = queryParameters,
+        body = Some(write(synonym)),
+        isSearch = false
     )
   }
 }
 
-case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym], index: Option[String] = None, forward: Option[ForwardToReplicas] = None, replace: Option[ReplaceExistingSynonyms] = None)(implicit val formats: Formats) extends Definition {
+case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym],
+                                   index: Option[String] = None,
+                                   forward: Option[ForwardToReplicas] = None,
+                                   replace: Option[ReplaceExistingSynonyms] =
+                                     None)(implicit val formats: Formats)
+    extends Definition {
 
   def inIndex(index: String) = copy(index = Some(index))
 
@@ -134,19 +153,23 @@ case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym], index: O
 
     var queryParameters = Map.empty[String, String]
     forward.foreach(_ => queryParameters += ("forwardToReplicas" -> "true"))
-    replace.foreach(_ => queryParameters += ("replaceExistingSynonyms" -> "true"))
+    replace.foreach(_ =>
+          queryParameters += ("replaceExistingSynonyms" -> "true"))
 
     HttpPayload(
-      POST,
-      path,
-      queryParameters = Some(queryParameters),
-      body = Some(write(synonyms)),
-      isSearch = false
+        POST,
+        path,
+        queryParameters = Some(queryParameters),
+        body = Some(write(synonyms)),
+        isSearch = false
     )
   }
 }
 
-case class SearchSynonymsDefinition(indx: Option[String] = None, query: Option[QuerySynonyms] = None)(implicit val formats: Formats) extends Definition {
+case class SearchSynonymsDefinition(
+    indx: Option[String] = None,
+    query: Option[QuerySynonyms] = None)(implicit val formats: Formats)
+    extends Definition {
 
   def index(indx: String) = copy(indx = Some(indx))
 
@@ -154,10 +177,10 @@ case class SearchSynonymsDefinition(indx: Option[String] = None, query: Option[Q
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-      POST,
-      Seq("1", "indexes") ++ indx ++ Seq("synonyms", "search"),
-      body = Some(write(query)),
-      isSearch = true
+        POST,
+        Seq("1", "indexes") ++ indx ++ Seq("synonyms", "search"),
+        body = Some(write(query)),
+        isSearch = true
     )
   }
 }
@@ -168,56 +191,70 @@ trait SynonymsDsl {
 
   object save {
 
-    def synonym(synonym: AbstractSynonym) = SaveSynonymDefinition(synonym = synonym)
+    def synonym(synonym: AbstractSynonym) =
+      SaveSynonymDefinition(synonym = synonym)
 
-    def synonyms(synonyms: Iterable[AbstractSynonym]) = BatchSynonymsDefinition(synonyms = synonyms)
+    def synonyms(synonyms: Iterable[AbstractSynonym]) =
+      BatchSynonymsDefinition(synonyms = synonyms)
 
   }
 
-  implicit object GetSynonymDefinitionExecutable extends Executable[GetSynonymDefinition, AbstractSynonym] {
+  implicit object GetSynonymDefinitionExecutable
+      extends Executable[GetSynonymDefinition, AbstractSynonym] {
 
-    override def apply(client: AlgoliaClient, query: GetSynonymDefinition)(implicit executor: ExecutionContext): Future[AbstractSynonym] = {
-      client request[AbstractSynonym] query.build()
+    override def apply(client: AlgoliaClient, query: GetSynonymDefinition)(
+        implicit executor: ExecutionContext): Future[AbstractSynonym] = {
+      client request [AbstractSynonym] query.build()
     }
 
   }
 
-  implicit object DeleteSynonymDefinitionExecutable extends Executable[DeleteSynonymDefinition, Task] {
+  implicit object DeleteSynonymDefinitionExecutable
+      extends Executable[DeleteSynonymDefinition, Task] {
 
-    override def apply(client: AlgoliaClient, query: DeleteSynonymDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+    override def apply(client: AlgoliaClient, query: DeleteSynonymDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
 
   }
 
-  implicit object ClearSynonymsDefinitionExecutable extends Executable[ClearSynonymsDefinition, Task] {
+  implicit object ClearSynonymsDefinitionExecutable
+      extends Executable[ClearSynonymsDefinition, Task] {
 
-    override def apply(client: AlgoliaClient, query: ClearSynonymsDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+    override def apply(client: AlgoliaClient, query: ClearSynonymsDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
 
   }
 
-  implicit object SaveSynonymDefinitionExecutable extends Executable[SaveSynonymDefinition, Task] {
+  implicit object SaveSynonymDefinitionExecutable
+      extends Executable[SaveSynonymDefinition, Task] {
 
-    override def apply(client: AlgoliaClient, query: SaveSynonymDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+    override def apply(client: AlgoliaClient, query: SaveSynonymDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
 
   }
 
-  implicit object BatchSynonymsDefinitionExecutable extends Executable[BatchSynonymsDefinition, Task] {
+  implicit object BatchSynonymsDefinitionExecutable
+      extends Executable[BatchSynonymsDefinition, Task] {
 
-    override def apply(client: AlgoliaClient, query: BatchSynonymsDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+    override def apply(client: AlgoliaClient, query: BatchSynonymsDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
 
   }
 
-  implicit object SearchSynonymsDefinitionExecutable extends Executable[SearchSynonymsDefinition, SearchSynonymResult] {
+  implicit object SearchSynonymsDefinitionExecutable
+      extends Executable[SearchSynonymsDefinition, SearchSynonymResult] {
 
-    override def apply(client: AlgoliaClient, query: SearchSynonymsDefinition)(implicit executor: ExecutionContext): Future[SearchSynonymResult] = {
-      client request[SearchSynonymResult] query.build()
+    override def apply(client: AlgoliaClient, query: SearchSynonymsDefinition)(
+        implicit executor: ExecutionContext): Future[SearchSynonymResult] = {
+      client request [SearchSynonymResult] query.build()
     }
 
   }

@@ -46,15 +46,18 @@ trait ClearDsl {
 
   case object clear {
 
-    def index(index: String): ClearIndexDefinition = ClearIndexDefinition(index)
+    def index(index: String): ClearIndexDefinition =
+      ClearIndexDefinition(index)
 
     def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
 
   }
 
-  implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+  implicit object ClearIndexDefinitionExecutable
+      extends Executable[ClearIndexDefinition, Task] {
+    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
   }
 

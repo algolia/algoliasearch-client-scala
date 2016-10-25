@@ -32,7 +32,7 @@ import algolia.AlgoliaDsl._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class LogIntegrationTest  extends AlgoliaTest {
+class LogIntegrationTest extends AlgoliaTest {
 
   it("should get the logs") {
     val result: Future[Logs] = client.execute {

@@ -33,7 +33,10 @@ import org.json4s.Formats
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
-case class LogsDefinition(offset: Option[Int] = None, length: Option[Int] = None, `type`: Option[LogType] = None) extends Definition {
+case class LogsDefinition(offset: Option[Int] = None,
+                          length: Option[Int] = None,
+                          `type`: Option[LogType] = None)
+    extends Definition {
 
   def offset(o: Int): LogsDefinition = copy(offset = Some(o))
 
@@ -54,10 +57,10 @@ case class LogsDefinition(offset: Option[Int] = None, length: Option[Int] = None
     }
 
     HttpPayload(
-      GET,
-      Seq("1", "logs"),
-      queryParameters = Some(queryParameters.toMap),
-      isSearch = false
+        GET,
+        Seq("1", "logs"),
+        queryParameters = Some(queryParameters.toMap),
+        isSearch = false
     )
   }
 }
@@ -68,9 +71,11 @@ trait LogsDsl {
 
   def logs() = LogsDefinition()
 
-  implicit object LogsDefinitionExecutable extends Executable[LogsDefinition, Logs] {
-    override def apply(client: AlgoliaClient, query: LogsDefinition)(implicit executor: ExecutionContext): Future[Logs] = {
-      client request[Logs] query.build()
+  implicit object LogsDefinitionExecutable
+      extends Executable[LogsDefinition, Logs] {
+    override def apply(client: AlgoliaClient, query: LogsDefinition)(
+        implicit executor: ExecutionContext): Future[Logs] = {
+      client request [Logs] query.build()
     }
   }
 

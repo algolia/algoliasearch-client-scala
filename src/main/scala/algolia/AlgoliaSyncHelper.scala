@@ -40,7 +40,9 @@ object AlgoliaSyncHelper {
 
 case class AlgoliaSyncHelper(client: AlgoliaClient) {
 
-  def deleteByQuery[T <: ObjectID : Manifest](index: String, query: Query)(implicit duration: Duration, executor: ExecutionContext): Future[Iterator[TasksMultipleIndex]] = {
+  def deleteByQuery[T <: ObjectID: Manifest](index: String, query: Query)(
+      implicit duration: Duration,
+      executor: ExecutionContext): Future[Iterator[TasksMultipleIndex]] = {
     val res = browse[T](index, query).map { seq =>
       client.execute {
         delete from index objectIds seq.map(_.objectID)
@@ -50,7 +52,9 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
     Future.sequence(res)
   }
 
-  def browse[T <: ObjectID : Manifest](index: String, query: Query)(implicit duration: Duration, executor: ExecutionContext): Iterator[Seq[T]] = {
+  def browse[T <: ObjectID: Manifest](index: String, query: Query)(
+      implicit duration: Duration,
+      executor: ExecutionContext): Iterator[Seq[T]] = {
     var cursor: CursorState = CursorState.Init
 
     new Iterator[Seq[T]] {
@@ -65,7 +69,8 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
         }
 
         val result = Await.result(future, duration)
-        cursor = result.cursor.fold[CursorState](CursorState.Empty)(CursorState.Full)
+        cursor =
+          result.cursor.fold[CursorState](CursorState.Empty)(CursorState.Full)
 
         result.asWithObjectID[T]
       }
@@ -73,7 +78,6 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
   }
 
 }
-
 
 private[algolia] sealed trait CursorState {
   def value: String

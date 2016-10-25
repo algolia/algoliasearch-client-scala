@@ -35,7 +35,11 @@ import org.json4s.native.Serialization._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class IndexingBatchDefinition(index: String,
-                                   definitions: Traversable[Definition] = Traversable())(implicit val formats: Formats) extends Definition with BatchOperationUtils {
+                                   definitions: Traversable[Definition] =
+                                     Traversable())(
+    implicit val formats: Formats)
+    extends Definition
+    with BatchOperationUtils {
 
   override private[algolia] def build(): HttpPayload = {
     val operations = definitions.map {
@@ -50,19 +54,21 @@ case class IndexingBatchDefinition(index: String,
     }
 
     HttpPayload(
-      POST,
-      Seq("1", "indexes", index, "batch"),
-      body = Some(write(BatchOperations(operations))),
-      isSearch = false
+        POST,
+        Seq("1", "indexes", index, "batch"),
+        body = Some(write(BatchOperations(operations))),
+        isSearch = false
     )
   }
 }
 
 trait IndexingBatchDsl {
 
-  implicit object IndexingBatchDefinitionExecutable extends Executable[IndexingBatchDefinition, TasksSingleIndex] {
-    override def apply(client: AlgoliaClient, batch: IndexingBatchDefinition)(implicit executor: ExecutionContext): Future[TasksSingleIndex] = {
-      client request[TasksSingleIndex] batch.build()
+  implicit object IndexingBatchDefinitionExecutable
+      extends Executable[IndexingBatchDefinition, TasksSingleIndex] {
+    override def apply(client: AlgoliaClient, batch: IndexingBatchDefinition)(
+        implicit executor: ExecutionContext): Future[TasksSingleIndex] = {
+      client request [TasksSingleIndex] batch.build()
     }
   }
 

@@ -130,3 +130,4 @@ publishTo := {
   }
 }
 
+addCommandAlias("checkAll", ";clean;compile;test:compile;scalafmt;test:scalafmt")

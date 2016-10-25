@@ -39,7 +39,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
 
     it("should list keys") {
       val result: Future[AllKeys] = client.execute {
-        get allKeys()
+        get allKeys ()
       }
 
       whenReady(result) { keys =>

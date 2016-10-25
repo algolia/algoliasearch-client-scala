@@ -40,11 +40,11 @@ class WaitForTaskTest extends AlgoliaTest {
 
     it("should call API") {
       (waitFor task Task(1L, None) from "toto").build() should be(
-        HttpPayload(
-          GET,
-          Seq("1", "indexes", "toto", "task", "1"),
-          isSearch = true
-        )
+          HttpPayload(
+              GET,
+              Seq("1", "indexes", "toto", "task", "1"),
+              isSearch = true
+          )
       )
     }
   }

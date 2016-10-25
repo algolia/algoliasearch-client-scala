@@ -35,18 +35,22 @@ import org.json4s.{Extraction, Formats}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BatchDefinition(definitions: Traversable[Definition])(implicit val formats: Formats) extends Definition with BatchOperationUtils {
+case class BatchDefinition(definitions: Traversable[Definition])(
+    implicit val formats: Formats)
+    extends Definition
+    with BatchOperationUtils {
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-      POST,
-      Seq("1", "indexes", "*", "batch"),
-      body = Some(write(BatchOperations(definitions.flatMap(transform)))),
-      isSearch = false
+        POST,
+        Seq("1", "indexes", "*", "batch"),
+        body = Some(write(BatchOperations(definitions.flatMap(transform)))),
+        isSearch = false
     )
   }
 
-  private def transform(definition: Definition): Traversable[BatchOperation[JValue]] = {
+  private def transform(
+      definition: Definition): Traversable[BatchOperation[JValue]] = {
     definition match {
       case IndexingDefinition(index, None, Some(obj)) =>
         hasObjectId(obj) match {
@@ -55,7 +59,8 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
         }
 
       case IndexingDefinition(index, Some(objectId), Some(obj)) =>
-        Traversable(UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
+        Traversable(
+            UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
 
       case ClearIndexDefinition(index) =>
         Traversable(ClearIndexOperation(index))
@@ -66,19 +71,32 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
       case DeleteIndexDefinition(index) =>
         Traversable(DeleteIndexOperation(index))
 
-      case PartialUpdateObjectOperationDefinition(operation, index, Some(objectId), Some(attribute), value, true) =>
+      case PartialUpdateObjectOperationDefinition(operation,
+                                                  index,
+                                                  Some(objectId),
+                                                  Some(attribute),
+                                                  value,
+                                                  true) =>
         val body = Map(
-          "objectID" -> objectId,
-          attribute -> PartialUpdateObject(operation.name, value)
+            "objectID" -> objectId,
+            attribute -> PartialUpdateObject(operation.name, value)
         )
-        Traversable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
+        Traversable(
+            PartialUpdateObjectOperation(Extraction.decompose(body), index))
 
-      case PartialUpdateObjectOperationDefinition(operation, index, Some(objectId), Some(attribute), value, false) =>
+      case PartialUpdateObjectOperationDefinition(operation,
+                                                  index,
+                                                  Some(objectId),
+                                                  Some(attribute),
+                                                  value,
+                                                  false) =>
         val body = Map(
-          "objectID" -> objectId,
-          attribute -> PartialUpdateObject(operation.name, value)
+            "objectID" -> objectId,
+            attribute -> PartialUpdateObject(operation.name, value)
         )
-        Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
+        Traversable(
+            PartialUpdateObjectNoCreateOperation(Extraction.decompose(body),
+                                                 index))
 
       case IndexingBatchDefinition(_, defs) =>
         defs.flatMap(transform)
@@ -86,7 +104,6 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
     }
   }
 }
-
 
 trait BatchDefinitionDsl {
 
@@ -100,9 +117,11 @@ trait BatchDefinitionDsl {
     BatchDefinition(batches)
   }
 
-  implicit object BatchDefinitionExecutable extends Executable[BatchDefinition, TasksMultipleIndex] {
-    override def apply(client: AlgoliaClient, query: BatchDefinition)(implicit executor: ExecutionContext): Future[TasksMultipleIndex] = {
-      client request[TasksMultipleIndex] query.build()
+  implicit object BatchDefinitionExecutable
+      extends Executable[BatchDefinition, TasksMultipleIndex] {
+    override def apply(client: AlgoliaClient, query: BatchDefinition)(
+        implicit executor: ExecutionContext): Future[TasksMultipleIndex] = {
+      client request [TasksMultipleIndex] query.build()
     }
   }
 

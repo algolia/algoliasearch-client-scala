@@ -43,14 +43,18 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
   * @param apiKey The API KEY of your Algolia account
   * @param customHeader Custom headers to add to every requests
   */
-class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[String, String] = Map.empty) {
+class AlgoliaClient(applicationId: String,
+                    apiKey: String,
+                    customHeader: Map[String, String] = Map.empty) {
 
   if (applicationId == null || applicationId.isEmpty) {
-    throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
+    throw new AlgoliaClientException(
+        s"'applicationId' is probably too short: '$applicationId'")
   }
 
   if (apiKey == null || apiKey.isEmpty) {
-    throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
+    throw new AlgoliaClientException(
+        s"'apiKey' is probably too short: '$apiKey'")
   }
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
@@ -58,73 +62,85 @@ class AlgoliaClient(applicationId: String, apiKey: String, customHeader: Map[Str
 
   lazy val indexingHosts: Seq[String] =
     s"https://$applicationId.$ALGOLIANET_HOST" +:
-      random.shuffle(Seq(
-        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-      ))
+      random.shuffle(
+          Seq(
+              s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+              s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+              s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+          ))
 
   lazy val queryHosts: Seq[String] =
     s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
-      random.shuffle(Seq(
-        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-      ))
+      random.shuffle(
+          Seq(
+              s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+              s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+              s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+          ))
 
   val httpClient: AlgoliaHttpClient = AlgoliaHttpClient()
   val random: AlgoliaRandom = AlgoliaRandom
-  val userAgent = s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
+  val userAgent =
+    s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty(
+        "java.version")}); Scala (${BuildInfo.scalaVersion})"
 
   val headers: Map[String, String] = customHeader ++ Map(
-    "Accept-Encoding" -> "gzip",
-    "X-Algolia-Application-Id" -> applicationId,
-    "X-Algolia-API-Key" -> apiKey,
-    "User-Agent" -> userAgent,
-    "Content-Type" -> "application/json; charset=UTF-8",
-    "Accept" -> "application/json"
-  )
+        "Accept-Encoding" -> "gzip",
+        "X-Algolia-Application-Id" -> applicationId,
+        "X-Algolia-API-Key" -> apiKey,
+        "User-Agent" -> userAgent,
+        "Content-Type" -> "application/json; charset=UTF-8",
+        "Accept" -> "application/json"
+    )
 
   private val HMAC_SHA256 = "HmacSHA256"
 
-  def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT], executor: ExecutionContext): Future[RESULT] = executable(this, query)
+  def execute[QUERY, RESULT](query: QUERY)(
+      implicit executable: Executable[QUERY, RESULT],
+      executor: ExecutionContext): Future[RESULT] = executable(this, query)
 
-  def generateSecuredApiKey(privateApiKey: String, query: Query, userToken: Option[String] = None): String = {
+  def generateSecuredApiKey(privateApiKey: String,
+                            query: Query,
+                            userToken: Option[String] = None): String = {
     val queryStr = query.copy(userToken = userToken).toParam
     val key = hmac(privateApiKey, queryStr)
 
-    new String(Base64.getEncoder.encode(s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
+    new String(
+        Base64.getEncoder.encode(
+            s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
   }
 
   private def hmac(key: String, msg: String): String = {
     val algorithm = Mac.getInstance(HMAC_SHA256)
     algorithm.init(new SecretKeySpec(key.getBytes(), HMAC_SHA256))
 
-    algorithm
-      .doFinal(msg.getBytes())
-      .map("%02x".format(_))
-      .mkString
+    algorithm.doFinal(msg.getBytes()).map("%02x".format(_)).mkString
   }
 
-  private[algolia] def request[T: Manifest](payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
+  private[algolia] def request[T: Manifest](payload: HttpPayload)(
+      implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) queryHosts else indexingHosts
 
-    val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
-      future.recoverWith {
-        case e: APIClientException => Future.failed(e) //No retry if 4XX
-        case _ => httpClient.request[T](host, headers, payload)
-      }
+    val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) {
+      (future, host) =>
+        future.recoverWith {
+          case e: APIClientException => Future.failed(e) //No retry if 4XX
+          case _ => httpClient.request[T](host, headers, payload)
+        }
     }
 
     result.recoverWith {
-      case e: APIClientException => Future.failed(new AlgoliaClientException(e.getMessage, e.getCause))
+      case e: APIClientException =>
+        Future.failed(new AlgoliaClientException(e.getMessage, e.getCause))
       case e: AlgoliaClientException => Future.failed(e)
-      case e: Throwable => Future.failed(new AlgoliaClientException("Failed on last retry", e))
+      case e: Throwable =>
+        Future.failed(new AlgoliaClientException("Failed on last retry", e))
     }
   }
 }
 
-class AlgoliaClientException(message: String, exception: Throwable) extends Exception(message, exception) {
+class AlgoliaClientException(message: String, exception: Throwable)
+    extends Exception(message, exception) {
 
   def this(message: String) = {
     this(message, null)

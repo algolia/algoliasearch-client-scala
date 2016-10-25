@@ -46,11 +46,11 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (get key "keyName").build() should be(
-          HttpPayload(
-            GET,
-            List("1", "keys", "keyName"),
-            isSearch = false
-          )
+            HttpPayload(
+                GET,
+                List("1", "keys", "keyName"),
+                isSearch = false
+            )
         )
       }
     }
@@ -62,11 +62,11 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         get.allKeys().build() should be(
-          HttpPayload(
-            GET,
-            List("1", "keys"),
-            isSearch = false
-          )
+            HttpPayload(
+                GET,
+                List("1", "keys"),
+                isSearch = false
+            )
         )
       }
     }
@@ -78,12 +78,12 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (add key ApiKey(validity = Some(10))).build() should be(
-          HttpPayload(
-            POST,
-            List("1", "keys"),
-            body = Some("""{"validity":10}"""),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "keys"),
+                body = Some("""{"validity":10}"""),
+                isSearch = false
+            )
         )
       }
     }
@@ -95,11 +95,11 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (delete key "keyName").build() should be(
-          HttpPayload(
-            DELETE,
-            List("1", "keys", "keyName"),
-            isSearch = false
-          )
+            HttpPayload(
+                DELETE,
+                List("1", "keys", "keyName"),
+                isSearch = false
+            )
         )
       }
     }
@@ -110,13 +110,14 @@ class ApiKeysTest extends AlgoliaTest {
       }
 
       it("should call the API") {
-        (update key "keyName" `with` ApiKey(validity = Some(10))).build() should be(
-          HttpPayload(
-            PUT,
-            List("1", "keys", "keyName"),
-            body = Some("""{"validity":10}"""),
-            isSearch = false
-          )
+        (update key "keyName" `with` ApiKey(validity = Some(10)))
+          .build() should be(
+            HttpPayload(
+                PUT,
+                List("1", "keys", "keyName"),
+                body = Some("""{"validity":10}"""),
+                isSearch = false
+            )
         )
       }
     }
@@ -131,11 +132,11 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (get key "keyName" from "indexName").build() should be(
-          HttpPayload(
-            GET,
-            List("1", "indexes", "indexName", "keys", "keyName"),
-            isSearch = false
-          )
+            HttpPayload(
+                GET,
+                List("1", "indexes", "indexName", "keys", "keyName"),
+                isSearch = false
+            )
         )
       }
     }
@@ -147,11 +148,11 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (get allKeysFrom "indexName").build() should be(
-          HttpPayload(
-            GET,
-            List("1", "indexes", "indexName", "keys"),
-            isSearch = false
-          )
+            HttpPayload(
+                GET,
+                List("1", "indexes", "indexName", "keys"),
+                isSearch = false
+            )
         )
       }
     }
@@ -163,12 +164,12 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (add key ApiKey(validity = Some(10)) to "indexName").build() should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "indexName", "keys"),
-            body = Some("""{"validity":10}"""),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "indexes", "indexName", "keys"),
+                body = Some("""{"validity":10}"""),
+                isSearch = false
+            )
         )
       }
     }
@@ -180,11 +181,11 @@ class ApiKeysTest extends AlgoliaTest {
 
       it("should call the API") {
         (delete key "keyName" from "indexName").build() should be(
-          HttpPayload(
-            DELETE,
-            List("1", "indexes", "indexName", "keys", "keyName"),
-            isSearch = false
-          )
+            HttpPayload(
+                DELETE,
+                List("1", "indexes", "indexName", "keys", "keyName"),
+                isSearch = false
+            )
         )
       }
     }
@@ -196,13 +197,14 @@ class ApiKeysTest extends AlgoliaTest {
       }
 
       it("should call the API") {
-        (update key "keyName" `with` ApiKey(validity = Some(10)) from "indexName").build() should be(
-          HttpPayload(
-            PUT,
-            List("1", "indexes", "indexName", "keys", "keyName"),
-            body = Some("""{"validity":10}"""),
-            isSearch = false
-          )
+        (update key "keyName" `with` ApiKey(validity = Some(10)) from "indexName")
+          .build() should be(
+            HttpPayload(
+                PUT,
+                List("1", "indexes", "indexName", "keys", "keyName"),
+                body = Some("""{"validity":10}"""),
+                isSearch = false
+            )
         )
       }
     }
@@ -210,8 +212,7 @@ class ApiKeysTest extends AlgoliaTest {
 
   describe("ApiKey serialization/deserialization") {
 
-    val json =
-      """{
+    val json = """{
         |  "acl":[
         |    "search",
         |    "addObject"
@@ -219,15 +220,16 @@ class ApiKeysTest extends AlgoliaTest {
         |}""".stripMargin
 
     it("should deserialize json") {
-      inside(parse(json).extract[ApiKey]) { case a: ApiKey =>
-        a.acl should be(Some(Seq(Acl.search, Acl.addObject)))
+      inside(parse(json).extract[ApiKey]) {
+        case a: ApiKey =>
+          a.acl should be(Some(Seq(Acl.search, Acl.addObject)))
       }
 
     }
 
     it("should serialize json") {
       val a = ApiKey(
-        acl = Some(Seq(Acl.search, Acl.addObject))
+          acl = Some(Seq(Acl.search, Acl.addObject))
       )
 
       writePretty(a) should be(json)

@@ -43,13 +43,14 @@ class SaveObjectTest extends AlgoliaTest {
       }
 
       it("should call API") {
-        (index into "toto" `object` BasicObject("algolia", 2)).build() should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "toto"),
-            body = Some("{\"name\":\"algolia\",\"age\":2}"),
-            isSearch = false
-          )
+        (index into "toto" `object` BasicObject("algolia", 2))
+          .build() should be(
+            HttpPayload(
+                POST,
+                List("1", "indexes", "toto"),
+                body = Some("{\"name\":\"algolia\",\"age\":2}"),
+                isSearch = false
+            )
         )
       }
 
@@ -60,24 +61,29 @@ class SaveObjectTest extends AlgoliaTest {
         }
 
         it("without objectID should call API ") {
-          (index into "toto" objects Seq(BasicObject("algolia", 2))).build() should be(
-            HttpPayload(
-              POST,
-              List("1", "indexes", "toto", "batch"),
-              body = Some("{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2},\"action\":\"addObject\"}]}"),
-              isSearch = false
-            )
+          (index into "toto" objects Seq(BasicObject("algolia", 2)))
+            .build() should be(
+              HttpPayload(
+                  POST,
+                  List("1", "indexes", "toto", "batch"),
+                  body = Some(
+                      "{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2},\"action\":\"addObject\"}]}"),
+                  isSearch = false
+              )
           )
         }
 
         it("with objectID should call API ") {
-          (index into "toto" objects Seq(BasicObjectWithObjectID("algolia", 2, "id"))).build() should be(
-            HttpPayload(
-              POST,
-              List("1", "indexes", "toto", "batch"),
-              body = Some("{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2,\"objectID\":\"id\"},\"action\":\"updateObject\"}]}"),
-              isSearch = false
-            )
+          (index into "toto" objects Seq(
+                  BasicObjectWithObjectID("algolia", 2, "id")))
+            .build() should be(
+              HttpPayload(
+                  POST,
+                  List("1", "indexes", "toto", "batch"),
+                  body = Some(
+                      "{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2,\"objectID\":\"id\"},\"action\":\"updateObject\"}]}"),
+                  isSearch = false
+              )
           )
         }
       }
@@ -90,17 +96,18 @@ class SaveObjectTest extends AlgoliaTest {
       }
 
       it("should index case class with id") {
-        index into "toto" `object`("1", BasicObject("algolia", 2))
+        index into "toto" `object` ("1", BasicObject("algolia", 2))
       }
 
       it("should call API") {
-        (index into "toto" objectId "1" `object` BasicObject("algolia", 2)).build() should be(
-          HttpPayload(
-            PUT,
-            List("1", "indexes", "toto", "1"),
-            body = Some("{\"name\":\"algolia\",\"age\":2}"),
-            isSearch = false
-          )
+        (index into "toto" objectId "1" `object` BasicObject("algolia", 2))
+          .build() should be(
+            HttpPayload(
+                PUT,
+                List("1", "indexes", "toto", "1"),
+                body = Some("{\"name\":\"algolia\",\"age\":2}"),
+                isSearch = false
+            )
         )
       }
 
@@ -111,13 +118,15 @@ class SaveObjectTest extends AlgoliaTest {
         }
 
         it("should call API") {
-          (index into "toto" objects Map("1" -> BasicObject("algolia", 2))).build() should be(
-            HttpPayload(
-              POST,
-              List("1", "indexes", "toto", "batch"),
-              body = Some("{\"requests\":[{\"body\":{\"objectID\":\"1\",\"name\":\"algolia\",\"age\":2},\"action\":\"updateObject\"}]}"),
-              isSearch = false
-            )
+          (index into "toto" objects Map("1" -> BasicObject("algolia", 2)))
+            .build() should be(
+              HttpPayload(
+                  POST,
+                  List("1", "indexes", "toto", "batch"),
+                  body = Some(
+                      "{\"requests\":[{\"body\":{\"objectID\":\"1\",\"name\":\"algolia\",\"age\":2},\"action\":\"updateObject\"}]}"),
+                  isSearch = false
+              )
           )
         }
       }

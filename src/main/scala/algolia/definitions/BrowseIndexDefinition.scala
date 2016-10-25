@@ -33,7 +33,11 @@ import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BrowseIndexDefinition(source: String, query: Option[Query] = None, cursor: Option[String] = None)(implicit val formats: Formats) extends Definition {
+case class BrowseIndexDefinition(
+    source: String,
+    query: Option[Query] = None,
+    cursor: Option[String] = None)(implicit val formats: Formats)
+    extends Definition {
 
   def from(cursor: String) = copy(cursor = Some(cursor))
 
@@ -43,10 +47,10 @@ case class BrowseIndexDefinition(source: String, query: Option[Query] = None, cu
     val q = query.getOrElse(Query()).copy(cursor = cursor)
 
     HttpPayload(
-      GET,
-      Seq("1", "indexes", source, "browse"),
-      queryParameters = Some(q.toQueryParam),
-      isSearch = true
+        GET,
+        Seq("1", "indexes", source, "browse"),
+        queryParameters = Some(q.toQueryParam),
+        isSearch = true
     )
   }
 }
@@ -57,13 +61,16 @@ trait BrowseIndexDsl {
 
   case object browse {
 
-    def index(index: String): BrowseIndexDefinition = BrowseIndexDefinition(index)
+    def index(index: String): BrowseIndexDefinition =
+      BrowseIndexDefinition(index)
 
   }
 
-  implicit object BrowseIndexDefinitionExecutable extends Executable[BrowseIndexDefinition, BrowseResult] {
-    override def apply(client: AlgoliaClient, query: BrowseIndexDefinition)(implicit executor: ExecutionContext): Future[BrowseResult] = {
-      client request[BrowseResult] query.build()
+  implicit object BrowseIndexDefinitionExecutable
+      extends Executable[BrowseIndexDefinition, BrowseResult] {
+    override def apply(client: AlgoliaClient, query: BrowseIndexDefinition)(
+        implicit executor: ExecutionContext): Future[BrowseResult] = {
+      client request [BrowseResult] query.build()
     }
   }
 

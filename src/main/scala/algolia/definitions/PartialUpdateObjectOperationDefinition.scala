@@ -59,30 +59,40 @@ case object Remove extends Operation {
   override def name: String = "Remove"
 }
 
-case class PartialUpdateObjectOperationDefinition(operation: Operation,
-                                                  index: Option[String] = None,
-                                                  objectId: Option[String] = None,
-                                                  attribute: Option[String] = None,
-                                                  value: Option[Any] = None,
-                                                  createNotExists: Boolean = true)(implicit val formats: Formats) extends Definition {
+case class PartialUpdateObjectOperationDefinition(
+    operation: Operation,
+    index: Option[String] = None,
+    objectId: Option[String] = None,
+    attribute: Option[String] = None,
+    value: Option[Any] = None,
+    createNotExists: Boolean = true)(implicit val formats: Formats)
+    extends Definition {
 
-  def ofObjectId(objectId: String): PartialUpdateObjectOperationDefinition = copy(objectId = Some(objectId))
+  def ofObjectId(objectId: String): PartialUpdateObjectOperationDefinition =
+    copy(objectId = Some(objectId))
 
-  def inAttribute(attr: String): PartialUpdateObjectOperationDefinition = attribute(attr)
+  def inAttribute(attr: String): PartialUpdateObjectOperationDefinition =
+    attribute(attr)
 
-  def attribute(attribute: String): PartialUpdateObjectOperationDefinition = copy(attribute = Some(attribute))
+  def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
+    copy(attribute = Some(attribute))
 
-  def by(value: Int): PartialUpdateObjectOperationDefinition = copy(value = Some(value))
+  def by(value: Int): PartialUpdateObjectOperationDefinition =
+    copy(value = Some(value))
 
-  def value(value: String): PartialUpdateObjectOperationDefinition = copy(value = Some(value))
+  def value(value: String): PartialUpdateObjectOperationDefinition =
+    copy(value = Some(value))
 
-  def from(index: String): PartialUpdateObjectOperationDefinition = copy(index = Some(index))
+  def from(index: String): PartialUpdateObjectOperationDefinition =
+    copy(index = Some(index))
 
-  def createIfNotExists(createNotExists: Boolean = false): PartialUpdateObjectOperationDefinition = copy(createNotExists = createNotExists)
+  def createIfNotExists(createNotExists: Boolean = false)
+    : PartialUpdateObjectOperationDefinition =
+    copy(createNotExists = createNotExists)
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
-      attribute.get -> PartialUpdateObject(operation.name, value)
+        attribute.get -> PartialUpdateObject(operation.name, value)
     )
 
     val queryParameters = if (createNotExists) {
@@ -92,37 +102,42 @@ case class PartialUpdateObjectOperationDefinition(operation: Operation,
     }
 
     HttpPayload(
-      POST,
-      Seq("1", "indexes") ++ index ++ objectId :+ "partial",
-      queryParameters = queryParameters,
-      body = Some(write(body)),
-      isSearch = false
+        POST,
+        Seq("1", "indexes") ++ index ++ objectId :+ "partial",
+        queryParameters = queryParameters,
+        body = Some(write(body)),
+        isSearch = false
     )
   }
 
 }
 
-case class PartialUpdateObjectDefinition(index: Option[String] = None,
-                                         objectId: Option[String] = None,
-                                         attribute: Option[String] = None,
-                                         value: Option[Any] = None)(implicit val formats: Formats) extends Definition {
+case class PartialUpdateObjectDefinition(
+    index: Option[String] = None,
+    objectId: Option[String] = None,
+    attribute: Option[String] = None,
+    value: Option[Any] = None)(implicit val formats: Formats)
+    extends Definition {
 
-  def ofObjectId(objectId: String): PartialUpdateObjectDefinition = copy(objectId = Some(objectId))
+  def ofObjectId(objectId: String): PartialUpdateObjectDefinition =
+    copy(objectId = Some(objectId))
 
-  def value(value: Any): PartialUpdateObjectDefinition = copy(value = Some(value))
+  def value(value: Any): PartialUpdateObjectDefinition =
+    copy(value = Some(value))
 
-  def from(index: String): PartialUpdateObjectDefinition = copy(index = Some(index))
+  def from(index: String): PartialUpdateObjectDefinition =
+    copy(index = Some(index))
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
-      attribute.get -> value
+        attribute.get -> value
     )
 
     HttpPayload(
-      POST,
-      Seq("1", "indexes") ++ index ++ objectId :+ "partial",
-      body = Some(write(body)),
-      isSearch = false
+        POST,
+        Seq("1", "indexes") ++ index ++ objectId :+ "partial",
+        body = Some(write(body)),
+        isSearch = false
     )
   }
 
@@ -135,14 +150,16 @@ trait PartialUpdateObjectDsl {
   case object increment {
 
     def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
-      PartialUpdateObjectOperationDefinition(Increment, attribute = Some(attribute))
+      PartialUpdateObjectOperationDefinition(Increment,
+                                             attribute = Some(attribute))
 
   }
 
   case object decrement {
 
     def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
-      PartialUpdateObjectOperationDefinition(Decrement, attribute = Some(attribute))
+      PartialUpdateObjectOperationDefinition(Decrement,
+                                             attribute = Some(attribute))
 
   }
 
@@ -178,15 +195,21 @@ trait PartialUpdateObjectDsl {
 
   }
 
-  implicit object PartialUpdateObjectOperationExecutable extends Executable[PartialUpdateObjectOperationDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: PartialUpdateObjectOperationDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+  implicit object PartialUpdateObjectOperationExecutable
+      extends Executable[PartialUpdateObjectOperationDefinition, Task] {
+    override def apply(client: AlgoliaClient,
+                       query: PartialUpdateObjectOperationDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
   }
 
-  implicit object PartialUpdateObjectExecutable extends Executable[PartialUpdateObjectDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: PartialUpdateObjectDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] query.build()
+  implicit object PartialUpdateObjectExecutable
+      extends Executable[PartialUpdateObjectDefinition, Task] {
+    override def apply(client: AlgoliaClient,
+                       query: PartialUpdateObjectDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] query.build()
     }
   }
 

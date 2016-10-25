@@ -39,21 +39,20 @@ class BatchTest extends AlgoliaTest {
 
       it("should index multiple objects") {
         batch(
-          index into "test" `object` BasicObject("name1", 1),
-          index into "tutu" objects Seq(BasicObject("name2", 2)),
-          index into "test" objectId "oid1" `object` BasicObject("name3", 3),
-          index into "tutu" objects Map("oid2" -> BasicObject("name4", 4))
+            index into "test" `object` BasicObject("name1", 1),
+            index into "tutu" objects Seq(BasicObject("name2", 2)),
+            index into "test" objectId "oid1" `object` BasicObject("name3", 3),
+            index into "tutu" objects Map("oid2" -> BasicObject("name4", 4))
         )
       }
 
       it("should call the API") {
         val build = batch(
-          index into "test" `object` BasicObject("name1", 1),
-          index into "test" objectId "oid1" `object` BasicObject("name3", 3)
+            index into "test" `object` BasicObject("name1", 1),
+            index into "test" objectId "oid1" `object` BasicObject("name3", 3)
         ).build()
 
-        val body =
-          """
+        val body = """
             | {
             |   "requests":[
             |     {
@@ -77,23 +76,22 @@ class BatchTest extends AlgoliaTest {
           """.stripMargin.split("\n").map(_.trim).mkString
 
         build should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "*", "batch"),
-            body = Some(body),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "indexes", "*", "batch"),
+                body = Some(body),
+                isSearch = false
+            )
         )
       }
 
       it("should call the API for batches of batches") {
         val build = batch(
-          index into "tutu" objects Seq(BasicObject("name2", 2)),
-          index into "tutu" objects Map("oid4" -> BasicObject("name4", 4))
+            index into "tutu" objects Seq(BasicObject("name2", 2)),
+            index into "tutu" objects Map("oid4" -> BasicObject("name4", 4))
         ).build()
 
-        val body =
-          """
+        val body = """
             | {
             |   "requests":[
             |     {
@@ -117,12 +115,12 @@ class BatchTest extends AlgoliaTest {
           """.stripMargin.split("\n").map(_.trim).mkString
 
         build should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "*", "batch"),
-            body = Some(body),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "indexes", "*", "batch"),
+                body = Some(body),
+                isSearch = false
+            )
         )
       }
     }
@@ -131,19 +129,18 @@ class BatchTest extends AlgoliaTest {
 
       it("should clear multiple indices") {
         batch(
-          clear index "test1",
-          clear index "test2"
+            clear index "test1",
+            clear index "test2"
         )
       }
 
       it("should call the API") {
         val build = batch(
-          clear index "test1",
-          clear index "test2"
+            clear index "test1",
+            clear index "test2"
         ).build()
 
-        val body =
-          """
+        val body = """
             | {
             |   "requests":[
             |     {
@@ -158,12 +155,12 @@ class BatchTest extends AlgoliaTest {
           """.stripMargin.split("\n").map(_.trim).mkString
 
         build should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "*", "batch"),
-            body = Some(body),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "indexes", "*", "batch"),
+                body = Some(body),
+                isSearch = false
+            )
         )
       }
 
@@ -173,19 +170,18 @@ class BatchTest extends AlgoliaTest {
 
       it("should deletes multiple objects") {
         batch(
-          delete from "test1" objectId "1",
-          delete from "test2" objectId "2"
+            delete from "test1" objectId "1",
+            delete from "test2" objectId "2"
         )
       }
 
       it("should call the API") {
         val build = batch(
-          delete from "test1" objectId "1",
-          delete from "test2" objectId "2"
+            delete from "test1" objectId "1",
+            delete from "test2" objectId "2"
         ).build()
 
-        val body =
-          """
+        val body = """
             | {
             |   "requests":[
             |     {
@@ -202,12 +198,12 @@ class BatchTest extends AlgoliaTest {
           """.stripMargin.split("\n").map(_.trim).mkString
 
         build should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "*", "batch"),
-            body = Some(body),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "indexes", "*", "batch"),
+                body = Some(body),
+                isSearch = false
+            )
         )
       }
 
@@ -217,27 +213,26 @@ class BatchTest extends AlgoliaTest {
 
       it("should update fields") {
         batch(
-          increment attribute "toto" by 1 from "index1" ofObjectId "myId",
-          decrement attribute "toto" by 1 ofObjectId "myId" from "index2",
-          add value "truc" inAttribute "toto" ofObjectId "myId" from "index3",
-          remove value "truc" inAttribute "toto" ofObjectId "myId" from "index4",
-          addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index5",
-          increment attribute "toto" by 1 from "index6" ofObjectId "1" createIfNotExists false
+            increment attribute "toto" by 1 from "index1" ofObjectId "myId",
+            decrement attribute "toto" by 1 ofObjectId "myId" from "index2",
+            add value "truc" inAttribute "toto" ofObjectId "myId" from "index3",
+            remove value "truc" inAttribute "toto" ofObjectId "myId" from "index4",
+            addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index5",
+            increment attribute "toto" by 1 from "index6" ofObjectId "1" createIfNotExists false
         )
       }
 
       it("should call the API") {
         val build = batch(
-          increment attribute "att1" by 1 from "index1" ofObjectId "1",
-          decrement attribute "att2" by 1 ofObjectId "2" from "index2",
-          add value "truc" inAttribute "att3" ofObjectId "3" from "index3",
-          remove value "truc" inAttribute "att4" ofObjectId "4" from "index4",
-          addUnique value "truc" inAttribute "att5" ofObjectId "5" from "index5",
-          increment attribute "att6" by 1 from "index6" ofObjectId "6" createIfNotExists false
+            increment attribute "att1" by 1 from "index1" ofObjectId "1",
+            decrement attribute "att2" by 1 ofObjectId "2" from "index2",
+            add value "truc" inAttribute "att3" ofObjectId "3" from "index3",
+            remove value "truc" inAttribute "att4" ofObjectId "4" from "index4",
+            addUnique value "truc" inAttribute "att5" ofObjectId "5" from "index5",
+            increment attribute "att6" by 1 from "index6" ofObjectId "6" createIfNotExists false
         ).build()
 
-        val body =
-          """
+        val body = """
             | {
             |   "requests":[
             |     {
@@ -306,12 +301,12 @@ class BatchTest extends AlgoliaTest {
           """.stripMargin.split("\n").map(_.trim).mkString
 
         build should be(
-          HttpPayload(
-            POST,
-            List("1", "indexes", "*", "batch"),
-            body = Some(body),
-            isSearch = false
-          )
+            HttpPayload(
+                POST,
+                List("1", "indexes", "*", "batch"),
+                body = Some(body),
+                isSearch = false
+            )
         )
       }
 

@@ -41,16 +41,15 @@ case class SearchResult(hits: Seq[JObject],
 
   implicit val formats = org.json4s.DefaultFormats
 
-  def asHit[T <: Hit : Manifest]: Seq[T] = hits.map(_.extract[T])
+  def asHit[T <: Hit: Manifest]: Seq[T] = hits.map(_.extract[T])
 
   def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  def asWithObjectID[T <: ObjectID : Manifest]: Seq[T] = hits.map(_.extract[T])
+  def asWithObjectID[T <: ObjectID: Manifest]: Seq[T] = hits.map(_.extract[T])
 
 }
 
-case class SearchSynonymResult(hits: Seq[AbstractSynonym],
-                               nbHits: Int)
+case class SearchSynonymResult(hits: Seq[AbstractSynonym], nbHits: Int)
 
 case class MultiQueriesResult(results: Seq[SearchResult])
 

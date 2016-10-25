@@ -25,7 +25,10 @@
 
 package algolia.objects
 
-case class InsideBoundingBox(p1Lat: String, p1Lng: String, p2Lat: String, p2Lng: String) {
+case class InsideBoundingBox(p1Lat: String,
+                             p1Lng: String,
+                             p2Lat: String,
+                             p2Lng: String) {
 
   override def toString = s"$p1Lat,$p1Lng,$p2Lat,$p2Lng"
 

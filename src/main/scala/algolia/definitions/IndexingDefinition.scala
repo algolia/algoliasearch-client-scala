@@ -33,17 +33,22 @@ import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexingDefinition(index: String,
-                              objectId: Option[String] = None,
-                              obj: Option[AnyRef] = None)(implicit val formats: Formats) extends Definition {
+case class IndexingDefinition(
+    index: String,
+    objectId: Option[String] = None,
+    obj: Option[AnyRef] = None)(implicit val formats: Formats)
+    extends Definition {
 
   def objects(objectsWithIds: Map[String, AnyRef]): IndexingBatchDefinition =
-    IndexingBatchDefinition(index, objectsWithIds.map { case (oid, o) =>
-      IndexingDefinition(index, Some(oid), Some(o))
+    IndexingBatchDefinition(index, objectsWithIds.map {
+      case (oid, o) =>
+        IndexingDefinition(index, Some(oid), Some(o))
     })
 
   def objects(objects: Traversable[AnyRef]): IndexingBatchDefinition =
-    IndexingBatchDefinition(index, objects.map { obj => copy(index = index, obj = Some(obj)) })
+    IndexingBatchDefinition(index, objects.map { obj =>
+      copy(index = index, obj = Some(obj))
+    })
 
   def objectId(objectId: String): IndexingDefinition =
     copy(objectId = Some(objectId))
@@ -61,7 +66,10 @@ case class IndexingDefinition(index: String,
       case None => http.POST
     }
 
-    HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body, isSearch = false)
+    HttpPayload(verb,
+                Seq("1", "indexes", index) ++ objectId,
+                body = body,
+                isSearch = false)
   }
 }
 
@@ -75,9 +83,11 @@ trait IndexingDsl {
 
   }
 
-  implicit object IndexingDefinitionExecutable extends Executable[IndexingDefinition, TaskIndexing] {
-    override def apply(client: AlgoliaClient, query: IndexingDefinition)(implicit executor: ExecutionContext): Future[TaskIndexing] = {
-      client request[TaskIndexing] query.build()
+  implicit object IndexingDefinitionExecutable
+      extends Executable[IndexingDefinition, TaskIndexing] {
+    override def apply(client: AlgoliaClient, query: IndexingDefinition)(
+        implicit executor: ExecutionContext): Future[TaskIndexing] = {
+      client request [TaskIndexing] query.build()
     }
   }
 

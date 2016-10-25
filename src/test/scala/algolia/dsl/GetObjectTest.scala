@@ -55,8 +55,7 @@ class GetObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      val body =
-        """
+      val body = """
           |{
           | "requests":[
           |   {
@@ -70,10 +69,12 @@ class GetObjectTest extends AlgoliaTest {
           |}
         """.stripMargin.split("\n").map(_.trim).mkString
 
-      val payload = HttpPayload(POST, Seq("1", "indexes", "*", "objects"), body = Some(body))
-      (get from "test" objectIds Seq("myId1", "myId2")).build() should be(payload)
+      val payload = HttpPayload(POST,
+                                Seq("1", "indexes", "*", "objects"),
+                                body = Some(body))
+      (get from "test" objectIds Seq("myId1", "myId2")).build() should be(
+          payload)
     }
-
 
   }
 

@@ -39,12 +39,12 @@ class MoveIndexTest extends AlgoliaTest {
 
     it("should call API") {
       (move index "toto" to "tata").build() should be(
-        HttpPayload(
-          POST,
-          Seq("1", "indexes", "toto", "operation"),
-          body = Some("{\"operation\":\"move\",\"destination\":\"tata\"}"),
-          isSearch = false
-        )
+          HttpPayload(
+              POST,
+              Seq("1", "indexes", "toto", "operation"),
+              body = Some("{\"operation\":\"move\",\"destination\":\"tata\"}"),
+              isSearch = false
+          )
       )
     }
   }

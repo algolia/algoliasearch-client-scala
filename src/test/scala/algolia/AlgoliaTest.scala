@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaTest
-  extends FunSpec
+    extends FunSpec
     with Matchers
     with BeforeAndAfter
     with Inspectors
@@ -48,12 +48,16 @@ class AlgoliaTest
   val applicationId = System.getenv("APPLICATION_ID")
   val apiKey = System.getenv("API_KEY")
   val client = new AlgoliaClient(applicationId, apiKey) {
-    override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(10000, 10000, 10000, 10000)
+    override val httpClient: AlgoliaHttpClient =
+      AlgoliaHttpClient(10000, 10000, 10000, 10000)
   }
 
-  implicit val patience = PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
+  implicit val patience =
+    PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
 
-  def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(implicit ec: ExecutionContext) = {
+  def taskShouldBeCreatedAndWaitForIt(
+      task: Future[AlgoliaTask],
+      index: String)(implicit ec: ExecutionContext) = {
     val t: AlgoliaTask = whenReady(task) { result =>
       result.idToWaitFor should not be 0
       result //for getting it after
@@ -70,10 +74,14 @@ class AlgoliaTest
 
   def clearIndices(indices: String*) = {
     val del = client.execute {
-      batch(indices.map { i => delete index i })
+      batch(indices.map { i =>
+        delete index i
+      })
     }
 
-    whenReady(del) { res => res }
+    whenReady(del) { res =>
+      res
+    }
   }
 
 }

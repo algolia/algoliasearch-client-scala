@@ -35,22 +35,29 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexSettingsDefinition(index: String)(implicit val formats: Formats) extends Definition {
+case class IndexSettingsDefinition(index: String)(
+    implicit val formats: Formats)
+    extends Definition {
 
-  def `with`(settings: IndexSettings) = IndexChangeSettingsDefinition(index, settings)
+  def `with`(settings: IndexSettings) =
+    IndexChangeSettingsDefinition(index, settings)
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-      GET,
-      Seq("1", "indexes", index, "settings"),
-      queryParameters = Some(Map("getVersion" -> "2")),
-      isSearch = true
+        GET,
+        Seq("1", "indexes", index, "settings"),
+        queryParameters = Some(Map("getVersion" -> "2")),
+        isSearch = true
     )
   }
 
 }
 
-case class IndexChangeSettingsDefinition(index: String, settings: IndexSettings, forward: Option[ForwardToReplicas] = None)(implicit val formats: Formats) extends Definition {
+case class IndexChangeSettingsDefinition(index: String,
+                                         settings: IndexSettings,
+                                         forward: Option[ForwardToReplicas] =
+                                           None)(implicit val formats: Formats)
+    extends Definition {
 
   def and(forward: ForwardToReplicas) = copy(forward = Some(forward))
 
@@ -62,11 +69,11 @@ case class IndexChangeSettingsDefinition(index: String, settings: IndexSettings,
     }
 
     HttpPayload(
-      PUT,
-      Seq("1", "indexes", index, "settings"),
-      body = Some(write(settings)),
-      queryParameters = queryParameters,
-      isSearch = false
+        PUT,
+        Seq("1", "indexes", index, "settings"),
+        body = Some(write(settings)),
+        queryParameters = queryParameters,
+        isSearch = false
     )
   }
 }
@@ -87,15 +94,21 @@ trait IndexSettingsDsl {
 
   }
 
-  implicit object IndexSettingsDefinitionExecutable extends Executable[IndexSettingsDefinition, IndexSettings] {
-    override def apply(client: AlgoliaClient, settings: IndexSettingsDefinition)(implicit executor: ExecutionContext): Future[IndexSettings] = {
-      client request[IndexSettings] settings.build()
+  implicit object IndexSettingsDefinitionExecutable
+      extends Executable[IndexSettingsDefinition, IndexSettings] {
+    override def apply(client: AlgoliaClient,
+                       settings: IndexSettingsDefinition)(
+        implicit executor: ExecutionContext): Future[IndexSettings] = {
+      client request [IndexSettings] settings.build()
     }
   }
 
-  implicit object IndexChangeSettingsDefinitionExecutable extends Executable[IndexChangeSettingsDefinition, Task] {
-    override def apply(client: AlgoliaClient, settings: IndexChangeSettingsDefinition)(implicit executor: ExecutionContext): Future[Task] = {
-      client request[Task] settings.build()
+  implicit object IndexChangeSettingsDefinitionExecutable
+      extends Executable[IndexChangeSettingsDefinition, Task] {
+    override def apply(client: AlgoliaClient,
+                       settings: IndexChangeSettingsDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client request [Task] settings.build()
     }
   }
 
