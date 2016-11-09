@@ -67,7 +67,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new QuerySynonymsSerializer +
       new AbstractSynonymSerializer +
       new DistinctSerializer +
-      new RemoveStopWordsSerializer
+      new RemoveStopWordsSerializer +
+      new IgnorePluralsSerializer
 
   val searchableAttributesUnordered = """^unordered\(([\w-]+)\)$""".r
   val searchableAttributesAttributes = """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
@@ -290,6 +291,18 @@ object AlgoliaDsl extends AlgoliaDsl {
           case RemoveStopWords.`true` => JBool(true)
           case RemoveStopWords.`false` => JBool(false)
           case RemoveStopWords.list(i) => JString(i.mkString(","))
+        }))
+
+  class IgnorePluralsSerializer
+      extends CustomSerializer[IgnorePlurals](format =>
+        ({
+          case JBool(true) => IgnorePlurals.`true`
+          case JBool(false) => IgnorePlurals.`false`
+          case JString(list) => IgnorePlurals.list(list.split(","))
+        }, {
+          case IgnorePlurals.`true` => JBool(true)
+          case IgnorePlurals.`false` => JBool(false)
+          case IgnorePlurals.list(i) => JString(i.mkString(","))
         }))
 
   case object forwardToSlaves extends ForwardToReplicas
