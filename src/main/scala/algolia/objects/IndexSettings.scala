@@ -60,7 +60,7 @@ case class IndexSettings(
     removeWordsIfNoResults: Option[String] = None,
     replaceSynonymsInHighlight: Option[Boolean] = None,
     maxValuesPerFacet: Option[Int] = None,
-    distinct: Option[Int] = None,
+    distinct: Option[Distinct] = None,
     typoTolerance: Option[TypoTolerance] = None,
-    removeStopWords: Option[Boolean] = None,
+    removeStopWords: Option[RemoveStopWords] = None,
     snippetEllipsisText: Option[String] = None)

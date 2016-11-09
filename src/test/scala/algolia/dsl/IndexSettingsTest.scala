@@ -106,7 +106,9 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "asc(att8)",
         |    "desc(att9)"
         |  ],
-        |  "typoTolerance":"strict"
+        |  "distinct":1,
+        |  "typoTolerance":"strict",
+        |  "removeStopWords":"fr,en"
         |}""".stripMargin
 
     it("should deserialize json") {
@@ -139,6 +141,8 @@ class IndexSettingsTest extends AlgoliaTest {
           CustomRanking.desc("att9")
         )))
         i.typoTolerance should be(Some(TypoTolerance.strict))
+        i.distinct should be(Some(Distinct.int(1)))
+        i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
       }
 
     }
@@ -163,7 +167,9 @@ class IndexSettingsTest extends AlgoliaTest {
           CustomRanking.asc("att8"),
           CustomRanking.desc("att9")
         )),
-        typoTolerance = Some(TypoTolerance.strict)
+        typoTolerance = Some(TypoTolerance.strict),
+        distinct = Some(Distinct.int(1)),
+        removeStopWords = Some(RemoveStopWords.list(Seq("fr", "en")))
       )
 
       writePretty(i) should be(json)
