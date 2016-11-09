@@ -65,7 +65,9 @@ object AlgoliaDsl extends AlgoliaDsl {
       new TypoToleranceSerializer +
       new AclSerializer +
       new QuerySynonymsSerializer +
-      new AbstractSynonymSerializer
+      new AbstractSynonymSerializer +
+      new DistinctSerializer +
+      new RemoveStopWordsSerializer
 
   val searchableAttributesUnordered = """^unordered\(([\w-]+)\)$""".r
   val searchableAttributesAttributes = """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
@@ -264,6 +266,30 @@ object AlgoliaDsl extends AlgoliaDsl {
             ("objectID" -> oid) ~ ("input" -> i) ~ ("synonyms" -> s) ~ ("type" -> "oneWaySynonym")
           case Synonym.Placeholder(oid, p, r) =>
             ("objectID" -> oid) ~ ("placeholder" -> p) ~ ("replacements" -> r) ~ ("type" -> "placeholder")
+        }))
+
+  class DistinctSerializer
+      extends CustomSerializer[Distinct](format =>
+        ({
+          case JBool(true) => Distinct.`true`
+          case JBool(false) => Distinct.`false`
+          case JInt(i) => Distinct.int(i.toInt)
+        }, {
+          case Distinct.`true` => JBool(true)
+          case Distinct.`false` => JBool(false)
+          case Distinct.int(i) => JInt(i)
+        }))
+
+  class RemoveStopWordsSerializer
+      extends CustomSerializer[RemoveStopWords](format =>
+        ({
+          case JBool(true) => RemoveStopWords.`true`
+          case JBool(false) => RemoveStopWords.`false`
+          case JString(list) => RemoveStopWords.list(list.split(","))
+        }, {
+          case RemoveStopWords.`true` => JBool(true)
+          case RemoveStopWords.`false` => JBool(false)
+          case RemoveStopWords.list(i) => JString(i.mkString(","))
         }))
 
   case object forwardToSlaves extends ForwardToReplicas

@@ -70,7 +70,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  tagFilters: Option[Seq[String]] = None,
 
                  /* DISTINCT PARAMETER */
-                 distinct: Option[Int] = None,
+                 distinct: Option[Distinct] = None,
 
                  /* FACETING PARAMETERS */
                  facets: Option[Seq[String]] = None,
@@ -152,7 +152,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "tagFilters" -> tagFilters.map(_.mkString(",")),
 
       /* DISTINCT PARAMETER */
-      "distinct" -> distinct.map(_.toString),
+      "distinct" -> distinct.map(_.value),
 
       /* FACETING PARAMETERS */
       "facets" -> facets.map(_.mkString(",")),
