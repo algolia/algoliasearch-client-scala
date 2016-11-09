@@ -43,11 +43,11 @@ class SynonymsTest extends AlgoliaTest {
 
       it("should call API") {
         (get synonym "syn_id" from "toto").build() should be(
-            HttpPayload(
-                GET,
-                Seq("1", "indexes", "toto", "synonyms", "syn_id"),
-                isSearch = true
-            )
+          HttpPayload(
+            GET,
+            Seq("1", "indexes", "toto", "synonyms", "syn_id"),
+            isSearch = true
+          )
         )
       }
 
@@ -63,12 +63,12 @@ class SynonymsTest extends AlgoliaTest {
       it("should call API") {
         (delete synonym "syn_id" from "toto" and forwardToReplicas)
           .build() should be(
-            HttpPayload(
-                DELETE,
-                Seq("1", "indexes", "toto", "synonyms", "syn_id"),
-                queryParameters = Some(Map("forwardToReplicas" -> "true")),
-                isSearch = false
-            )
+          HttpPayload(
+            DELETE,
+            Seq("1", "indexes", "toto", "synonyms", "syn_id"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            isSearch = false
+          )
         )
       }
 
@@ -85,12 +85,12 @@ class SynonymsTest extends AlgoliaTest {
       it("should call API") {
         (clear synonyms AlgoliaDsl.of index "toto" and forwardToReplicas)
           .build() should be(
-            HttpPayload(
-                POST,
-                Seq("1", "indexes", "toto", "synonyms", "clear"),
-                queryParameters = Some(Map("forwardToReplicas" -> "true")),
-                isSearch = false
-            )
+          HttpPayload(
+            POST,
+            Seq("1", "indexes", "toto", "synonyms", "clear"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            isSearch = false
+          )
         )
       }
 
@@ -100,25 +100,25 @@ class SynonymsTest extends AlgoliaTest {
 
       it("should search synonyms of an index") {
         search synonyms in index "toto" query QuerySynonyms(
-            query = "s",
-            types = Some(Seq(SynonymType.placeholder, SynonymType.synonym)),
-            page = Some(1),
-            hitsPerPage = Some(1))
+          query = "s",
+          types = Some(Seq(SynonymType.placeholder, SynonymType.synonym)),
+          page = Some(1),
+          hitsPerPage = Some(1))
       }
 
       it("should call API") {
         (search synonyms in index "toto" query QuerySynonyms(
-                query = "s",
-                types = Some(Seq(SynonymType.placeholder, SynonymType.synonym)),
-                page = Some(1),
-                hitsPerPage = Some(1))).build() should be(
-            HttpPayload(
-                POST,
-                Seq("1", "indexes", "toto", "synonyms", "search"),
-                body = Some(
-                    """{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""),
-                isSearch = true
-            )
+          query = "s",
+          types = Some(Seq(SynonymType.placeholder, SynonymType.synonym)),
+          page = Some(1),
+          hitsPerPage = Some(1))).build() should be(
+          HttpPayload(
+            POST,
+            Seq("1", "indexes", "toto", "synonyms", "search"),
+            body = Some(
+              """{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""),
+            isSearch = true
+          )
         )
       }
 
@@ -134,14 +134,14 @@ class SynonymsTest extends AlgoliaTest {
       it("should call API") {
         (save synonym Placeholder("oid", "1", Seq("2", "3")) inIndex "toto" and forwardToReplicas)
           .build() should be(
-            HttpPayload(
-                PUT,
-                Seq("1", "indexes", "toto", "synonyms", "oid"),
-                queryParameters = Some(Map("forwardToReplicas" -> "true")),
-                body = Some(
-                    """{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}"""),
-                isSearch = false
-            )
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "synonyms", "oid"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}"""),
+            isSearch = false
+          )
         )
       }
 
@@ -158,16 +158,15 @@ class SynonymsTest extends AlgoliaTest {
       it("should call API") {
         (save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and replaceExistingSynonyms)
           .build() should be(
-            HttpPayload(
-                POST,
-                Seq("1", "indexes", "toto", "synonyms", "batch"),
-                queryParameters =
-                  Some(Map("forwardToReplicas" -> "true",
-                           "replaceExistingSynonyms" -> "true")),
-                body = Some(
-                    """[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""),
-                isSearch = false
-            )
+          HttpPayload(
+            POST,
+            Seq("1", "indexes", "toto", "synonyms", "batch"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true",
+                                       "replaceExistingSynonyms" -> "true")),
+            body = Some(
+              """[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""),
+            isSearch = false
+          )
         )
       }
     }

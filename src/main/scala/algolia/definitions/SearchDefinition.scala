@@ -46,10 +46,10 @@ case class SearchDefinition(index: String, query: Option[Query] = None)(
     val body = Map("params" -> query.map(_.toParam))
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes", index, "query"),
-        body = Some(write(body)),
-        isSearch = true
+      POST,
+      Seq("1", "indexes", index, "query"),
+      body = Some(write(body)),
+      isSearch = true
     )
   }
 }
@@ -68,13 +68,13 @@ case class SearchFacetDefinition(
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
-        "params" -> query.copy(facetQuery = Some(facetQuery)).toParam)
+      "params" -> query.copy(facetQuery = Some(facetQuery)).toParam)
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes", index, "facets", facetName, "query"),
-        body = Some(write(body)),
-        isSearch = true
+      POST,
+      Seq("1", "indexes", index, "facets", facetName, "query"),
+      body = Some(write(body)),
+      isSearch = true
     )
   }
 }

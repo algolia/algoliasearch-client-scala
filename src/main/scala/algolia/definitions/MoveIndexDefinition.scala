@@ -45,10 +45,10 @@ case class MoveIndexDefinition(
     val operation = IndexOperation("move", destination)
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes", source, "operation"),
-        body = Some(write(operation)),
-        isSearch = false
+      POST,
+      Seq("1", "indexes", source, "operation"),
+      body = Some(write(operation)),
+      isSearch = false
     )
   }
 }

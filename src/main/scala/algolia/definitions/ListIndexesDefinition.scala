@@ -34,9 +34,9 @@ import scala.concurrent.{ExecutionContext, Future}
 case class ListIndexesDefinition() extends Definition {
 
   override private[algolia] def build() = HttpPayload(
-      GET,
-      Seq("1", "indexes"),
-      isSearch = true
+    GET,
+    Seq("1", "indexes"),
+    isSearch = true
   )
 
 }

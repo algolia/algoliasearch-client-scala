@@ -43,9 +43,9 @@ case class GetSynonymDefinition(synId: String, index: Option[String] = None)(
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-        GET,
-        Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
-        isSearch = true
+      GET,
+      Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
+      isSearch = true
     )
   }
 
@@ -69,10 +69,10 @@ case class DeleteSynonymDefinition(
     }
 
     HttpPayload(
-        DELETE,
-        Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
-        queryParameters = queryParameters,
-        isSearch = false
+      DELETE,
+      Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
+      queryParameters = queryParameters,
+      isSearch = false
     )
   }
 
@@ -97,10 +97,10 @@ case class ClearSynonymsDefinition(
     }
 
     HttpPayload(
-        POST,
-        path,
-        queryParameters = queryParameters,
-        isSearch = false
+      POST,
+      path,
+      queryParameters = queryParameters,
+      isSearch = false
     )
   }
 }
@@ -126,11 +126,11 @@ case class SaveSynonymDefinition(
     }
 
     HttpPayload(
-        PUT,
-        path,
-        queryParameters = queryParameters,
-        body = Some(write(synonym)),
-        isSearch = false
+      PUT,
+      path,
+      queryParameters = queryParameters,
+      body = Some(write(synonym)),
+      isSearch = false
     )
   }
 }
@@ -154,14 +154,14 @@ case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym],
     var queryParameters = Map.empty[String, String]
     forward.foreach(_ => queryParameters += ("forwardToReplicas" -> "true"))
     replace.foreach(_ =>
-          queryParameters += ("replaceExistingSynonyms" -> "true"))
+      queryParameters += ("replaceExistingSynonyms" -> "true"))
 
     HttpPayload(
-        POST,
-        path,
-        queryParameters = Some(queryParameters),
-        body = Some(write(synonyms)),
-        isSearch = false
+      POST,
+      path,
+      queryParameters = Some(queryParameters),
+      body = Some(write(synonyms)),
+      isSearch = false
     )
   }
 }
@@ -177,10 +177,10 @@ case class SearchSynonymsDefinition(
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-        POST,
-        Seq("1", "indexes") ++ indx ++ Seq("synonyms", "search"),
-        body = Some(write(query)),
-        isSearch = true
+      POST,
+      Seq("1", "indexes") ++ indx ++ Seq("synonyms", "search"),
+      body = Some(write(query)),
+      isSearch = true
     )
   }
 }

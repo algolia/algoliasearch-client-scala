@@ -79,7 +79,7 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
       val delete = helper.deleteByQuery[Value]("testBrowseSync", query)
       val tasksToWait = whenReady(delete) { res =>
         Future.traverse(res)(i =>
-              client.execute(waitFor task i from "testBrowseSync"))
+          client.execute(waitFor task i from "testBrowseSync"))
       }
 
       whenReady(tasksToWait) { res =>

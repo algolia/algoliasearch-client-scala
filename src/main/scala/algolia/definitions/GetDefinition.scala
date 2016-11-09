@@ -50,9 +50,9 @@ case class GetObjectDefinition(
 
   override private[algolia] def build(): HttpPayload =
     HttpPayload(
-        GET,
-        Seq("1", "indexes") ++ index ++ oid,
-        isSearch = true
+      GET,
+      Seq("1", "indexes") ++ index ++ oid,
+      isSearch = true
     )
 }
 
@@ -67,10 +67,10 @@ case class GetObjectsDefinition(
     }
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes", "*", "objects"),
-        body = Some(write(Requests(requests))),
-        isSearch = true
+      POST,
+      Seq("1", "indexes", "*", "objects"),
+      body = Some(write(Requests(requests))),
+      isSearch = true
     )
   }
 

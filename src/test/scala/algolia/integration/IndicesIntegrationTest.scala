@@ -38,14 +38,14 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
   after {
     clearIndices(
-        "index1",
-        "index2",
-        "indexToDelete",
-        "indexToClear",
-        "indexToCopy_before",
-        "indexToCopy_after",
-        "indexToMove_before",
-        "indexToMove_after"
+      "index1",
+      "index2",
+      "indexToDelete",
+      "indexToClear",
+      "indexToCopy_before",
+      "indexToCopy_after",
+      "indexToMove_before",
+      "indexToMove_after"
     )
   }
 
@@ -76,8 +76,8 @@ class IndicesIntegrationTest extends AlgoliaTest {
   it("should list indices") {
     val create: Future[TasksMultipleIndex] = client.execute {
       batch(
-          index into "index1" `object` Obj("1"),
-          index into "index2" `object` Obj("1")
+        index into "index1" `object` Obj("1"),
+        index into "index2" `object` Obj("1")
       )
     }
 
@@ -180,8 +180,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
     }
 
     whenReady(indices) { result =>
-      result.items
-        .map(_.name) should (contain("indexToMove_after") and not contain "indexToMove_before")
+      result.items.map(_.name) should (contain("indexToMove_after") and not contain "indexToMove_before")
     }
   }
 

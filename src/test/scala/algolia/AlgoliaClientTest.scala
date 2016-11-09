@@ -51,61 +51,61 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     it("should set user agent") {
       apiClient.userAgent should (startWith("Algolia for Scala (1.") and include(
-              "; JVM (1.8") and include("; Scala (2.11"))
+        "; JVM (1.8") and include("; Scala (2.11"))
     }
 
     it("should set Content-Type header") {
       apiClient.headers should contain(
-          "Content-Type" -> "application/json; charset=UTF-8")
+        "Content-Type" -> "application/json; charset=UTF-8")
     }
 
     it("should set indexing hosts") {
       apiClient.indexingHosts should equal(
-          Seq(
-              "https://APPID.algolia.net",
-              "https://APPID-1.algolianet.com",
-              "https://APPID-2.algolianet.com",
-              "https://APPID-3.algolianet.com"
-          ))
+        Seq(
+          "https://APPID.algolia.net",
+          "https://APPID-1.algolianet.com",
+          "https://APPID-2.algolianet.com",
+          "https://APPID-3.algolianet.com"
+        ))
     }
 
     it("should set query hosts") {
       apiClient.queryHosts should equal(
-          Seq(
-              "https://APPID-dsn.algolia.net",
-              "https://APPID-1.algolianet.com",
-              "https://APPID-2.algolianet.com",
-              "https://APPID-3.algolianet.com"
-          ))
+        Seq(
+          "https://APPID-dsn.algolia.net",
+          "https://APPID-1.algolianet.com",
+          "https://APPID-2.algolianet.com",
+          "https://APPID-3.algolianet.com"
+        ))
     }
 
     it("should throw exception if `null` APP_ID") {
       val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(
-            null,
-            "APIKEY")
+          null,
+          "APIKEY")
       thrown.getMessage should equal(
-          "'applicationId' is probably too short: 'null'")
+        "'applicationId' is probably too short: 'null'")
     }
 
     it("should throw exception if `` APP_ID") {
       val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(
-            "",
-            "APIKEY")
+          "",
+          "APIKEY")
       thrown.getMessage should equal(
-          "'applicationId' is probably too short: ''")
+        "'applicationId' is probably too short: ''")
     }
 
     it("should throw exception if `null` APIKEY") {
       val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(
-            "APP_ID",
-            null)
+          "APP_ID",
+          null)
       thrown.getMessage should equal("'apiKey' is probably too short: 'null'")
     }
 
     it("should throw exception if `` APIKEY") {
       val thrown = the[AlgoliaClientException] thrownBy new AlgoliaClient(
-            "APP_ID",
-            "")
+          "APP_ID",
+          "")
       thrown.getMessage should equal("'apiKey' is probably too short: ''")
     }
 
@@ -144,26 +144,26 @@ class AlgoliaClientTest extends AlgoliaTest {
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-dsn.algolia.net", emptyHeaders, payload, *, *)
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-dsn.algolia.net", emptyHeaders, payload, *, *)
       def mockRequest1 =
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *)
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *)
       def mockRequest2 =
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-2.algolianet.com", emptyHeaders, payload, *, *)
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-2.algolianet.com", emptyHeaders, payload, *, *)
       def mockRequest3 =
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *)
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *)
 
       val `4XXRequest`: Future[Result] =
         Future.failed(APIClientException(404, "404"))
@@ -217,10 +217,9 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest3 returning timeoutRequest
 
         whenReady(
-            apiClient
-              .request[Result](HttpPayload(http.GET, Seq("/")))
-              .failed) { e =>
-          e shouldBe a[AlgoliaClientException]
+          apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) {
+          e =>
+            e shouldBe a[AlgoliaClientException]
         }
       }
 
@@ -228,11 +227,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequestDsn returning `4XXRequest`
 
         whenReady(
-            apiClient
-              .request[Result](HttpPayload(http.GET, Seq("/")))
-              .failed) { e =>
-          e shouldBe a[AlgoliaClientException]
-          e should have message "Failure \"404\", response status: 404"
+          apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) {
+          e =>
+            e shouldBe a[AlgoliaClientException]
+            e should have message "Failure \"404\", response status: 404"
         }
       }
 
@@ -241,11 +239,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest1 returning `4XXRequest`
 
         whenReady(
-            apiClient
-              .request[Result](HttpPayload(http.GET, Seq("/")))
-              .failed) { e =>
-          e shouldBe a[AlgoliaClientException]
-          e should have message "Failure \"404\", response status: 404"
+          apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) {
+          e =>
+            e shouldBe a[AlgoliaClientException]
+            e should have message "Failure \"404\", response status: 404"
         }
       }
 
@@ -255,11 +252,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest2 returning `4XXRequest`
 
         whenReady(
-            apiClient
-              .request[Result](HttpPayload(http.GET, Seq("/")))
-              .failed) { e =>
-          e shouldBe a[AlgoliaClientException]
-          e should have message "Failure \"404\", response status: 404"
+          apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) {
+          e =>
+            e shouldBe a[AlgoliaClientException]
+            e should have message "Failure \"404\", response status: 404"
         }
       }
 
@@ -270,11 +266,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest3 returning `4XXRequest`
 
         whenReady(
-            apiClient
-              .request[Result](HttpPayload(http.GET, Seq("/")))
-              .failed) { e =>
-          e shouldBe a[AlgoliaClientException]
-          e should have message "Failure \"404\", response status: 404"
+          apiClient.request[Result](HttpPayload(http.GET, Seq("/"))).failed) {
+          e =>
+            e shouldBe a[AlgoliaClientException]
+            e should have message "Failure \"404\", response status: 404"
         }
       }
     }
@@ -295,27 +290,28 @@ class AlgoliaClientTest extends AlgoliaTest {
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a.algolia.net", emptyHeaders, payload, *, *) returning timeoutRequest
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a.algolia.net", emptyHeaders, payload, *, *) returning timeoutRequest
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning timeoutRequest
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning timeoutRequest
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-2.algolianet.com", emptyHeaders, payload, *, *) returning timeoutRequest
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-2.algolianet.com", emptyHeaders, payload, *, *) returning timeoutRequest
         (mockHttpClient.request[Result](_: String,
                                         _: Map[String, String],
                                         _: HttpPayload)(
-            _: Manifest[Result],
-            _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *) returning Future
+          _: Manifest[Result],
+          _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *) returning Future
           .successful(successfulRequest)
 
-        whenReady(apiClient.request[Result](
-                HttpPayload(http.GET, Seq("/"), isSearch = false))) { result =>
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = false))) { result =>
           result should equal(successfulRequest)
         }
       }
@@ -349,8 +345,8 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskPublished)
 
       val res: Future[TaskStatus] = apiClient.execute {
@@ -366,14 +362,14 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskPublished)
 
       val res: Future[TaskStatus] = apiClient.execute {
@@ -390,42 +386,42 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*2*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*4*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*8*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*16*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskPublished)
 
       val res: Future[TaskStatus] = apiClient.execute {
@@ -442,43 +438,43 @@ class AlgoliaClientTest extends AlgoliaTest {
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*2*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*4*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*8*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*16*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
       /*32*/
       (mockHttpClient.request[TaskStatus](_: String,
                                           _: Map[String, String],
                                           _: HttpPayload)(
-          _: Manifest[TaskStatus],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
+        _: Manifest[TaskStatus],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
 
       val res: Future[TaskStatus] = apiClient.execute {
@@ -498,19 +494,19 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     it("should generate a secured api key") {
       val secureApiKey = apiClient.generateSecuredApiKey(
-          "PRIVATE_API_KEY",
-          Query(tagFilters = Some(Seq("user_42"))))
+        "PRIVATE_API_KEY",
+        Query(tagFilters = Some(Seq("user_42"))))
       secureApiKey should be(
-          "ZWRjMDQyY2Y0MDM1OThiZjM0MmEyM2VlNjVmOWY2YTczYzc3YWJiMzdhMjIzMDY5M2VmY2RjNmQ0MmI5NWU3NHRhZ0ZpbHRlcnM9dXNlcl80Mg==")
+        "ZWRjMDQyY2Y0MDM1OThiZjM0MmEyM2VlNjVmOWY2YTczYzc3YWJiMzdhMjIzMDY5M2VmY2RjNmQ0MmI5NWU3NHRhZ0ZpbHRlcnM9dXNlcl80Mg==")
     }
 
     it("should generate a secured api key with user key") {
       val secureApiKey = apiClient.generateSecuredApiKey(
-          "PRIVATE_API_KEY",
-          Query(tagFilters = Some(Seq("user_42"))),
-          Some("userToken"))
+        "PRIVATE_API_KEY",
+        Query(tagFilters = Some(Seq("user_42"))),
+        Some("userToken"))
       secureApiKey should be(
-          "MDc3N2VlNzkwNDY1MjRjOGFmNGJhYmVmOWI1YTM1YzYxOGQ1NWMzNjBlYWMwM2FmODY0N2VmNjMyOTE5YTAwYnRhZ0ZpbHRlcnM9dXNlcl80MiZ1c2VyVG9rZW49dXNlclRva2Vu")
+        "MDc3N2VlNzkwNDY1MjRjOGFmNGJhYmVmOWI1YTM1YzYxOGQ1NWMzNjBlYWMwM2FmODY0N2VmNjMyOTE5YTAwYnRhZ0ZpbHRlcnM9dXNlcl80MiZ1c2VyVG9rZW49dXNlclRva2Vu")
     }
 
   }

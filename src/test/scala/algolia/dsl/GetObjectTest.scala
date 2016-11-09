@@ -73,7 +73,7 @@ class GetObjectTest extends AlgoliaTest {
                                 Seq("1", "indexes", "*", "objects"),
                                 body = Some(body))
       (get from "test" objectIds Seq("myId1", "myId2")).build() should be(
-          payload)
+        payload)
     }
 
   }

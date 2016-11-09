@@ -49,9 +49,8 @@ scalacOptions ++= Seq("-feature", "-unchecked")
   * see: https://github.com/xerial/sbt-sonatype
   *
   **/
-
 headers := Map(
-  "scala" ->(
+  "scala" -> (
     de.heikoseeberger.sbtheader.HeaderPattern.cStyleBlockComment,
     """|/*
       | * The MIT License (MIT)
@@ -79,14 +78,17 @@ headers := Map(
       | */
       |
       |""".stripMargin
-    )
+  )
 )
 
 lazy val myProject = project
   .in(file("."))
   .enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
   .settings(
-    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoKeys := Seq[BuildInfoKey](name,
+                                       version,
+                                       scalaVersion,
+                                       sbtVersion),
     buildInfoPackage := "algolia"
   )
 
@@ -94,7 +96,9 @@ publishMavenStyle := true
 
 publishArtifact in Test := false
 
-pomIncludeRepository := { _ => false }
+pomIncludeRepository := { _ =>
+  false
+}
 
 pomExtra := {
   <url>https://github.com/algolia/algoliasearch-client-scala</url>
@@ -130,4 +134,5 @@ publishTo := {
   }
 }
 
-addCommandAlias("checkAll", ";clean;compile;test:compile;scalafmt;test:scalafmt")
+addCommandAlias("checkAll",
+                ";clean;compile;test:compile;scalafmt;test:scalafmt")

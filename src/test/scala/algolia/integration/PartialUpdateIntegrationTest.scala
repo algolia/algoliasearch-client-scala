@@ -171,7 +171,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     whenReady(s) { get =>
       get.as[PartialUpdateValue] should equal(
-          PartialUpdateValue("otherOne", "otherValue", "updateValue"))
+        PartialUpdateValue("otherOne", "otherValue", "updateValue"))
     }
   }
 

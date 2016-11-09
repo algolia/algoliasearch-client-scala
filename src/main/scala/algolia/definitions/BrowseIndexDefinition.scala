@@ -47,10 +47,10 @@ case class BrowseIndexDefinition(
     val q = query.getOrElse(Query()).copy(cursor = cursor)
 
     HttpPayload(
-        GET,
-        Seq("1", "indexes", source, "browse"),
-        queryParameters = Some(q.toQueryParam),
-        isSearch = true
+      GET,
+      Seq("1", "indexes", source, "browse"),
+      queryParameters = Some(q.toQueryParam),
+      isSearch = true
     )
   }
 }

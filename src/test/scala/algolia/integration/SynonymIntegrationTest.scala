@@ -72,8 +72,8 @@ class SynonymIntegrationTest extends AlgoliaTest {
 
       val s = client.execute {
         search synonyms in index "indexToSynonym" query QuerySynonyms(
-            "altcorrection1",
-            hitsPerPage = Some(10))
+          "altcorrection1",
+          hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>
@@ -102,8 +102,8 @@ class SynonymIntegrationTest extends AlgoliaTest {
 
       val s = client.execute {
         search synonyms in index "indexToSynonym" query QuerySynonyms(
-            "",
-            hitsPerPage = Some(10))
+          "",
+          hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>
@@ -132,8 +132,8 @@ class SynonymIntegrationTest extends AlgoliaTest {
 
       val s = client.execute {
         search synonyms in index "indexToSynonym" query QuerySynonyms(
-            "",
-            hitsPerPage = Some(10))
+          "",
+          hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>
@@ -143,8 +143,8 @@ class SynonymIntegrationTest extends AlgoliaTest {
 
     it("should batch insert synonyms") {
       val synonymsToInsert = Seq(
-          AltCorrection1("altcorrection1", "p", Seq("a", "b")),
-          OneWaySynonym("one-way", "a", Seq("b"))
+        AltCorrection1("altcorrection1", "p", Seq("a", "b")),
+        OneWaySynonym("one-way", "a", Seq("b"))
       )
 
       val res1 = client.execute {
@@ -155,8 +155,8 @@ class SynonymIntegrationTest extends AlgoliaTest {
 
       val s = client.execute {
         search synonyms in index "indexToSynonym" query QuerySynonyms(
-            "",
-            hitsPerPage = Some(10))
+          "",
+          hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>

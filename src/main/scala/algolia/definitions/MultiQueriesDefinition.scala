@@ -48,18 +48,18 @@ case class MultiQueriesDefinition(definitions: Traversable[SearchDefinition],
       strategy.map(s => Some(Map("strategy" -> s.name))).getOrElse(None)
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes", "*", "queries"),
-        queryParameters = parameters,
-        body = Some(write(MultiQueriesRequests(definitions.map(transform)))),
-        isSearch = true
+      POST,
+      Seq("1", "indexes", "*", "queries"),
+      queryParameters = parameters,
+      body = Some(write(MultiQueriesRequests(definitions.map(transform)))),
+      isSearch = true
     )
   }
 
   private def transform(definition: SearchDefinition): MultiQueriesRequest = {
     MultiQueriesRequest(
-        indexName = definition.index,
-        params = definition.query.map(_.toParam)
+      indexName = definition.index,
+      params = definition.query.map(_.toParam)
     )
   }
 

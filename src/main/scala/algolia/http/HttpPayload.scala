@@ -67,7 +67,7 @@ private[algolia] case class HttpPayload(
     headers.foreach { case (k, v) => builder = builder.addHeader(k, v) }
 
     queryParameters.foreach(
-        _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }
+      _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }
     )
 
     body.foreach(b => builder = builder.setBody(b))
