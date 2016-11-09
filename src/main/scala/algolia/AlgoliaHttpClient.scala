@@ -60,8 +60,7 @@ case class AlgoliaHttpClient(
     .build
 
   val dnsNameResolver = new DnsNameResolverBuilder(
-      new NioEventLoopGroup(1)
-        .next()) //We only need 1 thread for DNS resolution
+    new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
     .channelType(classOf[NioDatagramChannel])
     .queryTimeoutMillis(dnsTimeout)
     .build
@@ -84,8 +83,8 @@ case class AlgoliaHttpClient(
         case 2 => toJson(response).extract[T]
         case 4 =>
           throw APIClientException(
-              response.getStatusCode,
-              (toJson(response) \ "message").extract[String])
+            response.getStatusCode,
+            (toJson(response) \ "message").extract[String])
         case _ => throw UnexpectedResponse(response.getStatusCode)
       }
   }
@@ -116,7 +115,7 @@ case class AlgoliaHttpClient(
 
 case class APIClientException(code: Int, message: String)
     extends Exception(
-        "Failure \"%s\", response status: %d".format(message, code))
+      "Failure \"%s\", response status: %d".format(message, code))
 
 case class UnexpectedResponse(code: Int)
     extends Exception("Unexpected response status: %d".format(code))

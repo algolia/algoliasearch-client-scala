@@ -37,12 +37,12 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
       override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
-          dnsTimeout = 1000
+        dnsTimeout = 1000
       )
 
       override lazy val queryHosts: Seq[String] = Seq(
-          s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
-          s"https://$applicationId-1.algolianet.com"
+        s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
+        s"https://$applicationId-1.algolianet.com"
       )
     }
 
@@ -69,12 +69,12 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
       override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
-          httpConnectTimeout = 1000
+        httpConnectTimeout = 1000
       )
 
       override lazy val queryHosts: Seq[String] = Seq(
-          s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
-          s"https://$applicationId-1.algolianet.com"
+        s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
+        s"https://$applicationId-1.algolianet.com"
       )
     }
 
@@ -101,8 +101,8 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
       override lazy val queryHosts: Seq[String] = Seq(
-          s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
-          s"https://$applicationId-1.algolianet.com"
+        s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
+        s"https://$applicationId-1.algolianet.com"
       )
     }
 
@@ -129,7 +129,7 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
       override lazy val queryHosts: Seq[String] = Seq(
-          s"https://will-not-exists-ever.algolianet.com" //Should return UnknownHostException
+        s"https://will-not-exists-ever.algolianet.com" //Should return UnknownHostException
       )
     }
 

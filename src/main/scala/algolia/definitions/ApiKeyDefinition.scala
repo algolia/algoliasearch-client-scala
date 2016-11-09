@@ -48,9 +48,9 @@ case class GetApiKeyDefinition(keyName: String,
     }
 
     HttpPayload(
-        GET,
-        path,
-        isSearch = false
+      GET,
+      path,
+      isSearch = false
     )
   }
 }
@@ -69,10 +69,10 @@ case class AddApiKeyDefinition(key: ApiKey, indexName: Option[String] = None)(
     }
 
     HttpPayload(
-        POST,
-        path,
-        body = Some(write(key)),
-        isSearch = false
+      POST,
+      path,
+      body = Some(write(key)),
+      isSearch = false
     )
   }
 }
@@ -91,9 +91,9 @@ case class DeleteApiKeyDefinition(keyName: String,
     }
 
     HttpPayload(
-        DELETE,
-        path,
-        isSearch = false
+      DELETE,
+      path,
+      isSearch = false
     )
   }
 }
@@ -116,10 +116,10 @@ case class UpdateApiKeyDefinition(
     }
 
     HttpPayload(
-        PUT,
-        path,
-        body = Some(write(key)),
-        isSearch = false
+      PUT,
+      path,
+      body = Some(write(key)),
+      isSearch = false
     )
   }
 }
@@ -134,9 +134,9 @@ case class GetAllApiKeyDefinition(indexName: Option[String] = None)
     }
 
     HttpPayload(
-        GET,
-        path,
-        isSearch = false
+      GET,
+      path,
+      isSearch = false
     )
   }
 }

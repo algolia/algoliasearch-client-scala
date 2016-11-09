@@ -26,7 +26,11 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.inputs.{AddObjectOperation, BatchOperations, UpdateObjectOperation}
+import algolia.inputs.{
+  AddObjectOperation,
+  BatchOperations,
+  UpdateObjectOperation
+}
 import algolia.responses.TasksSingleIndex
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -54,10 +58,10 @@ case class IndexingBatchDefinition(index: String,
     }
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes", index, "batch"),
-        body = Some(write(BatchOperations(operations))),
-        isSearch = false
+      POST,
+      Seq("1", "indexes", index, "batch"),
+      body = Some(write(BatchOperations(operations))),
+      isSearch = false
     )
   }
 }

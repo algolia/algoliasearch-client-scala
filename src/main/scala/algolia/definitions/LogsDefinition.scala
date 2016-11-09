@@ -57,10 +57,10 @@ case class LogsDefinition(offset: Option[Int] = None,
     }
 
     HttpPayload(
-        GET,
-        Seq("1", "logs"),
-        queryParameters = Some(queryParameters.toMap),
-        isSearch = false
+      GET,
+      Seq("1", "logs"),
+      queryParameters = Some(queryParameters.toMap),
+      isSearch = false
     )
   }
 }

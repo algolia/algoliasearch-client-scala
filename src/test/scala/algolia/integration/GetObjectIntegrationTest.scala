@@ -41,7 +41,7 @@ class GetObjectIntegrationTest extends AlgoliaTest {
   it("should get object") {
     val create: Future[TasksMultipleIndex] = client.execute {
       batch(
-          index into "indexToGet" `object` ObjectToGet("1", "toto")
+        index into "indexToGet" `object` ObjectToGet("1", "toto")
       )
     }
 
@@ -59,8 +59,8 @@ class GetObjectIntegrationTest extends AlgoliaTest {
   it("should get multiple objects") {
     val create: Future[TasksMultipleIndex] = client.execute {
       batch(
-          index into "indexToGet" `object` ObjectToGet("1", "toto"),
-          index into "indexToGet" `object` ObjectToGet("2", "tata")
+        index into "indexToGet" `object` ObjectToGet("1", "toto"),
+        index into "indexToGet" `object` ObjectToGet("2", "tata")
       )
     }
 
@@ -72,7 +72,7 @@ class GetObjectIntegrationTest extends AlgoliaTest {
 
     whenReady(request) { results =>
       results.as[ObjectToGet] should be(
-          Seq(ObjectToGet("1", "toto"), ObjectToGet("2", "tata")))
+        Seq(ObjectToGet("1", "toto"), ObjectToGet("2", "tata")))
     }
   }
 

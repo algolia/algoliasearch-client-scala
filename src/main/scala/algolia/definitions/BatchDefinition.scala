@@ -42,10 +42,10 @@ case class BatchDefinition(definitions: Traversable[Definition])(
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-        POST,
-        Seq("1", "indexes", "*", "batch"),
-        body = Some(write(BatchOperations(definitions.flatMap(transform)))),
-        isSearch = false
+      POST,
+      Seq("1", "indexes", "*", "batch"),
+      body = Some(write(BatchOperations(definitions.flatMap(transform)))),
+      isSearch = false
     )
   }
 
@@ -60,7 +60,7 @@ case class BatchDefinition(definitions: Traversable[Definition])(
 
       case IndexingDefinition(index, Some(objectId), Some(obj)) =>
         Traversable(
-            UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
+          UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
 
       case ClearIndexDefinition(index) =>
         Traversable(ClearIndexOperation(index))
@@ -78,11 +78,11 @@ case class BatchDefinition(definitions: Traversable[Definition])(
                                                   value,
                                                   true) =>
         val body = Map(
-            "objectID" -> objectId,
-            attribute -> PartialUpdateObject(operation.name, value)
+          "objectID" -> objectId,
+          attribute -> PartialUpdateObject(operation.name, value)
         )
         Traversable(
-            PartialUpdateObjectOperation(Extraction.decompose(body), index))
+          PartialUpdateObjectOperation(Extraction.decompose(body), index))
 
       case PartialUpdateObjectOperationDefinition(operation,
                                                   index,
@@ -91,12 +91,12 @@ case class BatchDefinition(definitions: Traversable[Definition])(
                                                   value,
                                                   false) =>
         val body = Map(
-            "objectID" -> objectId,
-            attribute -> PartialUpdateObject(operation.name, value)
+          "objectID" -> objectId,
+          attribute -> PartialUpdateObject(operation.name, value)
         )
         Traversable(
-            PartialUpdateObjectNoCreateOperation(Extraction.decompose(body),
-                                                 index))
+          PartialUpdateObjectNoCreateOperation(Extraction.decompose(body),
+                                               index))
 
       case IndexingBatchDefinition(_, defs) =>
         defs.flatMap(transform)

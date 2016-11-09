@@ -42,18 +42,16 @@ class BrowseIntegrationTest extends AlgoliaTest {
   before {
     val b: Future[TasksMultipleIndex] = client.execute {
       batch(
-          index into "indexToBrowse" `object` Test("algolia1",
-                                                   10,
-                                                   alien = false),
-          index into "indexToBrowse" `object` Test("algolia2",
-                                                   10,
-                                                   alien = false),
-          index into "indexToBrowse" `object` Test("algolia3",
-                                                   10,
-                                                   alien = false),
-          index into "indexToBrowse" `object` Test("anything",
-                                                   10,
-                                                   alien = false)
+        index into "indexToBrowse" `object` Test("algolia1",
+                                                 10,
+                                                 alien = false),
+        index into "indexToBrowse" `object` Test("algolia2",
+                                                 10,
+                                                 alien = false),
+        index into "indexToBrowse" `object` Test("algolia3",
+                                                 10,
+                                                 alien = false),
+        index into "indexToBrowse" `object` Test("anything", 10, alien = false)
       )
     }
 

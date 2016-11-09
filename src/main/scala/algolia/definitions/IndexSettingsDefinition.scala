@@ -44,10 +44,10 @@ case class IndexSettingsDefinition(index: String)(
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-        GET,
-        Seq("1", "indexes", index, "settings"),
-        queryParameters = Some(Map("getVersion" -> "2")),
-        isSearch = true
+      GET,
+      Seq("1", "indexes", index, "settings"),
+      queryParameters = Some(Map("getVersion" -> "2")),
+      isSearch = true
     )
   }
 
@@ -69,11 +69,11 @@ case class IndexChangeSettingsDefinition(index: String,
     }
 
     HttpPayload(
-        PUT,
-        Seq("1", "indexes", index, "settings"),
-        body = Some(write(settings)),
-        queryParameters = queryParameters,
-        isSearch = false
+      PUT,
+      Seq("1", "indexes", index, "settings"),
+      body = Some(write(settings)),
+      queryParameters = queryParameters,
+      isSearch = false
     )
   }
 }

@@ -37,9 +37,9 @@ class SearchIntegrationTest extends AlgoliaTest {
 
   after {
     clearIndices(
-        "indexToSearch",
-        "indexToSearch2",
-        "indexToSearchFacet"
+      "indexToSearch",
+      "indexToSearch2",
+      "indexToSearchFacet"
     )
   }
 
@@ -94,13 +94,13 @@ class SearchIntegrationTest extends AlgoliaTest {
       whenReady(s) { result =>
         result.hits should have length 1
         val hit = EnhanceTest(
-            "algolia",
-            10,
-            alien = false,
-            "563481290",
-            Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))),
-            None,
-            None)
+          "algolia",
+          10,
+          alien = false,
+          "563481290",
+          Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))),
+          None,
+          None)
         result.asHit[EnhanceTest].head should be(hit)
       }
     }
@@ -111,8 +111,8 @@ class SearchIntegrationTest extends AlgoliaTest {
     it("should return generic object") {
       val s = client.execute {
         multiQueries(
-            search into "indexToSearch" query Query(query = Some("a")),
-            search into "indexToSearch2" query Query(query = Some("a"))
+          search into "indexToSearch" query Query(query = Some("a")),
+          search into "indexToSearch2" query Query(query = Some("a"))
         )
       }
 
@@ -120,7 +120,7 @@ class SearchIntegrationTest extends AlgoliaTest {
         r.results should have length 2
         forAll(r.results) { result =>
           (result.hits.head \ "name").values.toString should startWith(
-              "algolia")
+            "algolia")
           (result.hits.head \ "age").values should be(10)
           (result.hits.head \ "alien").values shouldBe false
         }
@@ -130,8 +130,8 @@ class SearchIntegrationTest extends AlgoliaTest {
     it("should return case class") {
       val s = client.execute {
         multiQueries(
-            search into "indexToSearch" query Query(query = Some("a")),
-            search into "indexToSearch2" query Query(query = Some("a"))
+          search into "indexToSearch" query Query(query = Some("a")),
+          search into "indexToSearch2" query Query(query = Some("a"))
         )
       }
 
@@ -147,8 +147,8 @@ class SearchIntegrationTest extends AlgoliaTest {
     it("should return a hit") {
       val s = client.execute {
         multiQueries(
-            search into "indexToSearch" query Query(query = Some("a")),
-            search into "indexToSearch2" query Query(query = Some("a"))
+          search into "indexToSearch" query Query(query = Some("a")),
+          search into "indexToSearch2" query Query(query = Some("a"))
         )
       }
 
@@ -167,7 +167,7 @@ class SearchIntegrationTest extends AlgoliaTest {
     it("should search in facets") {
       val change = client.execute {
         changeSettings of "indexToSearchFacet" `with` IndexSettings(
-            attributesForFaceting = Some(Seq("searchable(series)"))
+          attributesForFaceting = Some(Seq("searchable(series)"))
         )
       }
 
@@ -175,9 +175,9 @@ class SearchIntegrationTest extends AlgoliaTest {
 
       val add = client.execute {
         index into "indexToSearchFacet" objects Seq(
-            Character("snoopy", "Peanuts"),
-            Character("woodstock", "Peanuts"),
-            Character("Calvin", "Calvin & Hobbes")
+          Character("snoopy", "Peanuts"),
+          Character("woodstock", "Peanuts"),
+          Character("Calvin", "Calvin & Hobbes")
         )
       }
       taskShouldBeCreatedAndWaitForIt(add, "indexToSearchFacet")

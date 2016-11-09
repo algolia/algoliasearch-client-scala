@@ -47,9 +47,9 @@ case class WaitForTaskDefinition(taskId: Long,
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-        GET,
-        Seq("1", "indexes") ++ index ++ Seq("task", taskId.toString),
-        isSearch = true
+      GET,
+      Seq("1", "indexes") ++ index ++ Seq("task", taskId.toString),
+      isSearch = true
     )
   }
 }
@@ -86,9 +86,8 @@ trait WaitForTaskDsl {
           if (res.status == "published") {
             Future.successful(res)
           } else if (d > query.maxDelay) {
-            Future.failed(
-                WaitForTimeoutException(
-                    s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
+            Future.failed(WaitForTimeoutException(
+              s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
           } else {
             request(d * 2)
           }

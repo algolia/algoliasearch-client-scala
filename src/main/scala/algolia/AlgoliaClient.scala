@@ -49,12 +49,12 @@ class AlgoliaClient(applicationId: String,
 
   if (applicationId == null || applicationId.isEmpty) {
     throw new AlgoliaClientException(
-        s"'applicationId' is probably too short: '$applicationId'")
+      s"'applicationId' is probably too short: '$applicationId'")
   }
 
   if (apiKey == null || apiKey.isEmpty) {
     throw new AlgoliaClientException(
-        s"'apiKey' is probably too short: '$apiKey'")
+      s"'apiKey' is probably too short: '$apiKey'")
   }
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
@@ -63,34 +63,34 @@ class AlgoliaClient(applicationId: String,
   lazy val indexingHosts: Seq[String] =
     s"https://$applicationId.$ALGOLIANET_HOST" +:
       random.shuffle(
-          Seq(
-              s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-              s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-              s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-          ))
+        Seq(
+          s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+        ))
 
   lazy val queryHosts: Seq[String] =
     s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
       random.shuffle(
-          Seq(
-              s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-              s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-              s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-          ))
+        Seq(
+          s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+        ))
 
   val httpClient: AlgoliaHttpClient = AlgoliaHttpClient()
   val random: AlgoliaRandom = AlgoliaRandom
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty(
-        "java.version")}); Scala (${BuildInfo.scalaVersion})"
+      "java.version")}); Scala (${BuildInfo.scalaVersion})"
 
   val headers: Map[String, String] = customHeader ++ Map(
-        "Accept-Encoding" -> "gzip",
-        "X-Algolia-Application-Id" -> applicationId,
-        "X-Algolia-API-Key" -> apiKey,
-        "User-Agent" -> userAgent,
-        "Content-Type" -> "application/json; charset=UTF-8",
-        "Accept" -> "application/json"
+      "Accept-Encoding" -> "gzip",
+      "X-Algolia-Application-Id" -> applicationId,
+      "X-Algolia-API-Key" -> apiKey,
+      "User-Agent" -> userAgent,
+      "Content-Type" -> "application/json; charset=UTF-8",
+      "Accept" -> "application/json"
     )
 
   private val HMAC_SHA256 = "HmacSHA256"
@@ -106,8 +106,8 @@ class AlgoliaClient(applicationId: String,
     val key = hmac(privateApiKey, queryStr)
 
     new String(
-        Base64.getEncoder.encode(
-            s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
+      Base64.getEncoder.encode(
+        s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
   }
 
   private def hmac(key: String, msg: String): String = {

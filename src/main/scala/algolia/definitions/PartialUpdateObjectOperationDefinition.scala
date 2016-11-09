@@ -92,7 +92,7 @@ case class PartialUpdateObjectOperationDefinition(
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
-        attribute.get -> PartialUpdateObject(operation.name, value)
+      attribute.get -> PartialUpdateObject(operation.name, value)
     )
 
     val queryParameters = if (createNotExists) {
@@ -102,11 +102,11 @@ case class PartialUpdateObjectOperationDefinition(
     }
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes") ++ index ++ objectId :+ "partial",
-        queryParameters = queryParameters,
-        body = Some(write(body)),
-        isSearch = false
+      POST,
+      Seq("1", "indexes") ++ index ++ objectId :+ "partial",
+      queryParameters = queryParameters,
+      body = Some(write(body)),
+      isSearch = false
     )
   }
 
@@ -130,14 +130,14 @@ case class PartialUpdateObjectDefinition(
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
-        attribute.get -> value
+      attribute.get -> value
     )
 
     HttpPayload(
-        POST,
-        Seq("1", "indexes") ++ index ++ objectId :+ "partial",
-        body = Some(write(body)),
-        isSearch = false
+      POST,
+      Seq("1", "indexes") ++ index ++ objectId :+ "partial",
+      body = Some(write(body)),
+      isSearch = false
     )
   }
 
