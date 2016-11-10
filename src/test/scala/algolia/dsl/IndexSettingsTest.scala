@@ -106,6 +106,7 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "asc(att8)",
         |    "desc(att9)"
         |  ],
+        |  "ignorePlurals":"fr,en",
         |  "distinct":1,
         |  "typoTolerance":"strict",
         |  "removeStopWords":"fr,en"
@@ -143,6 +144,7 @@ class IndexSettingsTest extends AlgoliaTest {
         i.typoTolerance should be(Some(TypoTolerance.strict))
         i.distinct should be(Some(Distinct.int(1)))
         i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
+        i.ignorePlurals should be(Some(IgnorePlurals.list(Seq("fr", "en"))))
       }
 
     }
@@ -167,6 +169,7 @@ class IndexSettingsTest extends AlgoliaTest {
           CustomRanking.asc("att8"),
           CustomRanking.desc("att9")
         )),
+        ignorePlurals = Some(IgnorePlurals.list(Seq("fr", "en"))),
         typoTolerance = Some(TypoTolerance.strict),
         distinct = Some(Distinct.int(1)),
         removeStopWords = Some(RemoveStopWords.list(Seq("fr", "en")))

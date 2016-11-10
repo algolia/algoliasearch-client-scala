@@ -55,7 +55,7 @@ case class IndexSettings(
     highlightPostTag: Option[String] = None,
     optionalWords: Option[Seq[String]] = None,
     allowTyposOnNumericTokens: Option[Boolean] = None,
-    ignorePlurals: Option[Boolean] = None,
+    ignorePlurals: Option[IgnorePlurals] = None,
     advancedSyntax: Option[Boolean] = None,
     removeWordsIfNoResults: Option[String] = None,
     replaceSynonymsInHighlight: Option[Boolean] = None,
