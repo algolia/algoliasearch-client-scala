@@ -34,7 +34,7 @@ import javax.crypto.spec.SecretKeySpec
 import algolia.http.HttpPayload
 import algolia.objects.Query
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * The AlgoliaClient to query Algolia
