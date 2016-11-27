@@ -32,7 +32,6 @@ import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaTest
@@ -72,7 +71,7 @@ class AlgoliaTest
     }
   }
 
-  def clearIndices(indices: String*) = {
+  def clearIndices(indices: String*)(implicit ec: ExecutionContext) = {
     val del = client.execute {
       batch(indices.map { i =>
         delete index i

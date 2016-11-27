@@ -6,19 +6,21 @@ description := "Scala client for Algolia Search API"
 
 version := "1.16.0-SNAPSHOT"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.0"
+crossScalaVersions := Seq("2.11.8", "2.12.0")
 
 //Wait fix in sbt-coveralls
-ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
 //coverageEnabled := true
 
 val asyncHttpClientVersion = "2.0.4"
 
-val json4sVersion = "3.4.0"
+val json4sVersion = "3.5.0.RC1"
 
-val scalaTestVersion = "2.2.6"
-val scalaMockVersion = "3.2"
-val scalacheckVersion = "1.12.1"
+val scalaTestVersion = "3.0.1"
+val scalaMockVersion = "3.3.0-pm"
+val scalacheckVersion = "1.13.4"
+
+resolvers += Resolver.bintrayRepo("barkhorn", "maven") //for scalamock_2.12
 
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
 
@@ -28,7 +30,7 @@ libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
 
-libraryDependencies += "com.netaporter" %% "scala-uri" % "0.4.14"
+libraryDependencies += "com.netaporter" %% "scala-uri" % "0.4.16"
 
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
@@ -133,6 +135,8 @@ publishTo := {
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
   }
 }
+
+scalafmtConfig in ThisBuild := Some(file(".scalafmt.conf"))
 
 addCommandAlias("checkAll",
                 ";clean;compile;test:compile;scalafmt;test:scalafmt")
