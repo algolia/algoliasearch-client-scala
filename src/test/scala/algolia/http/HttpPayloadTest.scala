@@ -25,7 +25,8 @@
 
 package algolia.http
 
-import algolia.{AlgoliaHttpClient, AlgoliaTest}
+import algolia.{AlgoliaClientConfiguration, AlgoliaHttpClient, AlgoliaTest}
+import io.netty.resolver.dns.DnsNameResolver
 
 class HttpPayloadTest extends AlgoliaTest {
 
@@ -49,7 +50,8 @@ class HttpPayloadTest extends AlgoliaTest {
 
   }
 
-  val dnsNameResolver = AlgoliaHttpClient().dnsNameResolver
+  val dnsNameResolver: DnsNameResolver = AlgoliaHttpClient(
+    AlgoliaClientConfiguration.default).dnsNameResolver
 
   describe("HttpPayload request builder") {
 

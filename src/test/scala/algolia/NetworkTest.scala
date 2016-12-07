@@ -26,7 +26,6 @@
 package algolia
 
 import algolia.AlgoliaDsl._
-import algolia.responses.Indices
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -37,13 +36,18 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
       override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
-        dnsTimeout = 1000
+        AlgoliaClientConfiguration.default.copy(dnsTimeoutMs = 1000)
       )
 
-      override lazy val queryHosts: Seq[String] = Seq(
-        s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
-        s"https://$applicationId-1.algolianet.com"
-      )
+      override val hostsStatuses =
+        HostsStatuses(
+          AlgoliaClientConfiguration.default,
+          utils,
+          Seq(
+            s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
+            s"https://$applicationId-1.algolianet.com"
+          ),
+          indexingHosts)
     }
 
     it("should answer within 3 seconds") {
@@ -69,13 +73,19 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
       override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
-        httpConnectTimeout = 1000
+        AlgoliaClientConfiguration.default.copy(httpConnectTimeoutMs = 1000)
       )
 
-      override lazy val queryHosts: Seq[String] = Seq(
-        s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
-        s"https://$applicationId-1.algolianet.com"
-      )
+      override val hostsStatuses =
+        HostsStatuses(
+          AlgoliaClientConfiguration.default,
+          utils,
+          Seq(
+            s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
+            s"https://$applicationId-1.algolianet.com"
+          ),
+          indexingHosts)
+
     }
 
     it("should answer within 3 seconds") {
@@ -100,10 +110,16 @@ class NetworkTest extends AlgoliaTest {
   describe("UnknownHostException on DNS resolution") {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
-      override lazy val queryHosts: Seq[String] = Seq(
-        s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
-        s"https://$applicationId-1.algolianet.com"
-      )
+
+      override val hostsStatuses =
+        HostsStatuses(
+          AlgoliaClientConfiguration.default,
+          utils,
+          Seq(
+            s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
+            s"https://$applicationId-1.algolianet.com"
+          ),
+          indexingHosts)
     }
 
     it("should answer within 1 second") {
@@ -128,9 +144,14 @@ class NetworkTest extends AlgoliaTest {
   describe("UnknownHostException on the last resolution") {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
-      override lazy val queryHosts: Seq[String] = Seq(
-        s"https://will-not-exists-ever.algolianet.com" //Should return UnknownHostException
-      )
+      override val hostsStatuses =
+        HostsStatuses(
+          AlgoliaClientConfiguration.default,
+          utils,
+          Seq(
+            s"https://will-not-exists-ever.algolianet.com" //Should return UnknownHostException
+          ),
+          indexingHosts)
     }
 
     it("should fail") {

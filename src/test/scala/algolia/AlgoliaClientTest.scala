@@ -34,20 +34,26 @@ import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClientTest extends AlgoliaTest {
 
-  val notSoRandom = new AlgoliaRandom {
-    override def shuffle(seq: Seq[String]) = seq
+  val notSoRandom = new AlgoliaUtils {
+    override def shuffle(seq: Seq[String]): Seq[String] = seq
   }
+
+  val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
+  val emptyHeaders: Map[String, String] = Map()
+
+  def mockedClient(utils: AlgoliaUtils = notSoRandom): AlgoliaClient =
+    new AlgoliaClient("a", "b", utils = utils) {
+      override val httpClient: AlgoliaHttpClient = mockHttpClient
+      override val headers: Map[String, String] = emptyHeaders
+    }
 
   describe("init") {
 
-    val apiClient = new AlgoliaClient("APPID", "APIKEY") {
-      override val random = notSoRandom
-    }
+    val apiClient = new AlgoliaClient("APPID", "APIKEY", utils = notSoRandom)
 
     it("should set user agent") {
       apiClient.userAgent should (startWith("Algolia for Scala (1.") and include(
@@ -121,52 +127,53 @@ class AlgoliaClientTest extends AlgoliaTest {
   }
 
   describe("requests") {
-
-    val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
-    val emptyHeaders: Map[String, String] = Map()
     val timeoutRequest: Future[Result] = Future.failed(new TimeoutException())
 
+    val successfulRequestDsn: Result = Result("dsn")
+    val successfulRequest1: Result = Result("1")
+    val successfulRequest2: Result = Result("2")
+    val successfulRequest3: Result = Result("3")
+
+    val payload = HttpPayload(GET, Seq("/"), None, None)
+
+    def mockRequestDsn =
+      (mockHttpClient.request[Result](_: String,
+                                      _: Map[String, String],
+                                      _: HttpPayload)(
+        _: Manifest[Result],
+        _: ExecutionContext)) expects ("https://a-dsn.algolia.net", emptyHeaders, payload, *, *)
+
+    def mockRequest1 =
+      (mockHttpClient.request[Result](_: String,
+                                      _: Map[String, String],
+                                      _: HttpPayload)(
+        _: Manifest[Result],
+        _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *)
+
+    def mockRequest2 =
+      (mockHttpClient.request[Result](_: String,
+                                      _: Map[String, String],
+                                      _: HttpPayload)(
+        _: Manifest[Result],
+        _: ExecutionContext)) expects ("https://a-2.algolianet.com", emptyHeaders, payload, *, *)
+
+    def mockRequest3 =
+      (mockHttpClient.request[Result](_: String,
+                                      _: Map[String, String],
+                                      _: HttpPayload)(
+        _: Manifest[Result],
+        _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *)
+
+    val `4XXRequest`: Future[Result] =
+      Future.failed(APIClientException(404, "404"))
+
+    var apiClient: AlgoliaClient = null
+
+    before {
+      apiClient = mockedClient()
+    }
+
     describe("search") {
-
-      val apiClient = new AlgoliaClient("a", "b") {
-        override val httpClient = mockHttpClient
-        override val headers = emptyHeaders
-        override val random = notSoRandom
-      }
-
-      val payload = HttpPayload(GET, Seq("/"), None, None)
-      val successfulRequestDsn: Result = Result("dsn")
-      val successfulRequest1: Result = Result("1")
-      val successfulRequest2: Result = Result("2")
-      val successfulRequest3: Result = Result("3")
-
-      def mockRequestDsn =
-        (mockHttpClient.request[Result](_: String,
-                                        _: Map[String, String],
-                                        _: HttpPayload)(
-          _: Manifest[Result],
-          _: ExecutionContext)) expects ("https://a-dsn.algolia.net", emptyHeaders, payload, *, *)
-      def mockRequest1 =
-        (mockHttpClient.request[Result](_: String,
-                                        _: Map[String, String],
-                                        _: HttpPayload)(
-          _: Manifest[Result],
-          _: ExecutionContext)) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *)
-      def mockRequest2 =
-        (mockHttpClient.request[Result](_: String,
-                                        _: Map[String, String],
-                                        _: HttpPayload)(
-          _: Manifest[Result],
-          _: ExecutionContext)) expects ("https://a-2.algolianet.com", emptyHeaders, payload, *, *)
-      def mockRequest3 =
-        (mockHttpClient.request[Result](_: String,
-                                        _: Map[String, String],
-                                        _: HttpPayload)(
-          _: Manifest[Result],
-          _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *)
-
-      val `4XXRequest`: Future[Result] =
-        Future.failed(APIClientException(404, "404"))
 
       it("no timeout") {
         mockRequestDsn returning Future.successful(successfulRequestDsn)
@@ -276,12 +283,6 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     describe("indexing") {
 
-      val apiClient = new AlgoliaClient("a", "b") {
-        override val httpClient = mockHttpClient
-        override val headers = emptyHeaders
-        override val random = notSoRandom
-      }
-
       val successfulRequest: Result = Result("1")
 
       val payload = HttpPayload(GET, Seq("/"), None, None, isSearch = false)
@@ -317,18 +318,52 @@ class AlgoliaClientTest extends AlgoliaTest {
       }
     }
 
+    describe("retry with state") {
+
+      def fixNow(date: Int) = new AlgoliaUtils {
+        override def shuffle(seq: Seq[String]): Seq[String] = seq
+
+        override def now(): Long = date.toLong
+      }
+
+      import scala.collection.JavaConverters._
+
+      it("should not reconnect to the same host twice if it fails") {
+        val apiClient: AlgoliaClient = mockedClient(fixNow(1))
+
+        mockRequestDsn returning timeoutRequest
+        mockRequest1 returning Future.successful(successfulRequest1)
+
+        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/")))) {
+          result =>
+            result should equal(successfulRequest1)
+        }
+
+        apiClient.hostsStatuses.hostStatuses.asScala should be(
+          Map(
+            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1l),
+            "https://a-1.algolianet.com" -> HostStatus(up = true, 1l)
+          ))
+
+        mockRequest1 returning Future.successful(successfulRequest1)
+
+        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/")))) {
+          result =>
+            result should equal(successfulRequest1)
+        }
+
+        apiClient.hostsStatuses.hostStatuses.asScala should be(
+          Map(
+            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1l),
+            "https://a-1.algolianet.com" -> HostStatus(up = true, 1l)
+          ))
+      }
+
+    }
   }
 
   describe("wait for") {
-
-    val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
-    val emptyHeaders: Map[String, String] = Map()
-
-    val apiClient = new AlgoliaClient("a", "b") {
-      override val httpClient = mockHttpClient
-      override val headers = emptyHeaders
-      override val random = notSoRandom
-    }
+    val apiClient = mockedClient()
 
     val taskInProgress: TaskStatus =
       TaskStatus("notPublished", pendingTask = true)

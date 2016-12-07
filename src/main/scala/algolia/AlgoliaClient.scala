@@ -34,7 +34,8 @@ import javax.crypto.spec.SecretKeySpec
 import algolia.http.HttpPayload
 import algolia.objects.Query
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 /**
   * The AlgoliaClient to query Algolia
@@ -45,7 +46,10 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
   */
 class AlgoliaClient(applicationId: String,
                     apiKey: String,
-                    customHeader: Map[String, String] = Map.empty) {
+                    customHeader: Map[String, String] = Map.empty,
+                    configuration: AlgoliaClientConfiguration =
+                      AlgoliaClientConfiguration.default,
+                    private[algolia] val utils: AlgoliaUtils = AlgoliaUtils) {
 
   if (applicationId == null || applicationId.isEmpty) {
     throw new AlgoliaClientException(
@@ -60,26 +64,26 @@ class AlgoliaClient(applicationId: String,
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
   final private val ALGOLIANET_HOST = "algolia.net"
 
-  lazy val indexingHosts: Seq[String] =
+  val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(configuration)
+
+  val indexingHosts: Seq[String] =
     s"https://$applicationId.$ALGOLIANET_HOST" +:
-      random.shuffle(
+      utils.shuffle(
         Seq(
           s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
           s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
           s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
         ))
 
-  lazy val queryHosts: Seq[String] =
+  val queryHosts: Seq[String] =
     s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
-      random.shuffle(
+      utils.shuffle(
         Seq(
           s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
           s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
           s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
         ))
 
-  val httpClient: AlgoliaHttpClient = AlgoliaHttpClient()
-  val random: AlgoliaRandom = AlgoliaRandom
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty(
       "java.version")}); Scala (${BuildInfo.scalaVersion})"
@@ -94,6 +98,8 @@ class AlgoliaClient(applicationId: String,
     )
 
   private val HMAC_SHA256 = "HmacSHA256"
+  private[algolia] val hostsStatuses =
+    HostsStatuses(configuration, utils, queryHosts, indexingHosts)
 
   def execute[QUERY, RESULT](query: QUERY)(
       implicit executable: Executable[QUERY, RESULT],
@@ -119,13 +125,21 @@ class AlgoliaClient(applicationId: String,
 
   private[algolia] def request[T: Manifest](payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
-    val hosts = if (payload.isSearch) queryHosts else indexingHosts
+    val hosts = if (payload.isSearch) {
+      hostsStatuses.queryHostsThatAreUp()
+    } else {
+      hostsStatuses.indexingHostsThatAreUp()
+    }
 
     val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) {
       (future, host) =>
         future.recoverWith {
           case e: APIClientException => Future.failed(e) //No retry if 4XX
-          case _ => httpClient.request[T](host, headers, payload)
+          case _ =>
+            httpClient.request[T](host, headers, payload).andThen {
+              case Failure(_) => hostsStatuses.markHostAsDown(host)
+              case Success(_) => hostsStatuses.markHostAsUp(host)
+            }
         }
     }
 

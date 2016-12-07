@@ -25,12 +25,20 @@
 
 package algolia
 
-import scala.util.{Random => ScalaRandom}
+case class AlgoliaClientConfiguration(httpConnectTimeoutMs: Int,
+                                      //httpSocketTimeout in HttpClient
+                                      httpReadTimeoutMs: Int,
+                                      httpRequestTimeoutMs: Int,
+                                      dnsTimeoutMs: Int,
+                                      hostDownTimeoutMs: Int) {}
 
-private[algolia] class AlgoliaRandom {
+object AlgoliaClientConfiguration {
 
-  def shuffle(seq: Seq[String]) = ScalaRandom.shuffle(seq)
-
+  val default = AlgoliaClientConfiguration(
+    httpConnectTimeoutMs = 2 * 1000,
+    httpReadTimeoutMs = 2 * 1000,
+    httpRequestTimeoutMs = 2 * 1000,
+    dnsTimeoutMs = 2 * 100, //200 ms
+    hostDownTimeoutMs = 5 * 60 * 1000
+  )
 }
-
-private[algolia] object AlgoliaRandom extends AlgoliaRandom

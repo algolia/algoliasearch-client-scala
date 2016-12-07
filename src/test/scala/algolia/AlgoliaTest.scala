@@ -26,7 +26,7 @@
 package algolia
 
 import algolia.AlgoliaDsl._
-import algolia.responses.AlgoliaTask
+import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
@@ -45,11 +45,12 @@ class AlgoliaTest
     with MockFactory
     with EitherValues {
 
-  val applicationId = System.getenv("APPLICATION_ID")
-  val apiKey = System.getenv("API_KEY")
+  val applicationId: String = System.getenv("APPLICATION_ID")
+  val apiKey: String = System.getenv("API_KEY")
   val client = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
-      AlgoliaHttpClient(10000, 10000, 10000, 10000)
+      AlgoliaHttpClient(
+        AlgoliaClientConfiguration(10000, 10000, 10000, 10000, 10000))
   }
 
   implicit val patience =
@@ -57,7 +58,7 @@ class AlgoliaTest
 
   def taskShouldBeCreatedAndWaitForIt(
       task: Future[AlgoliaTask],
-      index: String)(implicit ec: ExecutionContext) = {
+      index: String)(implicit ec: ExecutionContext): Unit = {
     val t: AlgoliaTask = whenReady(task) { result =>
       result.idToWaitFor should not be 0
       result //for getting it after
@@ -72,7 +73,7 @@ class AlgoliaTest
     }
   }
 
-  def clearIndices(indices: String*) = {
+  def clearIndices(indices: String*): TasksMultipleIndex = {
     val del = client.execute {
       batch(indices.map { i =>
         delete index i
