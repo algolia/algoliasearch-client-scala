@@ -142,11 +142,11 @@ class SearchTest extends AlgoliaTest {
   describe("search in facet") {
 
     it("should search in facet") {
-      search into "indexName" facet "facetName" facetQuery "facetQuery" query Query()
+      search into "indexName" facet "facetName" values "facetQuery" query Query()
     }
 
     it("should call the API") {
-      (search into "indexName" facet "facetName" facetQuery "facetQuery" query Query(
+      (search into "indexName" facet "facetName" values "facetQuery" query Query(
         query = Some("a"))).build() should be(
         HttpPayload(
           POST,
