@@ -57,18 +57,17 @@ case class SearchDefinition(index: String, query: Option[Query] = None)(
 case class SearchFacetDefinition(
     index: String,
     facetName: String,
-    facetQuery: String,
+    values: String,
     query: Query = Query())(implicit val formats: Formats)
     extends Definition {
 
-  def facetQuery(facetQuery: String): SearchFacetDefinition =
-    copy(facetQuery = facetQuery)
+  def values(facetQuery: String): SearchFacetDefinition =
+    copy(values = facetQuery)
 
   def query(q: Query): SearchFacetDefinition = copy(query = q)
 
   override private[algolia] def build(): HttpPayload = {
-    val body = Map(
-      "params" -> query.copy(facetQuery = Some(facetQuery)).toParam)
+    val body = Map("params" -> query.copy(facetQuery = Some(values)).toParam)
 
     HttpPayload(
       POST,
@@ -106,4 +105,5 @@ trait SearchDsl {
       client request [SearchFacetResult] query.build()
     }
   }
+
 }

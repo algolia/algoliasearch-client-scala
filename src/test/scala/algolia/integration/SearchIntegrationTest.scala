@@ -183,7 +183,7 @@ class SearchIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(add, "indexToSearchFacet")
 
       val facetSearch = client.execute {
-        search into "indexToSearchFacet" facet "series" facetQuery "Peanuts"
+        search into "indexToSearchFacet" facet "series" values "Peanuts"
       }
 
       whenReady(facetSearch) { r =>
