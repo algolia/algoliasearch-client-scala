@@ -28,7 +28,7 @@ package algolia
 import algolia.http._
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioDatagramChannel
-import io.netty.resolver.dns.DnsNameResolverBuilder
+import io.netty.resolver.dns.{DnsNameResolver, DnsNameResolverBuilder}
 import org.asynchttpclient._
 import org.json4s._
 import org.json4s.native.JsonMethods._
@@ -36,33 +36,21 @@ import org.json4s.native.JsonMethods._
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.Try
 
-object default {
-  val httpReadTimeout = 2000
-
-  //httpSocketTimeout in HttpClient
-  val httpConnectTimeout = 2000
-
-  val httpRequestTimeout = 2000
-
-  val dnsTimeout = httpConnectTimeout / 10
-}
-
 case class AlgoliaHttpClient(
-    httpReadTimeout: Int = default.httpReadTimeout,
-    httpConnectTimeout: Int = default.httpConnectTimeout,
-    httpRequestTimeout: Int = default.httpRequestTimeout,
-    dnsTimeout: Int = default.dnsTimeout) {
+    configuration: AlgoliaClientConfiguration =
+      AlgoliaClientConfiguration.default) {
 
-  val asyncClientConfig = new DefaultAsyncHttpClientConfig.Builder()
-    .setConnectTimeout(httpConnectTimeout)
-    .setReadTimeout(httpReadTimeout)
-    .setRequestTimeout(httpRequestTimeout)
-    .build
+  val asyncClientConfig: DefaultAsyncHttpClientConfig =
+    new DefaultAsyncHttpClientConfig.Builder()
+      .setConnectTimeout(configuration.httpConnectTimeoutMs)
+      .setReadTimeout(configuration.httpReadTimeoutMs)
+      .setRequestTimeout(configuration.httpRequestTimeoutMs)
+      .build
 
-  val dnsNameResolver = new DnsNameResolverBuilder(
+  val dnsNameResolver: DnsNameResolver = new DnsNameResolverBuilder(
     new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
     .channelType(classOf[NioDatagramChannel])
-    .queryTimeoutMillis(dnsTimeout)
+    .queryTimeoutMillis(configuration.dnsTimeoutMs)
     .build
 
   val _httpClient = new DefaultAsyncHttpClient(asyncClientConfig)
@@ -78,7 +66,7 @@ case class AlgoliaHttpClient(
   }
 
   def responseHandler[T: Manifest] = new AsyncCompletionHandler[T] {
-    override def onCompleted(response: Response) =
+    override def onCompleted(response: Response): T =
       response.getStatusCode / 100 match {
         case 2 => toJson(response).extract[T]
         case 4 =>
@@ -89,7 +77,7 @@ case class AlgoliaHttpClient(
       }
   }
 
-  def toJson(r: Response) =
+  def toJson(r: Response): JValue =
     parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
 
   def makeRequest[T](request: Request, handler: AsyncHandler[T])(
