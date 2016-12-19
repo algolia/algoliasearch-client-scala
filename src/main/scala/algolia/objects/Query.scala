@@ -58,7 +58,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  attributesToRetrieve: Option[Seq[String]] = None,
                  attributesToHighlight: Option[Seq[String]] = None,
                  attributesToSnippet: Option[Seq[(String, Int)]] = None,
-                 getRankingInfo: Option[Int] = None,
+                 getRankingInfo: Option[Boolean] = None,
                  highlightPreTag: Option[String] = None,
                  highlightPostTag: Option[String] = None,
                  snippetEllipsisText: Option[String] = None,
