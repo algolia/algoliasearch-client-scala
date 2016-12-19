@@ -136,4 +136,4 @@ publishTo := {
 
 addCommandAlias("formatAll", ";scalafmt;test:scalafmt")
 
-addCommandAlias("checkAll", ";clean;compile;test:compile;formatAll")
+addCommandAlias("checkAll", ";compile;test:compile;formatAll")
