@@ -93,8 +93,8 @@ class SearchTest extends AlgoliaTest {
         aroundRadius = Some(AroundRadius.integer(0)),
         aroundPrecision = Some(20),
         minimumAroundRadius = Some(30),
-        insideBoundingBox = Some(InsideBoundingBox("1", "2", "3", "4")),
-        insidePolygon = Some(InsidePolygon("1", "2", "3", "4", "5", "6")),
+        insideBoundingBox = Some(Seq(InsideBoundingBox("1", "2", "3", "4"))),
+        insidePolygon = Some(Seq(InsidePolygon("1", "2", "3", "4", "5", "6"))),
         userToken = Some("userToken"),
         responseFields = Some(Seq("att7", "att8"))
       )
@@ -104,7 +104,7 @@ class SearchTest extends AlgoliaTest {
           POST,
           List("1", "indexes", "indexName", "query"),
           body = Some(
-            """{"params":"numericFilters=1&alternativesAsExact=true&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&responseFields=att7%2Catt8&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=1%2C2%2C3%2C4%2C5%2C6&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=1%2C2%2C3%2C4&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
+            """{"params":"numericFilters=1&alternativesAsExact=true&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&responseFields=att7%2Catt8&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=%5B1%2C2%2C3%2C4%2C5%2C6%5D&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=%5B1%2C2%2C3%2C4%5D&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
           isSearch = true
         )
       )
@@ -202,8 +202,8 @@ class SearchTest extends AlgoliaTest {
         aroundRadius = Some(AroundRadius.integer(0)),
         aroundPrecision = Some(20),
         minimumAroundRadius = Some(30),
-        insideBoundingBox = Some(InsideBoundingBox("1", "2", "3", "4")),
-        insidePolygon = Some(InsidePolygon("1", "2", "3", "4", "5", "6")),
+        insideBoundingBox = Some(Seq(InsideBoundingBox("1", "2", "3", "4"))),
+        insidePolygon = Some(Seq(InsidePolygon("1", "2", "3", "4", "5", "6"))),
         userToken = Some("userToken")
       )
 
@@ -212,7 +212,7 @@ class SearchTest extends AlgoliaTest {
           POST,
           List("1", "indexes", "indexName", "query"),
           body = Some(
-            """{"params":"numericFilters=1&alternativesAsExact=true&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&facetQuery=facetQuery&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=1%2C2%2C3%2C4%2C5%2C6&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=1%2C2%2C3%2C4&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
+            """{"params":"numericFilters=1&alternativesAsExact=true&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&facetQuery=facetQuery&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=%5B1%2C2%2C3%2C4%2C5%2C6%5D&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=%5B1%2C2%2C3%2C4%5D&removeStopWords=false&attributesToHighlight=att5&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
           isSearch = true
         )
       )
