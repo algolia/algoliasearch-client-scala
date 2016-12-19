@@ -42,7 +42,8 @@ class GetObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      val payload = HttpPayload(GET, Seq("1", "indexes", "test", "myId"))
+      val payload =
+        HttpPayload(GET, Seq("1", "indexes", "test", "myId"), isSearch = true)
       (get objectId "myId" from "test").build() should be(payload)
     }
 
@@ -71,7 +72,8 @@ class GetObjectTest extends AlgoliaTest {
 
       val payload = HttpPayload(POST,
                                 Seq("1", "indexes", "*", "objects"),
-                                body = Some(body))
+                                body = Some(body),
+                                isSearch = true)
       (get from "test" objectIds Seq("myId1", "myId2")).build() should be(
         payload)
     }

@@ -54,7 +54,7 @@ private[algolia] case class HttpPayload(
     path: Seq[String],
     queryParameters: Option[Map[String, String]] = None,
     body: Option[String] = None,
-    isSearch: Boolean = true) {
+    isSearch: Boolean) {
 
   def apply(host: String,
             headers: Map[String, String],
