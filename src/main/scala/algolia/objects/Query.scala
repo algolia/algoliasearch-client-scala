@@ -72,6 +72,8 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  /* DISTINCT PARAMETER */
                  distinct: Option[Distinct] = None,
 
+                 responseFields: Option[Seq[String]] = None,
+
                  /* FACETING PARAMETERS */
                  facets: Option[Seq[String]] = None,
                  facetFilters: Option[Seq[String]] = None,
@@ -154,6 +156,8 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       /* DISTINCT PARAMETER */
       "distinct" -> distinct.map(_.value),
 
+      "responseFields" -> responseFields.map(_.mkString(",")),
+
       /* FACETING PARAMETERS */
       "facets" -> facets.map(_.mkString(",")),
       "facetFilters" -> facetFilters.map(_.mkString(",")),
@@ -180,7 +184,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       /* BROWSE */
       "cursor" -> cursor
     )
-      .filter { case (k, v) => v.isDefined }
+      .filter { case (_, v) => v.isDefined }
       .map { case (k, v) => k -> v.get }
 
     customParameters.fold(queryParam)(c => queryParam ++ c)
