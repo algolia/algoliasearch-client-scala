@@ -1,5 +1,45 @@
 # Change Log
 
+## [1.17.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.17.0) (2016-12-20)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.16.0...1.17.0)
+
+**Fixed bugs:**
+
+- `getRankingInfo` is a Boolean [\#195](https://github.com/algolia/algoliasearch-client-scala/issues/195)
+
+**Merged pull requests:**
+
+- feat\(query\): insidePolygon & insideBoundingBox as Seq [\#225](https://github.com/algolia/algoliasearch-client-scala/pull/225) ([ElPicador](https://github.com/ElPicador))
+- fix\(query\): getRankingInfo is a boolean [\#224](https://github.com/algolia/algoliasearch-client-scala/pull/224) ([ElPicador](https://github.com/ElPicador))
+- feat\(query\): Add responseFields [\#223](https://github.com/algolia/algoliasearch-client-scala/pull/223) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#221](https://github.com/algolia/algoliasearch-client-scala/pull/221) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
+## [1.16.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.16.0) (2016-12-09)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.15.0...1.16.0)
+
+**Closed issues:**
+
+- ignorePlurals: accept a list of ISO codes [\#190](https://github.com/algolia/algoliasearch-client-scala/issues/190)
+- Implement `search in facet` [\#178](https://github.com/algolia/algoliasearch-client-scala/issues/178)
+
+**Merged pull requests:**
+
+- feat\(index\): Rename search facet to search into facet value [\#202](https://github.com/algolia/algoliasearch-client-scala/pull/202) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#201](https://github.com/algolia/algoliasearch-client-scala/pull/201) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- feat\(retry\): New retry strategy [\#200](https://github.com/algolia/algoliasearch-client-scala/pull/200) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#199](https://github.com/algolia/algoliasearch-client-scala/pull/199) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- feat\(settings\): Ignore plurals accepts iso codes [\#193](https://github.com/algolia/algoliasearch-client-scala/pull/193) ([ElPicador](https://github.com/ElPicador))
+- fix\(settings\): Distinct & RemoveStopWords [\#192](https://github.com/algolia/algoliasearch-client-scala/pull/192) ([ElPicador](https://github.com/ElPicador))
+- chore\(scalafmt\): Update scalafmt version [\#191](https://github.com/algolia/algoliasearch-client-scala/pull/191) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#189](https://github.com/algolia/algoliasearch-client-scala/pull/189) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#188](https://github.com/algolia/algoliasearch-client-scala/pull/188) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#184](https://github.com/algolia/algoliasearch-client-scala/pull/184) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Reformat code with scalafmt [\#182](https://github.com/algolia/algoliasearch-client-scala/pull/182) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#181](https://github.com/algolia/algoliasearch-client-scala/pull/181) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- feat\(search\): Add search in facet [\#180](https://github.com/algolia/algoliasearch-client-scala/pull/180) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#179](https://github.com/algolia/algoliasearch-client-scala/pull/179) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#177](https://github.com/algolia/algoliasearch-client-scala/pull/177) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.15.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.15.0) (2016-10-06)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.14.0...1.15.0)
 
