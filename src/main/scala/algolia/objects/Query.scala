@@ -88,8 +88,8 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  aroundRadius: Option[AroundRadius] = None,
                  aroundPrecision: Option[Int] = None,
                  minimumAroundRadius: Option[Int] = None,
-                 insideBoundingBox: Option[InsideBoundingBox] = None,
-                 insidePolygon: Option[InsidePolygon] = None,
+                 insideBoundingBox: Option[Seq[InsideBoundingBox]] = None,
+                 insidePolygon: Option[Seq[InsidePolygon]] = None,
 
                  /* SECURED API KEYS */
                  userToken: Option[String] = None,
@@ -172,8 +172,8 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "aroundRadius" -> aroundRadius.map(_.name),
       "aroundPrecision" -> aroundPrecision.map(_.toString),
       "minimumAroundRadius" -> minimumAroundRadius.map(_.toString),
-      "insideBoundingBox" -> insideBoundingBox.map(_.toString),
-      "insidePolygon" -> insidePolygon.map(_.toString),
+      "insideBoundingBox" -> insideBoundingBox.map(e => s"[${e.map(_.toString).mkString(",")}]"),
+      "insidePolygon" -> insidePolygon.map(e => s"[${e.map(_.toString).mkString(",")}]"),
 
       /* SECURED API KEYS */
       "userToken" -> userToken,
