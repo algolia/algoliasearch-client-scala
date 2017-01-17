@@ -200,7 +200,7 @@ trait PartialUpdateObjectDsl {
     override def apply(client: AlgoliaClient,
                        query: PartialUpdateObjectOperationDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
   }
 
@@ -209,7 +209,7 @@ trait PartialUpdateObjectDsl {
     override def apply(client: AlgoliaClient,
                        query: PartialUpdateObjectDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
   }
 

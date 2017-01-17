@@ -81,7 +81,7 @@ trait WaitForTaskDsl {
         implicit executor: ExecutionContext): Future[TaskStatus] = {
       def request(d: Long): Future[TaskStatus] =
         delay[TaskStatus](d) {
-          client request [TaskStatus] query.build()
+          client.request[TaskStatus](query.build())
         }.flatMap { res =>
           if (res.status == "published") {
             Future.successful(res)

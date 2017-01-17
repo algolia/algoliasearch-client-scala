@@ -39,7 +39,7 @@ case class GetSynonymDefinition(synId: String, index: Option[String] = None)(
     implicit val formats: Formats)
     extends Definition {
 
-  def from(index: String) = copy(index = Some(index))
+  def from(index: String): GetSynonymDefinition = copy(index = Some(index))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
@@ -57,9 +57,10 @@ case class DeleteSynonymDefinition(
     option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def from(index: String) = copy(index = Some(index))
+  def from(index: String): DeleteSynonymDefinition = copy(index = Some(index))
 
-  def and(option: ForwardToReplicas) = copy(option = Some(option))
+  def and(option: ForwardToReplicas): DeleteSynonymDefinition =
+    copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
     val queryParameters = if (option.isDefined) {
@@ -83,9 +84,10 @@ case class ClearSynonymsDefinition(
     option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def index(index: String) = copy(index = Some(index))
+  def index(index: String): ClearSynonymsDefinition = copy(index = Some(index))
 
-  def and(option: ForwardToReplicas) = copy(option = Some(option))
+  def and(option: ForwardToReplicas): ClearSynonymsDefinition =
+    copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", "clear")
@@ -111,9 +113,10 @@ case class SaveSynonymDefinition(
     option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def inIndex(index: String) = copy(index = Some(index))
+  def inIndex(index: String): SaveSynonymDefinition = copy(index = Some(index))
 
-  def and(option: ForwardToReplicas) = copy(option = Some(option))
+  def and(option: ForwardToReplicas): SaveSynonymDefinition =
+    copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms",
@@ -142,11 +145,14 @@ case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym],
                                      None)(implicit val formats: Formats)
     extends Definition {
 
-  def inIndex(index: String) = copy(index = Some(index))
+  def inIndex(index: String): BatchSynonymsDefinition =
+    copy(index = Some(index))
 
-  def and(forward: ForwardToReplicas) = copy(forward = Some(forward))
+  def and(forward: ForwardToReplicas): BatchSynonymsDefinition =
+    copy(forward = Some(forward))
 
-  def and(replace: ReplaceExistingSynonyms) = copy(replace = Some(replace))
+  def and(replace: ReplaceExistingSynonyms): BatchSynonymsDefinition =
+    copy(replace = Some(replace))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", "batch")
@@ -171,7 +177,7 @@ case class SearchSynonymsDefinition(
     query: Option[QuerySynonyms] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def index(indx: String) = copy(indx = Some(indx))
+  def index(indx: String): SearchSynonymsDefinition = copy(indx = Some(indx))
 
   def query(query: QuerySynonyms) = copy(query = Some(query))
 
@@ -204,7 +210,7 @@ trait SynonymsDsl {
 
     override def apply(client: AlgoliaClient, query: GetSynonymDefinition)(
         implicit executor: ExecutionContext): Future[AbstractSynonym] = {
-      client request [AbstractSynonym] query.build()
+      client.request[AbstractSynonym](query.build())
     }
 
   }
@@ -214,7 +220,7 @@ trait SynonymsDsl {
 
     override def apply(client: AlgoliaClient, query: DeleteSynonymDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
 
   }
@@ -224,7 +230,7 @@ trait SynonymsDsl {
 
     override def apply(client: AlgoliaClient, query: ClearSynonymsDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
 
   }
@@ -234,7 +240,7 @@ trait SynonymsDsl {
 
     override def apply(client: AlgoliaClient, query: SaveSynonymDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
 
   }
@@ -244,7 +250,7 @@ trait SynonymsDsl {
 
     override def apply(client: AlgoliaClient, query: BatchSynonymsDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
 
   }
@@ -254,7 +260,7 @@ trait SynonymsDsl {
 
     override def apply(client: AlgoliaClient, query: SearchSynonymsDefinition)(
         implicit executor: ExecutionContext): Future[SearchSynonymResult] = {
-      client request [SearchSynonymResult] query.build()
+      client.request[SearchSynonymResult](query.build())
     }
 
   }

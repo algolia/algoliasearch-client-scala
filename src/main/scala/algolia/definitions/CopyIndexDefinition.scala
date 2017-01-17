@@ -38,7 +38,8 @@ case class CopyIndexDefinition(
     source: String,
     destination: Option[String] = None)(implicit val formats: Formats)
     extends Definition {
-  def to(destination: String) = copy(source, Some(destination))
+  def to(destination: String): CopyIndexDefinition =
+    copy(source, Some(destination))
 
   override private[algolia] def build(): HttpPayload = {
     val operation = IndexOperation("copy", destination)
@@ -66,7 +67,7 @@ trait CopyIndexDsl {
       extends Executable[CopyIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: CopyIndexDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
   }
 

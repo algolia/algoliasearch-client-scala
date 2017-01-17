@@ -87,7 +87,7 @@ trait IndexingDsl {
       extends Executable[IndexingDefinition, TaskIndexing] {
     override def apply(client: AlgoliaClient, query: IndexingDefinition)(
         implicit executor: ExecutionContext): Future[TaskIndexing] = {
-      client request [TaskIndexing] query.build()
+      client.request[TaskIndexing](query.build())
     }
   }
 

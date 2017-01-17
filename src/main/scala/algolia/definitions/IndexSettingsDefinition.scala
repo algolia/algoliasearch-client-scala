@@ -99,7 +99,7 @@ trait IndexSettingsDsl {
     override def apply(client: AlgoliaClient,
                        settings: IndexSettingsDefinition)(
         implicit executor: ExecutionContext): Future[IndexSettings] = {
-      client request [IndexSettings] settings.build()
+      client.request[IndexSettings](settings.build())
     }
   }
 
@@ -108,7 +108,7 @@ trait IndexSettingsDsl {
     override def apply(client: AlgoliaClient,
                        settings: IndexChangeSettingsDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] settings.build()
+      client.request[Task](settings.build())
     }
   }
 
