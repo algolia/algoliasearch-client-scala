@@ -39,9 +39,9 @@ case class BrowseIndexDefinition(
     cursor: Option[String] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def from(cursor: String) = copy(cursor = Some(cursor))
+  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
 
-  def query(query: Query) = copy(query = Some(query))
+  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
 
   override private[algolia] def build(): HttpPayload = {
     val q = query.getOrElse(Query()).copy(cursor = cursor)
@@ -70,7 +70,7 @@ trait BrowseIndexDsl {
       extends Executable[BrowseIndexDefinition, BrowseResult] {
     override def apply(client: AlgoliaClient, query: BrowseIndexDefinition)(
         implicit executor: ExecutionContext): Future[BrowseResult] = {
-      client request [BrowseResult] query.build()
+      client.request[BrowseResult](query.build())
     }
   }
 

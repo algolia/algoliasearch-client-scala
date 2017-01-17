@@ -57,7 +57,7 @@ trait ClearDsl {
       extends Executable[ClearIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
   }
 

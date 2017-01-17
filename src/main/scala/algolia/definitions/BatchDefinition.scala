@@ -121,7 +121,7 @@ trait BatchDefinitionDsl {
       extends Executable[BatchDefinition, TasksMultipleIndex] {
     override def apply(client: AlgoliaClient, query: BatchDefinition)(
         implicit executor: ExecutionContext): Future[TasksMultipleIndex] = {
-      client request [TasksMultipleIndex] query.build()
+      client.request[TasksMultipleIndex](query.build())
     }
   }
 

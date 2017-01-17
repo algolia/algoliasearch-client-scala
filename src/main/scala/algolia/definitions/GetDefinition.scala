@@ -102,7 +102,7 @@ trait GetDsl {
 
     override def apply(client: AlgoliaClient, query: GetObjectDefinition)(
         implicit executor: ExecutionContext): Future[GetObject] = {
-      (client request [JObject] query.build()).map(GetObject(_))
+      client.request[JObject](query.build()).map(GetObject)
     }
 
   }
@@ -112,7 +112,7 @@ trait GetDsl {
 
     override def apply(client: AlgoliaClient, query: GetObjectsDefinition)(
         implicit executor: ExecutionContext): Future[Results] = {
-      client request [Results] query.build()
+      client.request[Results](query.build())
     }
 
   }

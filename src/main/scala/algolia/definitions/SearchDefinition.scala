@@ -94,7 +94,7 @@ trait SearchDsl {
       extends Executable[SearchDefinition, SearchResult] {
     override def apply(client: AlgoliaClient, query: SearchDefinition)(
         implicit executor: ExecutionContext): Future[SearchResult] = {
-      client request [SearchResult] query.build()
+      client.request[SearchResult](query.build())
     }
   }
 
@@ -102,7 +102,7 @@ trait SearchDsl {
       extends Executable[SearchFacetDefinition, SearchFacetResult] {
     override def apply(client: AlgoliaClient, query: SearchFacetDefinition)(
         implicit executor: ExecutionContext): Future[SearchFacetResult] = {
-      client request [SearchFacetResult] query.build()
+      client.request[SearchFacetResult](query.build())
     }
   }
 

@@ -149,35 +149,35 @@ trait ApiKeyDefinitionDsl {
       extends Executable[GetApiKeyDefinition, ApiKey] {
     override def apply(client: AlgoliaClient, query: GetApiKeyDefinition)(
         implicit executor: ExecutionContext): Future[ApiKey] =
-      client request [ApiKey] query.build()
+      client.request[ApiKey](query.build())
   }
 
   implicit object AddApiKeyDefinitionExecutable
       extends Executable[AddApiKeyDefinition, CreateUpdateKey] {
     override def apply(client: AlgoliaClient, query: AddApiKeyDefinition)(
         implicit executor: ExecutionContext): Future[CreateUpdateKey] =
-      client request [CreateUpdateKey] query.build()
+      client.request[CreateUpdateKey](query.build())
   }
 
   implicit object DeleteApiKeyDefinitionExecutable
       extends Executable[DeleteApiKeyDefinition, DeleteKey] {
     override def apply(client: AlgoliaClient, query: DeleteApiKeyDefinition)(
         implicit executor: ExecutionContext): Future[DeleteKey] =
-      client request [DeleteKey] query.build()
+      client.request[DeleteKey](query.build())
   }
 
   implicit object UpdateApiKeyDefinitionExecutable
       extends Executable[UpdateApiKeyDefinition, CreateUpdateKey] {
     override def apply(client: AlgoliaClient, query: UpdateApiKeyDefinition)(
         implicit executor: ExecutionContext): Future[CreateUpdateKey] =
-      client request [CreateUpdateKey] query.build()
+      client.request[CreateUpdateKey](query.build())
   }
 
   implicit object GetAllApiKeyDefinitionExecutable
       extends Executable[GetAllApiKeyDefinition, AllKeys] {
     override def apply(client: AlgoliaClient, query: GetAllApiKeyDefinition)(
         implicit executor: ExecutionContext): Future[AllKeys] =
-      client request [AllKeys] query.build()
+      client.request[AllKeys](query.build())
   }
 
 }

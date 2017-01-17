@@ -51,7 +51,7 @@ trait ListIndexesDsl {
       extends Executable[ListIndexesDefinition, Indices] {
     override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
         implicit executor: ExecutionContext): Future[Indices] = {
-      client request [Indices] query.build()
+      client.request[Indices](query.build())
     }
   }
 

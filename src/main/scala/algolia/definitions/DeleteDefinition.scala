@@ -89,7 +89,7 @@ trait DeleteDsl {
       extends Executable[DeleteObjectDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteObjectDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
   }
 
@@ -97,7 +97,7 @@ trait DeleteDsl {
       extends Executable[DeleteIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteIndexDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
-      client request [Task] query.build()
+      client.request[Task](query.build())
     }
   }
 

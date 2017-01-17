@@ -82,7 +82,7 @@ trait MultiQueriesDefinitionDsl {
       extends Executable[MultiQueriesDefinition, MultiQueriesResult] {
     override def apply(client: AlgoliaClient, query: MultiQueriesDefinition)(
         implicit executor: ExecutionContext): Future[MultiQueriesResult] = {
-      client request [MultiQueriesResult] query.build()
+      client.request[MultiQueriesResult](query.build())
     }
   }
 
