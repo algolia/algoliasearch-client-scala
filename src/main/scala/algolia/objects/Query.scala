@@ -101,6 +101,9 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  /* BROWSE */
                  cursor: Option[String] = None,
 
+                 /* FACET QUERY */
+                 maxFacetHits: Option[Int] = None,
+
                  /* CUSTOM */
                  customParameters: Option[Map[String, String]] = None) {
 
@@ -184,7 +187,10 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "restrictSources" -> restrictSources,
 
       /* BROWSE */
-      "cursor" -> cursor
+      "cursor" -> cursor,
+
+      /* FACET */
+      "maxFacetHits" -> maxFacetHits.map(_.toString)
     )
       .filter { case (_, v) => v.isDefined }
       .map { case (k, v) => k -> v.get }
