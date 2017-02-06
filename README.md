@@ -71,7 +71,7 @@ java.security.Security.setProperty("networkaddress.cache.ttl", "60");
 **Manage Indices**
 
 1. [Create an index](#create-an-index)
-1. [List indices - `list.indices()`](#list-indices---listindices)
+1. [List indices - `list.indices()`](#list-indices---list.indices)
 1. [Delete an index - `delete index`](#delete-an-index---delete-index)
 1. [Clear an index - `clear index`](#clear-an-index---clear-index)
 1. [Copy index - `copy index`](#copy-index---copy-index)
