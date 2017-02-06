@@ -71,6 +71,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
 
                  /* DISTINCT PARAMETER */
                  distinct: Option[Distinct] = None,
+                 facetingAfterDistinct: Option[Boolean] = None,
 
                  responseFields: Option[Seq[String]] = None,
 
@@ -155,6 +156,7 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
 
       /* DISTINCT PARAMETER */
       "distinct" -> distinct.map(_.value),
+      "facetingAfterDistinct" -> facetingAfterDistinct.map(_.toString),
 
       "responseFields" -> responseFields.map(_.mkString(",")),
 
