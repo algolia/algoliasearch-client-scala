@@ -1,5 +1,19 @@
 # Change Log
 
+## [1.18.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.18.0) (2017-02-06)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.17.0...1.18.0)
+
+**Merged pull requests:**
+
+- feat\(facetquery\): maxFacetHits [\#331](https://github.com/algolia/algoliasearch-client-scala/pull/331) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#330](https://github.com/algolia/algoliasearch-client-scala/pull/330) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- feat\(query\): Add facetingAfterDistinct [\#329](https://github.com/algolia/algoliasearch-client-scala/pull/329) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#328](https://github.com/algolia/algoliasearch-client-scala/pull/328) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#321](https://github.com/algolia/algoliasearch-client-scala/pull/321) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- chore\(syntax\): Add dot notation [\#297](https://github.com/algolia/algoliasearch-client-scala/pull/297) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#295](https://github.com/algolia/algoliasearch-client-scala/pull/295) ([algoliareadmebot](https://github.com/algoliareadmebot))
+- Update README [\#282](https://github.com/algolia/algoliasearch-client-scala/pull/282) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.17.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.17.0) (2016-12-20)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.16.0...1.17.0)
 
