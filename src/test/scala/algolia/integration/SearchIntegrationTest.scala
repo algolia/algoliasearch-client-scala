@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.objects.{IndexSettings, Query}
+import algolia.objects.{IndexSettings, InsideBoundingBox, InsidePolygon, Query}
 import algolia.responses._
 import org.json4s._
 
@@ -44,11 +44,9 @@ class SearchIntegrationTest extends AlgoliaTest {
   }
 
   before {
+    val obj = Test("algolia", 10, alien = false)
     val insert1 = client.execute {
-      index into "indexToSearch" objectId "563481290" `object` Test("algolia",
-                                                                    10,
-                                                                    alien =
-                                                                      false)
+      index into "indexToSearch" objectId "563481290" `object` obj
     }
 
     taskShouldBeCreatedAndWaitForIt(insert1, "indexToSearch")
@@ -102,6 +100,34 @@ class SearchIntegrationTest extends AlgoliaTest {
           None,
           None)
         result.asHit[EnhanceTest].head should be(hit)
+      }
+    }
+
+    it("should be able to search on insideBoundingBox") {
+      val box = Seq(InsideBoundingBox("1", "2", "3", "4"),
+                    InsideBoundingBox("5", "6", "7", "8"))
+      val s = client.execute {
+        search into "indexToSearch" query Query(query = Some("a"),
+                                                insideBoundingBox = Some(box))
+      }
+
+      whenReady(s) { result =>
+        result.hits should be(empty)
+      }
+    }
+
+    it("should be able to search on insidePolygon") {
+      val polygon = Seq(
+        InsidePolygon("1", "2", "3", "4", "5", "6"),
+        InsidePolygon("7", "8", "9", "10", "11", "12")
+      )
+      val s = client.execute {
+        search into "indexToSearch" query Query(query = Some("a"),
+                                                insidePolygon = Some(polygon))
+      }
+
+      whenReady(s) { result =>
+        result.hits should be(empty)
       }
     }
   }
