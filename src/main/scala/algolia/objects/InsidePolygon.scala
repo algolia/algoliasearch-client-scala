@@ -32,7 +32,7 @@ case class InsidePolygon(p1Lat: String,
                          p3Lat: String,
                          p3Lng: String) {
 
-  override def toString = s"$p1Lat,$p1Lng,$p2Lat,$p2Lng,$p3Lat,$p3Lng"
+  override def toString = s"[$p1Lat,$p1Lng,$p2Lat,$p2Lng,$p3Lat,$p3Lng]"
 
 }
 
