@@ -35,3 +35,23 @@ case class InsidePolygon(p1Lat: String,
   override def toString = s"$p1Lat,$p1Lng,$p2Lat,$p2Lng,$p3Lat,$p3Lng"
 
 }
+
+object InsidePolygon {
+
+  def apply(p1Lat: Float,
+            p1Lng: Float,
+            p2Lat: Float,
+            p2Lng: Float,
+            p3Lat: Float,
+            p3Lng: Float): InsidePolygon = {
+    InsidePolygon(
+      p1Lat.toString,
+      p1Lng.toString,
+      p2Lat.toString,
+      p2Lng.toString,
+      p3Lat.toString,
+      p3Lng.toString
+    )
+  }
+
+}

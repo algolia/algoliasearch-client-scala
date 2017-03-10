@@ -33,3 +33,17 @@ case class InsideBoundingBox(p1Lat: String,
   override def toString = s"$p1Lat,$p1Lng,$p2Lat,$p2Lng"
 
 }
+
+object InsideBoundingBox {
+
+  def apply(p1Lat: Float,
+            p1Lng: Float,
+            p2Lat: Float,
+            p2Lng: Float): InsideBoundingBox = {
+    InsideBoundingBox(p1Lat.toString,
+                      p1Lng.toString,
+                      p2Lat.toString,
+                      p2Lng.toString)
+  }
+
+}
