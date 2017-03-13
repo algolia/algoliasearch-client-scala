@@ -1,5 +1,20 @@
 # Change Log
 
+## [1.19.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.19.0) (2017-03-13)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.18.0...1.19.0)
+
+**Fixed bugs:**
+
+- insideBoundingBox & insidePolygon takes arrays of arrays [\#365](https://github.com/algolia/algoliasearch-client-scala/issues/365)
+- Incompatibilities with Spark because of json4s [\#363](https://github.com/algolia/algoliasearch-client-scala/issues/363)
+
+**Merged pull requests:**
+
+- feat\(query\): Construtor with floats for InsidePolygon & InsideBoundin… [\#367](https://github.com/algolia/algoliasearch-client-scala/pull/367) ([ElPicador](https://github.com/ElPicador))
+- fix\(query\): Fix InsideBoundingBox & InsidePolygon [\#366](https://github.com/algolia/algoliasearch-client-scala/pull/366) ([ElPicador](https://github.com/ElPicador))
+- feat\(json4s\): Be less restrictiv for json4s dependency version, to make it compatible with Spark [\#364](https://github.com/algolia/algoliasearch-client-scala/pull/364) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#362](https://github.com/algolia/algoliasearch-client-scala/pull/362) ([algoliareadmebot](https://github.com/algoliareadmebot))
+
 ## [1.18.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.18.0) (2017-02-06)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.17.0...1.18.0)
 
