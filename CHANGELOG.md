@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.19.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.19.1) (2017-03-17)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.19.0...1.19.1)
+
+**Merged pull requests:**
+
+- Revert "feat\(json4s\): Be less restrictiv for json4s dependency versio… [\#368](https://github.com/algolia/algoliasearch-client-scala/pull/368) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.19.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.19.0) (2017-03-13)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.18.0...1.19.0)
 
