@@ -126,11 +126,10 @@ pomExtra := {
 }
 
 publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT")) {
-    Some("snapshots" at nexus + "content/repositories/snapshots")
+  if (isSnapshot.value) {
+    Some(Opts.resolver.sonatypeSnapshots)
   } else {
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    Some(Opts.resolver.sonatypeStaging)
   }
 }
 
