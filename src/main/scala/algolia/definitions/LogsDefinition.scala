@@ -71,8 +71,7 @@ trait LogsDsl {
 
   def logs() = LogsDefinition()
 
-  implicit object LogsDefinitionExecutable
-      extends Executable[LogsDefinition, Logs] {
+  implicit object LogsDefinitionExecutable extends Executable[LogsDefinition, Logs] {
     override def apply(client: AlgoliaClient, query: LogsDefinition)(
         implicit executor: ExecutionContext): Future[Logs] = {
       client.request[Logs](query.build())

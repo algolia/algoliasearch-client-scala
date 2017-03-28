@@ -91,24 +91,21 @@ class SearchIntegrationTest extends AlgoliaTest {
 
       whenReady(s) { result =>
         result.hits should have length 1
-        val hit = EnhanceTest(
-          "algolia",
-          10,
-          alien = false,
-          "563481290",
-          Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))),
-          None,
-          None)
+        val hit = EnhanceTest("algolia",
+                              10,
+                              alien = false,
+                              "563481290",
+                              Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))),
+                              None,
+                              None)
         result.asHit[EnhanceTest].head should be(hit)
       }
     }
 
     it("should be able to search on insideBoundingBox") {
-      val box = Seq(InsideBoundingBox("1", "2", "3", "4"),
-                    InsideBoundingBox("5", "6", "7", "8"))
+      val box = Seq(InsideBoundingBox("1", "2", "3", "4"), InsideBoundingBox("5", "6", "7", "8"))
       val s = client.execute {
-        search into "indexToSearch" query Query(query = Some("a"),
-                                                insideBoundingBox = Some(box))
+        search into "indexToSearch" query Query(query = Some("a"), insideBoundingBox = Some(box))
       }
 
       whenReady(s) { result =>
@@ -122,8 +119,7 @@ class SearchIntegrationTest extends AlgoliaTest {
         InsidePolygon("7", "8", "9", "10", "11", "12")
       )
       val s = client.execute {
-        search into "indexToSearch" query Query(query = Some("a"),
-                                                insidePolygon = Some(polygon))
+        search into "indexToSearch" query Query(query = Some("a"), insidePolygon = Some(polygon))
       }
 
       whenReady(s) { result =>
@@ -145,8 +141,7 @@ class SearchIntegrationTest extends AlgoliaTest {
       whenReady(s) { r =>
         r.results should have length 2
         forAll(r.results) { result =>
-          (result.hits.head \ "name").values.toString should startWith(
-            "algolia")
+          (result.hits.head \ "name").values.toString should startWith("algolia")
           (result.hits.head \ "age").values should be(10)
           (result.hits.head \ "alien").values shouldBe false
         }

@@ -35,9 +35,8 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetObjectDefinition(
-    index: Option[String] = None,
-    oid: Option[String] = None)(implicit val formats: Formats)
+case class GetObjectDefinition(index: Option[String] = None, oid: Option[String] = None)(
+    implicit val formats: Formats)
     extends Definition {
 
   def objectIds(oids: Seq[String]): GetObjectsDefinition =
@@ -56,9 +55,8 @@ case class GetObjectDefinition(
     )
 }
 
-case class GetObjectsDefinition(
-    index: Option[String],
-    oids: Seq[String] = Seq())(implicit val formats: Formats)
+case class GetObjectsDefinition(index: Option[String], oids: Seq[String] = Seq())(
+    implicit val formats: Formats)
     extends Definition {
 
   override private[algolia] def build(): HttpPayload = {

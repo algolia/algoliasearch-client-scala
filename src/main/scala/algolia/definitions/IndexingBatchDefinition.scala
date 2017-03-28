@@ -26,11 +26,7 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.inputs.{
-  AddObjectOperation,
-  BatchOperations,
-  UpdateObjectOperation
-}
+import algolia.inputs.{AddObjectOperation, BatchOperations, UpdateObjectOperation}
 import algolia.responses.TasksSingleIndex
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -38,10 +34,9 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexingBatchDefinition(index: String,
-                                   definitions: Traversable[Definition] =
-                                     Traversable())(
-    implicit val formats: Formats)
+case class IndexingBatchDefinition(
+    index: String,
+    definitions: Traversable[Definition] = Traversable())(implicit val formats: Formats)
     extends Definition
     with BatchOperationUtils {
 

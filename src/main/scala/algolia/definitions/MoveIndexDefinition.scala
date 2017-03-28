@@ -34,9 +34,8 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class MoveIndexDefinition(
-    source: String,
-    destination: Option[String] = None)(implicit val formats: Formats)
+case class MoveIndexDefinition(source: String, destination: Option[String] = None)(
+    implicit val formats: Formats)
     extends Definition {
 
   def to(destination: String): MoveIndexDefinition =
@@ -64,8 +63,7 @@ trait MoveIndexDsl {
 
   }
 
-  implicit object MoveIndexDefinitionExecutable
-      extends Executable[MoveIndexDefinition, Task] {
+  implicit object MoveIndexDefinitionExecutable extends Executable[MoveIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: MoveIndexDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())

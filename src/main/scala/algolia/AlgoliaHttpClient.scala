@@ -37,8 +37,7 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.Try
 
 case class AlgoliaHttpClient(
-    configuration: AlgoliaClientConfiguration =
-      AlgoliaClientConfiguration.default) {
+    configuration: AlgoliaClientConfiguration = AlgoliaClientConfiguration.default) {
 
   val asyncClientConfig: DefaultAsyncHttpClientConfig =
     new DefaultAsyncHttpClientConfig.Builder()
@@ -57,10 +56,8 @@ case class AlgoliaHttpClient(
 
   implicit val formats: Formats = AlgoliaDsl.formats
 
-  def request[T: Manifest](
-      host: String,
-      headers: Map[String, String],
-      payload: HttpPayload)(implicit executor: ExecutionContext): Future[T] = {
+  def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(
+      implicit executor: ExecutionContext): Future[T] = {
     val request = payload(host, headers, dnsNameResolver)
     makeRequest(request, responseHandler)
   }
@@ -70,9 +67,8 @@ case class AlgoliaHttpClient(
       response.getStatusCode / 100 match {
         case 2 => toJson(response).extract[T]
         case 4 =>
-          throw APIClientException(
-            response.getStatusCode,
-            (toJson(response) \ "message").extract[String])
+          throw APIClientException(response.getStatusCode,
+                                   (toJson(response) \ "message").extract[String])
         case _ => throw UnexpectedResponse(response.getStatusCode)
       }
   }
@@ -102,8 +98,7 @@ case class AlgoliaHttpClient(
 }
 
 case class APIClientException(code: Int, message: String)
-    extends Exception(
-      "Failure \"%s\", response status: %d".format(message, code))
+    extends Exception("Failure \"%s\", response status: %d".format(message, code))
 
 case class UnexpectedResponse(code: Int)
     extends Exception("Unexpected response status: %d".format(code))

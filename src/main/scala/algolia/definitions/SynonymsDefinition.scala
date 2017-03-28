@@ -119,8 +119,7 @@ case class SaveSynonymDefinition(
     copy(option = Some(option))
 
   override private[algolia] def build(): HttpPayload = {
-    val path = Seq("1", "indexes") ++ index ++ Seq("synonyms",
-                                                   synonym.objectID)
+    val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", synonym.objectID)
 
     val queryParameters = if (option.isDefined) {
       Some(Map("forwardToReplicas" -> "true"))
@@ -138,11 +137,11 @@ case class SaveSynonymDefinition(
   }
 }
 
-case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym],
-                                   index: Option[String] = None,
-                                   forward: Option[ForwardToReplicas] = None,
-                                   replace: Option[ReplaceExistingSynonyms] =
-                                     None)(implicit val formats: Formats)
+case class BatchSynonymsDefinition(
+    synonyms: Iterable[AbstractSynonym],
+    index: Option[String] = None,
+    forward: Option[ForwardToReplicas] = None,
+    replace: Option[ReplaceExistingSynonyms] = None)(implicit val formats: Formats)
     extends Definition {
 
   def inIndex(index: String): BatchSynonymsDefinition =
@@ -159,8 +158,7 @@ case class BatchSynonymsDefinition(synonyms: Iterable[AbstractSynonym],
 
     var queryParameters = Map.empty[String, String]
     forward.foreach(_ => queryParameters += ("forwardToReplicas" -> "true"))
-    replace.foreach(_ =>
-      queryParameters += ("replaceExistingSynonyms" -> "true"))
+    replace.foreach(_ => queryParameters += ("replaceExistingSynonyms" -> "true"))
 
     HttpPayload(
       POST,
@@ -235,8 +233,7 @@ trait SynonymsDsl {
 
   }
 
-  implicit object SaveSynonymDefinitionExecutable
-      extends Executable[SaveSynonymDefinition, Task] {
+  implicit object SaveSynonymDefinitionExecutable extends Executable[SaveSynonymDefinition, Task] {
 
     override def apply(client: AlgoliaClient, query: SaveSynonymDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {

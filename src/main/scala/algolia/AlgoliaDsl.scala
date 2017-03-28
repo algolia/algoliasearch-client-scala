@@ -27,9 +27,11 @@ package algolia
 
 import algolia.definitions._
 import algolia.objects._
-import org.json4s.CustomSerializer
+import org.json4s.{CustomSerializer, Formats}
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
+
+import scala.util.matching.Regex
 
 trait AlgoliaDsl
     extends Object //Just to have all trait DSL ordered `with`
@@ -54,7 +56,7 @@ trait AlgoliaDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 
-  implicit val formats =
+  implicit val formats: Formats =
     org.json4s.DefaultFormats +
       new SearchableAttributesSerializer +
       new AttributesToIndexSerializer +
@@ -70,11 +72,13 @@ object AlgoliaDsl extends AlgoliaDsl {
       new RemoveStopWordsSerializer +
       new IgnorePluralsSerializer
 
-  val searchableAttributesUnordered = """^unordered\(([\w-]+)\)$""".r
-  val searchableAttributesAttributes = """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
-  val numericAttributesToIndexEqualOnly = """^equalOnly\(([\w-]+)\)$""".r
-  val asc = """^asc\(([\w-]+)\)$""".r
-  val desc = """^desc\(([\w-]+)\)$""".r
+  val searchableAttributesUnordered: Regex = """^unordered\(([\w-]+)\)$""".r
+  val searchableAttributesAttributes: Regex =
+    """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
+  val numericAttributesToIndexEqualOnly: Regex =
+    """^equalOnly\(([\w-]+)\)$""".r
+  val asc: Regex = """^asc\(([\w-]+)\)$""".r
+  val desc: Regex = """^desc\(([\w-]+)\)$""".r
 
   sealed trait ForwardToReplicas
 
@@ -85,7 +89,7 @@ object AlgoliaDsl extends AlgoliaDsl {
   sealed trait In
 
   class AttributesToIndexSerializer
-      extends CustomSerializer[AttributesToIndex](format =>
+      extends CustomSerializer[AttributesToIndex](_ =>
         ({
           case JString(searchableAttributesUnordered(attr)) =>
             AttributesToIndex.unordered(attr)
@@ -101,7 +105,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class SearchableAttributesSerializer
-      extends CustomSerializer[SearchableAttributes](format =>
+      extends CustomSerializer[SearchableAttributes](_ =>
         ({
           case JString(searchableAttributesUnordered(attr)) =>
             SearchableAttributes.unordered(attr)
@@ -117,7 +121,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class NumericAttributesToIndexSerializer
-      extends CustomSerializer[NumericAttributesToIndex](format =>
+      extends CustomSerializer[NumericAttributesToIndex](_ =>
         ({
           case JString(numericAttributesToIndexEqualOnly(attr)) =>
             NumericAttributesToIndex.equalOnly(attr)
@@ -127,7 +131,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class RankingSerializer
-      extends CustomSerializer[Ranking](format =>
+      extends CustomSerializer[Ranking](_ =>
         ({
           case JString(asc(attr)) => Ranking.asc(attr)
           case JString(desc(attr)) => Ranking.desc(attr)
@@ -151,7 +155,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class CustomRankingSerializer
-      extends CustomSerializer[CustomRanking](format =>
+      extends CustomSerializer[CustomRanking](_ =>
         ({
           case JString(asc(attr)) => CustomRanking.asc(attr)
           case JString(desc(attr)) => CustomRanking.desc(attr)
@@ -161,7 +165,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class QueryTypeSerializer
-      extends CustomSerializer[QueryType](format =>
+      extends CustomSerializer[QueryType](_ =>
         ({
           case JString("prefixAll") => QueryType.prefixAll
           case JString("prefixLast") => QueryType.prefixLast
@@ -173,7 +177,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class TypoToleranceSerializer
-      extends CustomSerializer[TypoTolerance](format =>
+      extends CustomSerializer[TypoTolerance](_ =>
         ({
           case JString("true") => TypoTolerance.`true`
           case JString("false") => TypoTolerance.`false`
@@ -187,7 +191,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class AclSerializer
-      extends CustomSerializer[Acl](format =>
+      extends CustomSerializer[Acl](_ =>
         ({
           case JString("search") => Acl.search
           case JString("browse") => Acl.browse
@@ -211,15 +215,14 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class QuerySynonymsSerializer
-      extends CustomSerializer[QuerySynonyms](format =>
+      extends CustomSerializer[QuerySynonyms](_ =>
         ({
           case JObject(_) => ???
         }, {
           case QuerySynonyms(query, synonymsTypes, page, hitsPerPage) =>
             var fields = Seq(JField("query", JString(query)))
 
-            synonymsTypes.foreach(t =>
-              fields :+= JField("type", JString(t.mkString(","))))
+            synonymsTypes.foreach(t => fields :+= JField("type", JString(t.mkString(","))))
             page.foreach(p => fields :+= JField("page", JInt(p)))
             hitsPerPage.foreach(p => fields :+= JField("hitsPerPage", JInt(p)))
 
@@ -227,7 +230,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class AbstractSynonymSerializer
-      extends CustomSerializer[AbstractSynonym](format =>
+      extends CustomSerializer[AbstractSynonym](_ =>
         ({
           case x: JObject =>
             val objectID = (x \ "objectID").extract[String]
@@ -235,18 +238,15 @@ object AlgoliaDsl extends AlgoliaDsl {
 
             synonymType match {
               case SynonymType.synonym.name =>
-                Synonym.Synonym(objectID,
-                                (x \ "synonyms").extract[Seq[String]])
+                Synonym.Synonym(objectID, (x \ "synonyms").extract[Seq[String]])
               case SynonymType.altCorrection1.name =>
-                Synonym.AltCorrection1(
-                  objectID,
-                  (x \ "word").extract[String],
-                  (x \ "corrections").extract[Seq[String]])
+                Synonym.AltCorrection1(objectID,
+                                       (x \ "word").extract[String],
+                                       (x \ "corrections").extract[Seq[String]])
               case SynonymType.altCorrection2.name =>
-                Synonym.AltCorrection2(
-                  objectID,
-                  (x \ "word").extract[String],
-                  (x \ "corrections").extract[Seq[String]])
+                Synonym.AltCorrection2(objectID,
+                                       (x \ "word").extract[String],
+                                       (x \ "corrections").extract[Seq[String]])
               case SynonymType.oneWaySynonym.name =>
                 Synonym.OneWaySynonym(objectID,
                                       (x \ "input").extract[String],
@@ -270,7 +270,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class DistinctSerializer
-      extends CustomSerializer[Distinct](format =>
+      extends CustomSerializer[Distinct](_ =>
         ({
           case JBool(true) => Distinct.`true`
           case JBool(false) => Distinct.`false`
@@ -282,7 +282,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class RemoveStopWordsSerializer
-      extends CustomSerializer[RemoveStopWords](format =>
+      extends CustomSerializer[RemoveStopWords](_ =>
         ({
           case JBool(true) => RemoveStopWords.`true`
           case JBool(false) => RemoveStopWords.`false`
@@ -294,7 +294,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         }))
 
   class IgnorePluralsSerializer
-      extends CustomSerializer[IgnorePlurals](format =>
+      extends CustomSerializer[IgnorePlurals](_ =>
         ({
           case JBool(true) => IgnorePlurals.`true`
           case JBool(false) => IgnorePlurals.`false`

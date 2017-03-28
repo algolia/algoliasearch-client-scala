@@ -103,8 +103,7 @@ class PartialUpdateObjectTest extends AlgoliaTest {
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
-          body =
-            Some("{\"toto\":{\"_operation\":\"Remove\",\"value\":\"truc\"}}"),
+          body = Some("{\"toto\":{\"_operation\":\"Remove\",\"value\":\"truc\"}}"),
           isSearch = false
         )
       )
@@ -124,8 +123,7 @@ class PartialUpdateObjectTest extends AlgoliaTest {
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
-          body = Some(
-            "{\"toto\":{\"_operation\":\"AddUnique\",\"value\":\"truc\"}}"),
+          body = Some("{\"toto\":{\"_operation\":\"AddUnique\",\"value\":\"truc\"}}"),
           isSearch = false
         )
       )

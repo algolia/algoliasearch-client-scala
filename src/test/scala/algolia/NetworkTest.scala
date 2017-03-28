@@ -47,7 +47,8 @@ class NetworkTest extends AlgoliaTest {
             s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
             s"https://$applicationId-1.algolianet.com"
           ),
-          indexingHosts)
+          indexingHosts
+        )
     }
 
     it("should answer within 3 seconds") {
@@ -84,7 +85,8 @@ class NetworkTest extends AlgoliaTest {
             s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
             s"https://$applicationId-1.algolianet.com"
           ),
-          indexingHosts)
+          indexingHosts
+        )
 
     }
 
@@ -119,7 +121,8 @@ class NetworkTest extends AlgoliaTest {
             s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
             s"https://$applicationId-1.algolianet.com"
           ),
-          indexingHosts)
+          indexingHosts
+        )
     }
 
     it("should answer within 1 second") {

@@ -34,7 +34,7 @@ sealed trait Distinct {
 object Distinct {
 
   case class int(integer: Int) extends Distinct {
-    override val value = integer.toString
+    override val value: String = integer.toString
   }
 
   case object `true` extends Distinct {

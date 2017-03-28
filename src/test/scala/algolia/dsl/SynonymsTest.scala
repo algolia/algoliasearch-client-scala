@@ -115,8 +115,7 @@ class SynonymsTest extends AlgoliaTest {
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "synonyms", "search"),
-            body = Some(
-              """{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""),
+            body = Some("""{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""),
             isSearch = true
           )
         )
@@ -161,8 +160,8 @@ class SynonymsTest extends AlgoliaTest {
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "synonyms", "batch"),
-            queryParameters = Some(Map("forwardToReplicas" -> "true",
-                                       "replaceExistingSynonyms" -> "true")),
+            queryParameters =
+              Some(Map("forwardToReplicas" -> "true", "replaceExistingSynonyms" -> "true")),
             body = Some(
               """[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""),
             isSearch = false

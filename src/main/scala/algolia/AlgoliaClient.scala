@@ -47,18 +47,15 @@ import scala.util.{Failure, Success}
 class AlgoliaClient(applicationId: String,
                     apiKey: String,
                     customHeader: Map[String, String] = Map.empty,
-                    configuration: AlgoliaClientConfiguration =
-                      AlgoliaClientConfiguration.default,
+                    configuration: AlgoliaClientConfiguration = AlgoliaClientConfiguration.default,
                     private[algolia] val utils: AlgoliaUtils = AlgoliaUtils) {
 
   if (applicationId == null || applicationId.isEmpty) {
-    throw new AlgoliaClientException(
-      s"'applicationId' is probably too short: '$applicationId'")
+    throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
   }
 
   if (apiKey == null || apiKey.isEmpty) {
-    throw new AlgoliaClientException(
-      s"'apiKey' is probably too short: '$apiKey'")
+    throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
   }
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
@@ -69,41 +66,40 @@ class AlgoliaClient(applicationId: String,
   val indexingHosts: Seq[String] =
     s"https://$applicationId.$ALGOLIANET_HOST" +:
       utils.shuffle(
-        Seq(
-          s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-          s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-          s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-        ))
+      Seq(
+        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+      ))
 
   val queryHosts: Seq[String] =
     s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
       utils.shuffle(
-        Seq(
-          s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-          s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-          s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-        ))
+      Seq(
+        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+      ))
 
   val userAgent =
-    s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty(
-      "java.version")}); Scala (${BuildInfo.scalaVersion})"
+    s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
 
   val headers: Map[String, String] = customHeader ++ Map(
-      "Accept-Encoding" -> "gzip",
-      "X-Algolia-Application-Id" -> applicationId,
-      "X-Algolia-API-Key" -> apiKey,
-      "User-Agent" -> userAgent,
-      "Content-Type" -> "application/json; charset=UTF-8",
-      "Accept" -> "application/json"
-    )
+    "Accept-Encoding" -> "gzip",
+    "X-Algolia-Application-Id" -> applicationId,
+    "X-Algolia-API-Key" -> apiKey,
+    "User-Agent" -> userAgent,
+    "Content-Type" -> "application/json; charset=UTF-8",
+    "Accept" -> "application/json"
+  )
 
   private val HMAC_SHA256 = "HmacSHA256"
   private[algolia] val hostsStatuses =
     HostsStatuses(configuration, utils, queryHosts, indexingHosts)
 
-  def execute[QUERY, RESULT](query: QUERY)(
-      implicit executable: Executable[QUERY, RESULT],
-      executor: ExecutionContext): Future[RESULT] = executable(this, query)
+  def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT],
+                                           executor: ExecutionContext): Future[RESULT] =
+    executable(this, query)
 
   def generateSecuredApiKey(privateApiKey: String,
                             query: Query,
@@ -111,9 +107,7 @@ class AlgoliaClient(applicationId: String,
     val queryStr = query.copy(userToken = userToken).toParam
     val key = hmac(privateApiKey, queryStr)
 
-    new String(
-      Base64.getEncoder.encode(
-        s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
+    new String(Base64.getEncoder.encode(s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
   }
 
   private def hmac(key: String, msg: String): String = {
@@ -131,16 +125,15 @@ class AlgoliaClient(applicationId: String,
       hostsStatuses.indexingHostsThatAreUp()
     }
 
-    val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) {
-      (future, host) =>
-        future.recoverWith {
-          case e: APIClientException => Future.failed(e) //No retry if 4XX
-          case _ =>
-            httpClient.request[T](host, headers, payload).andThen {
-              case Failure(_) => hostsStatuses.markHostAsDown(host)
-              case Success(_) => hostsStatuses.markHostAsUp(host)
-            }
-        }
+    val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
+      future.recoverWith {
+        case e: APIClientException => Future.failed(e) //No retry if 4XX
+        case _ =>
+          httpClient.request[T](host, headers, payload).andThen {
+            case Failure(_) => hostsStatuses.markHostAsDown(host)
+            case Success(_) => hostsStatuses.markHostAsUp(host)
+          }
+      }
     }
 
     result.recoverWith {

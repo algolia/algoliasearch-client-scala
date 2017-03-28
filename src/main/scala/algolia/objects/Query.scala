@@ -27,63 +27,29 @@ package algolia.objects
 
 import java.net.URLEncoder
 
-case class Query(/* FULL TEXT SEARCH PARAMETERS */
-                 query: Option[String] = None,
-                 private[algolia] val facetQuery: Option[String] = None,
-                 queryType: Option[QueryType] = None,
-                 typoTolerance: Option[TypoTolerance] = None,
-                 minWordSizefor1Typo: Option[Int] = None,
-                 minWordSizefor2Typos: Option[Int] = None,
-                 allowTyposOnNumericTokens: Option[Boolean] = None,
-                 ignorePlurals: Option[IgnorePlurals] = None,
-                 restrictSearchableAttributes: Option[Seq[String]] = None,
-                 advancedSyntax: Option[Boolean] = None,
+case class Query(
+                 /* Advanced */
+                 distinct: Option[Distinct] = None,
+                 getRankingInfo: Option[Boolean] = None,
+                 numericFilters: Option[Seq[String]] = None,
+                 tagFilters: Option[Seq[String]] = None,
                  analytics: Option[Boolean] = None,
                  analyticsTags: Option[Seq[String]] = None,
                  synonyms: Option[Boolean] = None,
                  replaceSynonymsInHighlight: Option[Boolean] = None,
-                 optionalWords: Option[Seq[String]] = None,
                  minProximity: Option[Int] = None,
-                 removeWordsIfNoResults: Option[RemoveWordsIfNoResults] = None,
-                 disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
-                 removeStopWords: Option[RemoveStopWords] = None,
-                 exactOnSingleWordQuery: Option[String] = None,
-                 alternativesAsExact: Option[String] = None,
-
-                 /* PAGINATION PARAMETERS */
-                 page: Option[Int] = None,
-                 hitsPerPage: Option[Int] = None,
-
-                 /* PARAMETERS TO CONTROL RESULTS CONTENT */
-                 attributesToRetrieve: Option[Seq[String]] = None,
-                 attributesToHighlight: Option[Seq[String]] = None,
-                 attributesToSnippet: Option[Seq[(String, Int)]] = None,
-                 getRankingInfo: Option[Boolean] = None,
-                 highlightPreTag: Option[String] = None,
-                 highlightPostTag: Option[String] = None,
-                 snippetEllipsisText: Option[String] = None,
-
-                 /* NUMERIC SEARCH PARAMETERS */
-                 numericFilters: Option[String] = None,
-
-                 /* CATEGORY SEARCH PARAMETER */
-                 tagFilters: Option[Seq[String]] = None,
-
-                 /* DISTINCT PARAMETER */
-                 distinct: Option[Distinct] = None,
-                 facetingAfterDistinct: Option[Boolean] = None,
-
                  responseFields: Option[Seq[String]] = None,
-
-                 /* FACETING PARAMETERS */
-                 facets: Option[Seq[String]] = None,
-                 facetFilters: Option[Seq[String]] = None,
-                 maxValuesPerFacet: Option[Int] = None,
-
-                 /* UNIFIED FILTER PARAMETER (SQL LIKE) */
+                 maxFacetHits: Option[Int] = None,
+                 /* Attributes */
+                 attributesToRetrieve: Option[Seq[String]] = None,
+                 restrictSearchableAttributes: Option[Seq[String]] = None,
+                 /* Filtering faceting */
                  filters: Option[String] = None,
-
-                 /* GEO-SEARCH PARAMETERS */
+                 facets: Option[Seq[String]] = None,
+                 maxValuesPerFacet: Option[Int] = None,
+                 facetFilters: Option[Seq[String]] = None,
+                 facetingAfterDistinct: Option[Boolean] = None,
+                 /* Geo Search */
                  aroundLatLng: Option[AroundLatLng] = None,
                  aroundLatLngViaIP: Option[Boolean] = None,
                  aroundRadius: Option[AroundRadius] = None,
@@ -91,19 +57,50 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
                  minimumAroundRadius: Option[Int] = None,
                  insideBoundingBox: Option[Seq[InsideBoundingBox]] = None,
                  insidePolygon: Option[Seq[InsidePolygon]] = None,
+                 /* Highlighting Snippeting */
+                 attributesToHighlight: Option[Seq[String]] = None,
+                 attributesToSnippet: Option[Seq[String]] = None,
+                 highlightPreTag: Option[String] = None,
+                 highlightPostTag: Option[String] = None,
+                 snippetEllipsisText: Option[String] = None,
+                 restrictHighlightAndSnippetArrays: Option[Boolean] = None,
+                 /* Pagination */
+                 page: Option[Int] = None,
+                 hitsPerPage: Option[Int] = None,
+                 offset: Option[Int] = None,
+                 length: Option[Int] = None,
+                 /* Performance */
+                 //Nothing in Query
 
-                 /* SECURED API KEYS */
+                 /* Query strategy */
+                 queryType: Option[QueryType] = None,
+                 removeWordsIfNoResults: Option[RemoveWordsIfNoResults] = None,
+                 advancedSyntax: Option[Boolean] = None,
+                 optionalWords: Option[Seq[String]] = None,
+                 removeStopWords: Option[RemoveStopWords] = None,
+                 disableExactOnAttributes: Option[Seq[String]] = None,
+                 exactOnSingleWordQuery: Option[Seq[String]] = None,
+                 alternativesAsExact: Option[Seq[String]] = None,
+                 /* Ranking */
+                 //Nothing in Query
+
+                 /* Search */
+                 query: Option[String] = None,
+                 private[algolia] val facetQuery: Option[String] = None,
+                 /* Typos */
+                 minWordSizefor1Typo: Option[Int] = None,
+                 minWordSizefor2Typos: Option[Int] = None,
+                 typoTolerance: Option[TypoTolerance] = None,
+                 allowTyposOnNumericTokens: Option[Boolean] = None,
+                 ignorePlurals: Option[IgnorePlurals] = None,
+                 disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
+                 /* Secured API Keys */
                  userToken: Option[String] = None,
                  validUntil: Option[Int] = None,
                  restrictIndices: Option[Seq[String]] = None,
                  restrictSources: Option[String] = None,
-
-                 /* BROWSE */
+                 /* Browse */
                  cursor: Option[String] = None,
-
-                 /* FACET QUERY */
-                 maxFacetHits: Option[Int] = None,
-
                  /* CUSTOM */
                  customParameters: Option[Map[String, String]] = None) {
 
@@ -115,63 +112,28 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
 
   def toQueryParam: Map[String, String] = {
     val queryParam = Map(
-      /* FULL TEXT SEARCH PARAMETERS */
-      "query" -> query,
-      "facetQuery" -> facetQuery,
-      "queryType" -> queryType.map(_.name),
-      "typoTolerance" -> typoTolerance.map(_.name),
-      "minWordSizefor1Typo" -> minWordSizefor1Typo.map(_.toString),
-      "minWordSizefor2Typos" -> minWordSizefor2Typos.map(_.toString),
-      "allowTyposOnNumericTokens" -> allowTyposOnNumericTokens.map(_.toString),
-      "ignorePlurals" -> ignorePlurals.map(_.value),
-      "restrictSearchableAttributes" -> restrictSearchableAttributes.map(_.mkString(",")),
-      "advancedSyntax" -> advancedSyntax.map(_.toString),
+      /* Advanced */
+      "distinct" -> distinct.map(_.value),
+      "getRankingInfo" -> getRankingInfo.map(_.toString),
+      "numericFilters" -> numericFilters.map(_.mkString(",")),
+      "tagFilters" -> tagFilters.map(_.mkString(",")),
       "analytics" -> analytics.map(_.toString),
       "analyticsTags" -> analyticsTags.map(_.mkString(",")),
       "synonyms" -> synonyms.map(_.toString),
       "replaceSynonymsInHighlight" -> replaceSynonymsInHighlight.map(_.toString),
-      "optionalWords" -> optionalWords.map(_.mkString(",")),
       "minProximity" -> minProximity.map(_.toString),
-      "removeWordsIfNoResults" -> removeWordsIfNoResults.map(_.name),
-      "disableTypoToleranceOnAttributes" -> disableTypoToleranceOnAttributes.map(_.mkString(",")),
-      "removeStopWords" -> removeStopWords.map(_.value),
-      "exactOnSingleWordQuery" -> exactOnSingleWordQuery.map(_.toString),
-      "alternativesAsExact" -> alternativesAsExact.map(_.toString),
-
-      /* PAGINATION PARAMETERS */
-      "page" -> page.map(_.toString),
-      "hitsPerPage" -> hitsPerPage.map(_.toString),
-
-      /* PARAMETERS TO CONTROL RESULTS CONTENT */
-      "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
-      "attributesToHighlight" -> attributesToHighlight.map(_.mkString(",")),
-      "attributesToSnippet" -> attributesToSnippet.map(_.map(e => s"${e._1}:${e._2}").mkString(",")),
-      "getRankingInfo" -> getRankingInfo.map(_.toString),
-      "highlightPreTag" -> highlightPreTag,
-      "highlightPostTag" -> highlightPostTag,
-      "snippetEllipsisText" -> snippetEllipsisText,
-
-      /* NUMERIC SEARCH PARAMETERS */
-      "numericFilters" -> numericFilters,
-
-      /* CATEGORY SEARCH PARAMETER */
-      "tagFilters" -> tagFilters.map(_.mkString(",")),
-
-      /* DISTINCT PARAMETER */
-      "distinct" -> distinct.map(_.value),
-      "facetingAfterDistinct" -> facetingAfterDistinct.map(_.toString),
-
       "responseFields" -> responseFields.map(_.mkString(",")),
-
-      /* FACETING PARAMETERS */
-      "facets" -> facets.map(_.mkString(",")),
-      "facetFilters" -> facetFilters.map(_.mkString(",")),
-      "maxValuesPerFacet" -> maxValuesPerFacet.map(_.toString),
-
-      /* UNIFIED FILTER PARAMETER (SQL LIKE) */
+      "maxFacetHits" -> maxFacetHits.map(_.toString),
+      /* Attributes */
+      "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
+      "restrictSearchableAttributes" -> restrictSearchableAttributes.map(_.mkString(",")),
+      /* Filtering faceting */
       "filters" -> filters,
-
-      /* GEO-SEARCH PARAMETERS */
+      "facets" -> facets.map(_.mkString(",")),
+      "maxValuesPerFacet" -> maxValuesPerFacet.map(_.toString),
+      "facetFilters" -> facetFilters.map(_.mkString(",")),
+      "facetingAfterDistinct" -> facetingAfterDistinct.map(_.toString),
+      /* Geo Search */
       "aroundLatLng" -> aroundLatLng.map(_.toString),
       "aroundLatLngViaIP" -> aroundLatLngViaIP.map(_.toString),
       "aroundRadius" -> aroundRadius.map(_.name),
@@ -179,20 +141,51 @@ case class Query(/* FULL TEXT SEARCH PARAMETERS */
       "minimumAroundRadius" -> minimumAroundRadius.map(_.toString),
       "insideBoundingBox" -> insideBoundingBox.map(e => s"[${e.map(_.toString).mkString(",")}]"),
       "insidePolygon" -> insidePolygon.map(e => s"[${e.map(_.toString).mkString(",")}]"),
+      /* Highlighting Snippeting */
+      "attributesToHighlight" -> attributesToHighlight.map(_.mkString(",")),
+      "attributesToSnippet" -> attributesToSnippet.map(_.mkString(",")),
+      "highlightPreTag" -> highlightPreTag,
+      "highlightPostTag" -> highlightPostTag,
+      "snippetEllipsisText" -> snippetEllipsisText,
+      "restrictHighlightAndSnippetArrays" -> restrictHighlightAndSnippetArrays.map(_.toString),
+      /* Pagination */
+      "page" -> page.map(_.toString),
+      "hitsPerPage" -> hitsPerPage.map(_.toString),
+      "offset" -> offset.map(_.toString),
+      "length" -> length.map(_.toString),
+      /* Performance */
+      //Nothing in Query
 
-      /* SECURED API KEYS */
+      /* Query strategy */
+      "queryType" -> queryType.map(_.name),
+      "removeWordsIfNoResults" -> removeWordsIfNoResults.map(_.name),
+      "advancedSyntax" -> advancedSyntax.map(_.toString),
+      "optionalWords" -> optionalWords.map(_.mkString(",")),
+      "removeStopWords" -> removeStopWords.map(_.value),
+      "disableExactOnAttributes" -> disableExactOnAttributes.map(_.mkString(",")),
+      "exactOnSingleWordQuery" -> exactOnSingleWordQuery.map(_.mkString(",")),
+      "alternativesAsExact" -> alternativesAsExact.map(_.mkString(",")),
+      /* Ranking */
+      //Nothing in Query
+
+      /* Search */
+      "query" -> query,
+      "facetQuery" -> facetQuery,
+      /* Typos */
+      "minWordSizefor1Typo" -> minWordSizefor1Typo.map(_.toString),
+      "minWordSizefor2Typos" -> minWordSizefor2Typos.map(_.toString),
+      "typoTolerance" -> typoTolerance.map(_.name),
+      "allowTyposOnNumericTokens" -> allowTyposOnNumericTokens.map(_.toString),
+      "ignorePlurals" -> ignorePlurals.map(_.value),
+      "disableTypoToleranceOnAttributes" -> disableTypoToleranceOnAttributes.map(_.mkString(",")),
+      /* Secured API Keys */
       "userToken" -> userToken,
       "validUntil" -> validUntil.map(_.toString),
       "restrictIndices" -> restrictIndices.map(_.mkString(",")),
-      "restrictSources" -> restrictSources,
-
-      /* BROWSE */
-      "cursor" -> cursor,
-
-      /* FACET */
-      "maxFacetHits" -> maxFacetHits.map(_.toString)
-    )
-      .filter { case (_, v) => v.isDefined }
+      "restrictSources" -> restrictSources.map(_.mkString(",")),
+      /* Browse */
+      "cursor" -> cursor
+    ).filter { case (_, v) => v.isDefined }
       .map { case (k, v) => k -> v.get }
 
     customParameters.fold(queryParam)(c => queryParam ++ c)

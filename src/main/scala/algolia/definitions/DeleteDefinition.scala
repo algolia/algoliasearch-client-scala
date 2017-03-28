@@ -32,9 +32,8 @@ import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class DeleteObjectDefinition(
-    index: Option[String] = None,
-    oid: Option[String] = None)(implicit val formats: Formats)
+case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[String] = None)(
+    implicit val formats: Formats)
     extends Definition {
 
   def from(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
@@ -50,9 +49,7 @@ case class DeleteObjectDefinition(
     })
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE,
-                Seq("1", "indexes") ++ index ++ oid,
-                isSearch = false)
+    HttpPayload(http.DELETE, Seq("1", "indexes") ++ index ++ oid, isSearch = false)
 }
 
 case class DeleteIndexDefinition(index: String) extends Definition {
@@ -93,8 +90,7 @@ trait DeleteDsl {
     }
   }
 
-  implicit object DeleteIndexDefinitionExecutable
-      extends Executable[DeleteIndexDefinition, Task] {
+  implicit object DeleteIndexDefinitionExecutable extends Executable[DeleteIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteIndexDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())

@@ -26,41 +26,62 @@
 package algolia.objects
 
 case class IndexSettings(
-    /* INDEXING PARAMETERS */
+    /* Advanced */
+    attributeForDistinct: Option[String] = None,
+    distinct: Option[Distinct] = None,
+    replaceSynonymsInHighlight: Option[Boolean] = None,
+    placeholders: Option[Map[String, Seq[String]]] = None,
+    minProximity: Option[Int] = None,
+    /* Attributes */
     attributesToIndex: Option[Seq[AttributesToIndex]] = None,
     searchableAttributes: Option[Seq[SearchableAttributes]] = None,
-    numericAttributesToIndex: Option[Seq[NumericAttributesToIndex]] = None,
     attributesForFaceting: Option[Seq[String]] = None,
-    attributeForDistinct: Option[String] = None,
-    ranking: Option[Seq[Ranking]] = None,
-    customRanking: Option[Seq[CustomRanking]] = None,
-    separatorsToIndex: Option[String] = None,
-    slaves: Option[Seq[String]] = None,
-    replicas: Option[Seq[String]] = None,
     unretrievableAttributes: Option[Seq[String]] = None,
-    allowCompressionOfIntegerArray: Option[Boolean] = None,
-    /* QUERY EXPANSION */
-    disableTypoToleranceOnWords: Option[Seq[String]] = None,
-    disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
-    /* DEFAULT QUERY PARAMETERS (CAN BE OVERRIDDEN AT QUERY-TIME) */
-    minWordSizefor1Typo: Option[Int] = None,
-    minWordSizefor2Typos: Option[Int] = None,
-    hitsPerPage: Option[Int] = None,
     attributesToRetrieve: Option[Seq[String]] = None,
+    /* Filtering faceting */
+    maxValuesPerFacet: Option[Int] = None,
+    /* Geo Search */
+    //Nothing in IndexSettings
+
+    /* Highlighting Snippeting */
     attributesToHighlight: Option[Seq[String]] = None,
     attributesToSnippet: Option[Seq[String]] = None,
-    queryType: Option[QueryType] = None,
-    minProximity: Option[Int] = None,
     highlightPreTag: Option[String] = None,
     highlightPostTag: Option[String] = None,
+    snippetEllipsisText: Option[String] = None,
+    restrictHighlightAndSnippetArrays: Option[Boolean] = None,
+    /* Pagination */
+    hitsPerPage: Option[Int] = None,
+    paginationLimitedTo: Option[Int] = None,
+    /* Performance */
+    numericAttributesForFiltering: Option[Seq[String]] = None,
+    numericAttributesToIndex: Option[Seq[NumericAttributesToIndex]] = None,
+    allowCompressionOfIntegerArray: Option[Boolean] = None,
+    /* Query strategy */
+    queryType: Option[QueryType] = None,
+    removeWordsIfNoResults: Option[String] = None,
+    advancedSyntax: Option[Boolean] = None,
     optionalWords: Option[Seq[String]] = None,
+    removeStopWords: Option[RemoveStopWords] = None,
+    disablePrefixOnAttributes: Option[Seq[String]] = None,
+    disableExactOnAttributes: Option[Seq[String]] = None,
+    exactOnSingleWordQuery: Option[Seq[String]] = None,
+    alternativesAsExact: Option[Seq[String]] = None,
+    /* Ranking */
+    ranking: Option[Seq[Ranking]] = None,
+    customRanking: Option[Seq[CustomRanking]] = None,
+    slaves: Option[Seq[String]] = None,
+    replicas: Option[Seq[String]] = None,
+    /* Search */
+    //Nothing in IndexSettings
+
+    /* Typos */
+    minWordSizefor1Typo: Option[Int] = None,
+    minWordSizefor2Typos: Option[Int] = None,
+    typoTolerance: Option[TypoTolerance] = None,
     allowTyposOnNumericTokens: Option[Boolean] = None,
     ignorePlurals: Option[IgnorePlurals] = None,
-    advancedSyntax: Option[Boolean] = None,
-    removeWordsIfNoResults: Option[String] = None,
-    replaceSynonymsInHighlight: Option[Boolean] = None,
-    maxValuesPerFacet: Option[Int] = None,
-    distinct: Option[Distinct] = None,
-    typoTolerance: Option[TypoTolerance] = None,
-    removeStopWords: Option[RemoveStopWords] = None,
-    snippetEllipsisText: Option[String] = None)
+    disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
+    disableTypoToleranceOnWords: Option[Seq[String]] = None,
+    separatorsToIndex: Option[String] = None
+)
