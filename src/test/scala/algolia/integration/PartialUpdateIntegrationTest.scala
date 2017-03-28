@@ -106,8 +106,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should remove value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateArray(Seq("1", "2"),
-                                                             "remove")
+      index into "index_partial" `object` PartialUpdateArray(Seq("1", "2"), "remove")
     }
 
     taskShouldBeCreatedAndWaitForIt(create, "index_partial")
@@ -129,8 +128,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should add unique value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateArray(Seq("1", "2"),
-                                                             "addUnique")
+      index into "index_partial" `object` PartialUpdateArray(Seq("1", "2"), "addUnique")
     }
 
     taskShouldBeCreatedAndWaitForIt(create, "index_partial")
@@ -152,9 +150,7 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should update a value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateValue("value",
-                                                             "otherValue",
-                                                             "updateValue")
+      index into "index_partial" `object` PartialUpdateValue("value", "otherValue", "updateValue")
     }
 
     taskShouldBeCreatedAndWaitForIt(create, "index_partial")
@@ -181,6 +177,4 @@ case class PartialUpdateObj(value: Int, objectID: String)
 
 case class PartialUpdateArray(values: Seq[String], objectID: String)
 
-case class PartialUpdateValue(value: String,
-                              otherValue: String,
-                              objectID: String)
+case class PartialUpdateValue(value: String, otherValue: String, objectID: String)

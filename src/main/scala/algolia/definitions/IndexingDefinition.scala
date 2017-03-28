@@ -33,10 +33,9 @@ import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexingDefinition(
-    index: String,
-    objectId: Option[String] = None,
-    obj: Option[AnyRef] = None)(implicit val formats: Formats)
+case class IndexingDefinition(index: String,
+                              objectId: Option[String] = None,
+                              obj: Option[AnyRef] = None)(implicit val formats: Formats)
     extends Definition {
 
   def objects(objectsWithIds: Map[String, AnyRef]): IndexingBatchDefinition =
@@ -66,10 +65,7 @@ case class IndexingDefinition(
       case None => http.POST
     }
 
-    HttpPayload(verb,
-                Seq("1", "indexes", index) ++ objectId,
-                body = body,
-                isSearch = false)
+    HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body, isSearch = false)
   }
 }
 

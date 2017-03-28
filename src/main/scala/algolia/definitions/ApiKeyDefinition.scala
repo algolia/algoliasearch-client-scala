@@ -34,8 +34,7 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetApiKeyDefinition(keyName: String,
-                               indexName: Option[String] = None)
+case class GetApiKeyDefinition(keyName: String, indexName: Option[String] = None)
     extends Definition {
 
   def from(indexName: String) = copy(indexName = Some(indexName))
@@ -77,8 +76,7 @@ case class AddApiKeyDefinition(key: ApiKey, indexName: Option[String] = None)(
   }
 }
 
-case class DeleteApiKeyDefinition(keyName: String,
-                                  indexName: Option[String] = None)
+case class DeleteApiKeyDefinition(keyName: String, indexName: Option[String] = None)
     extends Definition {
 
   def from(indexName: String) = copy(indexName = Some(indexName))
@@ -98,10 +96,9 @@ case class DeleteApiKeyDefinition(keyName: String,
   }
 }
 
-case class UpdateApiKeyDefinition(
-    keyName: String,
-    key: Option[ApiKey] = None,
-    indexName: Option[String] = None)(implicit val formats: Formats)
+case class UpdateApiKeyDefinition(keyName: String,
+                                  key: Option[ApiKey] = None,
+                                  indexName: Option[String] = None)(implicit val formats: Formats)
     extends Definition {
 
   def `with`(key: ApiKey) = copy(key = Some(key))
@@ -124,8 +121,7 @@ case class UpdateApiKeyDefinition(
   }
 }
 
-case class GetAllApiKeyDefinition(indexName: Option[String] = None)
-    extends Definition {
+case class GetAllApiKeyDefinition(indexName: Option[String] = None) extends Definition {
   override private[algolia] def build(): HttpPayload = {
     val path = if (indexName.isEmpty) {
       Seq("1", "keys")
@@ -145,8 +141,7 @@ trait ApiKeyDefinitionDsl {
 
   implicit val formats: Formats
 
-  implicit object GetApiKeyDefinitionExecutable
-      extends Executable[GetApiKeyDefinition, ApiKey] {
+  implicit object GetApiKeyDefinitionExecutable extends Executable[GetApiKeyDefinition, ApiKey] {
     override def apply(client: AlgoliaClient, query: GetApiKeyDefinition)(
         implicit executor: ExecutionContext): Future[ApiKey] =
       client.request[ApiKey](query.build())

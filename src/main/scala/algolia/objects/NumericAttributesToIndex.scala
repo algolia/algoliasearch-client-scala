@@ -25,8 +25,10 @@
 
 package algolia.objects
 
+@Deprecated
 sealed trait NumericAttributesToIndex
 
+@Deprecated
 object NumericAttributesToIndex {
 
   case class equalOnly(attribute: String) extends NumericAttributesToIndex

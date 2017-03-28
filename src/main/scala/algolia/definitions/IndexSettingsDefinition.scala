@@ -35,8 +35,7 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexSettingsDefinition(index: String)(
-    implicit val formats: Formats)
+case class IndexSettingsDefinition(index: String)(implicit val formats: Formats)
     extends Definition {
 
   def `with`(settings: IndexSettings) =
@@ -53,10 +52,10 @@ case class IndexSettingsDefinition(index: String)(
 
 }
 
-case class IndexChangeSettingsDefinition(index: String,
-                                         settings: IndexSettings,
-                                         forward: Option[ForwardToReplicas] =
-                                           None)(implicit val formats: Formats)
+case class IndexChangeSettingsDefinition(
+    index: String,
+    settings: IndexSettings,
+    forward: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
     extends Definition {
 
   def and(forward: ForwardToReplicas) = copy(forward = Some(forward))
@@ -96,8 +95,7 @@ trait IndexSettingsDsl {
 
   implicit object IndexSettingsDefinitionExecutable
       extends Executable[IndexSettingsDefinition, IndexSettings] {
-    override def apply(client: AlgoliaClient,
-                       settings: IndexSettingsDefinition)(
+    override def apply(client: AlgoliaClient, settings: IndexSettingsDefinition)(
         implicit executor: ExecutionContext): Future[IndexSettings] = {
       client.request[IndexSettings](settings.build())
     }
@@ -105,8 +103,7 @@ trait IndexSettingsDsl {
 
   implicit object IndexChangeSettingsDefinitionExecutable
       extends Executable[IndexChangeSettingsDefinition, Task] {
-    override def apply(client: AlgoliaClient,
-                       settings: IndexChangeSettingsDefinition)(
+    override def apply(client: AlgoliaClient, settings: IndexChangeSettingsDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](settings.build())
     }

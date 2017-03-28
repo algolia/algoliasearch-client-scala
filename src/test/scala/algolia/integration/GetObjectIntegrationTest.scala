@@ -71,8 +71,7 @@ class GetObjectIntegrationTest extends AlgoliaTest {
     }
 
     whenReady(request) { results =>
-      results.as[ObjectToGet] should be(
-        Seq(ObjectToGet("1", "toto"), ObjectToGet("2", "tata")))
+      results.as[ObjectToGet] should be(Seq(ObjectToGet("1", "toto"), ObjectToGet("2", "tata")))
     }
   }
 

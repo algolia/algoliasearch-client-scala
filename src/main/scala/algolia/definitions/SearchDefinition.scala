@@ -54,11 +54,10 @@ case class SearchDefinition(index: String, query: Option[Query] = None)(
   }
 }
 
-case class SearchFacetDefinition(
-    index: String,
-    facetName: String,
-    values: String,
-    query: Query = Query())(implicit val formats: Formats)
+case class SearchFacetDefinition(index: String,
+                                 facetName: String,
+                                 values: String,
+                                 query: Query = Query())(implicit val formats: Formats)
     extends Definition {
 
   def values(facetQuery: String): SearchFacetDefinition =
@@ -90,8 +89,7 @@ trait SearchDsl {
 
   }
 
-  implicit object SearchDefinitionExecutable
-      extends Executable[SearchDefinition, SearchResult] {
+  implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, SearchResult] {
     override def apply(client: AlgoliaClient, query: SearchDefinition)(
         implicit executor: ExecutionContext): Future[SearchResult] = {
       client.request[SearchResult](query.build())

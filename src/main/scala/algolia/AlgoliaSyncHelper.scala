@@ -69,8 +69,7 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
         }
 
         val result = Await.result(future, duration)
-        cursor =
-          result.cursor.fold[CursorState](CursorState.Empty)(CursorState.Full)
+        cursor = result.cursor.fold[CursorState](CursorState.Empty)(CursorState.Full)
 
         result.asWithObjectID[T]
       }

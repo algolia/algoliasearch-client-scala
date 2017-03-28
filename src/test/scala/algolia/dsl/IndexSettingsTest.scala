@@ -69,7 +69,8 @@ class IndexSettingsTest extends AlgoliaTest {
         isSearch = false
       )
 
-      (changeSettings of "test" `with` IndexSettings() and forwardToReplicas).build() should be(payload)
+      (changeSettings of "test" `with` IndexSettings() and forwardToReplicas).build() should be(
+        payload)
     }
 
   }
@@ -78,6 +79,7 @@ class IndexSettingsTest extends AlgoliaTest {
 
     val json =
       """{
+        |  "distinct":1,
         |  "attributesToIndex":[
         |    "att1",
         |    "att2,att3",
@@ -91,6 +93,7 @@ class IndexSettingsTest extends AlgoliaTest {
         |  "numericAttributesToIndex":[
         |    "equalOnly(att5)"
         |  ],
+        |  "removeStopWords":"fr,en",
         |  "ranking":[
         |    "typo",
         |    "geo",
@@ -106,69 +109,81 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "asc(att8)",
         |    "desc(att9)"
         |  ],
-        |  "ignorePlurals":"fr,en",
-        |  "distinct":1,
         |  "typoTolerance":"strict",
-        |  "removeStopWords":"fr,en"
+        |  "ignorePlurals":"fr,en"
         |}""".stripMargin
 
     it("should deserialize json") {
-      inside(parse(json).extract[IndexSettings]) { case i: IndexSettings =>
-        i.attributesToIndex should be(Some(Seq(
-          AttributesToIndex.attribute("att1"),
-          AttributesToIndex.attributes("att2", "att3"),
-          AttributesToIndex.unordered("att4"))
-        ))
-        i.searchableAttributes should be(Some(Seq(
-          SearchableAttributes.attribute("att1"),
-          SearchableAttributes.attributes("att2", "att3"),
-          SearchableAttributes.unordered("att4"))
-        ))
-        i.numericAttributesToIndex should be(Some(Seq(
-          NumericAttributesToIndex.equalOnly("att5")
-        )))
-        i.ranking should be(Some(Seq(Ranking.typo,
-          Ranking.geo,
-          Ranking.words,
-          Ranking.proximity,
-          Ranking.attribute,
-          Ranking.exact,
-          Ranking.custom,
-          Ranking.asc("att6"),
-          Ranking.desc("att7")
-        )))
-        i.customRanking should be(Some(Seq(
-          CustomRanking.asc("att8"),
-          CustomRanking.desc("att9")
-        )))
-        i.typoTolerance should be(Some(TypoTolerance.strict))
-        i.distinct should be(Some(Distinct.int(1)))
-        i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
-        i.ignorePlurals should be(Some(IgnorePlurals.list(Seq("fr", "en"))))
+      inside(parse(json).extract[IndexSettings]) {
+        case i: IndexSettings =>
+          i.attributesToIndex should be(
+            Some(
+              Seq(AttributesToIndex.attribute("att1"),
+                  AttributesToIndex.attributes("att2", "att3"),
+                  AttributesToIndex.unordered("att4"))))
+          i.searchableAttributes should be(
+            Some(
+              Seq(SearchableAttributes.attribute("att1"),
+                  SearchableAttributes.attributes("att2", "att3"),
+                  SearchableAttributes.unordered("att4"))))
+          i.numericAttributesToIndex should be(
+            Some(
+              Seq(
+                NumericAttributesToIndex.equalOnly("att5")
+              )))
+          i.ranking should be(
+            Some(
+              Seq(Ranking.typo,
+                  Ranking.geo,
+                  Ranking.words,
+                  Ranking.proximity,
+                  Ranking.attribute,
+                  Ranking.exact,
+                  Ranking.custom,
+                  Ranking.asc("att6"),
+                  Ranking.desc("att7"))))
+          i.customRanking should be(
+            Some(
+              Seq(
+                CustomRanking.asc("att8"),
+                CustomRanking.desc("att9")
+              )))
+          i.typoTolerance should be(Some(TypoTolerance.strict))
+          i.distinct should be(Some(Distinct.int(1)))
+          i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
+          i.ignorePlurals should be(Some(IgnorePlurals.list(Seq("fr", "en"))))
       }
 
     }
 
     it("should serialize json") {
       val i = IndexSettings(
-        attributesToIndex = Some(Seq(AttributesToIndex.attribute("att1"), AttributesToIndex.attributes("att2", "att3"), AttributesToIndex.unordered("att4"))),
-        searchableAttributes = Some(Seq(SearchableAttributes.attribute("att1"), SearchableAttributes.attributes("att2", "att3"), SearchableAttributes.unordered("att4"))),
+        attributesToIndex = Some(
+          Seq(AttributesToIndex.attribute("att1"),
+              AttributesToIndex.attributes("att2", "att3"),
+              AttributesToIndex.unordered("att4"))),
+        searchableAttributes = Some(
+          Seq(SearchableAttributes.attribute("att1"),
+              SearchableAttributes.attributes("att2", "att3"),
+              SearchableAttributes.unordered("att4"))),
         numericAttributesToIndex = Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
-        ranking = Some(Seq(
-          Ranking.typo,
-          Ranking.geo,
-          Ranking.words,
-          Ranking.proximity,
-          Ranking.attribute,
-          Ranking.exact,
-          Ranking.custom,
-          Ranking.asc("att6"),
-          Ranking.desc("att7")
-        )),
-        customRanking = Some(Seq(
-          CustomRanking.asc("att8"),
-          CustomRanking.desc("att9")
-        )),
+        ranking = Some(
+          Seq(
+            Ranking.typo,
+            Ranking.geo,
+            Ranking.words,
+            Ranking.proximity,
+            Ranking.attribute,
+            Ranking.exact,
+            Ranking.custom,
+            Ranking.asc("att6"),
+            Ranking.desc("att7")
+          )),
+        customRanking = Some(
+          Seq(
+            CustomRanking.asc("att8"),
+            CustomRanking.desc("att9")
+          )),
         ignorePlurals = Some(IgnorePlurals.list(Seq("fr", "en"))),
         typoTolerance = Some(TypoTolerance.strict),
         distinct = Some(Distinct.int(1)),

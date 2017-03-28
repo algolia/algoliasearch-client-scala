@@ -43,16 +43,15 @@ case class UpdateObjectOperation[T <: AnyRef](body: T,
                                               action: String = "updateObject")
     extends BatchOperation[T]
 
-case class PartialUpdateObjectOperation[T <: AnyRef](
-    body: T,
-    indexName: Option[String] = None,
-    action: String = "partialUpdateObject")
+case class PartialUpdateObjectOperation[T <: AnyRef](body: T,
+                                                     indexName: Option[String] = None,
+                                                     action: String = "partialUpdateObject")
     extends BatchOperation[T]
 
-case class PartialUpdateObjectNoCreateOperation[T <: AnyRef](
-    body: T,
-    indexName: Option[String] = None,
-    action: String = "partialUpdateObjectNoCreate")
+case class PartialUpdateObjectNoCreateOperation[T <: AnyRef](body: T,
+                                                             indexName: Option[String] = None,
+                                                             action: String =
+                                                               "partialUpdateObjectNoCreate")
     extends BatchOperation[T]
 
 case class DeleteObjectOperation[T <: AnyRef](indexName: String,
@@ -60,10 +59,8 @@ case class DeleteObjectOperation[T <: AnyRef](indexName: String,
                                               action: String = "deleteObject")
     extends BatchOperation[T]
 
-case class ClearIndexOperation[T <: AnyRef](indexName: String,
-                                            action: String = "clear")
+case class ClearIndexOperation[T <: AnyRef](indexName: String, action: String = "clear")
     extends BatchOperation[T]
 
-case class DeleteIndexOperation[T <: AnyRef](indexName: String,
-                                             action: String = "delete")
+case class DeleteIndexOperation[T <: AnyRef](indexName: String, action: String = "delete")
     extends BatchOperation[T]

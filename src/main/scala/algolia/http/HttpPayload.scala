@@ -49,12 +49,11 @@ private[algolia] case object DELETE extends HttpVerb {
   override def toString: String = "DELETE"
 }
 
-private[algolia] case class HttpPayload(
-    verb: HttpVerb,
-    path: Seq[String],
-    queryParameters: Option[Map[String, String]] = None,
-    body: Option[String] = None,
-    isSearch: Boolean) {
+private[algolia] case class HttpPayload(verb: HttpVerb,
+                                        path: Seq[String],
+                                        queryParameters: Option[Map[String, String]] = None,
+                                        body: Option[String] = None,
+                                        isSearch: Boolean) {
 
   def apply(host: String,
             headers: Map[String, String],

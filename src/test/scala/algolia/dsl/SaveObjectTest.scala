@@ -74,8 +74,8 @@ class SaveObjectTest extends AlgoliaTest {
         }
 
         it("with objectID should call API ") {
-          (index into "toto" objects Seq(
-            BasicObjectWithObjectID("algolia", 2, "id"))).build() should be(
+          (index into "toto" objects Seq(BasicObjectWithObjectID("algolia", 2, "id")))
+            .build() should be(
             HttpPayload(
               POST,
               List("1", "indexes", "toto", "batch"),

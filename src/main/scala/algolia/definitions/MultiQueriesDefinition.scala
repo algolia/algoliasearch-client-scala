@@ -35,9 +35,9 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class MultiQueriesDefinition(definitions: Traversable[SearchDefinition],
-                                  strategy: Option[MultiQueries.Strategy] =
-                                    None)(implicit val formats: Formats)
+case class MultiQueriesDefinition(
+    definitions: Traversable[SearchDefinition],
+    strategy: Option[MultiQueries.Strategy] = None)(implicit val formats: Formats)
     extends Definition {
 
   def strategy(strategy: MultiQueries.Strategy) =
@@ -69,8 +69,7 @@ trait MultiQueriesDefinitionDsl {
 
   implicit val formats: Formats
 
-  def multiQueries(
-      queries: Traversable[SearchDefinition]): MultiQueriesDefinition = {
+  def multiQueries(queries: Traversable[SearchDefinition]): MultiQueriesDefinition = {
     MultiQueriesDefinition(queries)
   }
 

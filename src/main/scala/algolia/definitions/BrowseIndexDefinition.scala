@@ -33,10 +33,9 @@ import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None)(implicit val formats: Formats)
+case class BrowseIndexDefinition(source: String,
+                                 query: Option[Query] = None,
+                                 cursor: Option[String] = None)(implicit val formats: Formats)
     extends Definition {
 
   def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))

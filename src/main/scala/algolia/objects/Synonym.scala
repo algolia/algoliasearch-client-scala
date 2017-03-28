@@ -45,9 +45,7 @@ object Synonym {
    ]
   }
    */
-  case class OneWaySynonym(objectID: String,
-                           input: String,
-                           synonyms: Seq[String])
+  case class OneWaySynonym(objectID: String, input: String, synonyms: Seq[String])
       extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType =
@@ -65,8 +63,7 @@ object Synonym {
     ]
    }
    */
-  case class Synonym(objectID: String, synonyms: Seq[String])
-      extends AbstractSynonym {
+  case class Synonym(objectID: String, synonyms: Seq[String]) extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType = SynonymType.synonym
   }
@@ -82,18 +79,14 @@ object Synonym {
     ]
   }
    */
-  case class AltCorrection1(objectID: String,
-                            word: String,
-                            corrections: Seq[String])
+  case class AltCorrection1(objectID: String, word: String, corrections: Seq[String])
       extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType =
       SynonymType.altCorrection1
   }
 
-  case class AltCorrection2(objectID: String,
-                            word: String,
-                            corrections: Seq[String])
+  case class AltCorrection2(objectID: String, word: String, corrections: Seq[String])
       extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType =
@@ -112,9 +105,7 @@ object Synonym {
     ]
   }
    */
-  case class Placeholder(objectID: String,
-                         placeholder: String,
-                         replacements: Seq[String])
+  case class Placeholder(objectID: String, placeholder: String, replacements: Seq[String])
       extends AbstractSynonym {
 
     override private[algolia] val `type`: SynonymType = SynonymType.placeholder

@@ -34,9 +34,8 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class CopyIndexDefinition(
-    source: String,
-    destination: Option[String] = None)(implicit val formats: Formats)
+case class CopyIndexDefinition(source: String, destination: Option[String] = None)(
+    implicit val formats: Formats)
     extends Definition {
   def to(destination: String): CopyIndexDefinition =
     copy(source, Some(destination))
@@ -63,8 +62,7 @@ trait CopyIndexDsl {
 
   }
 
-  implicit object CopyIndexDefinitionExecutable
-      extends Executable[CopyIndexDefinition, Task] {
+  implicit object CopyIndexDefinitionExecutable extends Executable[CopyIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: CopyIndexDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())

@@ -85,10 +85,7 @@ lazy val myProject = project
   .in(file("."))
   .enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
   .settings(
-    buildInfoKeys := Seq[BuildInfoKey](name,
-                                       version,
-                                       scalaVersion,
-                                       sbtVersion),
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "algolia"
   )
 
@@ -133,6 +130,6 @@ publishTo := {
   }
 }
 
-addCommandAlias("formatAll", ";scalafmt;test:scalafmt")
+addCommandAlias("formatAll", ";scalafmt")
 
 addCommandAlias("checkAll", ";compile;test:compile;formatAll")

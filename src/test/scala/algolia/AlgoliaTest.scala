@@ -49,16 +49,14 @@ class AlgoliaTest
   val apiKey: String = System.getenv("API_KEY")
   val client = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
-      AlgoliaHttpClient(
-        AlgoliaClientConfiguration(10000, 10000, 10000, 10000, 10000))
+      AlgoliaHttpClient(AlgoliaClientConfiguration(10000, 10000, 10000, 10000, 10000))
   }
 
   implicit val patience =
     PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
 
-  def taskShouldBeCreatedAndWaitForIt(
-      task: Future[AlgoliaTask],
-      index: String)(implicit ec: ExecutionContext): Unit = {
+  def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
+      implicit ec: ExecutionContext): Unit = {
     val t: AlgoliaTask = whenReady(task) { result =>
       result.idToWaitFor should not be 0
       result //for getting it after

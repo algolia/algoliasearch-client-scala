@@ -35,9 +35,7 @@ case class Task(taskID: Long, createdAt: Option[String]) extends AlgoliaTask {
   override def idToWaitFor(): Long = taskID
 }
 
-case class TasksSingleIndex(taskID: Long,
-                            objectIDs: Seq[String],
-                            createdAt: Option[String])
+case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String])
     extends AlgoliaTask {
   override def idToWaitFor(): Long = taskID
 }
@@ -49,9 +47,7 @@ case class TasksMultipleIndex(taskID: Map[String, Long],
   override def idToWaitFor(): Long = taskID.values.max
 }
 
-case class TaskIndexing(taskID: Long,
-                        objectID: String,
-                        createdAt: Option[String])
+case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String])
     extends AlgoliaTask {
   override def idToWaitFor(): Long = taskID
 }

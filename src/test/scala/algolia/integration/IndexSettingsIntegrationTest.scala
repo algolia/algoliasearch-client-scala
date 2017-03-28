@@ -71,8 +71,7 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
     }
 
     whenReady(request) { result =>
-      result.searchableAttributes should be(
-        Some(Seq(SearchableAttributes.attribute("att"))))
+      result.searchableAttributes should be(Some(Seq(SearchableAttributes.attribute("att"))))
     }
   }
 

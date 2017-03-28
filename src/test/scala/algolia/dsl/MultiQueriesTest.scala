@@ -43,9 +43,9 @@ class MultiQueriesTest extends AlgoliaTest {
 
     it("should call the API") {
       val m = multiQueries(
-          search into "indexName1" query Query(query = Some("a")),
-          search into "indexName2" query Query(query = Some("b"))
-        ) strategy MultiQueries.Strategy.stopIfEnoughMatches
+        search into "indexName1" query Query(query = Some("a")),
+        search into "indexName2" query Query(query = Some("b"))
+      ) strategy MultiQueries.Strategy.stopIfEnoughMatches
 
       m.build() should be(
         HttpPayload(
