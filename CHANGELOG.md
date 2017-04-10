@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.20.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.20.0) (2017-03-28)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.19.1...1.20.0)
+
+**Closed issues:**
+
+- IndexSettings bad types [\#369](https://github.com/algolia/algoliasearch-client-scala/issues/369)
+
+**Merged pull requests:**
+
+- feat\(query,indexsettings\): Fix index settings & query types [\#372](https://github.com/algolia/algoliasearch-client-scala/pull/372) ([ElPicador](https://github.com/ElPicador))
+- Minor build clean up: use isSnapshot and sbt helpers [\#370](https://github.com/algolia/algoliasearch-client-scala/pull/370) ([pdalpra](https://github.com/pdalpra))
+
 ## [1.19.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.19.1) (2017-03-17)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.19.0...1.19.1)
 
