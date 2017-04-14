@@ -40,6 +40,7 @@ case class Query(
                  minProximity: Option[Int] = None,
                  responseFields: Option[Seq[String]] = None,
                  maxFacetHits: Option[Int] = None,
+                 percentileComputation: Option[Boolean] = None,
                  /* Attributes */
                  attributesToRetrieve: Option[Seq[String]] = None,
                  restrictSearchableAttributes: Option[Seq[String]] = None,
@@ -124,6 +125,7 @@ case class Query(
       "minProximity" -> minProximity.map(_.toString),
       "responseFields" -> responseFields.map(_.mkString(",")),
       "maxFacetHits" -> maxFacetHits.map(_.toString),
+      "percentileComputation" -> percentileComputation.map(_.toString),
       /* Attributes */
       "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
       "restrictSearchableAttributes" -> restrictSearchableAttributes.map(_.mkString(",")),
