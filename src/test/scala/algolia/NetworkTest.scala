@@ -39,7 +39,7 @@ class NetworkTest extends AlgoliaTest {
         AlgoliaClientConfiguration.default.copy(dnsTimeoutMs = 1000)
       )
 
-      override val hostsStatuses =
+      override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,
           utils,
@@ -77,7 +77,7 @@ class NetworkTest extends AlgoliaTest {
         AlgoliaClientConfiguration.default.copy(httpConnectTimeoutMs = 1000)
       )
 
-      override val hostsStatuses =
+      override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,
           utils,
@@ -113,7 +113,7 @@ class NetworkTest extends AlgoliaTest {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
 
-      override val hostsStatuses =
+      override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,
           utils,
@@ -147,7 +147,7 @@ class NetworkTest extends AlgoliaTest {
   describe("UnknownHostException on the last resolution") {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
-      override val hostsStatuses =
+      override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,
           utils,

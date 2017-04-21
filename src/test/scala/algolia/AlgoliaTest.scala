@@ -49,11 +49,11 @@ class AlgoliaTest
   val apiKey: String = System.getenv("API_KEY")
   val client = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
-      AlgoliaHttpClient(AlgoliaClientConfiguration(10000, 10000, 10000, 10000, 10000))
+      AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
   }
 
   implicit val patience =
-    PatienceConfig(timeout = Span(30, Seconds), interval = Span(500, Millis))
+    PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
 
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
       implicit ec: ExecutionContext): Unit = {

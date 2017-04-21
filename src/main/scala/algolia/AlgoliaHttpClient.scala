@@ -25,6 +25,8 @@
 
 package algolia
 
+import java.util.concurrent.ExecutionException
+
 import algolia.http._
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioDatagramChannel
@@ -34,7 +36,7 @@ import org.json4s._
 import org.json4s.native.JsonMethods._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 case class AlgoliaHttpClient(
     configuration: AlgoliaClientConfiguration = AlgoliaClientConfiguration.default) {
@@ -67,9 +69,9 @@ case class AlgoliaHttpClient(
       response.getStatusCode / 100 match {
         case 2 => toJson(response).extract[T]
         case 4 =>
-          throw APIClientException(response.getStatusCode,
-                                   (toJson(response) \ "message").extract[String])
-        case _ => throw UnexpectedResponse(response.getStatusCode)
+          throw `4XXAPIException`(response.getStatusCode,
+                                  (toJson(response) \ "message").extract[String])
+        case _ => throw UnexpectedResponseException(response.getStatusCode)
       }
   }
 
@@ -82,7 +84,12 @@ case class AlgoliaHttpClient(
     val promise = Promise[T]()
     val runnable = new java.lang.Runnable {
       def run() {
-        promise.complete(Try(javaFuture.get()))
+        try {
+          promise.complete(Success(javaFuture.get()))
+        } catch {
+          case e: ExecutionException => promise.complete(Failure(e.getCause))
+          case f: Throwable => promise.complete(Failure(f))
+        }
       }
     }
     val exec = new java.util.concurrent.Executor {
@@ -97,8 +104,8 @@ case class AlgoliaHttpClient(
 
 }
 
-case class APIClientException(code: Int, message: String)
+case class `4XXAPIException`(code: Int, message: String)
     extends Exception("Failure \"%s\", response status: %d".format(message, code))
 
-case class UnexpectedResponse(code: Int)
+case class UnexpectedResponseException(code: Int)
     extends Exception("Unexpected response status: %d".format(code))

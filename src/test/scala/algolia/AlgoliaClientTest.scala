@@ -146,7 +146,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *)
 
     val `4XXRequest`: Future[Result] =
-      Future.failed(APIClientException(404, "404"))
+      Future.failed(`4XXAPIException`(404, "404"))
 
     var apiClient: AlgoliaClient = null
 
