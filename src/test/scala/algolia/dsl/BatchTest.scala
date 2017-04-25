@@ -218,7 +218,8 @@ class BatchTest extends AlgoliaTest {
           add value "truc" inAttribute "toto" ofObjectId "myId" from "index3",
           remove value "truc" inAttribute "toto" ofObjectId "myId" from "index4",
           addUnique value "truc" inAttribute "toto" ofObjectId "myId" from "index5",
-          increment attribute "toto" by 1 from "index6" ofObjectId "1" createIfNotExists false
+          increment attribute "toto" by 1 from "index6" ofObjectId "1" createIfNotExists false,
+          update attribute "attr" value "newValue" ofObjectId "myId" from "index6"
         )
       }
 
@@ -229,7 +230,8 @@ class BatchTest extends AlgoliaTest {
           add value "truc" inAttribute "att3" ofObjectId "3" from "index3",
           remove value "truc" inAttribute "att4" ofObjectId "4" from "index4",
           addUnique value "truc" inAttribute "att5" ofObjectId "5" from "index5",
-          increment attribute "att6" by 1 from "index6" ofObjectId "6" createIfNotExists false
+          increment attribute "att6" by 1 from "index6" ofObjectId "6" createIfNotExists false,
+          update attribute "att7" value "newValue" ofObjectId "7" from "index7"
         ).build()
 
         val body = """
@@ -295,6 +297,13 @@ class BatchTest extends AlgoliaTest {
             |       },
             |       "indexName":"index6",
             |       "action":"partialUpdateObjectNoCreate"
+            |     },{
+            |       "body":{
+            |         "objectID":"7",
+            |         "att7":"newValue"
+            |       },
+            |       "indexName":"index7",
+            |       "action":"partialUpdateObject"
             |     }
             |   ]
             | }

@@ -92,6 +92,13 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
         )
         Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
 
+      case PartialUpdateObjectDefinition(index, Some(objectId), Some(attribute), value) =>
+        val body = Map(
+          "objectID" -> objectId,
+          attribute -> value
+        )
+        Traversable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
+
       case IndexingBatchDefinition(_, defs) =>
         defs.flatMap(transform)
 
