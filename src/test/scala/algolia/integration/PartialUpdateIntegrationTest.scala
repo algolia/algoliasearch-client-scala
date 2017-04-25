@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.responses.{GetObject, Task, TaskIndexing}
+import algolia.responses.{GetObject, Task, TaskIndexing, TasksMultipleIndex}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -168,6 +168,30 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
     whenReady(s) { get =>
       get.as[PartialUpdateValue] should equal(
         PartialUpdateValue("otherOne", "otherValue", "updateValue"))
+    }
+  }
+
+  it("should update a value in a batch") {
+    val create: Future[TaskIndexing] = client.execute {
+      index into "index_partial" `object` PartialUpdateObj(1, "batch_update")
+    }
+
+    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+
+    val updating: Future[TasksMultipleIndex] = client.execute {
+      batch(
+        update attribute "value" value 2 ofObjectId "batch_update" from "index_partial"
+      )
+    }
+
+    taskShouldBeCreatedAndWaitForIt(updating, "index_partial")
+
+    val s: Future[GetObject] = client.execute {
+      get from "index_partial" objectId "batch_update"
+    }
+
+    whenReady(s) { get =>
+      get.as[PartialUpdateObj] should equal(PartialUpdateObj(2, "batch_update"))
     }
   }
 
