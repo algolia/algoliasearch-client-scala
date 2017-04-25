@@ -1,6 +1,24 @@
 # Change Log
 
-## [1.20.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.20.0) (2017-03-28)
+## [1.21.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.21.0) (2017-04-25)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.20.0...1.21.0)
+
+**Implemented enhancements:**
+
+- Simplify DSL for batches on same index [\#67](https://github.com/algolia/algoliasearch-client-scala/issues/67)
+- Get Object with some attributes [\#19](https://github.com/algolia/algoliasearch-client-scala/issues/19)
+
+**Closed issues:**
+
+- Add cross compilation to Scala 2.10 [\#296](https://github.com/algolia/algoliasearch-client-scala/issues/296)
+
+**Merged pull requests:**
+
+- fix\(batch\): Add partial update on a batch [\#377](https://github.com/algolia/algoliasearch-client-scala/pull/377) ([ElPicador](https://github.com/ElPicador))
+- chore\(sbt\): Update sbt to 0.13.15 [\#375](https://github.com/algolia/algoliasearch-client-scala/pull/375) ([ElPicador](https://github.com/ElPicador))
+- feat\(query\): Add percentileComputation [\#373](https://github.com/algolia/algoliasearch-client-scala/pull/373) ([ElPicador](https://github.com/ElPicador))
+
+## [1.20.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.20.0) (2017-04-10)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.19.1...1.20.0)
 
 **Closed issues:**
