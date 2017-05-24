@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.22.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.22.0) (2017-05-24)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.21.0...1.22.0)
+
+**Merged pull requests:**
+
+- bump json4s version from 3.4.0 to 3.5.2 [\#379](https://github.com/algolia/algoliasearch-client-scala/pull/379) ([robconrad](https://github.com/robconrad))
+
 ## [1.21.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.21.0) (2017-04-25)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.20.0...1.21.0)
 
@@ -10,6 +17,7 @@
 
 **Closed issues:**
 
+- Batch operations not supported for `PartialUpdateObjectDefinition` [\#376](https://github.com/algolia/algoliasearch-client-scala/issues/376)
 - Add cross compilation to Scala 2.10 [\#296](https://github.com/algolia/algoliasearch-client-scala/issues/296)
 
 **Merged pull requests:**
