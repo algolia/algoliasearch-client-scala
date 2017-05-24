@@ -14,7 +14,7 @@ ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true
 
 val asyncHttpClientVersion = "2.0.4"
 
-val json4sVersion = "3.4.0"
+val json4sVersion = "3.5.2"
 
 val scalaTestVersion = "2.2.6"
 val scalaMockVersion = "3.2"
