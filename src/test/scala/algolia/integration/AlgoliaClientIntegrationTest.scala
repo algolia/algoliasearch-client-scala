@@ -25,38 +25,30 @@
 
 package algolia.integration
 
-import algolia.responses.{Logs, LogType}
-import algolia.AlgoliaTest
+import algolia.{AlgoliaClientException, AlgoliaTest}
 import algolia.AlgoliaDsl._
+import algolia.objects.Query
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class LogIntegrationTest extends AlgoliaTest {
+class AlgoliaClientIntegrationTest extends AlgoliaTest {
 
-  after {
-    clearIndices(
-      "indexToSearch"
-    )
-  }
+  describe("requests") {
 
-  before {
-    val obj = Test("algolia", 10, alien = false)
-    val insert1 = client.execute {
-      index into "indexToSearch" objectId "563481290" `object` obj
+    it("404") {
+      //will result in a 404
+      val s = client.execute {
+        search into "indexThatDoesNotExists" query Query(query = Some("a"))
+      }
+
+      whenReady(s.failed) { e =>
+        e shouldBe a[AlgoliaClientException]
+        e.asInstanceOf[AlgoliaClientException].getMessage should be(
+          "Failure \"Index indexThatDoesNotExists does not exist\", response status: 404")
+      }
+
     }
 
-    taskShouldBeCreatedAndWaitForIt(insert1, "indexToSearch")
-  }
-
-  it("should get the logs") {
-    val result: Future[Logs] = client.execute {
-      logs offset 0 length 10 `type` LogType.all
-    }
-
-    whenReady(result) { r =>
-      r.logs shouldNot be(empty)
-    }
   }
 
 }

@@ -27,7 +27,6 @@ package algolia
 
 import java.nio.charset.Charset
 import java.util.Base64
-import java.util.concurrent.TimeoutException
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -94,7 +93,7 @@ class AlgoliaClient(applicationId: String,
   )
 
   private val HMAC_SHA256 = "HmacSHA256"
-  private[algolia] val hostsStatuses =
+  private[algolia] lazy val hostsStatuses =
     HostsStatuses(configuration, utils, queryHosts, indexingHosts)
 
   def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT],
@@ -117,6 +116,7 @@ class AlgoliaClient(applicationId: String,
     algorithm.doFinal(msg.getBytes()).map("%02x".format(_)).mkString
   }
 
+  private val failedStart: Future[Nothing] = Future.failed(StartException())
   private[algolia] def request[T: Manifest](payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) {
@@ -125,26 +125,42 @@ class AlgoliaClient(applicationId: String,
       hostsStatuses.indexingHostsThatAreUp()
     }
 
-    val result = hosts.foldLeft(Future.failed[T](new TimeoutException())) { (future, host) =>
+    def makeRequest(host: String): Future[T] =
+      httpClient.request[T](host, headers, payload).andThen {
+        case Success(_) =>
+          hostsStatuses.markHostAsUp(host)
+        case Failure(_: `4XXAPIException`) =>
+          hostsStatuses.markHostAsUp(host)
+        case Failure(_) =>
+          hostsStatuses.markHostAsDown(host)
+      }
+
+    val result = hosts.foldLeft[Future[T]](failedStart) { (future, host) =>
       future.recoverWith {
-        case e: APIClientException => Future.failed(e) //No retry if 4XX
+        case f: `4XXAPIException` =>
+          Future.failed(f) //No retry if 4XX
         case _ =>
-          httpClient.request[T](host, headers, payload).andThen {
-            case Failure(_) => hostsStatuses.markHostAsDown(host)
-            case Success(_) => hostsStatuses.markHostAsUp(host)
-          }
+          makeRequest(host)
       }
     }
 
     result.recoverWith {
-      case e: APIClientException =>
-        Future.failed(new AlgoliaClientException(e.getMessage, e.getCause))
-      case e: AlgoliaClientException => Future.failed(e)
-      case e: Throwable =>
+      case e: `4XXAPIException` =>
+        Future.failed(new AlgoliaClientException(e.getMessage, e))
+      case e =>
         Future.failed(new AlgoliaClientException("Failed on last retry", e))
     }
   }
 }
+
+sealed trait Toto
+
+object Start extends Toto
+case class `4XX`[T](e: `4XXAPIException`) extends Toto
+case class UnknownException[T](e: Throwable) extends Toto
+case class Ok[T](r: T) extends Toto
+
+private[algolia] case class StartException() extends Exception
 
 class AlgoliaClientException(message: String, exception: Throwable)
     extends Exception(message, exception) {
