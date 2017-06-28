@@ -61,6 +61,8 @@ trait ClearDsl {
 
     def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
 
+    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
+
   }
 
   implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {

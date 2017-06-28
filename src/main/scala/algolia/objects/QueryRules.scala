@@ -25,24 +25,8 @@
 
 package algolia.objects
 
-sealed trait IgnorePlurals {
-
-  val value: String
-
-}
-
-object IgnorePlurals {
-
-  case class list(isoCodes: Seq[String]) extends IgnorePlurals {
-    override val value: String = isoCodes.mkString(",")
-  }
-
-  case object `true` extends IgnorePlurals {
-    override val value = "true"
-  }
-
-  case object `false` extends IgnorePlurals {
-    override val value = "false"
-  }
-
-}
+case class QueryRules(query: String,
+                      anchoring: Option[String] = None,
+                      context: Option[String] = None,
+                      page: Option[Int] = None,
+                      hitsPerPage: Option[Int] = None)
