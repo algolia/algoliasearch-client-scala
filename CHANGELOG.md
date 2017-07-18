@@ -1,5 +1,22 @@
 # Change Log
 
+## [1.22.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.22.1) (2017-07-18)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.22.0...1.22.1)
+
+**Fixed bugs:**
+
+- Control characters are not escaped automatically by json4s [\#381](https://github.com/algolia/algoliasearch-client-scala/issues/381)
+- Client retries on 400 [\#194](https://github.com/algolia/algoliasearch-client-scala/issues/194)
+
+**Closed issues:**
+
+- Add DSL for update object [\#171](https://github.com/algolia/algoliasearch-client-scala/issues/171)
+
+**Merged pull requests:**
+
+- feat\(ranking\): Add ranking filters [\#385](https://github.com/algolia/algoliasearch-client-scala/pull/385) ([ElPicador](https://github.com/ElPicador))
+- fix\(retry\): 4XX on retry [\#374](https://github.com/algolia/algoliasearch-client-scala/pull/374) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.22.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.22.0) (2017-05-24)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.21.0...1.22.0)
 
