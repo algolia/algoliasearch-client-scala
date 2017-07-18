@@ -153,13 +153,6 @@ class AlgoliaClient(applicationId: String,
   }
 }
 
-sealed trait Toto
-
-object Start extends Toto
-case class `4XX`[T](e: `4XXAPIException`) extends Toto
-case class UnknownException[T](e: Throwable) extends Toto
-case class Ok[T](r: T) extends Toto
-
 private[algolia] case class StartException() extends Exception
 
 class AlgoliaClientException(message: String, exception: Throwable)

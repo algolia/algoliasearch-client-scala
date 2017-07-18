@@ -12,13 +12,14 @@ scalaVersion := "2.11.7"
 ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
 //coverageEnabled := true
 
-val asyncHttpClientVersion = "2.0.4"
-
+val asyncHttpClientVersion = "2.0.33"
 val json4sVersion = "3.5.2"
+val logbackVersion = "1.2.3"
+val scalaUriVersion = "0.4.16"
 
-val scalaTestVersion = "2.2.6"
-val scalaMockVersion = "3.2"
-val scalacheckVersion = "1.12.1"
+val scalaTestVersion = "3.0.1"
+val scalaMockVersion = "3.4.2"
+val scalacheckVersion = "1.12.6"
 
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
 
@@ -26,9 +27,9 @@ libraryDependencies += "org.json4s" %% "json4s-ast" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
-libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3"
+libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion
 
-libraryDependencies += "com.netaporter" %% "scala-uri" % "0.4.14"
+libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
@@ -49,37 +50,32 @@ scalacOptions ++= Seq("-feature", "-unchecked")
   * see: https://github.com/xerial/sbt-sonatype
   *
   **/
-headers := Map(
-  "scala" -> (
-    de.heikoseeberger.sbtheader.HeaderPattern.cStyleBlockComment,
-    """|/*
-      | * The MIT License (MIT)
-      | *
-      | * Copyright (c) 2016 Algolia
-      | * http://www.algolia.com/
-      | *
-      | * Permission is hereby granted, free of charge, to any person obtaining a copy
-      | * of this software and associated documentation files (the "Software"), to deal
-      | * in the Software without restriction, including without limitation the rights
-      | * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-      | * copies of the Software, and to permit persons to whom the Software is
-      | * furnished to do so, subject to the following conditions:
-      | *
-      | * The above copyright notice and this permission notice shall be included in
-      | * all copies or substantial portions of the Software.
-      | *
-      | * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-      | * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-      | * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-      | * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-      | * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-      | * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-      | * THE SOFTWARE.
-      | */
+headerLicense := Some(
+  HeaderLicense.Custom(
+    """The MIT License (MIT)
       |
+      |Copyright (c) 2016 Algolia
+      |http://www.algolia.com/
+      |
+      |Permission is hereby granted, free of charge, to any person obtaining a copy
+      |of this software and associated documentation files (the "Software"), to deal
+      |in the Software without restriction, including without limitation the rights
+      |to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+      |copies of the Software, and to permit persons to whom the Software is
+      |furnished to do so, subject to the following conditions:
+      |
+      |The above copyright notice and this permission notice shall be included in
+      |all copies or substantial portions of the Software.
+      |
+      |THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+      |IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+      |FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+      |AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+      |LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+      |OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+      |THE SOFTWARE.
       |""".stripMargin
-  )
-)
+  ))
 
 lazy val myProject = project
   .in(file("."))
