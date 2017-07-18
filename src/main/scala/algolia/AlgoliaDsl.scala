@@ -142,6 +142,7 @@ object AlgoliaDsl extends AlgoliaDsl {
           case JString("attribute") => Ranking.attribute
           case JString("exact") => Ranking.exact
           case JString("custom") => Ranking.custom
+          case JString("filters") => Ranking.filters
         }, {
           case Ranking.asc(attribute) => JString(s"asc($attribute)")
           case Ranking.desc(attribute) => JString(s"desc($attribute)")
@@ -152,6 +153,7 @@ object AlgoliaDsl extends AlgoliaDsl {
           case Ranking.attribute => JString("attribute")
           case Ranking.exact => JString("exact")
           case Ranking.custom => JString("custom")
+          case Ranking.filters => JString("filters")
         }))
 
   class CustomRankingSerializer

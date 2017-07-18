@@ -47,4 +47,6 @@ object Ranking {
 
   case object custom extends Ranking
 
+  case object filters extends Ranking
+
 }
