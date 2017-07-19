@@ -29,7 +29,6 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.responses.{GetObject, Task, TaskIndexing, TasksMultipleIndex}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class PartialUpdateIntegrationTest extends AlgoliaTest {

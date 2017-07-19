@@ -31,13 +31,12 @@ import algolia.objects.Query
 import algolia.responses._
 import algolia.{AlgoliaSyncHelper, AlgoliaTest}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class AlgoliaSyncHelperTest extends AlgoliaTest {
 
   val helper = AlgoliaSyncHelper(client)
-  val list = 1 to 100 map (i => Value(i, i.toString))
+  val list: Seq[Value] = 1 to 100 map (i => Value(i, i.toString))
 
   before {
     val insert = client.execute {

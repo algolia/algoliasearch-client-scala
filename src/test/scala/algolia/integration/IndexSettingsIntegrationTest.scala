@@ -30,7 +30,6 @@ import algolia.AlgoliaTest
 import algolia.objects.{SearchableAttributes, IndexSettings}
 import algolia.responses._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class IndexSettingsIntegrationTest extends AlgoliaTest {

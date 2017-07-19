@@ -30,7 +30,6 @@ import algolia.AlgoliaTest
 import algolia.AlgoliaDsl._
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class LogIntegrationTest extends AlgoliaTest {
 

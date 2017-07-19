@@ -30,7 +30,6 @@ import algolia.AlgoliaTest
 import algolia.objects.Query
 import algolia.responses._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.language.postfixOps
 

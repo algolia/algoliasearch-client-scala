@@ -33,7 +33,6 @@ import algolia.http.{GET, HttpPayload}
 import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClientTest extends AlgoliaTest {
@@ -57,7 +56,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     it("should set user agent") {
       apiClient.userAgent should (startWith("Algolia for Scala (1.") and include("; JVM (1.8") and include(
-        "; Scala (2.11"))
+        "; Scala (2.1"))
     }
 
     it("should set Content-Type header") {

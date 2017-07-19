@@ -32,7 +32,6 @@ import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaTest
@@ -54,6 +53,8 @@ class AlgoliaTest
 
   implicit val patience =
     PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
+
+  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
       implicit ec: ExecutionContext): Unit = {

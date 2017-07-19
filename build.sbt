@@ -6,11 +6,11 @@ description := "Scala client for Algolia Search API"
 
 version := "1.23.0-SNAPSHOT"
 
-scalaVersion := "2.11.7"
+crossScalaVersions := Seq("2.11.11", "2.12.2")
 
-//Wait fix in sbt-coveralls
-ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := false //setting to true crashes the coverage
-//coverageEnabled := true
+scalaVersion := "2.12.2"
+
+coverageEnabled := true
 
 val asyncHttpClientVersion = "2.0.33"
 val json4sVersion = "3.5.2"
