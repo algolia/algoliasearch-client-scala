@@ -29,8 +29,6 @@ import algolia.{AlgoliaClientException, AlgoliaTest}
 import algolia.AlgoliaDsl._
 import algolia.objects.Query
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class AlgoliaClientIntegrationTest extends AlgoliaTest {
 
   describe("requests") {

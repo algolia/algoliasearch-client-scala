@@ -27,7 +27,6 @@ package algolia
 
 import algolia.AlgoliaDsl._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 class NetworkTest extends AlgoliaTest {

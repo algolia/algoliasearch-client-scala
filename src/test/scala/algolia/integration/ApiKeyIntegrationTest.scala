@@ -30,7 +30,6 @@ import algolia.AlgoliaTest
 import algolia.objects.{Acl, ApiKey}
 import algolia.responses.{AllKeys, CreateUpdateKey}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ApiKeyIntegrationTest extends AlgoliaTest {

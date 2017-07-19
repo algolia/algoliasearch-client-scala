@@ -29,7 +29,6 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.responses.{GetObject, Results, TasksMultipleIndex}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class GetObjectIntegrationTest extends AlgoliaTest {

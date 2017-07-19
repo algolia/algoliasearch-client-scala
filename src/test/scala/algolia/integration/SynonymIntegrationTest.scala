@@ -30,8 +30,6 @@ import algolia.objects.Synonym.{AltCorrection1, OneWaySynonym}
 import algolia.objects.{QuerySynonyms, Synonym, SynonymType}
 import algolia.{AlgoliaDsl, AlgoliaTest}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class SynonymIntegrationTest extends AlgoliaTest {
 
   after {
