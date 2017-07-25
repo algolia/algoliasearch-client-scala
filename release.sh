@@ -34,8 +34,8 @@ git push origin master
 git tag -f ${VERSION}
 git push --tags --force
 
-sbt publishSigned
-sbt sonatypeRelease
+sbt "+publishSigned"
+sbt "sonatypeReleaseAll"
 
 read -p "Next version number, without SNAPSHOT (ex: 1.4.0): " NEXT_VERSION
 
