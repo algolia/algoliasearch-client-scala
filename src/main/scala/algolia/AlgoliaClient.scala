@@ -116,6 +116,8 @@ class AlgoliaClient(applicationId: String,
     algorithm.doFinal(msg.getBytes()).map("%02x".format(_)).mkString
   }
 
+  def close(): Unit = httpClient.close()
+
   private val failedStart: Future[Nothing] = Future.failed(StartException())
   private[algolia] def request[T: Manifest](payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
