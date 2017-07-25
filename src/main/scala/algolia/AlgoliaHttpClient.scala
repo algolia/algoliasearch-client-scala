@@ -58,6 +58,8 @@ case class AlgoliaHttpClient(
 
   implicit val formats: Formats = AlgoliaDsl.formats
 
+  def close(): Unit = _httpClient.close()
+
   def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
     val request = payload(host, headers, dnsNameResolver)

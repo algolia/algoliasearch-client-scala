@@ -38,6 +38,7 @@ class AlgoliaTest
     extends FunSpec
     with Matchers
     with BeforeAndAfter
+    with BeforeAndAfterAll
     with Inspectors
     with ScalaFutures
     with Inside
@@ -55,6 +56,10 @@ class AlgoliaTest
     PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
 
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+
+  override protected def afterAll(): Unit = {
+    client.close()
+  }
 
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
       implicit ec: ExecutionContext): Unit = {
