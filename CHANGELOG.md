@@ -1,5 +1,18 @@
 # Change Log
 
+## [1.23.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.23.0) (2017-07-25)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.22.1...1.23.0)
+
+**Closed issues:**
+
+- Add cross compilation to Scala 2.12 [\#196](https://github.com/algolia/algoliasearch-client-scala/issues/196)
+
+**Merged pull requests:**
+
+- feat\(client\): Add a .close\(\) method [\#389](https://github.com/algolia/algoliasearch-client-scala/pull/389) ([ElPicador](https://github.com/ElPicador))
+- feat\(scala\): Add cross compilation to scala 2.11 and 2.12 [\#387](https://github.com/algolia/algoliasearch-client-scala/pull/387) ([ElPicador](https://github.com/ElPicador))
+- chore\(dependencies\): Update dependencies [\#386](https://github.com/algolia/algoliasearch-client-scala/pull/386) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.22.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.22.1) (2017-07-18)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.22.0...1.22.1)
 
@@ -10,6 +23,7 @@
 
 **Closed issues:**
 
+- Missing filters in Ranking to allow configuration of index settings [\#384](https://github.com/algolia/algoliasearch-client-scala/issues/384)
 - Add DSL for update object [\#171](https://github.com/algolia/algoliasearch-client-scala/issues/171)
 
 **Merged pull requests:**
