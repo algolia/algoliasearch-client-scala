@@ -29,7 +29,7 @@ import algolia.AlgoliaDsl._
 import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Millis, Seconds, Span}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +43,8 @@ class AlgoliaTest
     with ScalaFutures
     with Inside
     with MockFactory
-    with EitherValues {
+    with EitherValues
+    with Eventually {
 
   val applicationId: String = System.getenv("APPLICATION_ID")
   val apiKey: String = System.getenv("API_KEY")
@@ -61,12 +62,16 @@ class AlgoliaTest
     client.close()
   }
 
+  def taskShouldBeCreated(task: Future[AlgoliaTask])(implicit ec: ExecutionContext): AlgoliaTask = {
+    whenReady(task) { result =>
+      result.idToWaitFor should not be 0
+      result
+    }
+  }
+  
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
       implicit ec: ExecutionContext): Unit = {
-    val t: AlgoliaTask = whenReady(task) { result =>
-      result.idToWaitFor should not be 0
-      result //for getting it after
-    }
+    val t: AlgoliaTask = taskShouldBeCreated(task)
 
     val waiting = client.execute {
       waitFor task t from index maxDelay (60 * 10 * 1000) //600 seconds

@@ -25,11 +25,12 @@
 
 package algolia.definitions
 
-import java.util.{Timer, TimerTask}
+import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
 
-import algolia.http.{GET, HttpPayload}
+import algolia.http.HttpPayload
 import algolia.responses.{AlgoliaTask, TaskStatus}
 import algolia.{AlgoliaClient, Executable}
+import io.netty.util.{HashedWheelTimer, Timeout, TimerTask}
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 
@@ -45,13 +46,8 @@ case class WaitForTaskDefinition(taskId: Long,
 
   def maxDelay(delay: Long): WaitForTaskDefinition = copy(maxDelay = delay)
 
-  override private[algolia] def build(): HttpPayload = {
-    HttpPayload(
-      GET,
-      Seq("1", "indexes") ++ index ++ Seq("task", taskId.toString),
-      isSearch = true
-    )
-  }
+  override private[algolia] def build(): HttpPayload = TaskStatusDefinition(taskId, index).build()
+
 }
 
 trait WaitForTaskDsl {
@@ -63,6 +59,19 @@ trait WaitForTaskDsl {
 
   implicit object WaitForTaskDefinitionExecutable
       extends Executable[WaitForTaskDefinition, TaskStatus] {
+
+    // Run every 50 ms, use a wheel with 512 buckets
+    private lazy val timer = {
+      val threadFactory = new ThreadFactory {
+        override def newThread(r: Runnable): Thread = {
+          val t = Executors.defaultThreadFactory().newThread(r)
+          t.setDaemon(true)
+          t.setName("algolia-waitfor-thread")
+          t
+        }
+      }
+      new HashedWheelTimer(threadFactory, 50, TimeUnit.MILLISECONDS, 512)
+    }
 
     /**
       * Wait for the completion of a task
@@ -79,32 +88,30 @@ trait WaitForTaskDsl {
       */
     override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(
         implicit executor: ExecutionContext): Future[TaskStatus] = {
-      def request(d: Long): Future[TaskStatus] =
+
+      def request(d: Long, totalDelay: Long): Future[TaskStatus] =
         delay[TaskStatus](d) {
           client.request[TaskStatus](query.build())
         }.flatMap { res =>
           if (res.status == "published") {
             Future.successful(res)
-          } else if (d > query.maxDelay) {
+          } else if (totalDelay > query.maxDelay) {
             Future.failed(WaitForTimeoutException(
               s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
           } else {
-            request(d * 2)
+            request(d * 2, totalDelay + d)
           }
         }
 
-      request(query.baseDelay)
+      request(query.baseDelay, 0L)
     }
 
-    //from http://stackoverflow.com/questions/16359849/scala-scheduledfuture
     private def delay[T](delay: Long)(block: => Future[T]): Future[T] = {
       val promise = Promise[T]()
-      val t = new Timer()
-      t.schedule(new TimerTask {
-        override def run(): Unit = {
-          promise.completeWith(block)
-        }
-      }, delay)
+      val task = new TimerTask {
+        override def run(timeout: Timeout): Unit = promise.completeWith(block)
+      }
+      timer.newTimeout(task, delay, TimeUnit.MILLISECONDS)
       promise.future
     }
   }
