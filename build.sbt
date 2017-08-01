@@ -10,7 +10,7 @@ crossScalaVersions := Seq("2.11.11", "2.12.2")
 
 scalaVersion := "2.12.2"
 
-coverageEnabled := true
+coverageEnabled := false
 
 val asyncHttpClientVersion = "2.0.33"
 val json4sVersion = "3.5.2"
