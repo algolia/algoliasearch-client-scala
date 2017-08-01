@@ -1,10 +1,14 @@
 # Change Log
 
+## [1.23.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.23.1) (2017-07-25)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.23.0...1.23.1)
+
 ## [1.23.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.23.0) (2017-07-25)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.22.1...1.23.0)
 
 **Closed issues:**
 
+- Add a method to close the connection pool of the underlying http client [\#383](https://github.com/algolia/algoliasearch-client-scala/issues/383)
 - Add cross compilation to Scala 2.12 [\#196](https://github.com/algolia/algoliasearch-client-scala/issues/196)
 
 **Merged pull requests:**
