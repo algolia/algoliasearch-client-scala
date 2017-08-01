@@ -30,8 +30,6 @@ import algolia.AlgoliaTest
 import algolia.http.{GET, HttpPayload}
 import algolia.responses.Task
 
-
-
 class TaskStatusTest extends AlgoliaTest {
 
   describe("get task status") {
@@ -52,4 +50,3 @@ class TaskStatusTest extends AlgoliaTest {
   }
 
 }
-

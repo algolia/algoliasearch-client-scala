@@ -68,7 +68,7 @@ class AlgoliaTest
       result
     }
   }
-  
+
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
       implicit ec: ExecutionContext): Unit = {
     val t: AlgoliaTask = taskShouldBeCreated(task)

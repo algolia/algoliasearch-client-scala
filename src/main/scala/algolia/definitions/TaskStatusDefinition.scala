@@ -52,11 +52,10 @@ trait TaskStatusDsl {
       TaskStatusDefinition(task.idToWaitFor())
   }
 
-  implicit object TaskStatusExecutable
-    extends Executable[TaskStatusDefinition, TaskStatus] {
+  implicit object TaskStatusExecutable extends Executable[TaskStatusDefinition, TaskStatus] {
 
     override def apply(client: AlgoliaClient, query: TaskStatusDefinition)(
-      implicit executor: ExecutionContext): Future[TaskStatus] = {
+        implicit executor: ExecutionContext): Future[TaskStatus] = {
       client.request[TaskStatus](query.build())
     }
 

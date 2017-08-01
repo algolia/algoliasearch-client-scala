@@ -39,7 +39,7 @@ class TaskStatusIntegrationTest extends AlgoliaTest {
 
   it("should get the status of a single object task") {
     val create: Future[TaskIndexing] = client.execute {
-        index into "indexToGetTaskStatus" `object` ObjectToGet("1", "toto")
+      index into "indexToGetTaskStatus" `object` ObjectToGet("1", "toto")
     }
 
     val task = taskShouldBeCreated(create)
