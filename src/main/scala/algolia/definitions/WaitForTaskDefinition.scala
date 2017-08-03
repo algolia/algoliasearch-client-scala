@@ -60,7 +60,7 @@ trait WaitForTaskDsl {
   implicit object WaitForTaskDefinitionExecutable
       extends Executable[WaitForTaskDefinition, TaskStatus] {
 
-    // Run every 50 ms, use a wheel with 512 buckets
+    // Run every 100 ms, use a wheel with 512 buckets
     private lazy val timer = {
       val threadFactory = new ThreadFactory {
         override def newThread(r: Runnable): Thread = {
@@ -70,7 +70,7 @@ trait WaitForTaskDsl {
           t
         }
       }
-      new HashedWheelTimer(threadFactory, 50, TimeUnit.MILLISECONDS, 512)
+      new HashedWheelTimer(threadFactory, 100, TimeUnit.MILLISECONDS, 512)
     }
 
     /**
