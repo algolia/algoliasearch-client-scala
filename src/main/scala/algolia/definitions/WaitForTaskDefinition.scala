@@ -28,6 +28,7 @@ package algolia.definitions
 import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
 
 import algolia.http.HttpPayload
+import algolia.objects.RequestOptions
 import algolia.responses.{AlgoliaTask, TaskStatus}
 import algolia.{AlgoliaClient, Executable}
 import io.netty.util.{HashedWheelTimer, Timeout, TimerTask}
@@ -37,14 +38,20 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 case class WaitForTaskDefinition(taskId: Long,
                                  index: Option[String] = None,
                                  baseDelay: Long = 100,
-                                 maxDelay: Long = Long.MaxValue)
+                                 maxDelay: Long = Long.MaxValue,
+                                 requestOptions: Option[RequestOptions] = None)
     extends Definition {
+
+  type T = WaitForTaskDefinition
 
   def from(index: String): WaitForTaskDefinition = copy(index = Some(index))
 
   def baseDelay(delay: Long): WaitForTaskDefinition = copy(baseDelay = delay)
 
   def maxDelay(delay: Long): WaitForTaskDefinition = copy(maxDelay = delay)
+
+  override def options(requestOptions: RequestOptions): WaitForTaskDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = TaskStatusDefinition(taskId, index).build()
 

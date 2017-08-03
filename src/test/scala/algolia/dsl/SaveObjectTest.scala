@@ -49,7 +49,8 @@ class SaveObjectTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "toto"),
             body = Some("{\"name\":\"algolia\",\"age\":2}"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -68,7 +69,8 @@ class SaveObjectTest extends AlgoliaTest {
               List("1", "indexes", "toto", "batch"),
               body = Some(
                 "{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2},\"action\":\"addObject\"}]}"),
-              isSearch = false
+              isSearch = false,
+              requestOptions = None
             )
           )
         }
@@ -81,7 +83,8 @@ class SaveObjectTest extends AlgoliaTest {
               List("1", "indexes", "toto", "batch"),
               body = Some(
                 "{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2,\"objectID\":\"id\"},\"action\":\"updateObject\"}]}"),
-              isSearch = false
+              isSearch = false,
+              requestOptions = None
             )
           )
         }
@@ -105,7 +108,8 @@ class SaveObjectTest extends AlgoliaTest {
             PUT,
             List("1", "indexes", "toto", "1"),
             body = Some("{\"name\":\"algolia\",\"age\":2}"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -124,7 +128,8 @@ class SaveObjectTest extends AlgoliaTest {
               List("1", "indexes", "toto", "batch"),
               body = Some(
                 "{\"requests\":[{\"body\":{\"objectID\":\"1\",\"name\":\"algolia\",\"age\":2},\"action\":\"updateObject\"}]}"),
-              isSearch = false
+              isSearch = false,
+              requestOptions = None
             )
           )
         }

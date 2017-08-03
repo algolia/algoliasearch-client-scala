@@ -80,7 +80,8 @@ class BatchTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "*", "batch"),
             body = Some(body),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -119,7 +120,8 @@ class BatchTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "*", "batch"),
             body = Some(body),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -159,7 +161,8 @@ class BatchTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "*", "batch"),
             body = Some(body),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -202,7 +205,8 @@ class BatchTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "*", "batch"),
             body = Some(body),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -314,7 +318,8 @@ class BatchTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "*", "batch"),
             body = Some(body),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }

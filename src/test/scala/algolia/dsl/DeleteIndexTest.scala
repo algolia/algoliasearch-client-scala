@@ -42,7 +42,8 @@ class DeleteIndexTest extends AlgoliaTest {
         HttpPayload(
           DELETE,
           Seq("1", "indexes", "toto"),
-          isSearch = false
+          isSearch = false,
+          requestOptions = None
         )
       )
     }

@@ -26,15 +26,20 @@
 package algolia.definitions
 
 import algolia.http.HttpPayload
+import algolia.objects.RequestOptions
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[String] = None)(
-    implicit val formats: Formats)
+case class DeleteObjectDefinition(
+    index: Option[String] = None,
+    oid: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = DeleteObjectDefinition
 
   def from(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
 
@@ -48,14 +53,29 @@ case class DeleteObjectDefinition(index: Option[String] = None, oid: Option[Stri
       DeleteObjectDefinition(index, Some(oid))
     })
 
+  override def options(requestOptions: RequestOptions): DeleteObjectDefinition =
+    copy(requestOptions = Some(requestOptions))
+
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE, Seq("1", "indexes") ++ index ++ oid, isSearch = false)
+    HttpPayload(http.DELETE,
+                Seq("1", "indexes") ++ index ++ oid,
+                isSearch = false,
+                requestOptions = requestOptions)
 }
 
-case class DeleteIndexDefinition(index: String) extends Definition {
+case class DeleteIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
+    extends Definition {
+
+  type T = DeleteIndexDefinition
+
+  override def options(requestOptions: RequestOptions): DeleteIndexDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE, Seq("1", "indexes", index), isSearch = false)
+    HttpPayload(http.DELETE,
+                Seq("1", "indexes", index),
+                isSearch = false,
+                requestOptions = requestOptions)
 
 }
 

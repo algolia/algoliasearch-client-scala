@@ -27,6 +27,7 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs._
+import algolia.objects.RequestOptions
 import algolia.responses.TasksMultipleIndex
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.JsonAST.JValue
@@ -35,37 +36,45 @@ import org.json4s.{Extraction, Formats}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BatchDefinition(definitions: Traversable[Definition])(implicit val formats: Formats)
+case class BatchDefinition(
+    definitions: Traversable[Definition],
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition
     with BatchOperationUtils {
+
+  type T = BatchDefinition
+
+  override def options(requestOptions: RequestOptions): BatchDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
       POST,
       Seq("1", "indexes", "*", "batch"),
       body = Some(write(BatchOperations(definitions.flatMap(transform)))),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 
   private def transform(definition: Definition): Traversable[BatchOperation[JValue]] = {
     definition match {
-      case IndexingDefinition(index, None, Some(obj)) =>
+      case IndexingDefinition(index, None, Some(obj), _) =>
         hasObjectId(obj) match {
           case (true, o) => Traversable(UpdateObjectOperation(o, Some(index)))
           case (false, o) => Traversable(AddObjectOperation(o, Some(index)))
         }
 
-      case IndexingDefinition(index, Some(objectId), Some(obj)) =>
+      case IndexingDefinition(index, Some(objectId), Some(obj), _) =>
         Traversable(UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
 
-      case ClearIndexDefinition(index) =>
+      case ClearIndexDefinition(index, _) =>
         Traversable(ClearIndexOperation(index))
 
-      case DeleteObjectDefinition(Some(index), Some(oid)) =>
+      case DeleteObjectDefinition(Some(index), Some(oid), _) =>
         Traversable(DeleteObjectOperation(index, oid))
 
-      case DeleteIndexDefinition(index) =>
+      case DeleteIndexDefinition(index, _) =>
         Traversable(DeleteIndexOperation(index))
 
       case PartialUpdateObjectOperationDefinition(operation,
@@ -73,7 +82,8 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
                                                   Some(objectId),
                                                   Some(attribute),
                                                   value,
-                                                  true) =>
+                                                  true,
+                                                  _) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
@@ -85,21 +95,22 @@ case class BatchDefinition(definitions: Traversable[Definition])(implicit val fo
                                                   Some(objectId),
                                                   Some(attribute),
                                                   value,
-                                                  false) =>
+                                                  false,
+                                                  _) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
         Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
 
-      case PartialUpdateObjectDefinition(index, Some(objectId), Some(attribute), value) =>
+      case PartialUpdateObjectDefinition(index, Some(objectId), Some(attribute), value, _) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> value
         )
         Traversable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
 
-      case IndexingBatchDefinition(_, defs) =>
+      case IndexingBatchDefinition(_, defs, _) =>
         defs.flatMap(transform)
 
     }

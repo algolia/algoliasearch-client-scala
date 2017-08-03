@@ -27,6 +27,7 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.IndexOperation
+import algolia.objects.RequestOptions
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -34,11 +35,19 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class CopyIndexDefinition(source: String, destination: Option[String] = None)(
-    implicit val formats: Formats)
+case class CopyIndexDefinition(
+    source: String,
+    destination: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = CopyIndexDefinition
+
   def to(destination: String): CopyIndexDefinition =
     copy(source, Some(destination))
+
+  override def options(requestOptions: RequestOptions): CopyIndexDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val operation = IndexOperation("copy", destination)
@@ -47,7 +56,8 @@ case class CopyIndexDefinition(source: String, destination: Option[String] = Non
       POST,
       Seq("1", "indexes", source, "operation"),
       body = Some(write(operation)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }

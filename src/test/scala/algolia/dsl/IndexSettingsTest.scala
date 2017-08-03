@@ -46,7 +46,8 @@ class IndexSettingsTest extends AlgoliaTest {
         GET,
         Seq("1", "indexes", "test", "settings"),
         Some(Map("getVersion" -> "2")),
-        isSearch = true
+        isSearch = true,
+        requestOptions = None
       )
       (settings of "test").build() should be(payload)
     }
@@ -66,7 +67,8 @@ class IndexSettingsTest extends AlgoliaTest {
         Seq("1", "indexes", "test", "settings"),
         queryParameters = Some(Map("forwardToReplicas" -> "true")),
         body = Some("{}"),
-        isSearch = false
+        isSearch = false,
+        requestOptions = None
       )
 
       (changeSettings of "test" `with` IndexSettings() and forwardToReplicas).build() should be(

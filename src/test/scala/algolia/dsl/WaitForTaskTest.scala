@@ -43,7 +43,8 @@ class WaitForTaskTest extends AlgoliaTest {
         HttpPayload(
           GET,
           Seq("1", "indexes", "toto", "task", "1"),
-          isSearch = true
+          isSearch = true,
+          requestOptions = None
         )
       )
     }

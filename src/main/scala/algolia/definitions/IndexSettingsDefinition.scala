@@ -27,7 +27,7 @@ package algolia.definitions
 
 import algolia.AlgoliaDsl.ForwardToReplicas
 import algolia.http.{GET, HttpPayload, PUT}
-import algolia.objects.IndexSettings
+import algolia.objects.{IndexSettings, RequestOptions}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -35,18 +35,25 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexSettingsDefinition(index: String)(implicit val formats: Formats)
+case class IndexSettingsDefinition(index: String, requestOptions: Option[RequestOptions] = None)(
+    implicit val formats: Formats)
     extends Definition {
+
+  type T = IndexSettingsDefinition
 
   def `with`(settings: IndexSettings) =
     IndexChangeSettingsDefinition(index, settings)
+
+  override def options(requestOptions: RequestOptions): IndexSettingsDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
       GET,
       Seq("1", "indexes", index, "settings"),
       queryParameters = Some(Map("getVersion" -> "2")),
-      isSearch = true
+      isSearch = true,
+      requestOptions = requestOptions
     )
   }
 
@@ -55,10 +62,17 @@ case class IndexSettingsDefinition(index: String)(implicit val formats: Formats)
 case class IndexChangeSettingsDefinition(
     index: String,
     settings: IndexSettings,
-    forward: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    forward: Option[ForwardToReplicas] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def and(forward: ForwardToReplicas) = copy(forward = Some(forward))
+  type T = IndexChangeSettingsDefinition
+
+  override def options(requestOptions: RequestOptions): IndexChangeSettingsDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  def and(forward: ForwardToReplicas): IndexChangeSettingsDefinition =
+    copy(forward = Some(forward))
 
   override private[algolia] def build(): HttpPayload = {
     val queryParameters = if (forward.isDefined) {
@@ -72,7 +86,8 @@ case class IndexChangeSettingsDefinition(
       Seq("1", "indexes", index, "settings"),
       body = Some(write(settings)),
       queryParameters = queryParameters,
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }

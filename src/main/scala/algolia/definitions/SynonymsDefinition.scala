@@ -27,7 +27,7 @@ package algolia.definitions
 
 import algolia.AlgoliaDsl.{ForwardToReplicas, ReplaceExistingSynonyms}
 import algolia.http._
-import algolia.objects.{AbstractSynonym, QuerySynonyms}
+import algolia.objects.{AbstractSynonym, QuerySynonyms, RequestOptions}
 import algolia.responses.{SearchSynonymResult, Task}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -35,17 +35,25 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetSynonymDefinition(synId: String, index: Option[String] = None)(
-    implicit val formats: Formats)
+case class GetSynonymDefinition(
+    synId: String,
+    index: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
+  type T = GetSynonymDefinition
+
   def from(index: String): GetSynonymDefinition = copy(index = Some(index))
+
+  override def options(requestOptions: RequestOptions): GetSynonymDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
       GET,
       Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
-      isSearch = true
+      isSearch = true,
+      requestOptions = requestOptions
     )
   }
 
@@ -54,13 +62,19 @@ case class GetSynonymDefinition(synId: String, index: Option[String] = None)(
 case class DeleteSynonymDefinition(
     synId: String,
     index: Option[String] = None,
-    option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    option: Option[ForwardToReplicas] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = DeleteSynonymDefinition
 
   def from(index: String): DeleteSynonymDefinition = copy(index = Some(index))
 
   def and(option: ForwardToReplicas): DeleteSynonymDefinition =
     copy(option = Some(option))
+
+  override def options(requestOptions: RequestOptions): DeleteSynonymDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val queryParameters = if (option.isDefined) {
@@ -73,7 +87,8 @@ case class DeleteSynonymDefinition(
       DELETE,
       Seq("1", "indexes") ++ index ++ Seq("synonyms", synId),
       queryParameters = queryParameters,
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 
@@ -81,13 +96,19 @@ case class DeleteSynonymDefinition(
 
 case class ClearSynonymsDefinition(
     index: Option[String] = None,
-    option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    option: Option[ForwardToReplicas] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = ClearSynonymsDefinition
 
   def index(index: String): ClearSynonymsDefinition = copy(index = Some(index))
 
   def and(option: ForwardToReplicas): ClearSynonymsDefinition =
     copy(option = Some(option))
+
+  override def options(requestOptions: RequestOptions): ClearSynonymsDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", "clear")
@@ -102,7 +123,8 @@ case class ClearSynonymsDefinition(
       POST,
       path,
       queryParameters = queryParameters,
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
@@ -110,13 +132,19 @@ case class ClearSynonymsDefinition(
 case class SaveSynonymDefinition(
     synonym: AbstractSynonym,
     index: Option[String] = None,
-    option: Option[ForwardToReplicas] = None)(implicit val formats: Formats)
+    option: Option[ForwardToReplicas] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = SaveSynonymDefinition
 
   def inIndex(index: String): SaveSynonymDefinition = copy(index = Some(index))
 
   def and(option: ForwardToReplicas): SaveSynonymDefinition =
     copy(option = Some(option))
+
+  override def options(requestOptions: RequestOptions): SaveSynonymDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", synonym.objectID)
@@ -132,7 +160,8 @@ case class SaveSynonymDefinition(
       path,
       queryParameters = queryParameters,
       body = Some(write(synonym)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
@@ -141,8 +170,11 @@ case class BatchSynonymsDefinition(
     synonyms: Iterable[AbstractSynonym],
     index: Option[String] = None,
     forward: Option[ForwardToReplicas] = None,
-    replace: Option[ReplaceExistingSynonyms] = None)(implicit val formats: Formats)
+    replace: Option[ReplaceExistingSynonyms] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = BatchSynonymsDefinition
 
   def inIndex(index: String): BatchSynonymsDefinition =
     copy(index = Some(index))
@@ -152,6 +184,9 @@ case class BatchSynonymsDefinition(
 
   def and(replace: ReplaceExistingSynonyms): BatchSynonymsDefinition =
     copy(replace = Some(replace))
+
+  override def options(requestOptions: RequestOptions): BatchSynonymsDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = Seq("1", "indexes") ++ index ++ Seq("synonyms", "batch")
@@ -165,26 +200,34 @@ case class BatchSynonymsDefinition(
       path,
       queryParameters = Some(queryParameters),
       body = Some(write(synonyms)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
 
 case class SearchSynonymsDefinition(
     indx: Option[String] = None,
-    query: Option[QuerySynonyms] = None)(implicit val formats: Formats)
+    query: Option[QuerySynonyms] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = SearchSynonymsDefinition
 
   def index(indx: String): SearchSynonymsDefinition = copy(indx = Some(indx))
 
-  def query(query: QuerySynonyms) = copy(query = Some(query))
+  def query(query: QuerySynonyms): SearchSynonymsDefinition = copy(query = Some(query))
+
+  override def options(requestOptions: RequestOptions): SearchSynonymsDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
       POST,
       Seq("1", "indexes") ++ indx ++ Seq("synonyms", "search"),
       body = Some(write(query)),
-      isSearch = true
+      isSearch = true,
+      requestOptions = requestOptions
     )
   }
 }

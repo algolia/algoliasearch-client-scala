@@ -46,7 +46,8 @@ class DeleteObjectTest extends AlgoliaTest {
         HttpPayload(
           DELETE,
           Seq("1", "indexes", "toto", "oid"),
-          isSearch = false
+          isSearch = false,
+          requestOptions = None
         )
       )
     }
@@ -78,7 +79,8 @@ class DeleteObjectTest extends AlgoliaTest {
           HttpPayload(POST,
                       List("1", "indexes", "*", "batch"),
                       body = Some(body),
-                      isSearch = false)
+                      isSearch = false,
+                      requestOptions = None)
         )
       }
 

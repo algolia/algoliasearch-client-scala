@@ -122,7 +122,7 @@ class AlgoliaClientTest extends AlgoliaTest {
     val successfulRequest2: Result = Result("2")
     val successfulRequest3: Result = Result("3")
 
-    val payload = HttpPayload(GET, Seq("/"), None, None, isSearch = true)
+    val payload = HttpPayload(GET, Seq("/"), None, None, isSearch = true, requestOptions = None)
 
     def mockRequestDsn =
       (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(
@@ -158,9 +158,10 @@ class AlgoliaClientTest extends AlgoliaTest {
       it("no timeout") {
         mockRequestDsn returning Future.successful(successfulRequestDsn)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))) {
-          result =>
-            result should equal(successfulRequestDsn)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))) { result =>
+          result should equal(successfulRequestDsn)
         }
       }
 
@@ -168,9 +169,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequestDsn returning timeoutRequest
         mockRequest1 returning Future.successful(successfulRequest1)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))) {
-          result =>
-            result should equal(successfulRequest1)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))) { result =>
+          result should equal(successfulRequest1)
         }
       }
 
@@ -179,9 +181,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest1 returning timeoutRequest
         mockRequest2 returning Future.successful(successfulRequest2)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))) {
-          result =>
-            result should equal(successfulRequest2)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))) { result =>
+          result should equal(successfulRequest2)
         }
       }
 
@@ -191,9 +194,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest2 returning timeoutRequest
         mockRequest3 returning Future.successful(successfulRequest3)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))) {
-          result =>
-            result should equal(successfulRequest3)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))) { result =>
+          result should equal(successfulRequest3)
         }
       }
 
@@ -203,10 +207,9 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest2 returning timeoutRequest
         mockRequest3 returning timeoutRequest
 
-        whenReady(
-          apiClient
-            .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))
-            .failed) { e =>
+        whenReady(apiClient
+          .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))
+          .failed) { e =>
           e shouldBe a[AlgoliaClientException]
         }
       }
@@ -214,10 +217,9 @@ class AlgoliaClientTest extends AlgoliaTest {
       it("`4XX` on first request") {
         mockRequestDsn returning `4XXRequest`
 
-        whenReady(
-          apiClient
-            .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))
-            .failed) { e =>
+        whenReady(apiClient
+          .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))
+          .failed) { e =>
           e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
@@ -227,10 +229,9 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequestDsn returning timeoutRequest
         mockRequest1 returning `4XXRequest`
 
-        whenReady(
-          apiClient
-            .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))
-            .failed) { e =>
+        whenReady(apiClient
+          .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))
+          .failed) { e =>
           e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
@@ -241,10 +242,9 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest1 returning timeoutRequest
         mockRequest2 returning `4XXRequest`
 
-        whenReady(
-          apiClient
-            .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))
-            .failed) { e =>
+        whenReady(apiClient
+          .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))
+          .failed) { e =>
           e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
@@ -256,10 +256,9 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequest2 returning timeoutRequest
         mockRequest3 returning `4XXRequest`
 
-        whenReady(
-          apiClient
-            .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))
-            .failed) { e =>
+        whenReady(apiClient
+          .request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))
+          .failed) { e =>
           e shouldBe a[AlgoliaClientException]
           e should have message "Failure \"404\", response status: 404"
         }
@@ -270,7 +269,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
       val successfulRequest: Result = Result("1")
 
-      val payload = HttpPayload(GET, Seq("/"), None, None, isSearch = false)
+      val payload = HttpPayload(GET, Seq("/"), None, None, isSearch = false, requestOptions = None)
 
       it("should use indexingHosts") {
         (mockHttpClient.request[Result](_: String, _: Map[String, String], _: HttpPayload)(
@@ -287,9 +286,10 @@ class AlgoliaClientTest extends AlgoliaTest {
           _: ExecutionContext)) expects ("https://a-3.algolianet.com", emptyHeaders, payload, *, *) returning Future
           .successful(successfulRequest)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = false))) {
-          result =>
-            result should equal(successfulRequest)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = false, requestOptions = None))) { result =>
+          result should equal(successfulRequest)
         }
       }
     }
@@ -310,9 +310,10 @@ class AlgoliaClientTest extends AlgoliaTest {
         mockRequestDsn returning timeoutRequest
         mockRequest1 returning Future.successful(successfulRequest1)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))) {
-          result =>
-            result should equal(successfulRequest1)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))) { result =>
+          result should equal(successfulRequest1)
         }
 
         apiClient.hostsStatuses.hostStatuses.asScala should be(
@@ -323,9 +324,10 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         mockRequest1 returning Future.successful(successfulRequest1)
 
-        whenReady(apiClient.request[Result](HttpPayload(http.GET, Seq("/"), isSearch = true))) {
-          result =>
-            result should equal(successfulRequest1)
+        whenReady(
+          apiClient.request[Result](
+            HttpPayload(http.GET, Seq("/"), isSearch = true, requestOptions = None))) { result =>
+          result should equal(successfulRequest1)
         }
 
         apiClient.hostsStatuses.hostStatuses.asScala should be(
@@ -347,7 +349,12 @@ class AlgoliaClientTest extends AlgoliaTest {
     val taskToWait: Task = Task(1L, None)
 
     val payload =
-      HttpPayload(GET, Seq("1", "indexes", "toto", "task", "1"), None, None, isSearch = true)
+      HttpPayload(GET,
+                  Seq("1", "indexes", "toto", "task", "1"),
+                  None,
+                  None,
+                  isSearch = true,
+                  requestOptions = None)
 
     it("task is ready") {
       (mockHttpClient.request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(

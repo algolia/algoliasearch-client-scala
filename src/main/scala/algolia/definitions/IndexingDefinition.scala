@@ -27,16 +27,24 @@ package algolia.definitions
 
 import algolia._
 import algolia.http.HttpPayload
+import algolia.objects.RequestOptions
 import algolia.responses.TaskIndexing
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexingDefinition(index: String,
-                              objectId: Option[String] = None,
-                              obj: Option[AnyRef] = None)(implicit val formats: Formats)
+case class IndexingDefinition(
+    index: String,
+    objectId: Option[String] = None,
+    obj: Option[AnyRef] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = IndexingDefinition
+
+  override def options(requestOptions: RequestOptions): IndexingDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   def objects(objectsWithIds: Map[String, AnyRef]): IndexingBatchDefinition =
     IndexingBatchDefinition(index, objectsWithIds.map {
@@ -65,7 +73,11 @@ case class IndexingDefinition(index: String,
       case None => http.POST
     }
 
-    HttpPayload(verb, Seq("1", "indexes", index) ++ objectId, body = body, isSearch = false)
+    HttpPayload(verb,
+                Seq("1", "indexes", index) ++ objectId,
+                body = body,
+                isSearch = false,
+                requestOptions = requestOptions)
   }
 }
 

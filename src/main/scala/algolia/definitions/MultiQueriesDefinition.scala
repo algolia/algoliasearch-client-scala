@@ -27,7 +27,7 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs._
-import algolia.objects.MultiQueries
+import algolia.objects.{MultiQueries, RequestOptions}
 import algolia.responses.MultiQueriesResult
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -37,11 +37,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class MultiQueriesDefinition(
     definitions: Traversable[SearchDefinition],
-    strategy: Option[MultiQueries.Strategy] = None)(implicit val formats: Formats)
+    strategy: Option[MultiQueries.Strategy] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def strategy(strategy: MultiQueries.Strategy) =
+  type T = MultiQueriesDefinition
+
+  def strategy(strategy: MultiQueries.Strategy): MultiQueriesDefinition =
     copy(strategy = Some(strategy))
+
+  override def options(requestOptions: RequestOptions): MultiQueriesDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val parameters =
@@ -52,7 +58,8 @@ case class MultiQueriesDefinition(
       Seq("1", "indexes", "*", "queries"),
       queryParameters = parameters,
       body = Some(write(MultiQueriesRequests(definitions.map(transform)))),
-      isSearch = true
+      isSearch = true,
+      requestOptions = requestOptions
     )
   }
 

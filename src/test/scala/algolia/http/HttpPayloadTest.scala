@@ -25,6 +25,7 @@
 
 package algolia.http
 
+import algolia.objects.RequestOptions
 import algolia.{AlgoliaClientConfiguration, AlgoliaHttpClient, AlgoliaTest}
 import io.netty.resolver.dns.DnsNameResolver
 
@@ -60,7 +61,8 @@ class HttpPayloadTest extends AlgoliaTest {
       Seq("1", "indexes"),
       None,
       None,
-      isSearch = true
+      isSearch = true,
+      requestOptions = None
     )
 
     it("should set the URI") {
@@ -101,6 +103,25 @@ class HttpPayloadTest extends AlgoliaTest {
 
     it("should not set the body if None") {
       defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getByteData should be(null)
+    }
+
+    it("should set headers with request options") {
+      val payload = defaultPayload.copy(
+        requestOptions = Some(RequestOptions(extraHeaders = Some(Map("header" -> "value")))))
+      payload("https://algolia.com", Map.empty, dnsNameResolver).getHeaders
+        .entries()
+        .toString should be("[header=value]")
+    }
+
+    it("should set query options with request options") {
+      val payload =
+        defaultPayload.copy(
+          requestOptions =
+            Some(RequestOptions(extraQueryParameters = Some(Map("param" -> "value")))))
+      val params = payload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams
+      params should have size 1
+      params.get(0).getName should be("param")
+      params.get(0).getValue should be("value")
     }
 
   }

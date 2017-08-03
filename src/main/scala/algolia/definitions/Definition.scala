@@ -26,7 +26,12 @@
 package algolia.definitions
 
 import algolia.http.HttpPayload
+import algolia.objects.RequestOptions
 
-trait Definition {
+trait Definition { self =>
+  type T <: Definition
+
   private[algolia] def build(): HttpPayload
+
+  def options(requestOptions: RequestOptions): T
 }

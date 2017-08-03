@@ -46,7 +46,8 @@ class SynonymsTest extends AlgoliaTest {
           HttpPayload(
             GET,
             Seq("1", "indexes", "toto", "synonyms", "syn_id"),
-            isSearch = true
+            isSearch = true,
+            requestOptions = None
           )
         )
       }
@@ -67,7 +68,8 @@ class SynonymsTest extends AlgoliaTest {
             DELETE,
             Seq("1", "indexes", "toto", "synonyms", "syn_id"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -89,7 +91,8 @@ class SynonymsTest extends AlgoliaTest {
             POST,
             Seq("1", "indexes", "toto", "synonyms", "clear"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -116,7 +119,8 @@ class SynonymsTest extends AlgoliaTest {
             POST,
             Seq("1", "indexes", "toto", "synonyms", "search"),
             body = Some("""{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""),
-            isSearch = true
+            isSearch = true,
+            requestOptions = None
           )
         )
       }
@@ -139,7 +143,8 @@ class SynonymsTest extends AlgoliaTest {
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
               """{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}"""),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -164,7 +169,8 @@ class SynonymsTest extends AlgoliaTest {
               Some(Map("forwardToReplicas" -> "true", "replaceExistingSynonyms" -> "true")),
             body = Some(
               """[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
