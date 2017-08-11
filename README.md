@@ -31,21 +31,28 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 1. **[Install](#install)**
 
 
-1. **[Quick Start](#quick-start)**
-
-    * [Initialize the client](#initialize-the-client)
-    * [Push data](#push-data)
-    * [Search](#search)
-    * [Configure](#configure)
-    * [Frontend search](#frontend-search)
-
 1. **[Philosophy](#philosophy)**
 
     * [DSL](#dsl)
     * [Future](#future)
     * [JSON as case class](#json-as-case-class)
 
-1. **[Getting Help](#getting-help)**
+1. **[Quick Start](#quick-start)**
+
+    * [Initialize the client](#initialize-the-client)
+
+1. **[Push data](#push-data)**
+
+
+1. **[Configure](#configure)**
+
+
+1. **[Search](#search)**
+
+
+1. **[Search UI](#search-ui)**
+
+    * [index.html](#indexhtml)
 
 
 
@@ -55,13 +62,14 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 
 
+
 ## Supported platforms
 
-This API client only supports Scala 2.11.
+This API client only supports Scala 2.11 & 2.12.
 
 ## Install
 
-If you're using Maven, add the following dependency to your `pom.xml` file:
+If you're using `Maven`, add the following dependency to your `pom.xml` file:
 
 ```xml
 <dependency>
@@ -71,7 +79,7 @@ If you're using Maven, add the following dependency to your `pom.xml` file:
 </dependency>
 ```
 
-For Snapshots add the Sonatype repository:
+For snapshots, add the `sonatype` repository:
 ```xml
 <repositories>
     <repository>
@@ -85,133 +93,15 @@ For Snapshots add the Sonatype repository:
 </repositories>
 ```
 
-If you're using SBT, add the following dependency to your `build.sbt` file:
+If you're using `sbt`, add the following dependency to your `build.sbt` file:
 
 ```scala
 libraryDependencies += "com.algolia" %% "algoliasearch-scala" % "[1,)"
 ```
 
-For Snapshots add the Sonatype repository:
+For snapshots, add the `sonatype` repository:
 ```scala
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-```
-
-## Quick Start
-
-In 30 seconds, this quick start tutorial will show you how to index and search objects.
-
-### Initialize the client
-
-You first need to initialize the client. For that you need your **Application ID** and **API Key**.
-You can find both of them on [your Algolia account](https://www.algolia.com/api-keys).
-
-```scala
-val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
-```
-
-### Push data
-
-```scala
-//For the DSL
-import algolia.AlgoliaDsl._
-
-//For basic Future support, you might want to change this by your own ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
-
-//case class of your objects
-case class Contact(firstname: String,
-                   lastname: String,
-                   followers: Int,
-                   compagny: String)
-
-val indexing1: Future[Indexing] = client.execute {
-    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
-}
-
-val indexing2: Future[Indexing] = client.execute {
-    index into "contacts" `object` Contact("Warren", "Speach", 42, "Norwalk Crmc")
-}
-```
-
-### Search
-
-You can now search for contacts using firstname, lastname, company, etc. (even with typos):
-
-```scala
-// search by firstname
-client.execute { search into "contacts" query Query(query = Some("jimmie")) }
-
-// search a firstname with typo
-client.execute { search into "contacts" query Query(query = Some("jimie")) }
-
-// search for a company
-client.execute { search into "contacts" query Query(query = Some("california paint")) }
-
-// search for a firstname & company
-client.execute { search into "contacts" query Query(query = Some("jimmie paint")) }
-```
-
-### Configure
-
-Settings can be customized to tune the search behavior. For example, you can add a custom sort by number of followers to the already great built-in relevance:
-
-```scala
-client.execute {
-	changeSettings of "myIndex" `with` IndexSettings(
-		customRanking = Some(Seq(CustomRanking.desc("followers")))
-	)
-}
-```
-
-You can also configure the list of attributes you want to index by order of importance (first = most important):
-
-**Note:** Since the engine is designed to suggest results as you type, you'll generally search by prefix.
-In this case the order of attributes is very important to decide which hit is the best:
-
-```scala
-client.execute {
-	changeSettings of "myIndex" `with` IndexSettings(
-		searchableAttributes = Some(Seq("lastname", "firstname", "company"))
-	)
-}
-```
-
-### Frontend search
-
-**Note:** If you are building a web application, you may be more interested in using our [JavaScript client](https://github.com/algolia/algoliasearch-client-javascript) to perform queries.
-
-It brings two benefits:
-  * Your users get a better response time by not going through your servers
-  * It will offload unnecessary tasks from your servers
-
-```html
-<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-<script>
-var client = algoliasearch('ApplicationID', 'apiKey');
-var index = client.initIndex('indexName');
-
-// perform query "jim"
-index.search('jim', searchCallback);
-
-// the last optional argument can be used to add search parameters
-index.search(
-  'jim', {
-    hitsPerPage: 5,
-    facets: '*',
-    maxValuesPerFacet: 10
-  },
-  searchCallback
-);
-
-function searchCallback(err, content) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  console.log(content);
-}
-</script>
 ```
 
 ## Philosophy
@@ -244,7 +134,7 @@ var future: Future[Search] =
 ```
 
 ### JSON as case class
-Putting or getting objects from the API is wrapped into `case class` automatically by [json4s](http://json4s.org).
+Putting or getting objects from the API is wrapped into `case class` automatically by [`json4s`](http://json4s.org).
 
 If you want to get objects just search for it and unwrap the result:
 ```scala
@@ -289,6 +179,156 @@ For indexing documents, just pass an instance of your `case class` to the DSL:
 client.execute {
     index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
 }
+```
+
+## Quick Start
+
+In 30 seconds, this quick start tutorial will show you how to index and search objects.
+
+### Initialize the client
+
+To begin, you will need to initialize the client. In order to do this you will need your **Application ID** and **API Key**.
+You can find both on [your Algolia account](https://www.algolia.com/api-keys).
+
+```scala
+val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
+```
+
+## Push data
+
+```scala
+//For the DSL
+import algolia.AlgoliaDsl._
+
+//For basic Future support, you might want to change this by your own ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
+
+//case class of your objects
+case class Contact(firstname: String,
+                   lastname: String,
+                   followers: Int,
+                   compagny: String)
+
+val indexing1: Future[Indexing] = client.execute {
+    index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
+}
+
+val indexing2: Future[Indexing] = client.execute {
+    index into "contacts" `object` Contact("Warren", "Speach", 42, "Norwalk Crmc")
+}
+```
+
+## Configure
+
+Settings can be customized to fine tune the search behavior. For example, you can add a custom sort by number of followers to further enhance the built-in relevance:
+
+```scala
+client.execute {
+	changeSettings of "myIndex" `with` IndexSettings(
+		customRanking = Some(Seq(CustomRanking.desc("followers")))
+	)
+}
+```
+
+You can also configure the list of attributes you want to index by order of importance (most important first).
+
+**Note:** The Algolia engine is designed to suggest results as you type, which means you'll generally search by prefix.
+In this case, the order of attributes is very important to decide which hit is the best:
+
+```scala
+client.execute {
+	changeSettings of "myIndex" `with` IndexSettings(
+		searchableAttributes = Some(Seq("lastname", "firstname", "company"))
+	)
+}
+```
+
+## Search
+
+You can now search for contacts using `firstname`, `lastname`, `company`, etc. (even with typos):
+
+```scala
+// search by firstname
+client.execute { search into "contacts" query Query(query = Some("jimmie")) }
+
+// search a firstname with typo
+client.execute { search into "contacts" query Query(query = Some("jimie")) }
+
+// search for a company
+client.execute { search into "contacts" query Query(query = Some("california paint")) }
+
+// search for a firstname & company
+client.execute { search into "contacts" query Query(query = Some("jimmie paint")) }
+```
+
+## Search UI
+
+**Warning:** If you are building a web application, you may be more interested in using one of our
+[frontend search UI librairies](https://www.algolia.com/doc/guides/search-ui/search-libraries/)
+
+The following example shows how to build a front-end search quickly using
+[InstanSearch.js](https://community.algolia.com/instantsearch.js/)
+
+### index.html
+
+```html
+<!doctype html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
+</head>
+<body>
+  <header>
+    <div>
+       <input id="search-input" placeholder="Search for products">
+       <!-- We use a specific placeholder in the input to guides users in their search. -->
+    
+  </header>
+  <main>
+      
+      
+  </main>
+
+  <script type="text/html" id="hit-template">
+    
+      <p class="hit-name">{{{_highlightResult.firstname.value}}} {{{_highlightResult.lastname.value}}}</p>
+    
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+  <script src="app.js"></script>
+</body>
+```
+
+### app.js
+
+```js
+var search = instantsearch({
+  // Replace with your own values
+  appId: 'YourApplicationID',
+  apiKey: 'YourSearchOnlyAPIKey', // search only API key, no ADMIN key
+  indexName: 'contacts',
+  urlSync: true
+});
+
+search.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-input'
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.hits({
+    container: '#hits',
+    hitsPerPage: 10,
+    templates: {
+      item: document.getElementById('hit-template').innerHTML,
+      empty: "We didn't find any results for the search <em>\"{{query}}\"</em>"
+    }
+  })
+);
+
+search.start();
 ```
 
 ## Getting Help
