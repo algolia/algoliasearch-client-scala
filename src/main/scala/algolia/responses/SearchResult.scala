@@ -25,7 +25,7 @@
 
 package algolia.responses
 
-import algolia.objects.AbstractSynonym
+import algolia.objects.{AbstractSynonym, Rule}
 import org.json4s._
 
 case class SearchResult(hits: Seq[JObject],
@@ -50,6 +50,8 @@ case class SearchResult(hits: Seq[JObject],
 }
 
 case class SearchSynonymResult(hits: Seq[AbstractSynonym], nbHits: Int)
+
+case class SearchRuleResult(hits: Seq[Rule], nbHits: Int)
 
 case class MultiQueriesResult(results: Seq[SearchResult])
 

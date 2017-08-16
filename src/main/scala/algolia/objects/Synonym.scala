@@ -116,7 +116,7 @@ object Synonym {
 sealed trait SynonymType {
   val name: String
 
-  override def toString = name
+  override def toString: String = name
 }
 
 object SynonymType {

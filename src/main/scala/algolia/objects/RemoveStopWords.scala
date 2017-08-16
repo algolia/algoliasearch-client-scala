@@ -34,7 +34,7 @@ sealed trait RemoveStopWords {
 object RemoveStopWords {
 
   case class list(isoCodes: Seq[String]) extends RemoveStopWords {
-    override val value = isoCodes.mkString(",")
+    override val value: String = isoCodes.mkString(",")
   }
 
   case object `true` extends RemoveStopWords {

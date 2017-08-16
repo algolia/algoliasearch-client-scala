@@ -25,24 +25,15 @@
 
 package algolia.objects
 
-sealed trait IgnorePlurals {
+case class Rule(objectID: String,
+                condition: Condition,
+                consequence: Consequence,
+                description: Option[String] = None)
 
-  val value: String
+case class Condition(pattern: String, anchoring: String, context: Option[String] = None)
 
-}
+case class Consequence(params: Option[Map[String, Any]] = None,
+                       promote: Option[Iterable[ConsequencePromote]] = None,
+                       userData: Option[Map[String, Any]] = None)
 
-object IgnorePlurals {
-
-  case class list(isoCodes: Seq[String]) extends IgnorePlurals {
-    override val value: String = isoCodes.mkString(",")
-  }
-
-  case object `true` extends IgnorePlurals {
-    override val value = "true"
-  }
-
-  case object `false` extends IgnorePlurals {
-    override val value = "false"
-  }
-
-}
+case class ConsequencePromote(objectID: String, position: Int)

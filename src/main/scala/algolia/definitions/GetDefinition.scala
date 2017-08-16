@@ -110,6 +110,8 @@ trait GetDsl {
 
     def synonym(synId: String) = GetSynonymDefinition(synId = synId)
 
+    def rule(ruleId: String) = GetRuleDefinition(objectId = ruleId)
+
   }
 
   implicit object GetObjectDefinitionExecutable

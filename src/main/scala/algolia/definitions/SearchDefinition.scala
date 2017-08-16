@@ -104,6 +104,8 @@ trait SearchDsl {
 
     def synonyms(i: In): SearchSynonymsDefinition = SearchSynonymsDefinition()
 
+    def rules(i: In): SearchRulesDefinition = SearchRulesDefinition()
+
   }
 
   implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, SearchResult] {
