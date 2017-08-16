@@ -26,17 +26,25 @@
 package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
+import algolia.objects.RequestOptions
 import algolia.responses.Indices
 import algolia.{AlgoliaClient, Executable}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ListIndexesDefinition() extends Definition {
+case class ListIndexesDefinition(requestOptions: Option[RequestOptions] = None)
+    extends Definition {
+
+  type T = ListIndexesDefinition
+
+  override def options(requestOptions: RequestOptions): ListIndexesDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build() = HttpPayload(
     GET,
     Seq("1", "indexes"),
-    isSearch = true
+    isSearch = true,
+    requestOptions = requestOptions
   )
 
 }

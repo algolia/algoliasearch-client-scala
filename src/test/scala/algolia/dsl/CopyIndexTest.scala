@@ -43,7 +43,8 @@ class CopyIndexTest extends AlgoliaTest {
           POST,
           Seq("1", "indexes", "toto", "operation"),
           body = Some("{\"operation\":\"copy\",\"destination\":\"tata\"}"),
-          isSearch = false
+          isSearch = false,
+          requestOptions = None
         )
       )
     }

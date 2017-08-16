@@ -42,7 +42,8 @@ class ClearIndexTest extends AlgoliaTest {
         HttpPayload(
           POST,
           Seq("1", "indexes", "toto", "clear"),
-          isSearch = false
+          isSearch = false,
+          requestOptions = None
         )
       )
     }

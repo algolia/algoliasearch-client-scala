@@ -26,7 +26,7 @@
 package algolia.definitions
 
 import algolia.http._
-import algolia.objects.ApiKey
+import algolia.objects.{ApiKey, RequestOptions}
 import algolia.responses.{AllKeys, CreateUpdateKey, DeleteKey}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -34,10 +34,17 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetApiKeyDefinition(keyName: String, indexName: Option[String] = None)
+case class GetApiKeyDefinition(keyName: String,
+                               indexName: Option[String] = None,
+                               requestOptions: Option[RequestOptions] = None)
     extends Definition {
 
-  def from(indexName: String) = copy(indexName = Some(indexName))
+  type T = GetApiKeyDefinition
+
+  def from(indexName: String): GetApiKeyDefinition = copy(indexName = Some(indexName))
+
+  override def options(requestOptions: RequestOptions): GetApiKeyDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = if (indexName.isEmpty) {
@@ -49,16 +56,23 @@ case class GetApiKeyDefinition(keyName: String, indexName: Option[String] = None
     HttpPayload(
       GET,
       path,
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
 
-case class AddApiKeyDefinition(key: ApiKey, indexName: Option[String] = None)(
-    implicit val formats: Formats)
+case class AddApiKeyDefinition(
+    key: ApiKey,
+    indexName: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+  type T = AddApiKeyDefinition
 
-  def to(indexName: String) = copy(indexName = Some(indexName))
+  def to(indexName: String): AddApiKeyDefinition = copy(indexName = Some(indexName))
+
+  override def options(requestOptions: RequestOptions): AddApiKeyDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = if (indexName.isEmpty) {
@@ -71,15 +85,23 @@ case class AddApiKeyDefinition(key: ApiKey, indexName: Option[String] = None)(
       POST,
       path,
       body = Some(write(key)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
 
-case class DeleteApiKeyDefinition(keyName: String, indexName: Option[String] = None)
+case class DeleteApiKeyDefinition(keyName: String,
+                                  indexName: Option[String] = None,
+                                  requestOptions: Option[RequestOptions] = None)
     extends Definition {
 
-  def from(indexName: String) = copy(indexName = Some(indexName))
+  type T = DeleteApiKeyDefinition
+
+  def from(indexName: String): DeleteApiKeyDefinition = copy(indexName = Some(indexName))
+
+  override def options(requestOptions: RequestOptions): DeleteApiKeyDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = if (indexName.isEmpty) {
@@ -91,19 +113,27 @@ case class DeleteApiKeyDefinition(keyName: String, indexName: Option[String] = N
     HttpPayload(
       DELETE,
       path,
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
 
-case class UpdateApiKeyDefinition(keyName: String,
-                                  key: Option[ApiKey] = None,
-                                  indexName: Option[String] = None)(implicit val formats: Formats)
+case class UpdateApiKeyDefinition(
+    keyName: String,
+    key: Option[ApiKey] = None,
+    indexName: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
-  def `with`(key: ApiKey) = copy(key = Some(key))
+  type T = UpdateApiKeyDefinition
 
-  def from(indexName: String) = copy(indexName = Some(indexName))
+  def `with`(key: ApiKey): UpdateApiKeyDefinition = copy(key = Some(key))
+
+  def from(indexName: String): UpdateApiKeyDefinition = copy(indexName = Some(indexName))
+
+  override def options(requestOptions: RequestOptions): UpdateApiKeyDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val path = if (indexName.isEmpty) {
@@ -116,12 +146,21 @@ case class UpdateApiKeyDefinition(keyName: String,
       PUT,
       path,
       body = Some(write(key)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }
 
-case class GetAllApiKeyDefinition(indexName: Option[String] = None) extends Definition {
+case class GetAllApiKeyDefinition(indexName: Option[String] = None,
+                                  requestOptions: Option[RequestOptions] = None)
+    extends Definition {
+
+  type T = GetAllApiKeyDefinition
+
+  override def options(requestOptions: RequestOptions): GetAllApiKeyDefinition =
+    copy(requestOptions = Some(requestOptions))
+
   override private[algolia] def build(): HttpPayload = {
     val path = if (indexName.isEmpty) {
       Seq("1", "keys")
@@ -132,7 +171,8 @@ case class GetAllApiKeyDefinition(indexName: Option[String] = None) extends Defi
     HttpPayload(
       GET,
       path,
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }

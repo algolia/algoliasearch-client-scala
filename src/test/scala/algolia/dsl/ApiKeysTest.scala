@@ -29,13 +29,13 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http._
 import algolia.objects.{Acl, ApiKey}
-import algolia.responses._
+import org.json4s.Formats
 import org.json4s.native.JsonMethods._
 import org.json4s.native.Serialization._
 
 class ApiKeysTest extends AlgoliaTest {
 
-  implicit val formats = org.json4s.DefaultFormats + new AclSerializer
+  implicit val formats: Formats = org.json4s.DefaultFormats + new AclSerializer
 
   describe("global keys") {
 
@@ -49,7 +49,8 @@ class ApiKeysTest extends AlgoliaTest {
           HttpPayload(
             GET,
             List("1", "keys", "keyName"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -65,7 +66,8 @@ class ApiKeysTest extends AlgoliaTest {
           HttpPayload(
             GET,
             List("1", "keys"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -82,7 +84,8 @@ class ApiKeysTest extends AlgoliaTest {
             POST,
             List("1", "keys"),
             body = Some("""{"validity":10}"""),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -98,7 +101,8 @@ class ApiKeysTest extends AlgoliaTest {
           HttpPayload(
             DELETE,
             List("1", "keys", "keyName"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -116,7 +120,8 @@ class ApiKeysTest extends AlgoliaTest {
             PUT,
             List("1", "keys", "keyName"),
             body = Some("""{"validity":10}"""),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -135,7 +140,8 @@ class ApiKeysTest extends AlgoliaTest {
           HttpPayload(
             GET,
             List("1", "indexes", "indexName", "keys", "keyName"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -151,7 +157,8 @@ class ApiKeysTest extends AlgoliaTest {
           HttpPayload(
             GET,
             List("1", "indexes", "indexName", "keys"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -168,7 +175,8 @@ class ApiKeysTest extends AlgoliaTest {
             POST,
             List("1", "indexes", "indexName", "keys"),
             body = Some("""{"validity":10}"""),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -184,7 +192,8 @@ class ApiKeysTest extends AlgoliaTest {
           HttpPayload(
             DELETE,
             List("1", "indexes", "indexName", "keys", "keyName"),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -203,7 +212,8 @@ class ApiKeysTest extends AlgoliaTest {
             PUT,
             List("1", "indexes", "indexName", "keys", "keyName"),
             body = Some("""{"validity":10}"""),
-            isSearch = false
+            isSearch = false,
+            requestOptions = None
           )
         )
       }
@@ -212,7 +222,8 @@ class ApiKeysTest extends AlgoliaTest {
 
   describe("ApiKey serialization/deserialization") {
 
-    val json = """{
+    val json =
+      """{
         |  "acl":[
         |    "search",
         |    "addObject"

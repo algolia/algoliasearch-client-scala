@@ -23,33 +23,18 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.objects
 
-import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
-import algolia.http.{GET, HttpPayload}
-import algolia.responses.LogType
+case class RequestOptions(forwardedFor: Option[String] = None,
+                          extraHeaders: Option[Map[String, String]] = None,
+                          extraQueryParameters: Option[Map[String, String]] = None) {
 
-class LogsTest extends AlgoliaTest {
+  private[algolia] def generateExtraHeaders(): Map[String, String] = {
+    extraHeaders.getOrElse(Map.empty) ++ forwardedFor.map(f => "X-Forwarded-For" -> f)
+  }
 
-  describe("get logs") {
-
-    it("should get logs") {
-      logs offset 1 length 1 `type` LogType.error
-    }
-
-    it("should call API") {
-      val payload = HttpPayload(
-        GET,
-        Seq("1", "logs"),
-        queryParameters = Some(Map("offset" -> "1", "length" -> "1", "type" -> "error")),
-        isSearch = false,
-        requestOptions = None
-      )
-
-      (logs offset 1 length 1 `type` LogType.error).build() should be(payload)
-    }
-
+  private[algolia] def generateExtraQueryParameters(): Map[String, String] = {
+    extraQueryParameters.getOrElse(Map.empty)
   }
 
 }

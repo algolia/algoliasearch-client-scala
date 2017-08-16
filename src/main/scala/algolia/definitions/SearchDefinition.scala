@@ -28,19 +28,27 @@ package algolia.definitions
 import algolia.AlgoliaDsl.In
 import algolia._
 import algolia.http.{HttpPayload, POST}
-import algolia.objects.Query
+import algolia.objects.{Query, RequestOptions}
 import algolia.responses.{SearchFacetResult, SearchResult}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class SearchDefinition(index: String, query: Option[Query] = None)(
-    implicit val formats: Formats)
+case class SearchDefinition(
+    index: String,
+    query: Option[Query] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = SearchDefinition
+
   def facet(facetName: String) = SearchFacetDefinition(index, facetName, "")
 
   def query(q: Query): SearchDefinition = copy(query = Some(q))
+
+  override def options(requestOptions: RequestOptions): SearchDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map("params" -> query.map(_.toParam))
@@ -49,21 +57,29 @@ case class SearchDefinition(index: String, query: Option[Query] = None)(
       POST,
       Seq("1", "indexes", index, "query"),
       body = Some(write(body)),
-      isSearch = true
+      isSearch = true,
+      requestOptions = requestOptions
     )
   }
 }
 
-case class SearchFacetDefinition(index: String,
-                                 facetName: String,
-                                 values: String,
-                                 query: Query = Query())(implicit val formats: Formats)
+case class SearchFacetDefinition(
+    index: String,
+    facetName: String,
+    values: String,
+    query: Query = Query(),
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = SearchFacetDefinition
 
   def values(facetQuery: String): SearchFacetDefinition =
     copy(values = facetQuery)
 
   def query(q: Query): SearchFacetDefinition = copy(query = q)
+
+  override def options(requestOptions: RequestOptions): SearchFacetDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map("params" -> query.copy(facetQuery = Some(values)).toParam)
@@ -72,7 +88,8 @@ case class SearchFacetDefinition(index: String,
       POST,
       Seq("1", "indexes", index, "facets", facetName, "query"),
       body = Some(write(body)),
-      isSearch = true
+      isSearch = true,
+      requestOptions = requestOptions
     )
   }
 }

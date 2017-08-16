@@ -54,7 +54,8 @@ class MultiQueriesTest extends AlgoliaTest {
           queryParameters = Some(Map("strategy" -> "stopIfEnoughMatches")),
           body = Some(
             """{"requests":[{"indexName":"indexName1","params":"query=a"},{"indexName":"indexName2","params":"query=b"}]}"""),
-          isSearch = true
+          isSearch = true,
+          requestOptions = None
         )
       )
     }

@@ -27,6 +27,7 @@ package algolia.http
 
 import java.net.InetAddress
 
+import algolia.objects.RequestOptions
 import io.netty.resolver.NameResolver
 import com.netaporter.uri.dsl._
 import org.asynchttpclient.{Request, RequestBuilder}
@@ -53,7 +54,8 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
                                         path: Seq[String],
                                         queryParameters: Option[Map[String, String]] = None,
                                         body: Option[String] = None,
-                                        isSearch: Boolean) {
+                                        isSearch: Boolean,
+                                        requestOptions: Option[RequestOptions]) {
 
   def apply(host: String,
             headers: Map[String, String],
@@ -68,6 +70,13 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
     queryParameters.foreach(
       _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }
     )
+
+    requestOptions.foreach { r =>
+      r.generateExtraHeaders().foreach { case (k, v) => builder = builder.addHeader(k, v) }
+      r.generateExtraQueryParameters().foreach {
+        case (k, v) => builder = builder.addQueryParam(k, v)
+      }
+    }
 
     body.foreach(b => builder = builder.setBody(b))
 

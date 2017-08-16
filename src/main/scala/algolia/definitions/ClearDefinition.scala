@@ -27,16 +27,26 @@ package algolia.definitions
 
 import algolia.AlgoliaDsl.Of
 import algolia.http.{HttpPayload, POST}
+import algolia.objects.RequestOptions
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ClearIndexDefinition(index: String) extends Definition {
+case class ClearIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
+    extends Definition {
+
+  type T = ClearIndexDefinition
+
+  override def options(requestOptions: RequestOptions): ClearIndexDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(POST, Seq("1", "indexes", index, "clear"), isSearch = false)
+    HttpPayload(POST,
+                Seq("1", "indexes", index, "clear"),
+                isSearch = false,
+                requestOptions = requestOptions)
 
 }
 

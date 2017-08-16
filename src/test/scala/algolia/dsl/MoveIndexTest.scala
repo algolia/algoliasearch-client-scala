@@ -43,7 +43,8 @@ class MoveIndexTest extends AlgoliaTest {
           POST,
           Seq("1", "indexes", "toto", "operation"),
           body = Some("{\"operation\":\"move\",\"destination\":\"tata\"}"),
-          isSearch = false
+          isSearch = false,
+          requestOptions = None
         )
       )
     }

@@ -48,7 +48,8 @@ class BrowseIndexTest extends AlgoliaTest {
           GET,
           Seq("1", "indexes", "toto", "browse"),
           queryParameters = Some(Map("cursor" -> "cursor1")),
-          isSearch = true
+          isSearch = true,
+          requestOptions = None
         )
       )
     }
@@ -59,7 +60,8 @@ class BrowseIndexTest extends AlgoliaTest {
           GET,
           Seq("1", "indexes", "toto", "browse"),
           queryParameters = Some(Map("query" -> "q")),
-          isSearch = true
+          isSearch = true,
+          requestOptions = None
         )
       )
     }
@@ -71,7 +73,8 @@ class BrowseIndexTest extends AlgoliaTest {
           GET,
           Seq("1", "indexes", "toto", "browse"),
           queryParameters = Some(Map("query" -> "q", "cursor" -> "cursor1")),
-          isSearch = true
+          isSearch = true,
+          requestOptions = None
         )
       )
     }

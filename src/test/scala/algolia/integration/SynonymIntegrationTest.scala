@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.objects.Synonym.{AltCorrection1, OneWaySynonym}
-import algolia.objects.{QuerySynonyms, Synonym, SynonymType}
+import algolia.objects.{QuerySynonyms, SynonymType}
 import algolia.{AlgoliaDsl, AlgoliaTest}
 
 class SynonymIntegrationTest extends AlgoliaTest {

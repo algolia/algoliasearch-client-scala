@@ -26,6 +26,7 @@
 package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
+import algolia.objects.RequestOptions
 import algolia.responses.{LogType, Logs}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -35,14 +36,20 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class LogsDefinition(offset: Option[Int] = None,
                           length: Option[Int] = None,
-                          `type`: Option[LogType] = None)
+                          `type`: Option[LogType] = None,
+                          requestOptions: Option[RequestOptions] = None)
     extends Definition {
+
+  type T = LogsDefinition
 
   def offset(o: Int): LogsDefinition = copy(offset = Some(o))
 
   def length(l: Int): LogsDefinition = copy(length = Some(l))
 
   def `type`(t: LogType): LogsDefinition = copy(`type` = Some(t))
+
+  override def options(requestOptions: RequestOptions): LogsDefinition =
+    copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val queryParameters = mutable.Map[String, String]()
@@ -60,7 +67,8 @@ case class LogsDefinition(offset: Option[Int] = None,
       GET,
       Seq("1", "logs"),
       queryParameters = Some(queryParameters.toMap),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 }

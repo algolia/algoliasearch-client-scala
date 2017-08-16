@@ -27,7 +27,7 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.PartialUpdateObject
-import algolia.objects.ApiKey
+import algolia.objects.{ApiKey, RequestOptions}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -65,8 +65,11 @@ case class PartialUpdateObjectOperationDefinition(
     objectId: Option[String] = None,
     attribute: Option[String] = None,
     value: Option[Any] = None,
-    createNotExists: Boolean = true)(implicit val formats: Formats)
+    createNotExists: Boolean = true,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = PartialUpdateObjectOperationDefinition
 
   def ofObjectId(objectId: String): PartialUpdateObjectOperationDefinition =
     copy(objectId = Some(objectId))
@@ -89,6 +92,9 @@ case class PartialUpdateObjectOperationDefinition(
   def createIfNotExists(createNotExists: Boolean = false): PartialUpdateObjectOperationDefinition =
     copy(createNotExists = createNotExists)
 
+  override def options(requestOptions: RequestOptions): PartialUpdateObjectOperationDefinition =
+    copy(requestOptions = Some(requestOptions))
+
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
       attribute.get -> PartialUpdateObject(operation.name, value)
@@ -105,17 +111,22 @@ case class PartialUpdateObjectOperationDefinition(
       Seq("1", "indexes") ++ index ++ objectId :+ "partial",
       queryParameters = queryParameters,
       body = Some(write(body)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 
 }
 
-case class PartialUpdateObjectDefinition(index: Option[String] = None,
-                                         objectId: Option[String] = None,
-                                         attribute: Option[String] = None,
-                                         value: Option[Any] = None)(implicit val formats: Formats)
+case class PartialUpdateObjectDefinition(
+    index: Option[String] = None,
+    objectId: Option[String] = None,
+    attribute: Option[String] = None,
+    value: Option[Any] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
+
+  type T = PartialUpdateObjectDefinition
 
   def ofObjectId(objectId: String): PartialUpdateObjectDefinition =
     copy(objectId = Some(objectId))
@@ -126,6 +137,9 @@ case class PartialUpdateObjectDefinition(index: Option[String] = None,
   def from(index: String): PartialUpdateObjectDefinition =
     copy(index = Some(index))
 
+  override def options(requestOptions: RequestOptions): PartialUpdateObjectDefinition =
+    copy(requestOptions = Some(requestOptions))
+
   override private[algolia] def build(): HttpPayload = {
     val body = Map(
       attribute.get -> value
@@ -135,7 +149,8 @@ case class PartialUpdateObjectDefinition(index: Option[String] = None,
       POST,
       Seq("1", "indexes") ++ index ++ objectId :+ "partial",
       body = Some(write(body)),
-      isSearch = false
+      isSearch = false,
+      requestOptions = requestOptions
     )
   }
 
