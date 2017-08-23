@@ -40,6 +40,10 @@ object AlgoliaSyncHelper {
 
 case class AlgoliaSyncHelper(client: AlgoliaClient) {
 
+  /**
+    * @deprecated use `delete from "index" by Query()`
+    */
+  @Deprecated
   def deleteByQuery[T <: ObjectID: Manifest](index: String, query: Query)(
       implicit duration: Duration,
       executor: ExecutionContext): Future[Iterator[TasksMultipleIndex]] = {

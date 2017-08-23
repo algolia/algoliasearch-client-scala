@@ -50,12 +50,12 @@ class NetworkTest extends AlgoliaTest {
         )
     }
 
-    it("should answer within 3 seconds") {
+    it("should answer within 4 seconds") {
       val result = apiClient.execute {
         list.indices
       }
 
-      result.isReadyWithin(3.seconds) should be(true)
+      result.isReadyWithin(4.seconds) should be(true)
     }
 
     it("should get a result") {

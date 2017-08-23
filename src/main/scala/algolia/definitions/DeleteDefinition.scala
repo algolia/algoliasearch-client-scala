@@ -26,10 +26,11 @@
 package algolia.definitions
 
 import algolia.http.HttpPayload
-import algolia.objects.RequestOptions
+import algolia.objects.{Query, RequestOptions}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.Formats
+import org.json4s.native.Serialization.write
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -52,6 +53,9 @@ case class DeleteObjectDefinition(
     BatchDefinition(objectIds.map { oid =>
       DeleteObjectDefinition(index, Some(oid))
     })
+
+  def by(query: Query): DeleteByDefinition =
+    DeleteByDefinition(index, query, requestOptions)
 
   override def options(requestOptions: RequestOptions): DeleteObjectDefinition =
     copy(requestOptions = Some(requestOptions))
@@ -77,6 +81,27 @@ case class DeleteIndexDefinition(index: String, requestOptions: Option[RequestOp
                 isSearch = false,
                 requestOptions = requestOptions)
 
+}
+
+case class DeleteByDefinition(
+    index: Option[String],
+    query: Query,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    extends Definition {
+  type T = DeleteByDefinition
+
+  override private[algolia] def build(): HttpPayload = {
+    val body = Map("params" -> query.toParam)
+
+    HttpPayload(http.POST,
+                Seq("1", "indexes") ++ index ++ Some("deleteByQuery"),
+                isSearch = false,
+                body = Some(write(body)),
+                requestOptions = requestOptions)
+  }
+
+  override def options(requestOptions: RequestOptions): DeleteByDefinition =
+    copy(requestOptions = Some(requestOptions))
 }
 
 trait DeleteDsl {
@@ -114,6 +139,13 @@ trait DeleteDsl {
 
   implicit object DeleteIndexDefinitionExecutable extends Executable[DeleteIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteIndexDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client.request[Task](query.build())
+    }
+  }
+
+  implicit object DeleteByDefinitionExecutable extends Executable[DeleteByDefinition, Task] {
+    override def apply(client: AlgoliaClient, query: DeleteByDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
     }
