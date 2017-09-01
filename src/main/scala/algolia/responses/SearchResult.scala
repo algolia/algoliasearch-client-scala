@@ -29,17 +29,17 @@ import algolia.objects.{AbstractSynonym, Rule}
 import org.json4s._
 
 case class SearchResult(hits: Seq[JObject],
-                        page: Int,
                         nbHits: Int,
-                        nbPages: Int,
                         hitsPerPage: Int,
                         processingTimeMS: Int,
+                        page: Option[Int],
+                        nbPages: Option[Int],
                         facets: Option[Map[String, Map[String, Int]]],
                         exhaustiveFacetsCount: Option[Boolean],
                         query: String,
                         params: String) {
 
-  implicit val formats = org.json4s.DefaultFormats
+  implicit val formats: Formats = org.json4s.DefaultFormats
 
   def asHit[T <: Hit: Manifest]: Seq[T] = hits.map(_.extract[T])
 
