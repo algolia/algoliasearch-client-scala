@@ -126,6 +126,18 @@ class SearchIntegrationTest extends AlgoliaTest {
         result.hits should be(empty)
       }
     }
+
+    it("should validate mapping of SearchResult") {
+      val s = client.execute {
+        search into indexName query
+          Query(query = Some("a"), offset = Some(25), length = Some(10))
+      }
+
+      whenReady(s) { result =>
+        result.hits should be(empty)
+      }
+
+    }
   }
 
   describe("multi queries") {
