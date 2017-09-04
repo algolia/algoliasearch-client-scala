@@ -30,8 +30,8 @@ import org.json4s._
 
 case class SearchResult(hits: Seq[JObject],
                         nbHits: Int,
-                        hitsPerPage: Int,
                         processingTimeMS: Int,
+                        hitsPerPage: Option[Int],
                         page: Option[Int],
                         nbPages: Option[Int],
                         facets: Option[Map[String, Map[String, Int]]],
