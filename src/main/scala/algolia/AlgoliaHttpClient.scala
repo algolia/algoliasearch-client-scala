@@ -52,6 +52,7 @@ case class AlgoliaHttpClient(
     new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
     .channelType(classOf[NioDatagramChannel])
     .queryTimeoutMillis(configuration.dnsTimeoutMs)
+    .maxQueriesPerResolve(2)
     .build
 
   val _httpClient = new DefaultAsyncHttpClient(asyncClientConfig)
