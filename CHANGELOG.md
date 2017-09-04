@@ -1,14 +1,41 @@
 # Change Log
 
+## [1.24.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.24.1) (2017-09-04)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.24.0...1.24.1)
+
+**Closed issues:**
+
+- Pagination using offset/length is not working [\#404](https://github.com/algolia/algoliasearch-client-scala/issues/404)
+
+**Merged pull requests:**
+
+- fix\(mapping\): Fix mapping of SearchResult [\#407](https://github.com/algolia/algoliasearch-client-scala/pull/407) ([ElPicador](https://github.com/ElPicador))
+- fix\(mapping\): Fix mapping for SearchResult & fix incorrect usage of formats [\#406](https://github.com/algolia/algoliasearch-client-scala/pull/406) ([ElPicador](https://github.com/ElPicador))
+- feat\(delete\): Add delete by [\#400](https://github.com/algolia/algoliasearch-client-scala/pull/400) ([ElPicador](https://github.com/ElPicador))
+
+## [1.24.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.24.0) (2017-08-22)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.23.2...1.24.0)
+
+**Closed issues:**
+
+- Provide information on how to contribute [\#388](https://github.com/algolia/algoliasearch-client-scala/issues/388)
+
+**Merged pull requests:**
+
+- Update README [\#399](https://github.com/algolia/algoliasearch-client-scala/pull/399) ([algolia-api-client-bot](https://github.com/algolia-api-client-bot))
+- feat\(request\): Add request options [\#394](https://github.com/algolia/algoliasearch-client-scala/pull/394) ([ElPicador](https://github.com/ElPicador))
+- Add tasks status definition + use HashedWheelTimer in waitFor [\#393](https://github.com/algolia/algoliasearch-client-scala/pull/393) ([jlogeart](https://github.com/jlogeart))
+- feat\(rules\): Add query rules [\#382](https://github.com/algolia/algoliasearch-client-scala/pull/382) ([ElPicador](https://github.com/ElPicador))
+
+## [1.23.2](https://github.com/algolia/algoliasearch-client-scala/tree/1.23.2) (2017-08-01)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.23.1...1.23.2)
+
 ## [1.23.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.23.1) (2017-08-01)
-[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.23.2...1.23.1)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.23.0...1.23.1)
 
 **Closed issues:**
 
 - Can you please create a new release with scoverage disabled [\#391](https://github.com/algolia/algoliasearch-client-scala/issues/391)
-
-## [1.23.2](https://github.com/algolia/algoliasearch-client-scala/tree/1.23.2) (2017-08-01)
-[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.23.0...1.23.2)
 
 **Merged pull requests:**
 
