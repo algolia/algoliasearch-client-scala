@@ -25,19 +25,19 @@
 
 package algolia
 
+import java.net.UnknownHostException
+import java.util.concurrent.{ExecutionException, TimeUnit}
+
 import algolia.AlgoliaDsl._
 
 import scala.concurrent.duration._
+import scala.util.Try
 
 class NetworkTest extends AlgoliaTest {
 
   describe("timeout on DNS resolution") {
 
     val apiClient = new AlgoliaClient(applicationId, apiKey) {
-      override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
-        AlgoliaClientConfiguration.default.copy(dnsTimeoutMs = 1000)
-      )
-
       override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,
@@ -50,12 +50,20 @@ class NetworkTest extends AlgoliaTest {
         )
     }
 
-    it("should answer within 4 seconds") {
+    it("should answer within 200 * 6 milliseconds") {
+      val request = apiClient.httpClient.dnsNameResolver.resolve("https://scala-dsn.algolia.biz")
+      val result = Try(request.get(200 * 6, TimeUnit.MILLISECONDS))
+      result shouldBe 'failure
+      result.failed.get shouldBe a[ExecutionException]
+      result.failed.get.getCause shouldBe a[UnknownHostException]
+    }
+
+    it("should answer within 5 seconds") {
       val result = apiClient.execute {
         list.indices
       }
 
-      result.isReadyWithin(4.seconds) should be(true)
+      result.isReadyWithin(5.seconds) should be(true)
     }
 
     it("should get a result") {
@@ -89,12 +97,12 @@ class NetworkTest extends AlgoliaTest {
 
     }
 
-    it("should answer within 3 seconds") {
+    it("should answer within 5 seconds") {
       val result = apiClient.execute {
         list.indices
       }
 
-      result.isReadyWithin(3.seconds) should be(true)
+      result.isReadyWithin(5.seconds) should be(true)
     }
 
     it("should get a result") {
