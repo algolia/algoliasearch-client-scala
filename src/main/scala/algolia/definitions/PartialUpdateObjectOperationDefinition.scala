@@ -28,7 +28,7 @@ package algolia.definitions
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.PartialUpdateObject
 import algolia.objects.{ApiKey, RequestOptions}
-import algolia.responses.Task
+import algolia.responses.{ObjectID, Task}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
@@ -156,6 +156,31 @@ case class PartialUpdateObjectDefinition(
 
 }
 
+case class PartialUpdateOneObjectDefinition(
+    index: String,
+    `object`: Option[ObjectID] = None,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    extends Definition {
+  override type T = PartialUpdateOneObjectDefinition
+
+  override private[algolia] def build(): HttpPayload = {
+    HttpPayload(
+      POST,
+      Seq("1", "indexes", index) ++ `object`.map(_.objectID) :+ "partial",
+      body = Some(write(`object`)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(requestOptions: RequestOptions): PartialUpdateOneObjectDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  def `object`[T <: ObjectID](obj: T): PartialUpdateOneObjectDefinition =
+    copy(`object` = Some(obj))
+
+}
+
 trait PartialUpdateObjectDsl {
 
   implicit val formats: Formats
@@ -206,6 +231,14 @@ trait PartialUpdateObjectDsl {
 
   }
 
+  case object partialUpdate {
+
+    def from(index: String): PartialUpdateOneObjectDefinition = {
+      PartialUpdateOneObjectDefinition(index = index)
+    }
+
+  }
+
   implicit object PartialUpdateObjectOperationExecutable
       extends Executable[PartialUpdateObjectOperationDefinition, Task] {
     override def apply(client: AlgoliaClient, query: PartialUpdateObjectOperationDefinition)(
@@ -217,6 +250,14 @@ trait PartialUpdateObjectDsl {
   implicit object PartialUpdateObjectExecutable
       extends Executable[PartialUpdateObjectDefinition, Task] {
     override def apply(client: AlgoliaClient, query: PartialUpdateObjectDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client.request[Task](query.build())
+    }
+  }
+
+  implicit object PartialUpdateOneObjectDefinitionExecutable
+      extends Executable[PartialUpdateOneObjectDefinition, Task] {
+    override def apply(client: AlgoliaClient, query: PartialUpdateOneObjectDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
     }

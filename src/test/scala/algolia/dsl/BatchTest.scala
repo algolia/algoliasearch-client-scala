@@ -31,8 +31,6 @@ import algolia.http.{HttpPayload, POST}
 
 class BatchTest extends AlgoliaTest {
 
-  case class BasicObject(name: String, age: Int)
-
   describe("batch") {
 
     describe("index") {

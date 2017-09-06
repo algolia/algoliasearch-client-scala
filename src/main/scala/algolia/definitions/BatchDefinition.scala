@@ -113,6 +113,8 @@ case class BatchDefinition(
       case IndexingBatchDefinition(_, defs, _) =>
         defs.flatMap(transform)
 
+      case PartialUpdateOneObjectDefinition(index, Some(obj), _) =>
+        Traversable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
     }
   }
 }

@@ -27,31 +27,33 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.responses.{GetObject, Task, TaskIndexing, TasksMultipleIndex}
+import algolia.responses._
 
 import scala.concurrent.Future
 
 class PartialUpdateIntegrationTest extends AlgoliaTest {
 
+  val indexName = "index_partial"
+
   after {
-    clearIndices("index_partial")
+    clearIndices(indexName)
   }
 
   it("should increment value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateObj(1, "increment")
+      index into indexName `object` PartialUpdateObj(1, "increment")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val inc: Future[Task] = client.execute {
-      increment attribute "value" by 2 ofObjectId "increment" from "index_partial"
+      increment attribute "value" by 2 ofObjectId "increment" from indexName
     }
 
-    taskShouldBeCreatedAndWaitForIt(inc, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(inc, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "increment"
+      get from indexName objectId "increment"
     }
 
     whenReady(s) { get =>
@@ -61,19 +63,19 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should decrement value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateObj(10, "decrement")
+      index into indexName `object` PartialUpdateObj(10, "decrement")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val dec: Future[Task] = client.execute {
-      decrement attribute "value" by 4 ofObjectId "decrement" from "index_partial"
+      decrement attribute "value" by 4 ofObjectId "decrement" from indexName
     }
 
-    taskShouldBeCreatedAndWaitForIt(dec, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(dec, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "decrement"
+      get from indexName objectId "decrement"
     }
 
     whenReady(s) { get =>
@@ -83,19 +85,19 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should add value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateArray(Seq("1"), "add")
+      index into indexName `object` PartialUpdateArray(Seq("1"), "add")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val adding: Future[Task] = client.execute {
-      add value "2" inAttribute "values" ofObjectId "add" from "index_partial"
+      add value "2" inAttribute "values" ofObjectId "add" from indexName
     }
 
-    taskShouldBeCreatedAndWaitForIt(adding, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(adding, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "add"
+      get from indexName objectId "add"
     }
 
     whenReady(s) { get =>
@@ -105,19 +107,19 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should remove value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateArray(Seq("1", "2"), "remove")
+      index into indexName `object` PartialUpdateArray(Seq("1", "2"), "remove")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val removing: Future[Task] = client.execute {
-      remove value "1" inAttribute "values" ofObjectId "remove" from "index_partial"
+      remove value "1" inAttribute "values" ofObjectId "remove" from indexName
     }
 
-    taskShouldBeCreatedAndWaitForIt(removing, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(removing, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "remove"
+      get from indexName objectId "remove"
     }
 
     whenReady(s) { get =>
@@ -127,19 +129,19 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should add unique value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateArray(Seq("1", "2"), "addUnique")
+      index into indexName `object` PartialUpdateArray(Seq("1", "2"), "addUnique")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val addingUnique: Future[Task] = client.execute {
-      addUnique value "1" inAttribute "values" ofObjectId "addUnique" from "index_partial"
+      addUnique value "1" inAttribute "values" ofObjectId "addUnique" from indexName
     }
 
-    taskShouldBeCreatedAndWaitForIt(addingUnique, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(addingUnique, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "addUnique"
+      get from indexName objectId "addUnique"
     }
 
     whenReady(s) { get =>
@@ -149,19 +151,19 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should update a value") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateValue("value", "otherValue", "updateValue")
+      index into indexName `object` PartialUpdateValue("value", "otherValue", "updateValue")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val updating: Future[Task] = client.execute {
-      update attribute "value" value "otherOne" ofObjectId "updateValue" from "index_partial"
+      update attribute "value" value "otherOne" ofObjectId "updateValue" from indexName
     }
 
-    taskShouldBeCreatedAndWaitForIt(updating, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(updating, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "updateValue"
+      get from indexName objectId "updateValue"
     }
 
     whenReady(s) { get =>
@@ -172,29 +174,86 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should update a value in a batch") {
     val create: Future[TaskIndexing] = client.execute {
-      index into "index_partial" `object` PartialUpdateObj(1, "batch_update")
+      index into indexName `object` PartialUpdateObj(1, "batch_update")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val updating: Future[TasksMultipleIndex] = client.execute {
       batch(
-        update attribute "value" value 2 ofObjectId "batch_update" from "index_partial"
+        update attribute "value" value 2 ofObjectId "batch_update" from indexName
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(updating, "index_partial")
+    taskShouldBeCreatedAndWaitForIt(updating, indexName)
 
     val s: Future[GetObject] = client.execute {
-      get from "index_partial" objectId "batch_update"
+      get from indexName objectId "batch_update"
     }
 
     whenReady(s) { get =>
       get.as[PartialUpdateObj] should equal(PartialUpdateObj(2, "batch_update"))
     }
+
+  }
+
+  it("should partial update") {
+    val create: Future[TaskIndexing] = client.execute {
+      index into indexName `object` PartialUpdateObj(1, "batch_update")
+    }
+
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
+
+    val updating: Future[Task] = client.execute {
+      partialUpdate from indexName `object` PartialUpdateObjWithOtherFields(2,
+                                                                            "toto",
+                                                                            "batch_update")
+    }
+
+    taskShouldBeCreatedAndWaitForIt(updating, indexName)
+
+    val s: Future[GetObject] = client.execute {
+      get from indexName objectId "batch_update"
+    }
+
+    whenReady(s) { get =>
+      get.as[PartialUpdateObjWithOtherFields] should equal(
+        PartialUpdateObjWithOtherFields(2, "toto", "batch_update"))
+    }
+
+  }
+
+  it("should update an object in a batch") {
+    val create: Future[TaskIndexing] = client.execute {
+      index into indexName `object` PartialUpdateObj(1, "batch_update")
+    }
+
+    taskShouldBeCreatedAndWaitForIt(create, indexName)
+
+    val updating: Future[TasksMultipleIndex] = client.execute {
+      batch(
+        partialUpdate from indexName `object` PartialUpdateObjWithOtherFields(2,
+                                                                              "toto",
+                                                                              "batch_update")
+      )
+    }
+
+    taskShouldBeCreatedAndWaitForIt(updating, indexName)
+
+    val s: Future[GetObject] = client.execute {
+      get from indexName objectId "batch_update"
+    }
+
+    whenReady(s) { get =>
+      get.as[PartialUpdateObj] should equal(PartialUpdateObj(2, "batch_update"))
+    }
+
   }
 
 }
+
+case class PartialUpdateObjWithOtherFields(value: Int, name: String, objectID: String)
+    extends ObjectID
 
 case class PartialUpdateObj(value: Int, objectID: String)
 
