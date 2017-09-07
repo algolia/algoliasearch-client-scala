@@ -179,4 +179,25 @@ class PartialUpdateObjectTest extends AlgoliaTest {
 
   }
 
+  describe("partial update") {
+
+    it("should partial update") {
+      partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId")
+    }
+
+    it("should call API") {
+      (partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId"))
+        .build() should be(
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "index", "myId", "partial"),
+          body = Some("""{"name":"name1","age":1,"objectID":"myId"}"""),
+          isSearch = false,
+          requestOptions = None
+        )
+      )
+    }
+
+  }
+
 }
