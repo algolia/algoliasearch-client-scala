@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.25.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.25.0) (2017-09-07)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.24.1...1.25.0)
+
+**Merged pull requests:**
+
+- feat\(indexing\): Add partial update objects [\#409](https://github.com/algolia/algoliasearch-client-scala/pull/409) ([ElPicador](https://github.com/ElPicador))
+- fix\(test\): Fix network flaky test [\#408](https://github.com/algolia/algoliasearch-client-scala/pull/408) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.24.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.24.1) (2017-09-04)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.24.0...1.24.1)
 
