@@ -73,6 +73,9 @@ case class Query(
                  /* Performance */
                  //Nothing in Query
 
+                 /* Query rules */
+                 enableRules: Option[Boolean] = None,
+                 ruleContexts: Option[Seq[String]] = None,
                  /* Query strategy */
                  queryType: Option[QueryType] = None,
                  removeWordsIfNoResults: Option[RemoveWordsIfNoResults] = None,
@@ -158,6 +161,9 @@ case class Query(
       /* Performance */
       //Nothing in Query
 
+      /* Query rules */
+      "enableRules" -> enableRules.map(_.toString),
+      "ruleContexts" -> ruleContexts.map(_.mkString(",")),
       /* Query strategy */
       "queryType" -> queryType.map(_.name),
       "removeWordsIfNoResults" -> removeWordsIfNoResults.map(_.name),
