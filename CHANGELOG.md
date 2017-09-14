@@ -1,7 +1,18 @@
 # Change Log
 
-## [1.25.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.25.0) (2017-09-07)
+## [1.26.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.26.0) (2017-09-13)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.25.0...1.26.0)
+
+**Merged pull requests:**
+
+- feat\(rules\): Add settings & query parameters [\#412](https://github.com/algolia/algoliasearch-client-scala/pull/412) ([ElPicador](https://github.com/ElPicador))
+
+## [1.25.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.25.0) (2017-09-12)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.24.1...1.25.0)
+
+**Closed issues:**
+
+- Partial updates/adding new fields [\#405](https://github.com/algolia/algoliasearch-client-scala/issues/405)
 
 **Merged pull requests:**
 
