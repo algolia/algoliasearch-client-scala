@@ -27,7 +27,7 @@ package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
 import algolia.objects.{Query, RequestOptions}
-import algolia.responses.{BrowseResult, Task}
+import algolia.responses.BrowseResult
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
