@@ -164,7 +164,7 @@ class NetworkTest extends AlgoliaTest {
 
       whenReady(result.failed) { e =>
         e shouldBe a[AlgoliaClientException]
-        e should have message "Failed on last retry"
+        e should have message "All retries failed"
       }
     }
   }

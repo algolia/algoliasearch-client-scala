@@ -32,6 +32,7 @@ import javax.crypto.spec.SecretKeySpec
 
 import algolia.http.HttpPayload
 import algolia.objects.Query
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -119,6 +120,9 @@ class AlgoliaClient(applicationId: String,
   def close(): Unit = httpClient.close()
 
   private val failedStart: Future[Nothing] = Future.failed(StartException())
+
+  val logger: Logger = LoggerFactory.getLogger("algoliasearch")
+
   private[algolia] def request[T: Manifest](payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) {
@@ -140,6 +144,7 @@ class AlgoliaClient(applicationId: String,
     val result = hosts.foldLeft[Future[T]](failedStart) { (future, host) =>
       future.recoverWith {
         case f: `4XXAPIException` =>
+          logger.debug("Got 4XX, no retry", f)
           Future.failed(f) //No retry if 4XX
         case _ =>
           makeRequest(host)
@@ -148,9 +153,11 @@ class AlgoliaClient(applicationId: String,
 
     result.recoverWith {
       case e: `4XXAPIException` =>
+        logger.debug("Got 4XX, no retry", e)
         Future.failed(new AlgoliaClientException(e.getMessage, e))
       case e =>
-        Future.failed(new AlgoliaClientException("Failed on last retry", e))
+        logger.debug("All retries failed", e)
+        Future.failed(new AlgoliaClientException("All retries failed", e))
     }
   }
 }

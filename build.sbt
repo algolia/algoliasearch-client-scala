@@ -14,9 +14,10 @@ coverageEnabled := false
 
 val asyncHttpClientVersion = "2.0.33"
 val json4sVersion = "3.5.2"
-val logbackVersion = "1.2.3"
+val slf4jVersion = "1.7.25"
 val scalaUriVersion = "0.4.16"
 
+val logbackVersion = "1.2.3"
 val scalaTestVersion = "3.0.1"
 val scalaMockVersion = "3.4.2"
 val scalacheckVersion = "1.12.6"
@@ -27,7 +28,7 @@ libraryDependencies += "org.json4s" %% "json4s-ast" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
-libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion
+libraryDependencies += "org.slf4j" % "slf4j-api" % slf4jVersion
 
 libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 
@@ -35,6 +36,7 @@ libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
+libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion
 
 scalacOptions ++= Seq(
   "-deprecation",
