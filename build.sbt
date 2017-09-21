@@ -36,7 +36,18 @@ libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test
 libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
 
-scalacOptions ++= Seq("-feature", "-unchecked")
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-Xfatal-warnings",
+  "-feature", //Emit warning and location for usages of features that should be imported explicitly.
+  "-encoding",
+  "UTF-8",
+  "-unchecked", //Enable additional warnings where generated code depends on assumptions
+  "-Yno-adapted-args",
+  "-Ywarn-dead-code",
+  "-Ywarn-numeric-widen",
+  "-Xfuture"
+)
 
 /**
   * Publishing to Sonatype & Maven Central

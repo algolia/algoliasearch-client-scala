@@ -36,7 +36,7 @@ import org.json4s._
 import org.json4s.native.JsonMethods._
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 case class AlgoliaHttpClient(
     configuration: AlgoliaClientConfiguration = AlgoliaClientConfiguration.default) {
@@ -51,7 +51,7 @@ case class AlgoliaHttpClient(
   val dnsNameResolver: DnsNameResolver = new DnsNameResolverBuilder(
     new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
     .channelType(classOf[NioDatagramChannel])
-    .queryTimeoutMillis(configuration.dnsTimeoutMs)
+    .queryTimeoutMillis(configuration.dnsTimeoutMs.toLong)
     .maxQueriesPerResolve(2)
     .build
 
@@ -67,7 +67,7 @@ case class AlgoliaHttpClient(
     makeRequest(request, responseHandler)
   }
 
-  def responseHandler[T: Manifest] = new AsyncCompletionHandler[T] {
+  def responseHandler[T: Manifest]: AsyncCompletionHandler[T] = new AsyncCompletionHandler[T] {
     override def onCompleted(response: Response): T =
       response.getStatusCode / 100 match {
         case 2 => toJson(response).extract[T]
@@ -86,7 +86,7 @@ case class AlgoliaHttpClient(
     val javaFuture = _httpClient.executeRequest(request, handler)
     val promise = Promise[T]()
     val runnable = new java.lang.Runnable {
-      def run() {
+      def run(): Unit = {
         try {
           promise.complete(Success(javaFuture.get()))
         } catch {
@@ -96,7 +96,7 @@ case class AlgoliaHttpClient(
       }
     }
     val exec = new java.util.concurrent.Executor {
-      def execute(runnable: Runnable) {
+      def execute(runnable: Runnable): Unit = {
         executor.execute(runnable)
       }
     }
