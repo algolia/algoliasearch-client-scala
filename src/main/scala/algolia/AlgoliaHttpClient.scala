@@ -34,6 +34,7 @@ import io.netty.resolver.dns.{DnsNameResolver, DnsNameResolverBuilder}
 import org.asynchttpclient._
 import org.json4s._
 import org.json4s.native.JsonMethods._
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.{Failure, Success}
@@ -55,6 +56,8 @@ case class AlgoliaHttpClient(
     .maxQueriesPerResolve(2)
     .build
 
+  val logger: Logger = LoggerFactory.getLogger("algoliasearch")
+
   val _httpClient = new DefaultAsyncHttpClient(asyncClientConfig)
 
   implicit val formats: Formats = AlgoliaDsl.formats
@@ -64,24 +67,30 @@ case class AlgoliaHttpClient(
   def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
     val request = payload(host, headers, dnsNameResolver)
-    makeRequest(request, responseHandler)
+    logger.debug(s"Trying $host")
+    logger.debug(s"Query ${payload.toString(host)}")
+    makeRequest(host, request, responseHandler)
   }
 
   def responseHandler[T: Manifest]: AsyncCompletionHandler[T] = new AsyncCompletionHandler[T] {
-    override def onCompleted(response: Response): T =
+
+    override def onCompleted(response: Response): T = {
       response.getStatusCode / 100 match {
         case 2 => toJson(response).extract[T]
         case 4 =>
           throw `4XXAPIException`(response.getStatusCode,
                                   (toJson(response) \ "message").extract[String])
-        case _ => throw UnexpectedResponseException(response.getStatusCode)
+        case _ =>
+          logger.debug(s"Got HTTP code ${response.getStatusCode}, no retry")
+          throw UnexpectedResponseException(response.getStatusCode)
       }
+    }
   }
 
   def toJson(r: Response): JValue =
     parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
 
-  def makeRequest[T](request: Request, handler: AsyncHandler[T])(
+  def makeRequest[T](host: String, request: Request, handler: AsyncHandler[T])(
       implicit executor: ExecutionContext): Future[T] = {
     val javaFuture = _httpClient.executeRequest(request, handler)
     val promise = Promise[T]()
@@ -90,8 +99,12 @@ case class AlgoliaHttpClient(
         try {
           promise.complete(Success(javaFuture.get()))
         } catch {
-          case e: ExecutionException => promise.complete(Failure(e.getCause))
-          case f: Throwable => promise.complete(Failure(f))
+          case e: ExecutionException =>
+            logger.debug(s"Failing to query $host", e)
+            promise.complete(Failure(e.getCause))
+          case f: Throwable =>
+            logger.debug(s"Failing to query $host", f)
+            promise.complete(Failure(f))
         }
       }
     }

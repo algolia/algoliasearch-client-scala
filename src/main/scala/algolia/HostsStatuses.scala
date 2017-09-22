@@ -27,6 +27,8 @@ package algolia
 
 import java.util.concurrent.ConcurrentHashMap
 
+import org.slf4j.{Logger, LoggerFactory}
+
 case class HostsStatuses(configuration: AlgoliaClientConfiguration,
                          utils: AlgoliaUtils,
                          queryHosts: Seq[String],
@@ -35,11 +37,17 @@ case class HostsStatuses(configuration: AlgoliaClientConfiguration,
   private[algolia] val hostStatuses: ConcurrentHashMap[String, HostStatus] =
     new ConcurrentHashMap[String, HostStatus](5)
 
-  def markHostAsUp(host: String): Unit =
-    hostStatuses.put(host, HostStatus.up(utils.now()))
+  val logger: Logger = LoggerFactory.getLogger("algoliasearch")
 
-  def markHostAsDown(host: String): Unit =
+  def markHostAsUp(host: String): Unit = {
+    logger.debug("Marking {} as `up`", host)
+    hostStatuses.put(host, HostStatus.up(utils.now()))
+  }
+
+  def markHostAsDown(host: String): Unit = {
+    logger.debug("Marking {} as `down`", host)
     hostStatuses.put(host, HostStatus.down(utils.now()))
+  }
 
   def indexingHostsThatAreUp(): Seq[String] = hostsThatAreUp(indexingHosts)
 

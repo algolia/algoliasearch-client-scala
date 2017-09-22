@@ -83,4 +83,11 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
     builder.setNameResolver(dnsNameResolver).build()
   }
 
+  def toString(host: String): String = {
+    val _path = path.foldLeft("")(_ + "/" + _)
+    val _query = queryParameters.fold("")(_.foldLeft("") { case (acc, (k, v)) => s"$acc&$k=$v" })
+
+    s"$verb https://$host${_path}${_query}"
+  }
+
 }
