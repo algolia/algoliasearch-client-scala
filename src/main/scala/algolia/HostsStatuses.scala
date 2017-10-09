@@ -54,7 +54,12 @@ case class HostsStatuses(configuration: AlgoliaClientConfiguration,
   def queryHostsThatAreUp(): Seq[String] = hostsThatAreUp(queryHosts)
 
   private def hostsThatAreUp(hosts: Seq[String]): Seq[String] = {
-    hosts.filter(h => isUpOrCouldBeRetried(getHostStatus(h)))
+    val filteredHosts = hosts.filter(h => isUpOrCouldBeRetried(getHostStatus(h)))
+    if (filteredHosts.isEmpty) {
+      hosts
+    } else {
+      filteredHosts
+    }
   }
 
   def isUpOrCouldBeRetried(hostStatus: HostStatus): Boolean =
