@@ -1,6 +1,23 @@
 # Change Log
 
-## [1.26.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.26.0) (2017-09-13)
+## [1.26.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.26.1) (2017-10-09)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.26.0...1.26.1)
+
+**Implemented enhancements:**
+
+- Update sbt-coveralls plugin [\#83](https://github.com/algolia/algoliasearch-client-scala/issues/83)
+
+**Closed issues:**
+
+- Partial update not removing fields [\#419](https://github.com/algolia/algoliasearch-client-scala/issues/419)
+
+**Merged pull requests:**
+
+- fix\(retry\): Fix retry strategy when all hosts are down [\#420](https://github.com/algolia/algoliasearch-client-scala/pull/420) ([ElPicador](https://github.com/ElPicador))
+- feat\(debug\): Add logging in debug for queries [\#418](https://github.com/algolia/algoliasearch-client-scala/pull/418) ([ElPicador](https://github.com/ElPicador))
+- chore\(compiler\): Add better compiler options [\#417](https://github.com/algolia/algoliasearch-client-scala/pull/417) ([ElPicador](https://github.com/ElPicador))
+
+## [1.26.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.26.0) (2017-09-14)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.25.0...1.26.0)
 
 **Merged pull requests:**
