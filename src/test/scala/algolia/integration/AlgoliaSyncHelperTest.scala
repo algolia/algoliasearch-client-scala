@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaSyncHelper._
-import algolia.objects.Query
+import algolia.objects.{AbstractSynonym, Query, Rule, Synonym}
 import algolia.responses._
 import algolia.{AlgoliaSyncHelper, AlgoliaTest}
 
@@ -36,7 +36,10 @@ import scala.concurrent.Future
 class AlgoliaSyncHelperTest extends AlgoliaTest {
 
   val helper = AlgoliaSyncHelper(client)
-  val list: Seq[Value] = 1 to 100 map (i => Value(i, i.toString))
+  val list: Seq[Value] = 1.to(100).map(i => Value(i, i.toString))
+  val syns: Seq[Synonym.Synonym] =
+    1.to(10).map(i => Synonym.Synonym(s"obj_$i", Seq(s"a_$i", s"b_$i")))
+  val rules: Seq[Rule] = 1.to(10).map(i => generateRule(s"obj_$i"))
 
   before {
     val insert = client.execute {
@@ -44,6 +47,18 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     }
 
     taskShouldBeCreatedAndWaitForIt(insert, "testBrowseSync")
+
+    val insertSynonyms = client.execute {
+      save synonyms syns inIndex "testBrowseSync"
+    }
+
+    taskShouldBeCreatedAndWaitForIt(insertSynonyms, "testBrowseSync")
+
+    val insertRules = client.execute {
+      save rules rules inIndex "testBrowseSync"
+    }
+
+    taskShouldBeCreatedAndWaitForIt(insertRules, "testBrowseSync")
   }
 
   after {
@@ -93,6 +108,32 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
         forAll(r) { v =>
           v.int should (be >= 1 and be <= 10)
         }
+      }
+    }
+
+  }
+
+  describe("export synonyms") {
+
+    it("should export synonyms") {
+      val list: List[AbstractSynonym] = helper.exportSynonyms("testBrowseSync").toList.flatten
+
+      list should have size 10
+      forAll(list) { r =>
+        r.objectID should startWith("obj_")
+      }
+    }
+
+  }
+
+  describe("export rules") {
+
+    it("should export rules") {
+      val list: List[Rule] = helper.exportRules("testBrowseSync").toList.flatten
+
+      list should have size 10
+      forAll(list) { r =>
+        r.objectID should startWith("obj_")
       }
     }
 

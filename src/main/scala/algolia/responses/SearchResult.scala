@@ -28,6 +28,10 @@ package algolia.responses
 import algolia.objects.{AbstractSynonym, Rule}
 import org.json4s._
 
+private[algolia] trait SearchHits[A] {
+  val hits: Seq[A]
+}
+
 case class SearchResult(hits: Seq[JObject],
                         nbHits: Int,
                         processingTimeMS: Int,
@@ -50,8 +54,9 @@ case class SearchResult(hits: Seq[JObject],
 }
 
 case class SearchSynonymResult(hits: Seq[AbstractSynonym], nbHits: Int)
+    extends SearchHits[AbstractSynonym]
 
-case class SearchRuleResult(hits: Seq[Rule], nbHits: Int)
+case class SearchRuleResult(hits: Seq[Rule], nbHits: Int) extends SearchHits[Rule]
 
 case class MultiQueriesResult(results: Seq[SearchResult])
 

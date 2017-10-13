@@ -31,36 +31,29 @@ import algolia.{AlgoliaDsl, AlgoliaTest}
 
 class RulesIntegrationTest extends AlgoliaTest {
 
-  def generateRule(ruleId: String): Rule = {
-    Rule(
-      objectID = ruleId,
-      condition = Condition(
-        pattern = "a",
-        anchoring = "is"
-      ),
-      consequence = Consequence(
-        params = Some(Map("query" -> Map("remove" -> Seq("1")))),
-        userData = Some(Map("a" -> "b"))
-      ),
-      description = Some(ruleId)
-    )
-  }
+  val indexName = "indexToRule"
 
   after {
-    clearIndices("indexToRule")
+    clearIndices(indexName)
   }
 
   describe("rules") {
 
     it("should save a rule") {
-      val res = client.execute {
-        save rule generateRule("rule1") inIndex "indexToRule"
+      val o = client.execute {
+        index into indexName `object` Value(1, "1")
       }
 
-      taskShouldBeCreatedAndWaitForIt(res, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(o, indexName)
+
+      val res = client.execute {
+        save rule generateRule("rule1") inIndex indexName
+      }
+
+      taskShouldBeCreatedAndWaitForIt(res, indexName)
 
       val r = client.execute {
-        get rule "rule1" from "indexToRule"
+        get rule "rule1" from indexName
       }
 
       whenReady(r) { res =>
@@ -70,20 +63,26 @@ class RulesIntegrationTest extends AlgoliaTest {
     }
 
     it("should search rules") {
-      val res1 = client.execute {
-        save rule generateRule("rule1") inIndex "indexToRule"
+      val o = client.execute {
+        index into indexName `object` Value(1, "1")
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(o, indexName)
+
+      val res1 = client.execute {
+        save rule generateRule("rule1") inIndex indexName
+      }
+
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val res2 = client.execute {
-        save rule generateRule("rule2") inIndex "indexToRule"
+        save rule generateRule("rule2") inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res2, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val s = client.execute {
-        search rules in index "indexToRule" query QueryRules("rule1", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules("rule1", hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>
@@ -93,25 +92,25 @@ class RulesIntegrationTest extends AlgoliaTest {
 
     it("should delete rule") {
       val res1 = client.execute {
-        save rule generateRule("rule1") inIndex "indexToRule"
+        save rule generateRule("rule1") inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val res2 = client.execute {
-        save rule generateRule("rule2") inIndex "indexToRule"
+        save rule generateRule("rule2") inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res2, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val d = client.execute {
-        delete rule "rule1" from "indexToRule"
+        delete rule "rule1" from indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(d, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(d, indexName)
 
       val s = client.execute {
-        search rules in index "indexToRule" query QueryRules("", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>
@@ -121,25 +120,25 @@ class RulesIntegrationTest extends AlgoliaTest {
 
     it("should clear rules") {
       val res1 = client.execute {
-        save rule generateRule("rule1") inIndex "indexToRule"
+        save rule generateRule("rule1") inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val res2 = client.execute {
-        save rule generateRule("rule2") inIndex "indexToRule"
+        save rule generateRule("rule2") inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res2, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val d = client.execute {
-        clear rules AlgoliaDsl.of index "indexToRule"
+        clear rules AlgoliaDsl.of index indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(d, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(d, indexName)
 
       val s = client.execute {
-        search rules in index "indexToRule" query QueryRules("", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>
@@ -154,13 +153,13 @@ class RulesIntegrationTest extends AlgoliaTest {
       )
 
       val res1 = client.execute {
-        save rules rulesToInsert inIndex "indexToRule"
+        save rules rulesToInsert inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, "indexToRule")
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val s = client.execute {
-        search rules in index "indexToRule" query QueryRules("", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
       whenReady(s) { res =>

@@ -26,6 +26,7 @@
 package algolia
 
 import algolia.AlgoliaDsl._
+import algolia.objects.{Condition, Consequence, Rule}
 import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
@@ -48,12 +49,12 @@ class AlgoliaTest
 
   val applicationId: String = System.getenv("APPLICATION_ID")
   val apiKey: String = System.getenv("API_KEY")
-  val client = new AlgoliaClient(applicationId, apiKey) {
+  val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
       AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
   }
 
-  implicit val patience =
+  implicit val patience: PatienceConfig =
     PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
 
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
@@ -94,4 +95,20 @@ class AlgoliaTest
     }
   }
 
+  def generateRule(ruleId: String): Rule = {
+    Rule(
+      objectID = ruleId,
+      condition = Condition(
+        pattern = "a",
+        anchoring = "is"
+      ),
+      consequence = Consequence(
+        params = Some(
+          Map("query" -> Map("remove" -> Seq("1")))
+        ),
+        userData = Some(Map("a" -> "b"))
+      ),
+      description = Some(ruleId)
+    )
+  }
 }

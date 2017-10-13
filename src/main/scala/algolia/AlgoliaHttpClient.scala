@@ -76,10 +76,12 @@ case class AlgoliaHttpClient(
 
     override def onCompleted(response: Response): T = {
       response.getStatusCode / 100 match {
-        case 2 => toJson(response).extract[T]
+        case 2 =>
+          val a = fromJson(response).extract[T]
+          a
         case 4 =>
           throw `4XXAPIException`(response.getStatusCode,
-                                  (toJson(response) \ "message").extract[String])
+                                  (fromJson(response) \ "message").extract[String])
         case _ =>
           logger.debug(s"Got HTTP code ${response.getStatusCode}, no retry")
           throw UnexpectedResponseException(response.getStatusCode)
@@ -87,7 +89,7 @@ case class AlgoliaHttpClient(
     }
   }
 
-  def toJson(r: Response): JValue =
+  def fromJson(r: Response): JValue =
     parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
 
   def makeRequest[T](host: String, request: Request, handler: AsyncHandler[T])(

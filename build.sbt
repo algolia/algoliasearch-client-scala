@@ -36,7 +36,7 @@ libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
 libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
-libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion
+libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion % "test"
 
 scalacOptions ++= Seq(
   "-deprecation",
