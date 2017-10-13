@@ -50,6 +50,7 @@ case class Query(
                  maxValuesPerFacet: Option[Int] = None,
                  facetFilters: Option[Seq[String]] = None,
                  facetingAfterDistinct: Option[Boolean] = None,
+                 sortFacetValuesBy: Option[String] = None,
                  /* Geo Search */
                  aroundLatLng: Option[AroundLatLng] = None,
                  aroundLatLngViaIP: Option[Boolean] = None,
@@ -138,6 +139,7 @@ case class Query(
       "maxValuesPerFacet" -> maxValuesPerFacet.map(_.toString),
       "facetFilters" -> facetFilters.map(_.mkString(",")),
       "facetingAfterDistinct" -> facetingAfterDistinct.map(_.toString),
+      "sortFacetValuesBy" -> sortFacetValuesBy.map(_.toString),
       /* Geo Search */
       "aroundLatLng" -> aroundLatLng.map(_.toString),
       "aroundLatLngViaIP" -> aroundLatLngViaIP.map(_.toString),

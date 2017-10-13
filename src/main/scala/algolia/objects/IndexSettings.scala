@@ -40,6 +40,7 @@ case class IndexSettings(
     attributesToRetrieve: Option[Seq[String]] = None,
     /* Filtering faceting */
     maxValuesPerFacet: Option[Int] = None,
+    sortFacetValuesBy: Option[String] = None,
     /* Geo Search */
     //Nothing in IndexSettings
 
