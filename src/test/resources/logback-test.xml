@@ -10,6 +10,7 @@
     </appender>
 
     <logger name="com.ning.http" level="error"/>
+    <logger name="algoliasearch" level="info"/>
 
     <!-- By default, the level of the root level is set to DEBUG -->
     <root level="info">

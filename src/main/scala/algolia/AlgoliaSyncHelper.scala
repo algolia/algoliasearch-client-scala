@@ -26,8 +26,9 @@
 package algolia
 
 import algolia.AlgoliaDsl._
-import algolia.objects.Query
-import algolia.responses.{BrowseResult, ObjectID, TasksMultipleIndex}
+import algolia.definitions.{SearchRulesDefinition, SearchSynonymsDefinition}
+import algolia.objects._
+import algolia.responses._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -80,6 +81,57 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
     }
   }
 
+  def exportSynonyms(index: String, hitsPerPage: Int = 1000)(
+      implicit duration: Duration,
+      executor: ExecutionContext): Iterator[Seq[AbstractSynonym]] = {
+    exportIterator[SearchSynonymsDefinition, AbstractSynonym, SearchSynonymResult](hitsPerPage) {
+      page =>
+        AlgoliaDsl.search synonyms in index index query QuerySynonyms("",
+                                                                      page = Some(page),
+                                                                      hitsPerPage =
+                                                                        Some(hitsPerPage))
+    }
+  }
+
+  def exportRules(index: String, hitsPerPage: Int = 999 /* bug in the rules, the timit is 999 */ )(
+      implicit duration: Duration,
+      executor: ExecutionContext): Iterator[Seq[Rule]] = {
+    exportIterator[SearchRulesDefinition, Rule, SearchRuleResult](hitsPerPage) { page =>
+      AlgoliaDsl.search rules in index index query QueryRules("",
+                                                              page = Some(page),
+                                                              hitsPerPage = Some(hitsPerPage))
+    }
+  }
+
+  private def exportIterator[Q, A, B <: SearchHits[A]](hitsPerPage: Int)(query: Int => Q)(
+      implicit duration: Duration,
+      executable: Executable[Q, B],
+      executor: ExecutionContext): Iterator[Seq[A]] = {
+    var page: PageState = PageState.Init
+
+    new Iterator[Seq[A]] {
+      override def hasNext: Boolean = page match {
+        case PageState.End => false
+        case _ => true
+      }
+
+      override def next(): Seq[A] = {
+        val future: Future[B] = client.execute {
+          query(page.page)
+        }
+
+        val result = Await.result(future, duration).hits
+        page = if (result.size < hitsPerPage) {
+          PageState.End
+        } else {
+          page.nextPage()
+        }
+
+        result
+      }
+    }
+  }
+
 }
 
 private[algolia] sealed trait CursorState {
@@ -96,6 +148,32 @@ private[algolia] object CursorState {
 
   object Init extends CursorState {
     override def value: String = ""
+  }
+
+}
+
+private[algolia] sealed trait PageState {
+  val page: Int
+
+  def nextPage(): PageState
+}
+
+private[algolia] object PageState {
+
+  object Init extends PageState {
+    override val page: Int = 0
+
+    override def nextPage(): PageState = PageState.Full(1)
+  }
+
+  object End extends PageState {
+    override val page: Int = 0
+
+    override def nextPage(): PageState = PageState.End
+  }
+
+  case class Full(page: Int) extends PageState {
+    override def nextPage(): PageState = Full(page + 1)
   }
 
 }

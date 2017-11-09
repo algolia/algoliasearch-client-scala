@@ -32,22 +32,6 @@ import algolia.{AlgoliaDsl, AlgoliaTest}
 
 class RulesTest extends AlgoliaTest {
 
-  def generateRule(ruleId: String): Rule = {
-    Rule(
-      objectID = ruleId,
-      condition = Condition(
-        pattern = "a",
-        anchoring = "is"
-      ),
-      consequence = Consequence(
-        params = Some(
-          Map("query" -> Map("remove" -> Seq("1")))
-        ),
-        userData = Some(Map("a" -> "b"))
-      )
-    )
-  }
-
   describe("rules") {
 
     describe("get by id") {
@@ -153,7 +137,7 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}}}"""),
+              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}},"description":"rule1"}"""),
             isSearch = false,
             requestOptions = None
           )
@@ -206,7 +190,7 @@ class RulesTest extends AlgoliaTest {
             queryParameters =
               Some(Map("forwardToReplicas" -> "true", "clearExistingRules" -> "true")),
             body = Some(
-              """[{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}}}]"""),
+              """[{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}},"description":"rule1"}]"""),
             isSearch = false,
             requestOptions = None
           )
