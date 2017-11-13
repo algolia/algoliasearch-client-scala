@@ -25,36 +25,38 @@
 
 package algolia.integration
 
-import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
+import algolia.AlgoliaDsl._
 import algolia.objects.Query
 
-class DeleteByIntegrationTest extends AlgoliaTest {
+class BatchIntegrationTest extends AlgoliaTest {
 
-  val list: Seq[Value] = 1 to 100 map (i => Value(i, i.toString))
-
-  before {
-    val insert = client.execute {
-      index into "testDeleteB y" objects list
-    }
-
-    taskShouldBeCreatedAndWaitForIt(insert, "testDeleteBy")
-  }
+  val indexName = "indexToBatch"
 
   after {
-    clearIndices("testDeleteBy")
+    clearIndices(indexName)
   }
 
-  describe("delete by query") {
+  describe("batches") {
 
-    val query = Query(filters = Some("int > 10"))
+    it("should batch objects") {
+      val list: Seq[Value] = 1 to 10 map (i => Value(i, i.toString))
 
-    it("should delete with a query") {
-      val d = client.execute {
-        delete from "testDeleteBy" by query
+      val task = client.execute {
+        batch(
+          index into indexName objects list
+        )
       }
 
-      taskShouldBeCreatedAndWaitForIt(d, "testDeleteBy")
+      taskShouldBeCreatedAndWaitForIt(task, indexName)
+
+      val res = client.execute {
+        search into indexName query Query(query = Some(""))
+      }
+
+      whenReady(res) { r =>
+        r.hits should have length 10
+      }
     }
 
   }
