@@ -14,6 +14,9 @@ You should change this TTL by setting the property `networkaddress.cache.ttl`. F
 java.security.Security.setProperty("networkaddress.cache.ttl", "60");
 ```
 
+For debug purposes you can enable debug logging on the API client. It's using [slf4j](https://www.slf4j.org) so it should be compatibnle with most java logger.
+The logger is named `algoliasearch`.
+
 
 
 
@@ -23,6 +26,7 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 
 ## Table of Contents
+
 
 
 1. **[Supported platforms](#supported-platforms)**
@@ -54,6 +58,7 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
     * [index.html](#indexhtml)
 
+1. **[List of available methods](#list-of-available-methods)**
 
 
 
@@ -192,6 +197,7 @@ You can find both on [your Algolia account](https://www.algolia.com/api-keys).
 
 ```scala
 val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
+//No initIndex
 ```
 
 ## Push data
@@ -264,10 +270,10 @@ client.execute { search into "contacts" query Query(query = Some("jimmie paint")
 ## Search UI
 
 **Warning:** If you are building a web application, you may be more interested in using one of our
-[frontend search UI librairies](https://www.algolia.com/doc/guides/search-ui/search-libraries/)
+[frontend search UI libraries](https://www.algolia.com/doc/guides/search-ui/search-libraries/)
 
 The following example shows how to build a front-end search quickly using
-[InstanSearch.js](https://community.algolia.com/instantsearch.js/)
+[InstantSearch.js](https://community.algolia.com/instantsearch.js/)
 
 ### index.html
 
@@ -331,10 +337,99 @@ search.addWidget(
 search.start();
 ```
 
+
+
+
+## List of available methods
+
+
+
+
+
+### Search
+
+  - [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
+  - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=scala)
+  - [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=scala)
+
+
+
+### Indexing
+
+  - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=scala)
+  - [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=scala)
+  - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=scala)
+  - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=scala)
+  - [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=scala)
+  - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=scala)
+  - [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=scala)
+
+
+
+### Settings
+
+  - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=scala)
+  - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=scala)
+
+
+
+### Manage indices
+
+  - [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=scala)
+  - [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=scala)
+  - [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=scala)
+  - [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=scala)
+  - [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=scala)
+
+
+
+### API Keys
+
+  - [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=scala)
+  - [Add API Key](https://algolia.com/doc/api-reference/api-methods/add-api-key/?language=scala)
+  - [Update API Key](https://algolia.com/doc/api-reference/api-methods/update-api-key/?language=scala)
+  - [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=scala)
+  - [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=scala)
+  - [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=scala)
+
+
+
+### Synonyms
+
+  - [Save synonym](https://algolia.com/doc/api-reference/api-methods/save-synonym/?language=scala)
+  - [Batch synonyms](https://algolia.com/doc/api-reference/api-methods/batch-synonyms/?language=scala)
+  - [Delete synonym](https://algolia.com/doc/api-reference/api-methods/delete-synonym/?language=scala)
+  - [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=scala)
+  - [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=scala)
+  - [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=scala)
+
+
+
+### Query rules
+
+  - [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
+  - [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
+  - [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=scala)
+  - [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
+  - [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
+  - [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
+
+
+
+
+
+### Advanced
+
+  - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=scala)
+  - [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=scala)
+  - [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=scala)
+
+
+
+
 ## Getting Help
 
 - **Need help**? Ask a question to the [Algolia Community](https://discourse.algolia.com/) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/algolia).
 - **Found a bug?** You can open a [GitHub issue](https://github.com/algolia/algoliasearch-client-scala/issues).
-
 
 
