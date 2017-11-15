@@ -48,5 +48,27 @@ class CopyIndexTest extends AlgoliaTest {
         )
       )
     }
+
+  }
+
+  describe("copy with scope") {
+
+    it("copy index") {
+      copy index "toto" to "tata" scopes Seq("settings")
+    }
+
+    it("should call API") {
+      (copy index "toto" to "tata" scopes Seq("settings")).build() should be(
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "toto", "operation"),
+          body =
+            Some("{\"operation\":\"copy\",\"destination\":\"tata\",\"scopes\":[\"settings\"]}"),
+          isSearch = false,
+          requestOptions = None
+        )
+      )
+    }
+
   }
 }

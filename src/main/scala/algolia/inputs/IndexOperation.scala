@@ -25,4 +25,6 @@
 
 package algolia.inputs
 
-case class IndexOperation(operation: String, destination: Option[String])
+case class IndexOperation(operation: String,
+                          destination: Option[String],
+                          scopes: Option[Seq[String]] = None)
