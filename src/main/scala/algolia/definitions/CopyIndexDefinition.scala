@@ -38,6 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class CopyIndexDefinition(
     source: String,
     destination: Option[String] = None,
+    scopes: Option[Seq[String]] = None,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
@@ -46,11 +47,14 @@ case class CopyIndexDefinition(
   def to(destination: String): CopyIndexDefinition =
     copy(source, Some(destination))
 
+  def scopes(scopes: Seq[String]): CopyIndexDefinition =
+    copy(scopes = Some(scopes))
+
   override def options(requestOptions: RequestOptions): CopyIndexDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
-    val operation = IndexOperation("copy", destination)
+    val operation = IndexOperation("copy", destination, scopes)
 
     HttpPayload(
       POST,
