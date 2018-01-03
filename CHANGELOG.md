@@ -1,5 +1,20 @@
 # Change Log
 
+## [1.27.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.27.0) (2018-01-03)
+[Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.26.1...1.27.0)
+
+**Closed issues:**
+
+- Batch insert with manual ObjectIds not working as documented [\#425](https://github.com/algolia/algoliasearch-client-scala/issues/425)
+
+**Merged pull requests:**
+
+- feat\(task\): Add wait for taskID [\#439](https://github.com/algolia/algoliasearch-client-scala/pull/439) ([ElPicador](https://github.com/ElPicador))
+- feat\(index\): Copy scope [\#428](https://github.com/algolia/algoliasearch-client-scala/pull/428) ([ElPicador](https://github.com/ElPicador))
+- Update README [\#427](https://github.com/algolia/algoliasearch-client-scala/pull/427) ([algolia-api-client-bot](https://github.com/algolia-api-client-bot))
+- feat\(parameter\): Add sortFacetValuesBy [\#422](https://github.com/algolia/algoliasearch-client-scala/pull/422) ([ElPicador](https://github.com/ElPicador))
+- feat\(helper\): Add export synonyms & rules [\#421](https://github.com/algolia/algoliasearch-client-scala/pull/421) ([ElPicador](https://github.com/ElPicador))
+
 ## [1.26.1](https://github.com/algolia/algoliasearch-client-scala/tree/1.26.1) (2017-10-09)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.26.0...1.26.1)
 
