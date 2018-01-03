@@ -38,8 +38,23 @@ class WaitForTaskTest extends AlgoliaTest {
       waitFor task Task(1L, None) from "toto" baseDelay 5 maxDelay 100
     }
 
+    it("wait for a taskId") {
+      waitFor task 1L from "toto" baseDelay 5 maxDelay 100
+    }
+
     it("should call API") {
       (waitFor task Task(1L, None) from "toto").build() should be(
+        HttpPayload(
+          GET,
+          Seq("1", "indexes", "toto", "task", "1"),
+          isSearch = true,
+          requestOptions = None
+        )
+      )
+    }
+
+    it("should call API for a taskID") {
+      (waitFor task 1L from "toto").build() should be(
         HttpPayload(
           GET,
           Seq("1", "indexes", "toto", "task", "1"),
