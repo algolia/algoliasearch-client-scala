@@ -47,4 +47,8 @@ object Acl {
 
   case object listIndexes extends Acl
 
+  case object logs extends Acl
+
+  case object seeUnretrievableAttributes extends Acl
+
 }

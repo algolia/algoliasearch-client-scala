@@ -49,12 +49,12 @@ case class AlgoliaHttpClient(
       .setRequestTimeout(configuration.httpRequestTimeoutMs)
       .build
 
-  val dnsNameResolver: DnsNameResolver = new DnsNameResolverBuilder(
-    new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
-    .channelType(classOf[NioDatagramChannel])
-    .queryTimeoutMillis(configuration.dnsTimeoutMs.toLong)
-    .maxQueriesPerResolve(2)
-    .build
+  val dnsNameResolver: DnsNameResolver =
+    new DnsNameResolverBuilder(new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
+      .channelType(classOf[NioDatagramChannel])
+      .queryTimeoutMillis(configuration.dnsTimeoutMs.toLong)
+      .maxQueriesPerResolve(2)
+      .build
 
   val logger: Logger = LoggerFactory.getLogger("algoliasearch")
 

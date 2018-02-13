@@ -178,7 +178,6 @@ class RulesTest extends AlgoliaTest {
       it("should save batches rules of an index") {
         save rules Seq(generateRule("rule1")) inIndex "toto" and forwardToSlaves and clearExistingRules
         save rules Seq(generateRule("rule2")) inIndex "toto" and forwardToReplicas and clearExistingRules
-
       }
 
       it("should call API") {

@@ -51,7 +51,7 @@ case class MultiQueriesDefinition(
 
   override private[algolia] def build(): HttpPayload = {
     val parameters =
-      strategy.map(s => Some(Map("strategy" -> s.name))).getOrElse(None)
+      strategy.flatMap(s => Some(Map("strategy" -> s.name)))
 
     HttpPayload(
       POST,

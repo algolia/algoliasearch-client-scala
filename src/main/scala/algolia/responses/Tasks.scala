@@ -31,11 +31,12 @@ sealed trait AlgoliaTask {
 
 }
 
-case class Task(taskID: Long, createdAt: Option[String]) extends AlgoliaTask {
+case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
+    extends AlgoliaTask {
   override def idToWaitFor(): Long = taskID
 }
 
-case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String])
+case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
     extends AlgoliaTask {
   override def idToWaitFor(): Long = taskID
 }
@@ -47,7 +48,7 @@ case class TasksMultipleIndex(taskID: Map[String, Long],
   override def idToWaitFor(): Long = taskID.values.max
 }
 
-case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String])
+case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
     extends AlgoliaTask {
   override def idToWaitFor(): Long = taskID
 }

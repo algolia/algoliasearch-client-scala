@@ -97,6 +97,7 @@ class SearchIntegrationTest extends AlgoliaTest {
                               "563481290",
                               Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))),
                               None,
+                              None,
                               None)
         result.asHit[EnhanceTest].head should be(hit)
       }
@@ -235,7 +236,8 @@ case class EnhanceTest(name: String,
                        objectID: String,
                        _highlightResult: Option[Map[String, HighlightResult]],
                        _snippetResult: Option[Map[String, SnippetResult]],
-                       _rankingInfo: Option[RankingInfo])
+                       _rankingInfo: Option[RankingInfo],
+                       _distinctSeqID: Option[Integer])
     extends Hit
 
 case class Character(name: String, series: String)
