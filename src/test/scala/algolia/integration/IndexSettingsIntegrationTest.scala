@@ -56,9 +56,9 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
     }
   }
 
-  it("should update settings") {
+  it("should set settings") {
     val change: Future[Task] = client.execute {
-      changeSettings of "indexToChangeSettings" `with` IndexSettings(
+      setSettings of "indexToChangeSettings" `with` IndexSettings(
         searchableAttributes = Some(Seq(SearchableAttributes.attribute("att")))
       )
     }
