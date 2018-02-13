@@ -30,19 +30,19 @@ import algolia.AlgoliaTest
 import algolia.http._
 import algolia.objects.{MultiQueries, Query}
 
-class MultiQueriesTest extends AlgoliaTest {
+class MultipleQueriesTest extends AlgoliaTest {
 
-  describe("multi queries") {
+  describe("multiple queries") {
 
-    it("should do multi queries") {
-      multiQueries(
+    it("should do multiple queries") {
+      multipleQueries(
         search into "indexName" query Query(),
         search into "indexName2" query Query()
       ) strategy MultiQueries.Strategy.stopIfEnoughMatches
     }
 
     it("should call the API") {
-      val m = multiQueries(
+      val m = multipleQueries(
         search into "indexName1" query Query(query = Some("a")),
         search into "indexName2" query Query(query = Some("b"))
       ) strategy MultiQueries.Strategy.stopIfEnoughMatches

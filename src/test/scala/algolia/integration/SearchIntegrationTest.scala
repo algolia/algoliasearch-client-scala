@@ -141,11 +141,11 @@ class SearchIntegrationTest extends AlgoliaTest {
     }
   }
 
-  describe("multi queries") {
+  describe("multiple queries") {
 
     it("should return generic object") {
       val s = client.execute {
-        multiQueries(
+        multipleQueries(
           search into indexName query Query(query = Some("a")),
           search into "indexToSearch2" query Query(query = Some("a"))
         )
@@ -163,7 +163,7 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return case class") {
       val s = client.execute {
-        multiQueries(
+        multipleQueries(
           search into indexName query Query(query = Some("a")),
           search into "indexToSearch2" query Query(query = Some("a"))
         )
@@ -180,7 +180,7 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return a hit") {
       val s = client.execute {
-        multiQueries(
+        multipleQueries(
           search into indexName query Query(query = Some("a")),
           search into "indexToSearch2" query Query(query = Some("a"))
         )
