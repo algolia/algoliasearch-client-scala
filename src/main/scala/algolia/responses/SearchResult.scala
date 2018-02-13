@@ -40,8 +40,17 @@ case class SearchResult(hits: Seq[JObject],
                         nbPages: Option[Int],
                         facets: Option[Map[String, Map[String, Int]]],
                         exhaustiveFacetsCount: Option[Boolean],
+                        exhaustiveNbHits: Option[Boolean],
                         query: String,
+                        queryAfterRemoval: Option[String],
                         params: String,
+                        message: Option[String],
+                        aroundLatLng: Option[String],
+                        automaticRadius: Option[Int],
+                        facets_stats: Option[Map[String, Float]],
+                        // For getRankingInfo
+                        serverUsed: Option[String],
+                        parsedQuery: Option[String],
                         // For multiqueries
                         processed: Option[Boolean],
                         index: Option[String]) {
@@ -81,7 +90,10 @@ trait Hit extends ObjectID {
 
 }
 
-case class HighlightResult(value: String, matchLevel: String)
+case class HighlightResult(value: String,
+                           matchLevel: String,
+                           matchedWords: Iterable[String],
+                           fullyHighlighted: Boolean)
 
 case class SnippetResult(value: String, matchLevel: String)
 
@@ -91,4 +103,7 @@ case class RankingInfo(nbTypos: Int,
                        userScore: Int,
                        geoDistance: Int,
                        geoPrecision: Int,
-                       nbExactWords: Int)
+                       nbExactWords: Int,
+                       words: Int,
+                       filters: Int,
+                       matchedGeoLocation: Option[Map[String, Float]])
