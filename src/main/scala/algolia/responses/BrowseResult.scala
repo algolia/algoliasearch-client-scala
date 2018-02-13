@@ -25,15 +25,19 @@
 
 package algolia.responses
 
-import org.json4s.JObject
+import org.json4s.{DefaultFormats, JObject}
 
 case class BrowseResult(cursor: Option[String],
                         hits: Seq[JObject],
                         processingTimeMS: Int,
                         query: String,
-                        params: String) {
+                        params: String,
+                        nbHits: Option[Int],
+                        page: Option[Int],
+                        histPerPage: Option[Int],
+                        nbPages: Option[Int]) {
 
-  implicit val formats = org.json4s.DefaultFormats
+  implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
   def asHit[T <: Hit: Manifest]: Seq[T] = hits.map(_.extract[T])
 

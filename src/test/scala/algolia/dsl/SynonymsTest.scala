@@ -156,7 +156,6 @@ class SynonymsTest extends AlgoliaTest {
       it("should save batches synonyms of an index") {
         save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToSlaves and replaceExistingSynonyms
         save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and replaceExistingSynonyms
-
       }
 
       it("should call API") {

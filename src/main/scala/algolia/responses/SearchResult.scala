@@ -41,7 +41,10 @@ case class SearchResult(hits: Seq[JObject],
                         facets: Option[Map[String, Map[String, Int]]],
                         exhaustiveFacetsCount: Option[Boolean],
                         query: String,
-                        params: String) {
+                        params: String,
+                        // For multiqueries
+                        processed: Option[Boolean],
+                        index: Option[String]) {
 
   implicit val formats: Formats = org.json4s.DefaultFormats
 
@@ -74,11 +77,13 @@ trait Hit extends ObjectID {
 
   val _rankingInfo: Option[RankingInfo]
 
+  val _distinctSeqID: Option[Integer]
+
 }
 
 case class HighlightResult(value: String, matchLevel: String)
 
-case class SnippetResult(value: String)
+case class SnippetResult(value: String, matchLevel: String)
 
 case class RankingInfo(nbTypos: Int,
                        firstMatchedWord: Int,

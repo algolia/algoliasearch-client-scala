@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClientTest extends AlgoliaTest {
 
-  val notSoRandom = new AlgoliaUtils {
+  val notSoRandom: AlgoliaUtils = new AlgoliaUtils {
     override def shuffle(seq: Seq[String]): Seq[String] = seq
   }
 

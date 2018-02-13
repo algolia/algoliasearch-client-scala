@@ -48,7 +48,7 @@ class SaveObjectTest extends AlgoliaTest {
           HttpPayload(
             POST,
             List("1", "indexes", "toto"),
-            body = Some("{\"name\":\"algolia\",\"age\":2}"),
+            body = Some("""{"name":"algolia","age":2}"""),
             isSearch = false,
             requestOptions = None
           )
@@ -68,7 +68,7 @@ class SaveObjectTest extends AlgoliaTest {
               POST,
               List("1", "indexes", "toto", "batch"),
               body = Some(
-                "{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2},\"action\":\"addObject\"}]}"),
+                """{"requests":[{"body":{"name":"algolia","age":2},"action":"addObject"}]}"""),
               isSearch = false,
               requestOptions = None
             )
@@ -82,7 +82,7 @@ class SaveObjectTest extends AlgoliaTest {
               POST,
               List("1", "indexes", "toto", "batch"),
               body = Some(
-                "{\"requests\":[{\"body\":{\"name\":\"algolia\",\"age\":2,\"objectID\":\"id\"},\"action\":\"updateObject\"}]}"),
+                """{"requests":[{"body":{"name":"algolia","age":2,"objectID":"id"},"action":"updateObject"}]}"""),
               isSearch = false,
               requestOptions = None
             )
@@ -107,7 +107,7 @@ class SaveObjectTest extends AlgoliaTest {
           HttpPayload(
             PUT,
             List("1", "indexes", "toto", "1"),
-            body = Some("{\"name\":\"algolia\",\"age\":2}"),
+            body = Some("""{"name":"algolia","age":2}"""),
             isSearch = false,
             requestOptions = None
           )
@@ -127,7 +127,7 @@ class SaveObjectTest extends AlgoliaTest {
               POST,
               List("1", "indexes", "toto", "batch"),
               body = Some(
-                "{\"requests\":[{\"body\":{\"objectID\":\"1\",\"name\":\"algolia\",\"age\":2},\"action\":\"updateObject\"}]}"),
+                """{"requests":[{"body":{"objectID":"1","name":"algolia","age":2},"action":"updateObject"}]}"""),
               isSearch = false,
               requestOptions = None
             )
