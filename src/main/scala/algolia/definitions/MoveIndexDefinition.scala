@@ -38,6 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class MoveIndexDefinition(
     source: String,
     destination: Option[String] = None,
+    scope: Option[Seq[String]] = None,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
@@ -49,8 +50,11 @@ case class MoveIndexDefinition(
   override def options(requestOptions: RequestOptions): MoveIndexDefinition =
     copy(requestOptions = Some(requestOptions))
 
+  def scope(scope: Seq[String]): MoveIndexDefinition =
+    copy(scope = Some(scope))
+
   override private[algolia] def build(): HttpPayload = {
-    val operation = IndexOperation("move", destination)
+    val operation = IndexOperation("move", destination, scope)
 
     HttpPayload(
       POST,

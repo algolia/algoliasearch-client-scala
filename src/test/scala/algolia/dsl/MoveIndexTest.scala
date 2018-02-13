@@ -49,4 +49,24 @@ class MoveIndexTest extends AlgoliaTest {
       )
     }
   }
+
+  describe("move with scope") {
+
+    it("move index") {
+      move index "toto" to "tata" scope Seq("settings")
+    }
+
+    it("should call API") {
+      (move index "toto" to "tata" scope Seq("settings")).build() should be(
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "toto", "operation"),
+          body = Some("""{"operation":"move","destination":"tata","scope":["settings"]}"""),
+          isSearch = false,
+          requestOptions = None
+        )
+      )
+    }
+
+  }
 }
