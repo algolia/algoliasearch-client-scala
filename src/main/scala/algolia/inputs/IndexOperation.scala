@@ -27,4 +27,4 @@ package algolia.inputs
 
 case class IndexOperation(operation: String,
                           destination: Option[String],
-                          scopes: Option[Seq[String]] = None)
+                          scope: Option[Seq[String]] = None)
