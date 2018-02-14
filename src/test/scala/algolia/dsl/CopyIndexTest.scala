@@ -54,15 +54,15 @@ class CopyIndexTest extends AlgoliaTest {
   describe("copy with scope") {
 
     it("copy index") {
-      copy index "toto" to "tata" scopes Seq("settings")
+      copy index "toto" to "tata" scope Seq("settings")
     }
 
     it("should call API") {
-      (copy index "toto" to "tata" scopes Seq("settings")).build() should be(
+      (copy index "toto" to "tata" scope Seq("settings")).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "toto", "operation"),
-          body = Some("""{"operation":"copy","destination":"tata","scopes":["settings"]}"""),
+          body = Some("""{"operation":"copy","destination":"tata","scope":["settings"]}"""),
           isSearch = false,
           requestOptions = None
         )
