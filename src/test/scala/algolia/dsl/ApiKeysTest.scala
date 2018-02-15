@@ -32,6 +32,7 @@ import algolia.objects.{Acl, ApiKey}
 import org.json4s.Formats
 import org.json4s.native.JsonMethods._
 import org.json4s.native.Serialization._
+import scala.language.postfixOps
 
 class ApiKeysTest extends AlgoliaTest {
 
@@ -58,11 +59,11 @@ class ApiKeysTest extends AlgoliaTest {
 
     describe("get all keys") {
       it("should get all keys") {
-        get.allKeys()
+        list keys
       }
 
       it("should call the API") {
-        get.allKeys().build() should be(
+        list.keys.build() should be(
           HttpPayload(
             GET,
             List("1", "keys"),
@@ -149,11 +150,11 @@ class ApiKeysTest extends AlgoliaTest {
 
     describe("get all keys") {
       it("should get all keys") {
-        get allKeysFrom "indexName"
+        list keysFrom "indexName"
       }
 
       it("should call the API") {
-        (get allKeysFrom "indexName").build() should be(
+        (list keysFrom "indexName").build() should be(
           HttpPayload(
             GET,
             List("1", "indexes", "indexName", "keys"),

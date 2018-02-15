@@ -204,7 +204,7 @@ trait PartialUpdateObjectDsl {
     def value(value: String): PartialUpdateObjectOperationDefinition =
       PartialUpdateObjectOperationDefinition(Add, value = Some(value))
 
-    def key(key: ApiKey) = AddApiKeyDefinition(key)
+    def key(key: ApiKey) = AddKeyDefinition(key)
 
   }
 
@@ -227,7 +227,7 @@ trait PartialUpdateObjectDsl {
     def attribute(attribute: String): PartialUpdateObjectDefinition =
       PartialUpdateObjectDefinition(attribute = Some(attribute))
 
-    def key(keyName: String) = UpdateApiKeyDefinition(keyName)
+    def key(keyName: String) = UpdateKeyDefinition(keyName)
 
   }
 

@@ -101,12 +101,14 @@ trait GetDsl {
 
     def from(index: String) = GetObjectDefinition(index = Some(index))
 
-    def key(keyName: String) = GetApiKeyDefinition(keyName)
+    def key(keyName: String) = GetKeyDefinition(keyName)
 
-    def allKeys() = GetAllApiKeyDefinition()
+    @deprecated("use list keys", "1.27.1")
+    def allKeys() = ListKeysDefinition()
 
+    @deprecated("use list keysFrom", "1.27.1")
     def allKeysFrom(indexName: String) =
-      GetAllApiKeyDefinition(indexName = Some(indexName))
+      ListKeysDefinition(indexName = Some(indexName))
 
     def synonym(synId: String) = GetSynonymDefinition(synId = synId)
 

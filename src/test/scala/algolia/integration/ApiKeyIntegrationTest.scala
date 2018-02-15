@@ -29,6 +29,7 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.objects.{Acl, ApiKey}
 import algolia.responses.{AllKeys, CreateUpdateKey}
+import scala.language.postfixOps
 
 import scala.concurrent.Future
 
@@ -38,7 +39,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
 
     it("should list keys") {
       val result: Future[AllKeys] = client.execute {
-        get allKeys ()
+        list keys
       }
 
       whenReady(result) { keys =>
@@ -101,7 +102,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
 
     it("should list keys") {
       val result: Future[AllKeys] = client.execute {
-        get allKeysFrom "indexToTestKeys"
+        list keysFrom "indexToTestKeys"
       }
 
       whenReady(result) { keys =>
