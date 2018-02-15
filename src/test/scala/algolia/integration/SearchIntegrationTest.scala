@@ -207,7 +207,7 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should search in facets") {
       val change = client.execute {
-        changeSettings of "indexToSearchFacet" `with` IndexSettings(
+        setSettings of "indexToSearchFacet" `with` IndexSettings(
           attributesForFaceting = Some(Seq("searchable(series)"))
         )
       }

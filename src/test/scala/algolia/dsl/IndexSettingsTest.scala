@@ -54,11 +54,11 @@ class IndexSettingsTest extends AlgoliaTest {
 
   }
 
-  describe("change settings") {
+  describe("set settings") {
 
-    it("should get settings") {
-      changeSettings of "index" `with` IndexSettings() and forwardToSlaves
-      changeSettings of "index" `with` IndexSettings() and forwardToReplicas
+    it("should set settings") {
+      setSettings of "index" `with` IndexSettings() and forwardToSlaves
+      setSettings of "index" `with` IndexSettings() and forwardToReplicas
     }
 
     it("should call API") {
@@ -71,7 +71,7 @@ class IndexSettingsTest extends AlgoliaTest {
         requestOptions = None
       )
 
-      (changeSettings of "test" `with` IndexSettings() and forwardToReplicas).build() should be(
+      (setSettings of "test" `with` IndexSettings() and forwardToReplicas).build() should be(
         payload)
     }
 
