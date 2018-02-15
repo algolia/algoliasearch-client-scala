@@ -91,14 +91,21 @@ class SearchIntegrationTest extends AlgoliaTest {
 
       whenReady(s) { result =>
         result.hits should have length 1
-        val hit = EnhanceTest("algolia",
-                              10,
-                              alien = false,
-                              "563481290",
-                              Some(Map("name" -> HighlightResult("<em>a</em>lgolia", "full"))),
-                              None,
-                              None,
-                              None)
+        val hit = EnhanceTest(
+          "algolia",
+          10,
+          alien = false,
+          "563481290",
+          Some(
+            Map(
+              "name" -> HighlightResult("<em>a</em>lgolia",
+                                        "full",
+                                        Seq("a"),
+                                        fullyHighlighted = false))),
+          None,
+          None,
+          None
+        )
         result.asHit[EnhanceTest].head should be(hit)
       }
     }

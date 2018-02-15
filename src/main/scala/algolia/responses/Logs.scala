@@ -33,7 +33,11 @@ case class Log(timestamp: String,
                url: String,
                ip: String,
                query_headers: String,
-               sha1: String)
+               sha1: String,
+               nb_api_calls: String,
+               processing_time_ms: String,
+               query_nb_hits: String,
+               exhaustive: Boolean)
 
 sealed trait LogType {
 
