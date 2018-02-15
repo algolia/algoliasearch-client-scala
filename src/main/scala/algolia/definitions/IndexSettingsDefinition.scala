@@ -102,7 +102,14 @@ trait IndexSettingsDsl {
 
   }
 
+  @deprecated("use setSettings", "1.27.1")
   case object changeSettings {
+
+    def of(index: String) = IndexSettingsDefinition(index)
+
+  }
+
+  case object setSettings {
 
     def of(index: String) = IndexSettingsDefinition(index)
 
