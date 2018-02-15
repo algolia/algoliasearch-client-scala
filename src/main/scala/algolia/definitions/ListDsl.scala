@@ -25,26 +25,28 @@
 
 package algolia.definitions
 
-import algolia.http.{GET, HttpPayload}
-import algolia.objects.RequestOptions
 import algolia.responses.Indices
 import algolia.{AlgoliaClient, Executable}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ListIndexesDefinition(requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+trait ListDsl {
 
-  type T = ListIndexesDefinition
+  case object list {
+    def indices = ListIndexesDefinition()
 
-  override def options(requestOptions: RequestOptions): ListIndexesDefinition =
-    copy(requestOptions = Some(requestOptions))
+    def keys = ListKeysDefinition()
 
-  override private[algolia] def build() = HttpPayload(
-    GET,
-    Seq("1", "indexes"),
-    isSearch = true,
-    requestOptions = requestOptions
-  )
+    def keysFrom(indexName: String) =
+      ListKeysDefinition(indexName = Some(indexName))
+  }
+
+  implicit object ListIndexesDefinitionExecutable
+      extends Executable[ListIndexesDefinition, Indices] {
+    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
+        implicit executor: ExecutionContext): Future[Indices] = {
+      client.request[Indices](query.build())
+    }
+  }
 
 }

@@ -34,16 +34,16 @@ import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class GetApiKeyDefinition(keyName: String,
-                               indexName: Option[String] = None,
-                               requestOptions: Option[RequestOptions] = None)
+case class GetKeyDefinition(keyName: String,
+                            indexName: Option[String] = None,
+                            requestOptions: Option[RequestOptions] = None)
     extends Definition {
 
-  type T = GetApiKeyDefinition
+  type T = GetKeyDefinition
 
-  def from(indexName: String): GetApiKeyDefinition = copy(indexName = Some(indexName))
+  def from(indexName: String): GetKeyDefinition = copy(indexName = Some(indexName))
 
-  override def options(requestOptions: RequestOptions): GetApiKeyDefinition =
+  override def options(requestOptions: RequestOptions): GetKeyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -62,16 +62,16 @@ case class GetApiKeyDefinition(keyName: String,
   }
 }
 
-case class AddApiKeyDefinition(
+case class AddKeyDefinition(
     key: ApiKey,
     indexName: Option[String] = None,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
-  type T = AddApiKeyDefinition
+  type T = AddKeyDefinition
 
-  def to(indexName: String): AddApiKeyDefinition = copy(indexName = Some(indexName))
+  def to(indexName: String): AddKeyDefinition = copy(indexName = Some(indexName))
 
-  override def options(requestOptions: RequestOptions): AddApiKeyDefinition =
+  override def options(requestOptions: RequestOptions): AddKeyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -91,16 +91,16 @@ case class AddApiKeyDefinition(
   }
 }
 
-case class DeleteApiKeyDefinition(keyName: String,
-                                  indexName: Option[String] = None,
-                                  requestOptions: Option[RequestOptions] = None)
+case class DeleteKeyDefinition(keyName: String,
+                               indexName: Option[String] = None,
+                               requestOptions: Option[RequestOptions] = None)
     extends Definition {
 
-  type T = DeleteApiKeyDefinition
+  type T = DeleteKeyDefinition
 
-  def from(indexName: String): DeleteApiKeyDefinition = copy(indexName = Some(indexName))
+  def from(indexName: String): DeleteKeyDefinition = copy(indexName = Some(indexName))
 
-  override def options(requestOptions: RequestOptions): DeleteApiKeyDefinition =
+  override def options(requestOptions: RequestOptions): DeleteKeyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -119,20 +119,20 @@ case class DeleteApiKeyDefinition(keyName: String,
   }
 }
 
-case class UpdateApiKeyDefinition(
+case class UpdateKeyDefinition(
     keyName: String,
     key: Option[ApiKey] = None,
     indexName: Option[String] = None,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
-  type T = UpdateApiKeyDefinition
+  type T = UpdateKeyDefinition
 
-  def `with`(key: ApiKey): UpdateApiKeyDefinition = copy(key = Some(key))
+  def `with`(key: ApiKey): UpdateKeyDefinition = copy(key = Some(key))
 
-  def from(indexName: String): UpdateApiKeyDefinition = copy(indexName = Some(indexName))
+  def from(indexName: String): UpdateKeyDefinition = copy(indexName = Some(indexName))
 
-  override def options(requestOptions: RequestOptions): UpdateApiKeyDefinition =
+  override def options(requestOptions: RequestOptions): UpdateKeyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -152,13 +152,13 @@ case class UpdateApiKeyDefinition(
   }
 }
 
-case class GetAllApiKeyDefinition(indexName: Option[String] = None,
-                                  requestOptions: Option[RequestOptions] = None)
+case class ListKeysDefinition(indexName: Option[String] = None,
+                              requestOptions: Option[RequestOptions] = None)
     extends Definition {
 
-  type T = GetAllApiKeyDefinition
+  type T = ListKeysDefinition
 
-  override def options(requestOptions: RequestOptions): GetAllApiKeyDefinition =
+  override def options(requestOptions: RequestOptions): ListKeysDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -177,40 +177,40 @@ case class GetAllApiKeyDefinition(indexName: Option[String] = None,
   }
 }
 
-trait ApiKeyDefinitionDsl {
+trait KeyDefinitionDsl {
 
   implicit val formats: Formats
 
-  implicit object GetApiKeyDefinitionExecutable extends Executable[GetApiKeyDefinition, ApiKey] {
-    override def apply(client: AlgoliaClient, query: GetApiKeyDefinition)(
+  implicit object GetApiKeyDefinitionExecutable extends Executable[GetKeyDefinition, ApiKey] {
+    override def apply(client: AlgoliaClient, query: GetKeyDefinition)(
         implicit executor: ExecutionContext): Future[ApiKey] =
       client.request[ApiKey](query.build())
   }
 
   implicit object AddApiKeyDefinitionExecutable
-      extends Executable[AddApiKeyDefinition, CreateUpdateKey] {
-    override def apply(client: AlgoliaClient, query: AddApiKeyDefinition)(
+      extends Executable[AddKeyDefinition, CreateUpdateKey] {
+    override def apply(client: AlgoliaClient, query: AddKeyDefinition)(
         implicit executor: ExecutionContext): Future[CreateUpdateKey] =
       client.request[CreateUpdateKey](query.build())
   }
 
   implicit object DeleteApiKeyDefinitionExecutable
-      extends Executable[DeleteApiKeyDefinition, DeleteKey] {
-    override def apply(client: AlgoliaClient, query: DeleteApiKeyDefinition)(
+      extends Executable[DeleteKeyDefinition, DeleteKey] {
+    override def apply(client: AlgoliaClient, query: DeleteKeyDefinition)(
         implicit executor: ExecutionContext): Future[DeleteKey] =
       client.request[DeleteKey](query.build())
   }
 
   implicit object UpdateApiKeyDefinitionExecutable
-      extends Executable[UpdateApiKeyDefinition, CreateUpdateKey] {
-    override def apply(client: AlgoliaClient, query: UpdateApiKeyDefinition)(
+      extends Executable[UpdateKeyDefinition, CreateUpdateKey] {
+    override def apply(client: AlgoliaClient, query: UpdateKeyDefinition)(
         implicit executor: ExecutionContext): Future[CreateUpdateKey] =
       client.request[CreateUpdateKey](query.build())
   }
 
   implicit object GetAllApiKeyDefinitionExecutable
-      extends Executable[GetAllApiKeyDefinition, AllKeys] {
-    override def apply(client: AlgoliaClient, query: GetAllApiKeyDefinition)(
+      extends Executable[ListKeysDefinition, AllKeys] {
+    override def apply(client: AlgoliaClient, query: ListKeysDefinition)(
         implicit executor: ExecutionContext): Future[AllKeys] =
       client.request[AllKeys](query.build())
   }

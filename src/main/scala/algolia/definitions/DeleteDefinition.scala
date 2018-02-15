@@ -121,7 +121,7 @@ trait DeleteDsl {
     //Object
     def from(index: String) = DeleteObjectDefinition(index = Some(index))
 
-    def key(keyName: String) = DeleteApiKeyDefinition(keyName)
+    def key(keyName: String) = DeleteKeyDefinition(keyName)
 
     def synonym(synId: String) = DeleteSynonymDefinition(synId = synId)
 
