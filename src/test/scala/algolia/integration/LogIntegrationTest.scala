@@ -50,7 +50,7 @@ class LogIntegrationTest extends AlgoliaTest {
 
   it("should get the logs") {
     val result: Future[Logs] = client.execute {
-      logs offset 0 length 10 `type` LogType.all
+      getLogs offset 0 length 10 `type` LogType.all
     }
 
     whenReady(result) { r =>

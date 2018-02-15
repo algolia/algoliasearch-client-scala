@@ -36,8 +36,9 @@ case class Log(timestamp: String,
                sha1: String,
                nb_api_calls: String,
                processing_time_ms: String,
-               query_nb_hits: String,
-               exhaustive: Boolean)
+               index: Option[String],
+               query_nb_hits: Option[String],
+               exhaustive: Option[Boolean])
 
 sealed trait LogType {
 
