@@ -118,25 +118,3 @@ case class BatchDefinition(
     }
   }
 }
-
-trait BatchDefinitionDsl {
-
-  implicit val formats: Formats
-
-  def batch(batches: Traversable[Definition]): BatchDefinition = {
-    BatchDefinition(batches)
-  }
-
-  def batch(batches: Definition*): BatchDefinition = {
-    BatchDefinition(batches)
-  }
-
-  implicit object BatchDefinitionExecutable
-      extends Executable[BatchDefinition, TasksMultipleIndex] {
-    override def apply(client: AlgoliaClient, query: BatchDefinition)(
-        implicit executor: ExecutionContext): Future[TasksMultipleIndex] = {
-      client.request[TasksMultipleIndex](query.build())
-    }
-  }
-
-}

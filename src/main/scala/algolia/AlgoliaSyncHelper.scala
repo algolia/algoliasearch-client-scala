@@ -121,7 +121,7 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
         }
 
         val result = Await.result(future, duration).hits
-        page = if (result.size < hitsPerPage) {
+        page = if (result.lengthCompare(hitsPerPage) < 0) {
           PageState.End
         } else {
           page.nextPage()

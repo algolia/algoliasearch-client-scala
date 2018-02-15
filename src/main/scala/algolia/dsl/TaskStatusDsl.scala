@@ -23,41 +23,28 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.http.{GET, HttpPayload}
-import algolia.objects.{Query, RequestOptions}
-import algolia.responses.BrowseResult
+import algolia.definitions.TaskStatusDefinition
+import algolia.responses.{AlgoliaTask, TaskStatus}
 import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
-    extends Definition {
+trait TaskStatusDsl {
 
-  type T = BrowseIndexDefinition
-
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
-
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
-
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-
-    HttpPayload(
-      GET,
-      Seq("1", "indexes", source, "browse"),
-      queryParameters = Some(q.toQueryParam),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
+  case object getStatus {
+    def task(task: AlgoliaTask): TaskStatusDefinition =
+      TaskStatusDefinition(task.idToWaitFor())
   }
+
+  implicit object TaskStatusExecutable extends Executable[TaskStatusDefinition, TaskStatus] {
+
+    override def apply(client: AlgoliaClient, query: TaskStatusDefinition)(
+        implicit executor: ExecutionContext): Future[TaskStatus] = {
+      client.request[TaskStatus](query.build())
+    }
+
+  }
+
 }

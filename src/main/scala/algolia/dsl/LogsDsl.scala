@@ -23,48 +23,26 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.http.{HttpPayload, POST}
-import algolia.inputs.{AddObjectOperation, BatchOperations, UpdateObjectOperation}
-import algolia.objects.RequestOptions
-import algolia.responses.TasksSingleIndex
+import algolia.definitions.LogsDefinition
+import algolia.responses.Logs
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
-import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IndexingBatchDefinition(
-    index: String,
-    definitions: Traversable[Definition] = Traversable(),
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
-    extends Definition
-    with BatchOperationUtils {
+trait LogsDsl {
 
-  type T = IndexingBatchDefinition
+  implicit val formats: Formats
 
-  override def options(requestOptions: RequestOptions): IndexingBatchDefinition =
-    copy(requestOptions = Some(requestOptions))
+  def logs() = LogsDefinition()
 
-  override private[algolia] def build(): HttpPayload = {
-    val operations = definitions.map {
-      case IndexingDefinition(_, None, Some(obj), _) =>
-        hasObjectId(obj) match {
-          case (true, o) => UpdateObjectOperation(o)
-          case (false, o) => AddObjectOperation(o)
-        }
-
-      case IndexingDefinition(_, Some(objectId), Some(obj), _) =>
-        UpdateObjectOperation(addObjectId(obj, objectId))
+  implicit object LogsDefinitionExecutable extends Executable[LogsDefinition, Logs] {
+    override def apply(client: AlgoliaClient, query: LogsDefinition)(
+        implicit executor: ExecutionContext): Future[Logs] = {
+      client.request[Logs](query.build())
     }
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", index, "batch"),
-      body = Some(write(BatchOperations(operations))),
-      isSearch = false,
-      requestOptions = requestOptions
-    )
   }
+
 }

@@ -54,21 +54,3 @@ case class TaskStatusDefinition(taskId: Long,
   }
 
 }
-
-trait TaskStatusDsl {
-
-  case object getStatus {
-    def task(task: AlgoliaTask): TaskStatusDefinition =
-      TaskStatusDefinition(task.idToWaitFor())
-  }
-
-  implicit object TaskStatusExecutable extends Executable[TaskStatusDefinition, TaskStatus] {
-
-    override def apply(client: AlgoliaClient, query: TaskStatusDefinition)(
-        implicit executor: ExecutionContext): Future[TaskStatus] = {
-      client.request[TaskStatus](query.build())
-    }
-
-  }
-
-}

@@ -65,22 +65,3 @@ case class MoveIndexDefinition(
     )
   }
 }
-
-trait MoveIndexDsl {
-
-  implicit val formats: Formats
-
-  case object move {
-
-    def index(index: String): MoveIndexDefinition = MoveIndexDefinition(index)
-
-  }
-
-  implicit object MoveIndexDefinitionExecutable extends Executable[MoveIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: MoveIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
-    }
-  }
-
-}

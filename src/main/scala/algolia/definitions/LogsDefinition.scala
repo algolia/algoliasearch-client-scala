@@ -72,18 +72,3 @@ case class LogsDefinition(offset: Option[Int] = None,
     )
   }
 }
-
-trait LogsDsl {
-
-  implicit val formats: Formats
-
-  def logs() = LogsDefinition()
-
-  implicit object LogsDefinitionExecutable extends Executable[LogsDefinition, Logs] {
-    override def apply(client: AlgoliaClient, query: LogsDefinition)(
-        implicit executor: ExecutionContext): Future[Logs] = {
-      client.request[Logs](query.build())
-    }
-  }
-
-}
