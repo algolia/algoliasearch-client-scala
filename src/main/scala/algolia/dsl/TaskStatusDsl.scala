@@ -35,7 +35,7 @@ trait TaskStatusDsl {
 
   case object getStatus {
     def task(task: AlgoliaTask): TaskStatusDefinition =
-      TaskStatusDefinition(task.idToWaitFor())
+      TaskStatusDefinition(task.idToWaitFor)
   }
 
   implicit object TaskStatusExecutable extends Executable[TaskStatusDefinition, TaskStatus] {

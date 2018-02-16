@@ -27,7 +27,7 @@ package algolia.dsl
 
 import algolia.definitions._
 import algolia.objects.{AbstractSynonym, Rule}
-import algolia.responses.{SearchSynonymResult, Task}
+import algolia.responses.{SearchSynonymResult, SynonymTask}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
@@ -64,40 +64,41 @@ trait SynonymsDsl {
   }
 
   implicit object DeleteSynonymDefinitionExecutable
-      extends Executable[DeleteSynonymDefinition, Task] {
+      extends Executable[DeleteSynonymDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: DeleteSynonymDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
+        implicit executor: ExecutionContext): Future[SynonymTask] = {
+      client.request[SynonymTask](query.build())
     }
 
   }
 
   implicit object ClearSynonymsDefinitionExecutable
-      extends Executable[ClearSynonymsDefinition, Task] {
+      extends Executable[ClearSynonymsDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: ClearSynonymsDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
+        implicit executor: ExecutionContext): Future[SynonymTask] = {
+      client.request[SynonymTask](query.build())
     }
 
   }
 
-  implicit object SaveSynonymDefinitionExecutable extends Executable[SaveSynonymDefinition, Task] {
+  implicit object SaveSynonymDefinitionExecutable
+      extends Executable[SaveSynonymDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: SaveSynonymDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
+        implicit executor: ExecutionContext): Future[SynonymTask] = {
+      client.request[SynonymTask](query.build())
     }
 
   }
 
   implicit object BatchSynonymsDefinitionExecutable
-      extends Executable[BatchSynonymsDefinition, Task] {
+      extends Executable[BatchSynonymsDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: BatchSynonymsDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
+        implicit executor: ExecutionContext): Future[SynonymTask] = {
+      client.request[SynonymTask](query.build())
     }
 
   }

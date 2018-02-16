@@ -27,28 +27,33 @@ package algolia.responses
 
 sealed trait AlgoliaTask {
 
-  protected[algolia] def idToWaitFor(): Long
+  protected[algolia] val idToWaitFor: Long
 
 }
 
 case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
     extends AlgoliaTask {
-  override def idToWaitFor(): Long = taskID
+  override val idToWaitFor: Long = taskID
 }
 
 case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
     extends AlgoliaTask {
-  override def idToWaitFor(): Long = taskID
+  override val idToWaitFor: Long = taskID
 }
 
 case class TasksMultipleIndex(taskID: Map[String, Long],
                               objectIDs: Seq[String],
                               createdAt: Option[String])
     extends AlgoliaTask {
-  override def idToWaitFor(): Long = taskID.values.max
+  override val idToWaitFor: Long = taskID.values.max
 }
 
 case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
     extends AlgoliaTask {
-  override def idToWaitFor(): Long = taskID
+  override val idToWaitFor: Long = taskID
+}
+
+case class SynonymTask(taskID: Long, id: Option[String], updatedAt: Option[String] = None)
+    extends AlgoliaTask {
+  override val idToWaitFor: Long = taskID
 }
