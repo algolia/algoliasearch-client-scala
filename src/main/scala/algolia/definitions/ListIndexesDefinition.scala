@@ -27,10 +27,6 @@ package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
 import algolia.objects.RequestOptions
-import algolia.responses.Indices
-import algolia.{AlgoliaClient, Executable}
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class ListIndexesDefinition(requestOptions: Option[RequestOptions] = None)
     extends Definition {

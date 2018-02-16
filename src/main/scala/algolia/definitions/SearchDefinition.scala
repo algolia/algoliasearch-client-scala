@@ -25,15 +25,10 @@
 
 package algolia.definitions
 
-import algolia.AlgoliaDsl.In
-import algolia._
 import algolia.http.{HttpPayload, POST}
 import algolia.objects.{Query, RequestOptions}
-import algolia.responses.{SearchFacetResult, SearchResult}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class SearchDefinition(
     index: String,

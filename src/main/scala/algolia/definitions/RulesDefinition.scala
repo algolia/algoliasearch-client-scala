@@ -28,12 +28,8 @@ package algolia.definitions
 import algolia.AlgoliaDsl.{ClearExistingRules, ForwardToReplicas}
 import algolia.http._
 import algolia.objects.{QueryRules, RequestOptions, Rule}
-import algolia.responses.{SearchRuleResult, Task}
-import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class GetRuleDefinition(
     objectId: String,

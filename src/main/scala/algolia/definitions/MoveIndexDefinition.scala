@@ -28,12 +28,8 @@ package algolia.definitions
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.IndexOperation
 import algolia.objects.RequestOptions
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class MoveIndexDefinition(
     source: String,

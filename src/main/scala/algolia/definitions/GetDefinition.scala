@@ -28,13 +28,8 @@ package algolia.definitions
 import algolia.http.{GET, HttpPayload, POST}
 import algolia.inputs.{Request, Requests}
 import algolia.objects.RequestOptions
-import algolia.responses.{GetObject, Results}
-import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.Formats
-import org.json4s.JsonAST.JObject
 import org.json4s.native.Serialization._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class GetObjectDefinition(
     index: Option[String] = None,

@@ -28,12 +28,8 @@ package algolia.definitions
 import algolia.AlgoliaDsl.ForwardToReplicas
 import algolia.http.{GET, HttpPayload, PUT}
 import algolia.objects.{IndexSettings, RequestOptions}
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class IndexSettingsDefinition(index: String, requestOptions: Option[RequestOptions] = None)(
     implicit val formats: Formats)
