@@ -93,34 +93,3 @@ case class SearchFacetDefinition(
     )
   }
 }
-
-trait SearchDsl {
-
-  implicit val formats: Formats
-
-  case object search {
-
-    def into(index: String) = SearchDefinition(index)
-
-    def synonyms(i: In): SearchSynonymsDefinition = SearchSynonymsDefinition()
-
-    def rules(i: In): SearchRulesDefinition = SearchRulesDefinition()
-
-  }
-
-  implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, SearchResult] {
-    override def apply(client: AlgoliaClient, query: SearchDefinition)(
-        implicit executor: ExecutionContext): Future[SearchResult] = {
-      client.request[SearchResult](query.build())
-    }
-  }
-
-  implicit object SearchFacetDefinitionExecutable
-      extends Executable[SearchFacetDefinition, SearchFacetResult] {
-    override def apply(client: AlgoliaClient, query: SearchFacetDefinition)(
-        implicit executor: ExecutionContext): Future[SearchFacetResult] = {
-      client.request[SearchFacetResult](query.build())
-    }
-  }
-
-}

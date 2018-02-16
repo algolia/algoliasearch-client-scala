@@ -26,6 +26,7 @@
 package algolia
 
 import algolia.definitions._
+import algolia.dsl._
 import algolia.objects._
 import org.json4s.{CustomSerializer, Formats}
 import org.json4s.JsonAST._
@@ -36,10 +37,10 @@ import scala.util.matching.Regex
 trait AlgoliaDsl
     extends Object //Just to have all trait DSL ordered `with`
     with KeyDefinitionDsl
-    with BatchDefinitionDsl
-    with BrowseIndexDsl
+    with dsl.BatchDsl
+    with BrowseDsl
     with ClearDsl
-    with CopyIndexDsl
+    with CopyDsl
     with DeleteDsl
     with GetDsl
     with IndexingBatchDsl
@@ -47,7 +48,7 @@ trait AlgoliaDsl
     with IndexSettingsDsl
     with ListDsl
     with LogsDsl
-    with MoveIndexDsl
+    with MoveDsl
     with MultiQueriesDefinitionDsl
     with PartialUpdateObjectDsl
     with RulesDsl

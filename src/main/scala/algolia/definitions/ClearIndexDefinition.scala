@@ -26,45 +26,20 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.inputs.{AddObjectOperation, BatchOperations, UpdateObjectOperation}
 import algolia.objects.RequestOptions
-import algolia.responses.TasksSingleIndex
-import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
-import org.json4s.native.Serialization._
 
-import scala.concurrent.{ExecutionContext, Future}
+case class ClearIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
+    extends Definition {
 
-case class IndexingBatchDefinition(
-    index: String,
-    definitions: Traversable[Definition] = Traversable(),
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
-    extends Definition
-    with BatchOperationUtils {
+  type T = ClearIndexDefinition
 
-  type T = IndexingBatchDefinition
-
-  override def options(requestOptions: RequestOptions): IndexingBatchDefinition =
+  override def options(requestOptions: RequestOptions): ClearIndexDefinition =
     copy(requestOptions = Some(requestOptions))
 
-  override private[algolia] def build(): HttpPayload = {
-    val operations = definitions.map {
-      case IndexingDefinition(_, None, Some(obj), _) =>
-        hasObjectId(obj) match {
-          case (true, o) => UpdateObjectOperation(o)
-          case (false, o) => AddObjectOperation(o)
-        }
+  override private[algolia] def build(): HttpPayload =
+    HttpPayload(POST,
+                Seq("1", "indexes", index, "clear"),
+                isSearch = false,
+                requestOptions = requestOptions)
 
-      case IndexingDefinition(_, Some(objectId), Some(obj), _) =>
-        UpdateObjectOperation(addObjectId(obj, objectId))
-    }
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", index, "batch"),
-      body = Some(write(BatchOperations(operations))),
-      isSearch = false,
-      requestOptions = requestOptions
-    )
-  }
 }

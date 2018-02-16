@@ -23,29 +23,35 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.responses.Indices
+import algolia.AlgoliaDsl.Of
+import algolia.definitions.{ClearIndexDefinition, ClearRulesDefinition, ClearSynonymsDefinition}
+import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
+import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ListDsl {
+trait ClearDsl {
 
-  case object list {
-    def indices = ListIndexesDefinition()
+  implicit val formats: Formats
 
-    def keys = ListKeysDefinition()
+  case object clear {
 
-    def keysFrom(indexName: String) =
-      ListKeysDefinition(indexName = Some(indexName))
+    def index(index: String): ClearIndexDefinition =
+      ClearIndexDefinition(index)
+
+    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
+
+    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
+
   }
 
-  implicit object ListIndexesDefinitionExecutable
-      extends Executable[ListIndexesDefinition, Indices] {
-    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
-        implicit executor: ExecutionContext): Future[Indices] = {
-      client.request[Indices](query.build())
+  implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
+    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
+        implicit executor: ExecutionContext): Future[Task] = {
+      client.request[Task](query.build())
     }
   }
 

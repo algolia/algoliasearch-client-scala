@@ -23,51 +23,43 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.http.{HttpPayload, POST}
-import algolia.inputs._
-import algolia.objects.{MultiQueries, RequestOptions}
+import algolia.definitions.{MultiQueriesDefinition, SearchDefinition}
 import algolia.responses.MultiQueriesResult
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
-import org.json4s.native.Serialization._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class MultiQueriesDefinition(
-    definitions: Traversable[SearchDefinition],
-    strategy: Option[MultiQueries.Strategy] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
-    extends Definition {
+trait MultiQueriesDefinitionDsl {
 
-  type T = MultiQueriesDefinition
+  implicit val formats: Formats
 
-  def strategy(strategy: MultiQueries.Strategy): MultiQueriesDefinition =
-    copy(strategy = Some(strategy))
-
-  override def options(requestOptions: RequestOptions): MultiQueriesDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val parameters =
-      strategy.flatMap(s => Some(Map("strategy" -> s.name)))
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", "*", "queries"),
-      queryParameters = parameters,
-      body = Some(write(MultiQueriesRequests(definitions.map(transform)))),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
+  @deprecated("use multipleQueries", "1.27.1")
+  def multiQueries(queries: Traversable[SearchDefinition]): MultiQueriesDefinition = {
+    MultiQueriesDefinition(queries)
   }
 
-  private def transform(definition: SearchDefinition): MultiQueriesRequest = {
-    MultiQueriesRequest(
-      indexName = definition.index,
-      params = definition.query.map(_.toParam)
-    )
+  @deprecated("use multipleQueries", "1.27.1")
+  def multiQueries(queries: SearchDefinition*): MultiQueriesDefinition = {
+    MultiQueriesDefinition(queries)
+  }
+
+  def multipleQueries(queries: Traversable[SearchDefinition]): MultiQueriesDefinition = {
+    MultiQueriesDefinition(queries)
+  }
+
+  def multipleQueries(queries: SearchDefinition*): MultiQueriesDefinition = {
+    MultiQueriesDefinition(queries)
+  }
+
+  implicit object MultiQueriesExecutable
+      extends Executable[MultiQueriesDefinition, MultiQueriesResult] {
+    override def apply(client: AlgoliaClient, query: MultiQueriesDefinition)(
+        implicit executor: ExecutionContext): Future[MultiQueriesResult] = {
+      client.request[MultiQueriesResult](query.build())
+    }
   }
 
 }

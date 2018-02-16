@@ -23,41 +23,33 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.http.{GET, HttpPayload}
-import algolia.objects.{Query, RequestOptions}
-import algolia.responses.BrowseResult
+import algolia.definitions.{ListIndexesDefinition, ListKeysDefinition}
+import algolia.responses.Indices
 import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
-    extends Definition {
+trait ListDsl {
 
-  type T = BrowseIndexDefinition
+  case object list {
+    def indices = ListIndexesDefinition()
 
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
+    def indexes = ListIndexesDefinition()
 
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
+    def keys = ListKeysDefinition()
 
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-
-    HttpPayload(
-      GET,
-      Seq("1", "indexes", source, "browse"),
-      queryParameters = Some(q.toQueryParam),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
+    def keysFrom(indexName: String) =
+      ListKeysDefinition(indexName = Some(indexName))
   }
+
+  implicit object ListIndexesDefinitionExecutable
+      extends Executable[ListIndexesDefinition, Indices] {
+    override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
+        implicit executor: ExecutionContext): Future[Indices] = {
+      client.request[Indices](query.build())
+    }
+  }
+
 }

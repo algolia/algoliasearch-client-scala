@@ -69,22 +69,3 @@ case class CopyIndexDefinition(
     )
   }
 }
-
-trait CopyIndexDsl {
-
-  implicit val formats: Formats
-
-  case object copy {
-
-    def index(index: String): CopyIndexDefinition = CopyIndexDefinition(index)
-
-  }
-
-  implicit object CopyIndexDefinitionExecutable extends Executable[CopyIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: CopyIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
-    }
-  }
-
-}

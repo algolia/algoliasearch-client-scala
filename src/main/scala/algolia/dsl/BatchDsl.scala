@@ -23,52 +23,32 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.AlgoliaDsl.Of
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.RequestOptions
-import algolia.responses.Task
+import algolia.definitions.{BatchDefinition, Definition}
+import algolia.responses.TasksMultipleIndex
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ClearIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
-    extends Definition {
-
-  type T = ClearIndexDefinition
-
-  override def options(requestOptions: RequestOptions): ClearIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload =
-    HttpPayload(POST,
-                Seq("1", "indexes", index, "clear"),
-                isSearch = false,
-                requestOptions = requestOptions)
-
-}
-
-trait ClearDsl {
+trait BatchDsl {
 
   implicit val formats: Formats
 
-  case object clear {
-
-    def index(index: String): ClearIndexDefinition =
-      ClearIndexDefinition(index)
-
-    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
-
-    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
-
+  def batch(batches: Traversable[Definition]): BatchDefinition = {
+    BatchDefinition(batches)
   }
 
-  implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
-      client.request[Task](query.build())
+  def batch(batches: Definition*): BatchDefinition = {
+    BatchDefinition(batches)
+  }
+
+  implicit object BatchDefinitionExecutable
+      extends Executable[BatchDefinition, TasksMultipleIndex] {
+    override def apply(client: AlgoliaClient, query: BatchDefinition)(
+        implicit executor: ExecutionContext): Future[TasksMultipleIndex] = {
+      client.request[TasksMultipleIndex](query.build())
     }
   }
 
