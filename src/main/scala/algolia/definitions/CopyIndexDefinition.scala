@@ -47,7 +47,7 @@ case class CopyIndexDefinition(
   def to(destination: String): CopyIndexDefinition =
     copy(source, Some(destination))
 
-  @deprecated("use scope", "1.17.1")
+  @deprecated("use scope", "1.27.1")
   def scopes(scope: Seq[String]): CopyIndexDefinition =
     copy(scope = Some(scope))
 

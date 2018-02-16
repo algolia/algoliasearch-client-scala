@@ -35,7 +35,7 @@ class LogsTest extends AlgoliaTest {
   describe("get logs") {
 
     it("should get logs") {
-      logs offset 1 length 1 `type` LogType.error
+      getLogs offset 1 length 1 `type` LogType.error
     }
 
     it("should call API") {
@@ -47,7 +47,7 @@ class LogsTest extends AlgoliaTest {
         requestOptions = None
       )
 
-      (logs offset 1 length 1 `type` LogType.error).build() should be(payload)
+      (getLogs offset 1 length 1 `type` LogType.error).build() should be(payload)
     }
 
   }

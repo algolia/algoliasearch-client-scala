@@ -36,6 +36,9 @@ trait LogsDsl {
 
   implicit val formats: Formats
 
+  def getLogs = LogsDefinition()
+
+  @deprecated("use getLogs", "1.27.1")
   def logs() = LogsDefinition()
 
   implicit object LogsDefinitionExecutable extends Executable[LogsDefinition, Logs] {
