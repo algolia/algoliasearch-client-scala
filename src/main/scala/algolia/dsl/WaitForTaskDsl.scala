@@ -38,7 +38,7 @@ trait WaitForTaskDsl {
 
   case object waitFor {
     def task(task: AlgoliaTask): WaitForTaskDefinition =
-      WaitForTaskDefinition(task.idToWaitFor())
+      WaitForTaskDefinition(task.idToWaitFor)
 
     def task(taskID: Long): WaitForTaskDefinition =
       WaitForTaskDefinition(taskID)
