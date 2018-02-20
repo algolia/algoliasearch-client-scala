@@ -25,14 +25,11 @@
 
 package algolia.definitions
 
+import algolia._
 import algolia.http.HttpPayload
 import algolia.objects.{Query, RequestOptions}
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable, _}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class DeleteObjectDefinition(
     index: Option[String] = None,

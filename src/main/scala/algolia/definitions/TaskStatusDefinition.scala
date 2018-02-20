@@ -27,10 +27,6 @@ package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
 import algolia.objects.RequestOptions
-import algolia.responses.{AlgoliaTask, TaskStatus}
-import algolia.{AlgoliaClient, Executable}
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class TaskStatusDefinition(taskId: Long,
                                 index: Option[String] = None,

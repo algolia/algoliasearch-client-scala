@@ -27,13 +27,9 @@ package algolia.definitions
 
 import algolia.AlgoliaDsl.{ForwardToReplicas, ReplaceExistingSynonyms}
 import algolia.http._
-import algolia.objects.{AbstractSynonym, QuerySynonyms, RequestOptions, Rule}
-import algolia.responses.{SearchSynonymResult, Task}
-import algolia.{AlgoliaClient, Executable}
+import algolia.objects.{AbstractSynonym, QuerySynonyms, RequestOptions}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class GetSynonymDefinition(
     synId: String,

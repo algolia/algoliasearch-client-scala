@@ -25,15 +25,8 @@
 
 package algolia.definitions
 
-import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
-
 import algolia.http.HttpPayload
 import algolia.objects.RequestOptions
-import algolia.responses.{AlgoliaTask, TaskStatus}
-import algolia.{AlgoliaClient, Executable}
-import io.netty.util.{HashedWheelTimer, Timeout, TimerTask}
-
-import scala.concurrent.{ExecutionContext, Future, Promise}
 
 case class WaitForTaskDefinition(taskId: Long,
                                  index: Option[String] = None,

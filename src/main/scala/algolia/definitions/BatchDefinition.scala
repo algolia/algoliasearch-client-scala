@@ -28,13 +28,9 @@ package algolia.definitions
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs._
 import algolia.objects.RequestOptions
-import algolia.responses.TasksMultipleIndex
-import algolia.{AlgoliaClient, Executable}
 import org.json4s.JsonAST.JValue
 import org.json4s.native.Serialization._
 import org.json4s.{Extraction, Formats}
-
-import scala.concurrent.{ExecutionContext, Future}
 
 case class BatchDefinition(
     definitions: Traversable[Definition],
@@ -113,7 +109,7 @@ case class BatchDefinition(
       case IndexingBatchDefinition(_, defs, _) =>
         defs.flatMap(transform)
 
-      case PartialUpdateOneObjectDefinition(index, Some(obj), _) =>
+      case PartialUpdateOneObjectDefinition(index, Some(obj), _, _) =>
         Traversable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
     }
   }

@@ -27,12 +27,9 @@ package algolia.definitions
 
 import algolia.http.{GET, HttpPayload}
 import algolia.objects.RequestOptions
-import algolia.responses.{LogType, Logs}
-import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
+import algolia.responses.LogType
 
 import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, Future}
 
 case class LogsDefinition(offset: Option[Int] = None,
                           length: Option[Int] = None,

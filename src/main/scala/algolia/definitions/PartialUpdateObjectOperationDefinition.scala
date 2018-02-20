@@ -27,13 +27,10 @@ package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
 import algolia.inputs.PartialUpdateObject
-import algolia.objects.{ApiKey, RequestOptions}
-import algolia.responses.{ObjectID, Task}
-import algolia.{AlgoliaClient, Executable}
+import algolia.objects.RequestOptions
+import algolia.responses.ObjectID
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
-
-import scala.concurrent.{ExecutionContext, Future}
 
 private[algolia] sealed trait Operation {
   def name: String
@@ -65,7 +62,7 @@ case class PartialUpdateObjectOperationDefinition(
     objectId: Option[String] = None,
     attribute: Option[String] = None,
     value: Option[Any] = None,
-    createNotExists: Boolean = true,
+    createIfNotExists: Boolean = true,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
@@ -89,8 +86,9 @@ case class PartialUpdateObjectOperationDefinition(
   def from(index: String): PartialUpdateObjectOperationDefinition =
     copy(index = Some(index))
 
-  def createIfNotExists(createNotExists: Boolean = false): PartialUpdateObjectOperationDefinition =
-    copy(createNotExists = createNotExists)
+  def createIfNotExists(
+      createIfNotExists: Boolean = false): PartialUpdateObjectOperationDefinition =
+    copy(createIfNotExists = createIfNotExists)
 
   override def options(requestOptions: RequestOptions): PartialUpdateObjectOperationDefinition =
     copy(requestOptions = Some(requestOptions))
@@ -100,7 +98,7 @@ case class PartialUpdateObjectOperationDefinition(
       attribute.get -> PartialUpdateObject(operation.name, value)
     )
 
-    val queryParameters = if (createNotExists) {
+    val queryParameters = if (createIfNotExists) {
       None
     } else {
       Some(Map("createIfNotExists" -> "false"))
@@ -159,19 +157,30 @@ case class PartialUpdateObjectDefinition(
 case class PartialUpdateOneObjectDefinition(
     index: String,
     `object`: Option[ObjectID] = None,
+    createIfNotExists: Boolean = true,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
   override type T = PartialUpdateOneObjectDefinition
 
   override private[algolia] def build(): HttpPayload = {
+    val queryParameters = if (createIfNotExists) {
+      None
+    } else {
+      Some(Map("createIfNotExists" -> "false"))
+    }
+
     HttpPayload(
       POST,
       Seq("1", "indexes", index) ++ `object`.map(_.objectID) :+ "partial",
+      queryParameters = queryParameters,
       body = Some(write(`object`)),
       isSearch = false,
       requestOptions = requestOptions
     )
   }
+
+  def createIfNotExists(createIfNotExists: Boolean = false): PartialUpdateOneObjectDefinition =
+    copy(createIfNotExists = createIfNotExists)
 
   override def options(requestOptions: RequestOptions): PartialUpdateOneObjectDefinition =
     copy(requestOptions = Some(requestOptions))
