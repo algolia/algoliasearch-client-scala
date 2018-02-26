@@ -188,4 +188,11 @@ case class PartialUpdateOneObjectDefinition(
   def `object`[T <: ObjectID](obj: T): PartialUpdateOneObjectDefinition =
     copy(`object` = Some(obj))
 
+  def objects[T <: ObjectID](objects: Iterable[T]): BatchDefinition =
+    BatchDefinition(
+      objects.map(o =>
+        PartialUpdateOneObjectDefinition(index, Some(o), createIfNotExists, requestOptions)),
+      requestOptions
+    )
+
 }

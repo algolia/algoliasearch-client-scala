@@ -58,12 +58,12 @@ class NetworkTest extends AlgoliaTest {
       result.failed.get.getCause shouldBe a[UnknownHostException]
     }
 
-    it("should answer within 10 seconds") {
+    it("should answer within 1 minute") {
       val result = apiClient.execute {
         list.indices
       }
 
-      result.isReadyWithin(10.seconds) should be(true)
+      result.isReadyWithin(1.minute) should be(true)
       whenReady(result) { res =>
         res.items shouldNot be(null)
       }
