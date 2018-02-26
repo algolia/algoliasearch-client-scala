@@ -34,7 +34,7 @@ class GetObjectTest extends AlgoliaTest {
   describe("get object") {
 
     it("should get object objectId before") {
-      get objectId "myId" from "test"
+      get objectId "myId" from "test" attributesToRetrieve Seq("a", "b")
     }
 
     it("should get object from before") {
@@ -45,9 +45,11 @@ class GetObjectTest extends AlgoliaTest {
       val payload =
         HttpPayload(GET,
                     Seq("1", "indexes", "test", "myId"),
+                    queryParameters = Some(Map("attributesToRetrieve" -> "a,b")),
                     isSearch = true,
                     requestOptions = None)
-      (get objectId "myId" from "test").build() should be(payload)
+      (get objectId "myId" from "test" attributesToRetrieve Seq("a", "b")).build() should be(
+        payload)
     }
 
   }
