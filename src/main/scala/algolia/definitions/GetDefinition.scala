@@ -34,6 +34,7 @@ import org.json4s.native.Serialization._
 case class GetObjectDefinition(
     index: Option[String] = None,
     oid: Option[String] = None,
+    attributesToRetrieve: Iterable[String] = Iterable.empty,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
@@ -47,16 +48,30 @@ case class GetObjectDefinition(
   def objectId(objectId: String): GetObjectDefinition =
     copy(oid = Some(objectId))
 
+  def attributesToRetrieve(attributesToRetrieve: Iterable[String]): GetObjectDefinition =
+    copy(attributesToRetrieve = attributesToRetrieve)
+
   override def options(requestOptions: RequestOptions): GetObjectDefinition =
     copy(requestOptions = Some(requestOptions))
 
-  override private[algolia] def build(): HttpPayload =
+  override private[algolia] def build(): HttpPayload = {
+    val parameters = if (attributesToRetrieve.isEmpty) {
+      None
+    } else {
+      Some(
+        Map(
+          "attributesToRetrieve" -> attributesToRetrieve.mkString(",")
+        ))
+    }
+
     HttpPayload(
       GET,
       Seq("1", "indexes") ++ index ++ oid,
+      queryParameters = parameters,
       isSearch = true,
       requestOptions = requestOptions
     )
+  }
 }
 
 case class GetObjectsDefinition(
