@@ -1,7 +1,11 @@
 # Algolia Search API Client for Scala
 
-[Algolia Search](https://www.algolia.com) is a hosted full-text, numerical, and faceted search engine capable of delivering realtime results from the first keystroke.
-The **Algolia Search API Client for Scala** lets you easily use the [Algolia Search REST API](https://www.algolia.com/doc/rest-api/search) from your Scala code.
+[Algolia Search](https://www.algolia.com) is a hosted full-text, numerical,
+and faceted search engine capable of delivering realtime results from the first keystroke.
+
+The **Algolia Search API Client for Scala** lets
+you easily use the [Algolia Search REST API](https://www.algolia.com/doc/rest-api/search) from
+your Scala code.
 
 [![Build Status](https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=master)](https://travis-ci.org/algolia/algoliasearch-client-scala) [![Coverage Status](https://coveralls.io/repos/algolia/algoliasearch-client-scala/badge.svg?branch=master&service=github)](https://coveralls.io/github/algolia/algoliasearch-client-scala?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/)
 
@@ -35,15 +39,8 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 1. **[Install](#install)**
 
 
-1. **[Philosophy](#philosophy)**
-
-    * [DSL](#dsl)
-    * [Future](#future)
-    * [JSON as case class](#json-as-case-class)
-
 1. **[Quick Start](#quick-start)**
 
-    * [Initialize the client](#initialize-the-client)
 
 1. **[Push data](#push-data)**
 
@@ -56,15 +53,11 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 1. **[Search UI](#search-ui)**
 
-    * [index.html](#indexhtml)
 
 1. **[List of available methods](#list-of-available-methods)**
 
 
-
-
 # Getting Started
-
 
 
 
@@ -109,9 +102,7 @@ For snapshots, add the `sonatype` repository:
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-## Philosophy
-
-### DSL
+#### DSL
 
 The main goal of this client is to provide a human _accessible_ and _readable_ DSL for using Algolia search.
 
@@ -127,18 +118,18 @@ client.execute { from index "index" objectId "myId" }
 client.execute { get / "index" / "myId" }
 ```
 
-### Future
+#### Future
 
-The `execute` method always return a [`scala.concurrent.Future`](http://www.scala-lang.org/api/2.11.7/#scala.concurrent.Future).
-Depending of the operation it will be parametrized by a `case class`. For example:
+The `execute` method always returns a [`scala.concurrent.Future`](http://www.scala-lang.org/api/2.11.7/#scala.concurrent.Future).
+Depending on the operation it will be parametrized by a `case class`. For example:
 ```scala
-var future: Future[Search] =
+val future: Future[Search] =
     client.execute {
         search into "index" query "a"
     }
 ```
 
-### JSON as case class
+#### JSON as case class
 Putting or getting objects from the API is wrapped into `case class` automatically by [`json4s`](http://json4s.org).
 
 If you want to get objects just search for it and unwrap the result:
@@ -148,7 +139,7 @@ case class Contact(firstname: String,
                    followers: Int,
                    compagny: String)
 
-var future: Future[Seq[Contact]] =
+val future: Future[Seq[Contact]] =
     client
         .execute {
             search into "index" query "a"
@@ -169,7 +160,7 @@ case class EnhanceContact(firstname: String,
                           _snippetResult: Option[Map[String, SnippetResult]],
                           _rankingInfo: Option[RankingInfo]) extends Hit
 
-var future: Future[Seq[EnhanceContact]] =
+val future: Future[Seq[EnhanceContact]] =
     client
         .execute {
             search into "index" query "a"
@@ -196,8 +187,8 @@ To begin, you will need to initialize the client. In order to do this you will n
 You can find both on [your Algolia account](https://www.algolia.com/api-keys).
 
 ```scala
+// No initIndex
 val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
-//No initIndex
 ```
 
 ## Push data
@@ -281,7 +272,9 @@ The following example shows how to build a front-end search quickly using
 <!doctype html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.3/dist/instantsearch.min.css">
+  <!-- Always use `2.x` versions in production rather than `2` to mitigate any side effects on your website,
+  Find the latest version on InstantSearch.js website: https://community.algolia.com/instantsearch.js/v2/guides/usage.html -->
 </head>
 <body>
   <header>
@@ -301,7 +294,7 @@ The following example shows how to build a front-end search quickly using
     
   </script>
 
-  <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.3/dist/instantsearch.min.js"></script>
   <script src="app.js"></script>
 </body>
 ```
@@ -314,7 +307,10 @@ var search = instantsearch({
   appId: 'YourApplicationID',
   apiKey: 'YourSearchOnlyAPIKey', // search only API key, no ADMIN key
   indexName: 'contacts',
-  urlSync: true
+  urlSync: true,
+  searchParameters: {
+    hitsPerPage: 10
+  }
 });
 
 search.addWidget(
@@ -326,7 +322,6 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
-    hitsPerPage: 10,
     templates: {
       item: document.getElementById('hit-template').innerHTML,
       empty: "We didn't find any results for the search <em>\"{{query}}\"</em>"
@@ -346,73 +341,94 @@ search.start();
 
 
 
+
+
 ### Search
 
-  - [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
-  - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=scala)
-  - [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=scala)
+- [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
+- [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=scala)
+- [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=scala)
+- [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=scala)
+
+
 
 
 
 ### Indexing
 
-  - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=scala)
-  - [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=scala)
-  - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=scala)
-  - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=scala)
-  - [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=scala)
-  - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=scala)
-  - [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=scala)
+- [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=scala)
+- [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=scala)
+- [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=scala)
+- [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=scala)
+- [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=scala)
+- [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=scala)
+- [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=scala)
+- [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=scala)
+
+
 
 
 
 ### Settings
 
-  - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=scala)
-  - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=scala)
+- [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=scala)
+- [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=scala)
+
+
 
 
 
 ### Manage indices
 
-  - [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=scala)
-  - [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=scala)
-  - [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=scala)
-  - [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=scala)
-  - [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=scala)
+- [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=scala)
+- [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=scala)
+- [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=scala)
+- [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=scala)
+- [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=scala)
+
+
 
 
 
 ### API Keys
 
-  - [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=scala)
-  - [Add API Key](https://algolia.com/doc/api-reference/api-methods/add-api-key/?language=scala)
-  - [Update API Key](https://algolia.com/doc/api-reference/api-methods/update-api-key/?language=scala)
-  - [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=scala)
-  - [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=scala)
-  - [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=scala)
+- [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=scala)
+- [Add API Key](https://algolia.com/doc/api-reference/api-methods/add-api-key/?language=scala)
+- [Update API Key](https://algolia.com/doc/api-reference/api-methods/update-api-key/?language=scala)
+- [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=scala)
+- [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=scala)
+- [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=scala)
+
+
 
 
 
 ### Synonyms
 
-  - [Save synonym](https://algolia.com/doc/api-reference/api-methods/save-synonym/?language=scala)
-  - [Batch synonyms](https://algolia.com/doc/api-reference/api-methods/batch-synonyms/?language=scala)
-  - [Delete synonym](https://algolia.com/doc/api-reference/api-methods/delete-synonym/?language=scala)
-  - [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=scala)
-  - [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=scala)
-  - [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=scala)
+- [Save synonym](https://algolia.com/doc/api-reference/api-methods/save-synonym/?language=scala)
+- [Batch synonyms](https://algolia.com/doc/api-reference/api-methods/batch-synonyms/?language=scala)
+- [Delete synonym](https://algolia.com/doc/api-reference/api-methods/delete-synonym/?language=scala)
+- [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=scala)
+- [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=scala)
+- [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=scala)
+- [Export Synonyms](https://algolia.com/doc/api-reference/api-methods/export-synonyms/?language=scala)
+
+
 
 
 
 ### Query rules
 
-  - [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
-  - [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
-  - [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=scala)
-  - [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
-  - [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
-  - [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
+- [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
+- [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
+- [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=scala)
+- [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
+- [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
+- [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
+- [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=scala)
+
+
+
 
 
 
@@ -420,9 +436,8 @@ search.start();
 
 ### Advanced
 
-  - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=scala)
-  - [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=scala)
-  - [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=scala)
+- [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=scala)
+
 
 
 
@@ -431,5 +446,4 @@ search.start();
 
 - **Need help**? Ask a question to the [Algolia Community](https://discourse.algolia.com/) or on [Stack Overflow](http://stackoverflow.com/questions/tagged/algolia).
 - **Found a bug?** You can open a [GitHub issue](https://github.com/algolia/algoliasearch-client-scala/issues).
-
 
