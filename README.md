@@ -14,7 +14,7 @@ You should change this TTL by setting the property `networkaddress.cache.ttl`. F
 java.security.Security.setProperty("networkaddress.cache.ttl", "60");
 ```
 
-For debug purposes you can enable debug logging on the API client. It's using [slf4j](https://www.slf4j.org) so it should be compatibnle with most java logger.
+For debug purposes you can enable debug logging on the API client. It's using [slf4j](https://www.slf4j.org) so it should be compatible with most java loggers.
 The logger is named `algoliasearch`.
 
 
