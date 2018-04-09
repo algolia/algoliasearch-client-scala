@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.objects._
-import algolia.{AlgoliaDsl, AlgoliaTest}
+import algolia.{AlgoliaClientException, AlgoliaDsl, AlgoliaTest}
 
 class RulesIntegrationTest extends AlgoliaTest {
 
@@ -59,6 +59,19 @@ class RulesIntegrationTest extends AlgoliaTest {
       whenReady(r) { res =>
         res.objectID should be("rule1")
         res.description shouldBe Some("rule1")
+      }
+    }
+
+    it("should not save a rule with empty objectID") {
+      val f = client.execute {
+        save rule generateRule("") inIndex indexName
+      }
+
+      whenReady(f.failed) { res =>
+        res shouldBe an[AlgoliaClientException]
+        res
+          .asInstanceOf[AlgoliaClientException]
+          .getMessage shouldBe "rule's 'objectID' cannot be empty"
       }
     }
 
