@@ -28,7 +28,7 @@ package algolia.dsl
 import algolia.definitions._
 import algolia.objects.Rule
 import algolia.responses.{SearchRuleResult, Task}
-import algolia.{AlgoliaClient, Executable}
+import algolia.{AlgoliaClient, AlgoliaClientException, Executable}
 import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -68,6 +68,9 @@ trait RulesDsl {
 
     override def apply(client: AlgoliaClient, query: SaveRuleDefinition)(
         implicit executor: ExecutionContext): Future[Task] = {
+      if (query.rule.objectID.isEmpty) {
+        return Future.failed(new AlgoliaClientException(s"rule's 'objectID' cannot be empty"))
+      }
       client.request[Task](query.build())
     }
 
