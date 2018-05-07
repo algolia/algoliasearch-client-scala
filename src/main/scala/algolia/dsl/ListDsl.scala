@@ -40,6 +40,7 @@ trait ListDsl {
 
     def keys = ListKeysDefinition()
 
+    @deprecated("use without index", "1.27.0")
     def keysFrom(indexName: String) =
       ListKeysDefinition(indexName = Some(indexName))
   }
