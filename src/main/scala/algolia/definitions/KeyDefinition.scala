@@ -37,6 +37,7 @@ case class GetKeyDefinition(keyName: String,
 
   type T = GetKeyDefinition
 
+  @deprecated("use without index", "1.27.0")
   def from(indexName: String): GetKeyDefinition = copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): GetKeyDefinition =
@@ -65,6 +66,7 @@ case class AddKeyDefinition(
     extends Definition {
   type T = AddKeyDefinition
 
+  @deprecated("use without index", "1.27.0")
   def to(indexName: String): AddKeyDefinition = copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): AddKeyDefinition =
@@ -94,6 +96,7 @@ case class DeleteKeyDefinition(keyName: String,
 
   type T = DeleteKeyDefinition
 
+  @deprecated("use without index", "1.27.0")
   def from(indexName: String): DeleteKeyDefinition = copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): DeleteKeyDefinition =
@@ -126,6 +129,7 @@ case class UpdateKeyDefinition(
 
   def `with`(key: ApiKey): UpdateKeyDefinition = copy(key = Some(key))
 
+  @deprecated("use without index", "1.27.0")
   def from(indexName: String): UpdateKeyDefinition = copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): UpdateKeyDefinition =
