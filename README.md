@@ -18,7 +18,7 @@ You should change this TTL by setting the property `networkaddress.cache.ttl`. F
 java.security.Security.setProperty("networkaddress.cache.ttl", "60");
 ```
 
-For debug purposes you can enable debug logging on the API client. It's using [slf4j](https://www.slf4j.org) so it should be compatibnle with most java logger.
+For debug purposes you can enable debug logging on the API client. It's using [slf4j](https://www.slf4j.org) so it should be compatible with most java loggers.
 The logger is named `algoliasearch`.
 
 
@@ -27,9 +27,6 @@ The logger is named `algoliasearch`.
 ## API Documentation
 
 You can find the full reference on [Algolia's website](https://www.algolia.com/doc/api-client/scala/).
-
-
-## Table of Contents
 
 
 
@@ -341,8 +338,6 @@ search.start();
 
 
 
-
-
 ### Search
 
 - [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
@@ -353,18 +348,15 @@ search.start();
 
 
 
-
 ### Indexing
 
 - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=scala)
 - [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=scala)
 - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=scala)
 - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=scala)
-- [Delete by query](https://algolia.com/doc/api-reference/api-methods/delete-by-query/?language=scala)
+- [Delete by](https://algolia.com/doc/api-reference/api-methods/delete-by/?language=scala)
 - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=scala)
 - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=scala)
-- [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=scala)
-
 
 
 
@@ -373,7 +365,6 @@ search.start();
 
 - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=scala)
 - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=scala)
-
 
 
 
@@ -389,7 +380,6 @@ search.start();
 
 
 
-
 ### API Keys
 
 - [Create secured API Key](https://algolia.com/doc/api-reference/api-methods/generate-secured-api-key/?language=scala)
@@ -398,7 +388,6 @@ search.start();
 - [Delete API Key](https://algolia.com/doc/api-reference/api-methods/delete-api-key/?language=scala)
 - [Get API Key permissions](https://algolia.com/doc/api-reference/api-methods/get-api-key/?language=scala)
 - [List API Keys](https://algolia.com/doc/api-reference/api-methods/list-api-keys/?language=scala)
-
 
 
 
@@ -416,12 +405,11 @@ search.start();
 
 
 
-
 ### Query rules
 
 - [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
 - [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
-- [Read a rule](https://algolia.com/doc/api-reference/api-methods/rules-read/?language=scala)
+- [Get a rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=scala)
 - [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
 - [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
 - [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
@@ -430,13 +418,25 @@ search.start();
 
 
 
+### MultiClusters
+
+- [Assign or Move userID](https://algolia.com/doc/api-reference/api-methods/assign-user-id/?language=scala)
+- [Get top userID](https://algolia.com/doc/api-reference/api-methods/get-top-user-id/?language=scala)
+- [Get userID](https://algolia.com/doc/api-reference/api-methods/get-user-id/?language=scala)
+- [List clusters](https://algolia.com/doc/api-reference/api-methods/list-clusters/?language=scala)
+- [List userIDs](https://algolia.com/doc/api-reference/api-methods/list-user-id/?language=scala)
+- [Remove userID](https://algolia.com/doc/api-reference/api-methods/remove-user-id/?language=scala)
+- [Search userID](https://algolia.com/doc/api-reference/api-methods/search-user-id/?language=scala)
 
 
 
 
 ### Advanced
 
-- [Get latest logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=scala)
+- [Get logs](https://algolia.com/doc/api-reference/api-methods/get-logs/?language=scala)
+- [Configuring timeouts](https://algolia.com/doc/api-reference/api-methods/configuring-timeouts/?language=scala)
+- [Set extra header](https://algolia.com/doc/api-reference/api-methods/set-extra-header/?language=scala)
+- [Wait for operations](https://algolia.com/doc/api-reference/api-methods/wait-task/?language=scala)
 
 
 
