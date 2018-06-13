@@ -37,22 +37,6 @@ trait SynonymsDsl {
 
   implicit val formats: Formats
 
-  object save {
-
-    def synonym(synonym: AbstractSynonym) =
-      SaveSynonymDefinition(synonym = synonym)
-
-    def synonyms(synonyms: Iterable[AbstractSynonym]) =
-      BatchSynonymsDefinition(synonyms = synonyms)
-
-    def rule(rule: Rule) =
-      SaveRuleDefinition(rule = rule)
-
-    def rules(rules: Iterable[Rule]) =
-      BatchRulesDefinition(rules = rules)
-
-  }
-
   implicit object GetSynonymDefinitionExecutable
       extends Executable[GetSynonymDefinition, AbstractSynonym] {
 
