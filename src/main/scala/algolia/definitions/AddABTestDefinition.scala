@@ -23,41 +23,37 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.definitions
 
-sealed trait AlgoliaTask {
+import java.time.ZoneOffset
 
-  protected[algolia] val idToWaitFor: Long
+import algolia.http.{HttpPayload, POST}
+import algolia.inputs.ABTest
+import algolia.objects.RequestOptions
+import org.json4s.Formats
+import org.json4s.native.Serialization._
 
-}
+case class AddABTestDefinition(abtest: ABTest)(implicit val formats: Formats) extends Definition {
 
-case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+  type T = AddABTestDefinition
 
-case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+  override def options(requestOptions: RequestOptions): AddABTestDefinition =
+    this
 
-case class TasksMultipleIndex(taskID: Map[String, Long],
-                              objectIDs: Seq[String],
-                              createdAt: Option[String])
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID.values.max
-}
+  override private[algolia] def build(): HttpPayload = {
+    val body = Map(
+      "name" -> abtest.name,
+      "variants" -> abtest.variants,
+      "endAt" -> abtest.endAt.atOffset(ZoneOffset.UTC).toString
+    )
 
-case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class SynonymTask(taskID: Long, id: Option[String], updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class ABTestTask(abTestID: Int, taskID: Long, index: String) extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
+    HttpPayload(
+      POST,
+      Seq("2", "abtests"),
+      body = Some(write(body)),
+      isSearch = false,
+      isAnalytics = true,
+      requestOptions = None
+    )
+  }
 }

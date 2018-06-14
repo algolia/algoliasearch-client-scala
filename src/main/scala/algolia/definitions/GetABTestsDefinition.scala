@@ -23,41 +23,31 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.definitions
 
-sealed trait AlgoliaTask {
+import algolia.http.{GET, HttpPayload}
+import algolia.objects.RequestOptions
+import org.json4s.Formats
 
-  protected[algolia] val idToWaitFor: Long
+case class GetABTestsDefinition(offset: Int = 0, limit: Int = 10)(implicit val formats: Formats)
+    extends Definition {
 
-}
+  type T = GetABTestsDefinition
 
-case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+  override def options(requestOptions: RequestOptions): GetABTestsDefinition = this
 
-case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+  def offset(offset: Int): GetABTestsDefinition = copy(offset = offset)
 
-case class TasksMultipleIndex(taskID: Map[String, Long],
-                              objectIDs: Seq[String],
-                              createdAt: Option[String])
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID.values.max
-}
+  def limit(limit: Int): GetABTestsDefinition = copy(limit = limit)
 
-case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+  override private[algolia] def build(): HttpPayload =
+    HttpPayload(
+      verb = GET,
+      path = Seq("2", "abtests"),
+      queryParameters = Some(Map("offset" -> offset.toString, "limit" -> limit.toString)),
+      isSearch = false,
+      isAnalytics = true,
+      requestOptions = None
+    )
 
-case class SynonymTask(taskID: Long, id: Option[String], updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class ABTestTask(abTestID: Int, taskID: Long, index: String) extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
 }

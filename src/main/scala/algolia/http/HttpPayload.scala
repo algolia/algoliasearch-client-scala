@@ -55,6 +55,7 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
                                         queryParameters: Option[Map[String, String]] = None,
                                         body: Option[String] = None,
                                         isSearch: Boolean,
+                                        isAnalytics: Boolean = false,
                                         requestOptions: Option[RequestOptions]) {
 
   def apply(host: String,
@@ -66,6 +67,13 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
       new RequestBuilder().setMethod(verb.toString).setUrl(uri)
 
     headers.foreach { case (k, v) => builder = builder.addHeader(k, v) }
+
+    // Needed to properly request the Analytics API that is behind GCP and
+    // which always expects to have the Content-Length header of POST
+    // requests set, even the ones whose body is empty.
+    if (verb == POST && body.isEmpty) {
+      builder.addHeader("Content-Length", "0")
+    }
 
     queryParameters.foreach(
       _.foreach { case (k, v) => builder = builder.addQueryParam(k, v) }

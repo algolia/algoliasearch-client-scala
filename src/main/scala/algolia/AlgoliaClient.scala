@@ -81,6 +81,8 @@ class AlgoliaClient(applicationId: String,
         s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
       ))
 
+  val analyticsHost: String = "https://analytics.algolia.com"
+
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
 
@@ -125,6 +127,24 @@ class AlgoliaClient(applicationId: String,
 
   private[algolia] def request[T: Manifest](payload: HttpPayload)(
       implicit executor: ExecutionContext): Future[T] = {
+    if (payload.isAnalytics) {
+      requestAnalytics(payload)
+    } else {
+      requestSearch(payload)
+    }
+  }
+
+  private[algolia] def requestAnalytics[T: Manifest](payload: HttpPayload)(
+      implicit executor: ExecutionContext): Future[T] = {
+    httpClient.request[T](analyticsHost, headers, payload).andThen {
+      case Failure(e) =>
+        logger.debug("Analytics API call failed", e)
+        Future.failed(new AlgoliaClientException("Analytics API call failed", e))
+    }
+  }
+
+  private[algolia] def requestSearch[T: Manifest](payload: HttpPayload)(
+      implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) {
       hostsStatuses.queryHostsThatAreUp()
     } else {
@@ -160,6 +180,7 @@ class AlgoliaClient(applicationId: String,
         Future.failed(new AlgoliaClientException("All retries failed", e))
     }
   }
+
 }
 
 private[algolia] case class StartException() extends Exception

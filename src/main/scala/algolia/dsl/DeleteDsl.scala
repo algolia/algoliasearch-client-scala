@@ -55,6 +55,9 @@ trait DeleteDsl {
 
     def rule(ruleId: String) = DeleteRuleDefinition(objectId = ruleId)
 
+    // AB test
+    def abTest(id: Int) = DeleteABTestDefinition(id)
+
   }
 
   implicit object DeleteObjectDefinitionExecutable

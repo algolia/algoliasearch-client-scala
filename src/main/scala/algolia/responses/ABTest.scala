@@ -25,39 +25,27 @@
 
 package algolia.responses
 
-sealed trait AlgoliaTask {
+import java.time.LocalDateTime
 
-  protected[algolia] val idToWaitFor: Long
+case class ABTestsResponse(abtests: Seq[ABTestResponse], count: Int, total: Int)
 
-}
+case class ABTestResponse(abTestID: Int,
+                          clickSignificance: Option[Int],
+                          conversionSignificance: Option[Float],
+                          createdAt: LocalDateTime,
+                          endAt: LocalDateTime,
+                          name: String,
+                          status: String,
+                          variants: Seq[VariantResponse])
 
-case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class TasksMultipleIndex(taskID: Map[String, Long],
-                              objectIDs: Seq[String],
-                              createdAt: Option[String])
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID.values.max
-}
-
-case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class SynonymTask(taskID: Long, id: Option[String], updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class ABTestTask(abTestID: Int, taskID: Long, index: String) extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+case class VariantResponse(averageClickPosition: Option[Int],
+                           clickCount: Option[Int],
+                           clickThroughRate: Option[Float],
+                           conversionCount: Option[Int],
+                           conversionRate: Option[Float],
+                           description: String,
+                           index: String,
+                           noResultCount: Option[Int],
+                           searchCount: Option[Int],
+                           trafficPercentage: Int,
+                           userCount: Option[Int])

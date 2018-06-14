@@ -75,6 +75,7 @@ case class AlgoliaHttpClient(
   def responseHandler[T: Manifest]: AsyncCompletionHandler[T] = new AsyncCompletionHandler[T] {
 
     override def onCompleted(response: Response): T = {
+      logger.debug("Response: {}", response.getResponseBody)
       response.getStatusCode / 100 match {
         case 2 =>
           val a = fromJson(response).extract[T]
