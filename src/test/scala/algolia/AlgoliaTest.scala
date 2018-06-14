@@ -83,6 +83,65 @@ class AlgoliaTest
     }
   }
 
+  def waitForMultipleIndexTasks(tasks: Map[String, Long]): Unit = {
+    tasks.foreach {
+      case (index, taskID) =>
+        taskID should not be 0
+        val f = client.execute { waitFor task taskID from index }
+        whenReady(f) { status =>
+          status
+        }
+    }
+  }
+
+  case class DummyObject(objectID: String)
+
+  def createIndices(indices: String*): TasksMultipleIndex = {
+    val add = client.execute {
+      batch(indices.map { i =>
+        index into i `object` DummyObject("one")
+      })
+    }
+
+    whenReady(add) { res =>
+      res
+    }
+  }
+
+  def deleteAllABTests(): Unit = {
+    var areABTestsRemaining: Boolean = true
+
+    while (areABTestsRemaining) {
+      areABTestsRemaining = deleteOnePageOfABTests()
+    }
+  }
+
+  def deleteOnePageOfABTests(): Boolean = {
+    val f = client.execute {
+      get all abTests
+    }
+
+    whenReady(f) { res =>
+      val areABTestsRemaining = res.total - res.count > 0
+
+      val ids = res.abtests.map(_.abTestID)
+
+      val futures = ids.map { id =>
+        client.execute {
+          delete abTest id
+        }
+      }
+
+      futures.foreach { fDelete =>
+        whenReady(fDelete) { res =>
+          res
+        }
+      }
+
+      areABTestsRemaining
+    }
+  }
+
   def clearIndices(indices: String*): TasksMultipleIndex = {
     val del = client.execute {
       batch(indices.map { i =>
