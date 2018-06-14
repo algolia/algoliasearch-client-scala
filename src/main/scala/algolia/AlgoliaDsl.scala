@@ -25,6 +25,9 @@
 
 package algolia
 
+import java.time.{LocalDateTime, ZoneOffset}
+import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
+
 import algolia.definitions._
 import algolia.dsl._
 import algolia.objects._
@@ -38,6 +41,7 @@ trait AlgoliaDsl
     extends Object //Just to have all trait DSL ordered `with`
     with KeyDefinitionDsl
     with AddDsl
+    with ABTestDsl
     with BatchDsl
     with BrowseDsl
     with ClearDsl
@@ -55,6 +59,7 @@ trait AlgoliaDsl
     with RulesDsl
     with SaveDsl
     with SearchDsl
+    with StopDsl
     with SynonymsDsl
     with WaitForTaskDsl
     with TaskStatusDsl
@@ -75,7 +80,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new AbstractSynonymSerializer +
       new DistinctSerializer +
       new RemoveStopWordsSerializer +
-      new IgnorePluralsSerializer
+      new IgnorePluralsSerializer +
+      new LocalDateTimeSerializer
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -94,6 +100,8 @@ object AlgoliaDsl extends AlgoliaDsl {
   sealed trait Of
 
   sealed trait In
+
+  sealed trait ABTests
 
   class AttributesToIndexSerializer
       extends CustomSerializer[AttributesToIndex](_ =>
@@ -314,6 +322,21 @@ object AlgoliaDsl extends AlgoliaDsl {
           case IgnorePlurals.list(i) => JString(i.mkString(","))
         }))
 
+  val iso8601WithNsFormatter = new DateTimeFormatterBuilder()
+    .append(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    .appendPattern("[.SSSSSSSSS][.SSSSSS][.SSS]")
+    .appendOffset("+HH:mm", "Z")
+    .toFormatter()
+
+  class LocalDateTimeSerializer
+      extends CustomSerializer[LocalDateTime](_ =>
+        ({
+          case JString(s) => LocalDateTime.parse(s, iso8601WithNsFormatter)
+        }, {
+          case ts: LocalDateTime =>
+            JString(ts.atOffset(ZoneOffset.UTC).format(iso8601WithNsFormatter))
+        }))
+
   case object forwardToSlaves extends ForwardToReplicas
 
   case object forwardToReplicas extends ForwardToReplicas
@@ -325,5 +348,7 @@ object AlgoliaDsl extends AlgoliaDsl {
   case object of extends Of
 
   case object in extends In
+
+  case object abTests extends ABTests
 
 }

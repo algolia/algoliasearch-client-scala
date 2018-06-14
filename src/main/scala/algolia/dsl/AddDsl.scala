@@ -25,7 +25,13 @@
 
 package algolia.dsl
 
-import algolia.definitions.{Add, AddKeyDefinition, PartialUpdateObjectOperationDefinition}
+import algolia.definitions.{
+  Add,
+  AddABTestDefinition,
+  AddKeyDefinition,
+  PartialUpdateObjectOperationDefinition
+}
+import algolia.inputs.ABTest
 import algolia.objects.ApiKey
 import org.json4s.Formats
 
@@ -39,6 +45,8 @@ trait AddDsl {
       PartialUpdateObjectOperationDefinition(Add, value = Some(value))
 
     def key(key: ApiKey) = AddKeyDefinition(key)
+
+    def abTest(abTest: ABTest) = AddABTestDefinition(abTest)
 
   }
 

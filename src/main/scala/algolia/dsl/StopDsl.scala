@@ -23,41 +23,20 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.dsl
 
-sealed trait AlgoliaTask {
+import algolia.definitions.StopABTestDefinition
+import org.json4s.Formats
 
-  protected[algolia] val idToWaitFor: Long
+trait StopDsl {
 
-}
+  implicit val formats: Formats
 
-case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+  case object stop {
 
-case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
+    // AB test
+    def abTest(id: Int) = StopABTestDefinition(id)
 
-case class TasksMultipleIndex(taskID: Map[String, Long],
-                              objectIDs: Seq[String],
-                              createdAt: Option[String])
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID.values.max
-}
+  }
 
-case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class SynonymTask(taskID: Long, id: Option[String], updatedAt: Option[String] = None)
-    extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
-}
-
-case class ABTestTask(abTestID: Int, taskID: Long, index: String) extends AlgoliaTask {
-  override val idToWaitFor: Long = taskID
 }

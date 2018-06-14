@@ -25,6 +25,7 @@
 
 package algolia.dsl
 
+import algolia.AlgoliaDsl.ABTests
 import algolia.definitions._
 import algolia.responses.{GetObject, Results}
 import algolia.{AlgoliaClient, Executable}
@@ -55,6 +56,11 @@ trait GetDsl {
     def synonym(synId: String) = GetSynonymDefinition(synId = synId)
 
     def rule(ruleId: String) = GetRuleDefinition(objectId = ruleId)
+
+    // AB test
+    def abTest(id: Int) = GetABTestDefinition(id)
+
+    def all(abTests: ABTests) = GetABTestsDefinition()
 
   }
 
