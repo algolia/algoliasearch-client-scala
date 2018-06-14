@@ -37,6 +37,7 @@ import scala.util.matching.Regex
 trait AlgoliaDsl
     extends Object //Just to have all trait DSL ordered `with`
     with KeyDefinitionDsl
+    with AddDsl
     with BatchDsl
     with BrowseDsl
     with ClearDsl

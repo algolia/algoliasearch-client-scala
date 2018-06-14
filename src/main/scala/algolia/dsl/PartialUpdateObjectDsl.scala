@@ -51,15 +51,6 @@ trait PartialUpdateObjectDsl {
 
   }
 
-  case object add {
-
-    def value(value: String): PartialUpdateObjectOperationDefinition =
-      PartialUpdateObjectOperationDefinition(Add, value = Some(value))
-
-    def key(key: ApiKey) = AddKeyDefinition(key)
-
-  }
-
   case object addUnique {
 
     def value(value: String): PartialUpdateObjectOperationDefinition =
