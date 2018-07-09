@@ -340,10 +340,10 @@ search.start();
 
 ### Search
 
-- [Search an index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
+- [Search index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
 - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=scala)
 - [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=scala)
-- [Browse an index](https://algolia.com/doc/api-reference/api-methods/browse/?language=scala)
+- [Browse index](https://algolia.com/doc/api-reference/api-methods/browse/?language=scala)
 
 
 
@@ -407,13 +407,24 @@ search.start();
 
 ### Query rules
 
-- [Save a single rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
-- [Batch save multiple rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
-- [Get a rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=scala)
-- [Delete a single rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
-- [Clear all rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
-- [Search for rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
+- [Save rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
+- [Batch rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
+- [Get rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=scala)
+- [Delete rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
+- [Clear rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
+- [Search rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
 - [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=scala)
+
+
+
+
+### A/B Test
+
+- [Add A/B test](https://algolia.com/doc/api-reference/api-methods/add-ab-test/?language=scala)
+- [Get A/B test](https://algolia.com/doc/api-reference/api-methods/get-ab-test/?language=scala)
+- [List A/B tests](https://algolia.com/doc/api-reference/api-methods/list-ab-tests/?language=scala)
+- [Stop A/B test](https://algolia.com/doc/api-reference/api-methods/stop-ab-test/?language=scala)
+- [Delete A/B test](https://algolia.com/doc/api-reference/api-methods/delete-ab-test/?language=scala)
 
 
 
