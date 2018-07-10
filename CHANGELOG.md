@@ -1,4 +1,48 @@
-# Change Log
+# ChangeLog
+
+# [1.28.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.27.0...1.28.0) (2018-07-10)
+
+### Summary
+
+Hello everyone,
+
+As you may see, the format of the ChangeLog now changes a bit as we are trying
+to improve it across all our API clients at Algolia. Feel free to send us any
+feedback you may have regarding this.
+
+As for the changes, you will find an exhaustive list of all the changes that
+happened since our latest release. In short, we've mainly fixed a lot of things
+following an internal audit we conducted across all our API clients and added a
+new Analytics component to let you interact with our [AB Testing
+framework](https://www.algolia.com/doc/guides/insights-and-analytics/abtest-overview/#ab-testing-defined).
+
+### Changes
+
+- **chore:** Update release script ([e344a92](https://github.com/algolia/algoliasearch-client-scala/commit/e344a92))
+- **misc:** Update README ([ae4cf0e](https://github.com/algolia/algoliasearch-client-scala/commit/ae4cf0e))
+- **test:** Add tests for AB testing ([4351967](https://github.com/algolia/algoliasearch-client-scala/commit/4351967))
+- **feat:** Implement AB testing methods ([736aaba](https://github.com/algolia/algoliasearch-client-scala/commit/736aaba))
+- **refactor:** Migrate `add` verb into its own DSL file ([b6b6aff](https://github.com/algolia/algoliasearch-client-scala/commit/b6b6aff))
+- **refactor:** Migrate `save` verb into its own DSL file ([559d25f](https://github.com/algolia/algoliasearch-client-scala/commit/559d25f))
+- **misc:** Update README (#474) ([d5d1720](https://github.com/algolia/algoliasearch-client-scala/commit/d5d1720))
+- **test:** Remove tests for deprecated per-index API key methods ([86dcb62](https://github.com/algolia/algoliasearch-client-scala/commit/86dcb62))
+- **feat:** Deprecate API keys methods on Index in favor of Client ones ([e67c206](https://github.com/algolia/algoliasearch-client-scala/commit/e67c206))
+- **fix:** Prevent saving a rule with an empty objectID ([cd80f01](https://github.com/algolia/algoliasearch-client-scala/commit/cd80f01))
+- **chore(md):** Update contribution-related files (#475) ([71a5e49](https://github.com/algolia/algoliasearch-client-scala/commit/71a5e49))
+- **misc:** Update README (#472) ([14cc747](https://github.com/algolia/algoliasearch-client-scala/commit/14cc747))
+- **feat(partial):** Add partial update objects (#470) ([ef322ed](https://github.com/algolia/algoliasearch-client-scala/commit/ef322ed))
+- **feat(object):** Add attributesToRetrieve for get object (#471) ([291a8dd](https://github.com/algolia/algoliasearch-client-scala/commit/291a8dd))
+- **feat(partial_update):** Add createIfNotExists to partialUpdateObject (#469) ([de81905](https://github.com/algolia/algoliasearch-client-scala/commit/de81905))
+- **fix(synonym):** Fix synonym Task of synonyms (#468) ([ab5d27b](https://github.com/algolia/algoliasearch-client-scala/commit/ab5d27b))
+- **fix(logs):** Rename logs to get logs (#467) ([703d2b9](https://github.com/algolia/algoliasearch-client-scala/commit/703d2b9))
+- **fix(client):** Rename list indices to list indexes (#466) ([132eaa9](https://github.com/algolia/algoliasearch-client-scala/commit/132eaa9))
+- **fix(client):** Add missing outputs (#465) ([de24979](https://github.com/algolia/algoliasearch-client-scala/commit/de24979))
+- **fix(settings):** Rename changeSettings in setSettings (#462) ([e77f6ee](https://github.com/algolia/algoliasearch-client-scala/commit/e77f6ee))
+- **fix(keys):** Rename get.allKeys() in list keys (#464) ([f0f8bd0](https://github.com/algolia/algoliasearch-client-scala/commit/f0f8bd0))
+- **fix(index):** Rename scopes to scope in Copy/Move Index (#463) ([b95c546](https://github.com/algolia/algoliasearch-client-scala/commit/b95c546))
+- **misc:** fic(queries): Rename `multiQueries` => `multipleQueries` (#461) ([fc60a3c](https://github.com/algolia/algoliasearch-client-scala/commit/fc60a3c))
+- **fix(responses):** Fix various responses formats (#460) ([f6ad92c](https://github.com/algolia/algoliasearch-client-scala/commit/f6ad92c))
+- **misc:** Bump snapshot 1.27.1 ([8204e7e](https://github.com/algolia/algoliasearch-client-scala/commit/8204e7e))
 
 ## [1.27.0](https://github.com/algolia/algoliasearch-client-scala/tree/1.27.0) (2018-01-03)
 [Full Changelog](https://github.com/algolia/algoliasearch-client-scala/compare/1.26.1...1.27.0)
