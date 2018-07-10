@@ -1,46 +1,54 @@
 #!/usr/bin/env bash
+set -e
 
-#rbenv install 2.1.2
-#gem install github_changelog_generator
+function is_version_valid() {
+  echo "$1" | grep -q -E '^[0-9]+\.[0-9]+\.[0-9]+$'
+  if [[ "$?" == "0" ]]; then return 0; else return 1; fi
+}
 
-read -p "Have you set \$GITHUB_TOKEN? (y/n) " OK
-case "$OK" in
-  y|Y ) ;;
-  * ) echo "Set it and relaunch"; exit 1;
-esac
+function is_working_dir_clean() {
+  if [ -z "$(git status --porcelain)" ]; then return 0; else return 1; fi
+}
 
-read -p "Is the gem 'github_changelog_generator' available? (y/n) " OK
-case "$OK" in
-  y|Y ) ;;
-  * ) echo "Install it and relaunch"; exit 1;
-esac
+version=$1
+next_version=$2
 
-read -p "Version number to bump (ex: 1.3.1): " VERSION
+if ! is_version_valid "$version"; then
+  echo "Version '$version' is not valid (expecting X.Y.Z)"
+  exit 1
+fi
 
-git tag ${VERSION}
+if ! is_version_valid "$next_version"; then
+  echo "Version '$version' is not valid (expecting X.Y.Z)"
+  exit 1
+fi
+
+if ! is_working_dir_clean; then
+  echo "Current directory is not clean, release aborted"
+  exit 1
+fi
+
+sed -i '' "s/^version \:=.*\$/version := \"${version}\"/" build.sbt
+rake alg:changelog["$version"]
+
+git --no-pager diff
+printf 'Please confirm those final changes before the automatic release [y/n]: '
+read yes_or_no
+if [[ "$yes_or_no" != "y" ]]; then
+  echo 'Aborting release'
+  git reset --hard HEAD > /dev/null 2>&1
+  exit 1
+fi
+
+git add build.sbt CHANGELOG.md
+git commit -m "chore: Release version $version [skip ci]"
+git tag "$version"
 git push --tags
-
-github_changelog_generator -t ${GITHUB_TOKEN} --no-unreleased
-
-sed -i '' "s/^version \:=.*\$/version := \"${VERSION}\"/" build.sbt
-git add build.sbt
-git commit -m"Bump version ${VERSION}"
-
-git add CHANGELOG.md
-git commit -m"Changelog for v${VERSION}"
-
-git push origin master
-
-git tag -f ${VERSION}
-git push --tags --force
 
 sbt "+publishSigned"
 sbt "sonatypeReleaseAll"
 
-read -p "Next version number, without SNAPSHOT (ex: 1.4.0): " NEXT_VERSION
-
-sed -i '' "s/^version \:=.*\$/version := \"${NEXT_VERSION}-SNAPSHOT\"/" build.sbt
+sed -i '' "s/^version \:=.*\$/version := \"${next_version}-SNAPSHOT\"/" build.sbt
 git add build.sbt
-git commit -m"Bump snapshot ${NEXT_VERSION}"
-
+git commit -m"chore: Bump snapshot to ${next_version} [skip ci]"
 git push origin master
