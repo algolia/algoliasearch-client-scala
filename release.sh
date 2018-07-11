@@ -43,6 +43,7 @@ fi
 git add build.sbt CHANGELOG.md
 git commit -m "chore: Release version $version [skip ci]"
 git tag "$version"
+git push origin master
 git push --tags
 
 sbt "+publishSigned"
@@ -50,5 +51,5 @@ sbt "sonatypeReleaseAll"
 
 sed -i '' "s/^version \:=.*\$/version := \"${next_version}-SNAPSHOT\"/" build.sbt
 git add build.sbt
-git commit -m"chore: Bump snapshot to ${next_version} [skip ci]"
+git commit -m "chore: Bump snapshot to ${next_version} [skip ci]"
 git push origin master
