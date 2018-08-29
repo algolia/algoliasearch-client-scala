@@ -82,6 +82,7 @@ class IndexSettingsTest extends AlgoliaTest {
     val json =
       """{
         |  "distinct":1,
+        |  "keepDiacriticsOnCharacters":"éø",
         |  "attributesToIndex":[
         |    "att1",
         |    "att2,att3",
@@ -112,8 +113,7 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "desc(att9)"
         |  ],
         |  "typoTolerance":"strict",
-        |  "ignorePlurals":"fr,en",
-        |  "keepDiacriticsOnCharacters":"éø"
+        |  "ignorePlurals":"fr,en"
         |}""".stripMargin
 
     it("should deserialize json") {
