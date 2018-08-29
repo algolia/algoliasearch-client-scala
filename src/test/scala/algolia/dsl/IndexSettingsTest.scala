@@ -112,7 +112,8 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "desc(att9)"
         |  ],
         |  "typoTolerance":"strict",
-        |  "ignorePlurals":"fr,en"
+        |  "ignorePlurals":"fr,en",
+        |  "keepDiacriticsOnCharacters":"éø"
         |}""".stripMargin
 
     it("should deserialize json") {
@@ -154,6 +155,7 @@ class IndexSettingsTest extends AlgoliaTest {
           i.distinct should be(Some(Distinct.int(1)))
           i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
           i.ignorePlurals should be(Some(IgnorePlurals.list(Seq("fr", "en"))))
+          i.keepDiacriticsOnCharacters should be(Some("éø"))
       }
 
     }
@@ -189,7 +191,8 @@ class IndexSettingsTest extends AlgoliaTest {
         ignorePlurals = Some(IgnorePlurals.list(Seq("fr", "en"))),
         typoTolerance = Some(TypoTolerance.strict),
         distinct = Some(Distinct.int(1)),
-        removeStopWords = Some(RemoveStopWords.list(Seq("fr", "en")))
+        removeStopWords = Some(RemoveStopWords.list(Seq("fr", "en"))),
+        keepDiacriticsOnCharacters = Some("éø")
       )
 
       writePretty(i) should be(json)

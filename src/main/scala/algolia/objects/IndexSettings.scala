@@ -32,6 +32,7 @@ case class IndexSettings(
     replaceSynonymsInHighlight: Option[Boolean] = None,
     placeholders: Option[Map[String, Seq[String]]] = None,
     minProximity: Option[Int] = None,
+    keepDiacriticsOnCharacters: Option[String] = None,
     /* Attributes */
     attributesToIndex: Option[Seq[AttributesToIndex]] = None,
     searchableAttributes: Option[Seq[SearchableAttributes]] = None,
