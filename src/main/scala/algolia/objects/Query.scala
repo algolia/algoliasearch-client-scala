@@ -41,6 +41,7 @@ case class Query(
                  responseFields: Option[Seq[String]] = None,
                  maxFacetHits: Option[Int] = None,
                  percentileComputation: Option[Boolean] = None,
+                 queryLanguages: Option[Seq[String]] = None,
                  /* Attributes */
                  attributesToRetrieve: Option[Seq[String]] = None,
                  restrictSearchableAttributes: Option[Seq[String]] = None,
@@ -130,6 +131,7 @@ case class Query(
       "responseFields" -> responseFields.map(_.mkString(",")),
       "maxFacetHits" -> maxFacetHits.map(_.toString),
       "percentileComputation" -> percentileComputation.map(_.toString),
+      "queryLanguages" -> queryLanguages.map(_.mkString(",")),
       /* Attributes */
       "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
       "restrictSearchableAttributes" -> restrictSearchableAttributes.map(_.mkString(",")),

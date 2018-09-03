@@ -33,6 +33,7 @@ case class IndexSettings(
     placeholders: Option[Map[String, Seq[String]]] = None,
     minProximity: Option[Int] = None,
     keepDiacriticsOnCharacters: Option[String] = None,
+    queryLanguages: Option[Seq[String]] = None,
     /* Attributes */
     attributesToIndex: Option[Seq[AttributesToIndex]] = None,
     searchableAttributes: Option[Seq[SearchableAttributes]] = None,
