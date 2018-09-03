@@ -41,6 +41,7 @@ case class IndexSettings(
     unretrievableAttributes: Option[Seq[String]] = None,
     attributesToRetrieve: Option[Seq[String]] = None,
     camelCaseAttributes: Option[Seq[String]] = None,
+    decompoundedAttributes: Option[Map[String, Seq[String]]] = None,
     /* Filtering faceting */
     maxValuesPerFacet: Option[Int] = None,
     sortFacetValuesBy: Option[String] = None,
