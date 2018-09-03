@@ -93,6 +93,12 @@ class IndexSettingsTest extends AlgoliaTest {
         |    "att2,att3",
         |    "unordered(att4)"
         |  ],
+        |  "decompoundedAttributes":{
+        |    "de":[
+        |      "attr1",
+        |      "attr2"
+        |    ]
+        |  },
         |  "numericAttributesToIndex":[
         |    "equalOnly(att5)"
         |  ],
@@ -156,6 +162,7 @@ class IndexSettingsTest extends AlgoliaTest {
           i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
           i.ignorePlurals should be(Some(IgnorePlurals.list(Seq("fr", "en"))))
           i.keepDiacriticsOnCharacters should be(Some("éø"))
+          i.decompoundedAttributes should be(Some(Map("de" -> Seq("attr1", "attr2"))))
       }
 
     }
@@ -192,7 +199,8 @@ class IndexSettingsTest extends AlgoliaTest {
         typoTolerance = Some(TypoTolerance.strict),
         distinct = Some(Distinct.int(1)),
         removeStopWords = Some(RemoveStopWords.list(Seq("fr", "en"))),
-        keepDiacriticsOnCharacters = Some("éø")
+        keepDiacriticsOnCharacters = Some("éø"),
+        decompoundedAttributes = Some(Map("de" -> Seq("attr1", "attr2")))
       )
 
       writePretty(i) should be(json)
