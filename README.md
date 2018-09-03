@@ -64,7 +64,7 @@ This API client only supports Scala 2.11 & 2.12.
 
 ## Install
 
-If you're using `Maven`, add the following dependency to your `pom.xml` file:
+With [Maven](https://maven.apache.org/), add the following dependency to your `pom.xml` file:
 
 ```xml
 <dependency>
