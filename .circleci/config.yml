@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  check_format:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    environment:
+      JVM_OPTS: -Xmx3200m -Dsun.net.maxDatagramSockets=2048
+    steps:
+      - checkout
+      - run: sbt scalafmtTest
+  test:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    environment:
+      JVM_OPTS: -Xmx3200m -Dsun.net.maxDatagramSockets=2048
+    steps:
+      - checkout
+      - run: sbt clean
+      - run: sbt test
+  coverage:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    environment:
+      JVM_OPTS: -Xmx3200m -Dsun.net.maxDatagramSockets=2048
+    steps:
+      - checkout
+      - run: sbt coverage
+      - run: sbt coverageReport 
+      - run: sbt coveralls
+workflows:
+  version: 2
+  all:
+    jobs:
+      - check_format
+      - test
+      - coverage
