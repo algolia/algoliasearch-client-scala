@@ -1,5 +1,32 @@
 # ChangeLog
 
+# [1.29.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.28.0...1.29.0) (2018-09-04)
+
+### Summary
+
+Hello everyone,
+
+Let's continue with those back-to-shool releases. This week, we're releasing a
+new version of the client with the support for new settings and search
+parameters. The list of changes speaks for itself this time. Feel free to
+consult the details of each parameter in [the official Algolia documentation](https://www.algolia.com/doc/api-reference/api-parameters/).
+
+### Changes
+
+- **feat:** Expose decompoundedAttributes as a setting parameter ([9e120d9](https://github.com/algolia/algoliasearch-client-scala/commit/9e120d9))
+- **feat:** Expose camelCaseAttributes as a setting parameter ([310cb5d](https://github.com/algolia/algoliasearch-client-scala/commit/310cb5d))
+- **feat:** Expose queryLanguages as a setting and search parameter ([f01061d](https://github.com/algolia/algoliasearch-client-scala/commit/f01061d))
+- **chore(md):** Update contribution-related files ([c73ebff](https://github.com/algolia/algoliasearch-client-scala/commit/c73ebff))
+- **misc:** Update README ([f1c9108](https://github.com/algolia/algoliasearch-client-scala/commit/f1c9108))
+- **tests(keepDiacriticsOnCharacters):** fix expected json ([b4b22c6](https://github.com/algolia/algoliasearch-client-scala/commit/b4b22c6))
+- **feat:** implement keepDiacriticsOnCharacters ([9600f5b](https://github.com/algolia/algoliasearch-client-scala/commit/9600f5b))
+- **misc:** Merge pull request #478 from julienbourdeau/update/githubdir ([2f57f7e](https://github.com/algolia/algoliasearch-client-scala/commit/2f57f7e))
+- **chore(md):** Update contribution-related files ([2485a9a](https://github.com/algolia/algoliasearch-client-scala/commit/2485a9a))
+- **chore:** Ensure sync of local/remote master branches during a release ([ccda8c9](https://github.com/algolia/algoliasearch-client-scala/commit/ccda8c9))
+- **chore:** Bump sbt-pgp plugin from 1.0.1 to 1.1.1 (only used to release the client) ([45ae68a](https://github.com/algolia/algoliasearch-client-scala/commit/45ae68a))
+- **chore:** List gpg.sbt file in the .gitignore ([9a613b2](https://github.com/algolia/algoliasearch-client-scala/commit/9a613b2))
+- **chore:** Bump snapshot to 1.29.0 ([866bf38](https://github.com/algolia/algoliasearch-client-scala/commit/866bf38))
+
 # [1.28.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.27.0...1.28.0) (2018-07-10)
 
 ### Summary
