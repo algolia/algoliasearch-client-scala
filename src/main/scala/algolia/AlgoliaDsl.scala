@@ -25,7 +25,7 @@
 
 package algolia
 
-import java.time.{LocalDateTime, ZoneOffset}
+import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 
 import algolia.definitions._
@@ -81,7 +81,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new DistinctSerializer +
       new RemoveStopWordsSerializer +
       new IgnorePluralsSerializer +
-      new LocalDateTimeSerializer
+      new LocalDateTimeSerializer +
+      new ZonedDateTimeSerializer
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -335,6 +336,15 @@ object AlgoliaDsl extends AlgoliaDsl {
         }, {
           case ts: LocalDateTime =>
             JString(ts.atOffset(ZoneOffset.UTC).format(iso8601WithNsFormatter))
+        }))
+
+  class ZonedDateTimeSerializer
+      extends CustomSerializer[ZonedDateTime](_ =>
+        ({
+          case JInt(l) =>
+            ZonedDateTime.ofInstant(Instant.ofEpochSecond(l.longValue()), ZoneOffset.UTC)
+        }, {
+          case ts: ZonedDateTime => JInt(ts.toEpochSecond())
         }))
 
   case object forwardToSlaves extends ForwardToReplicas

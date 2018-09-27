@@ -25,6 +25,8 @@
 
 package algolia.integration
 
+import java.time.{ZoneId, ZonedDateTime}
+
 import algolia.AlgoliaDsl._
 import algolia.objects._
 import algolia.{AlgoliaClientException, AlgoliaDsl, AlgoliaTest}
@@ -98,8 +100,7 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("rule1", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res =>
-        res.hits should have size 1
+      whenReady(s) { res => res.hits should have size 1
       }
     }
 
@@ -126,8 +127,7 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res =>
-        res.hits should have size 1
+      whenReady(s) { res => res.hits should have size 1
       }
     }
 
@@ -154,8 +154,7 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res =>
-        res.hits should have size 0
+      whenReady(s) { res => res.hits should have size 0
       }
     }
 
@@ -175,11 +174,134 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res =>
-        res.hits should have size 2
+      whenReady(s) { res => res.hits should have size 2
       }
     }
 
+    it("should save rule with automatic facet filters") {
+      val rule = Rule(
+        objectID = "RuleAutomaticFacetFilters",
+        condition = Condition(
+          pattern = "{facet:brand}",
+          anchoring = "is"
+        ),
+        consequence = Consequence(
+          params = Some(Map(
+              "automaticFacetFilters" -> Seq(AutomaticFacetFilters("brand", Some(true), Some(42)))
+            )),
+        ),
+      )
+
+      val res1 = client.execute {
+        save rule rule inIndex indexName
+      }
+
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
+
+      val s = client.execute {
+        get rule "RuleAutomaticFacetFilters" from indexName
+      }
+    }
+
+    it("should save rule with time range") {
+
+      val from = ZonedDateTime.of(2018, 9, 27, 13, 44, 10, 0, ZoneId.of("UTC").normalized());
+      val until = from.plusDays(5);
+
+      val rule = Rule(
+        objectID = "RuleTimeRange",
+        enabled = Some(true),
+        validity = Some(Seq(TimeRange(from, until))),
+        condition = Condition(
+          pattern = "a",
+          anchoring = "is"
+        ),
+        consequence = Consequence(
+          params = Some(Map("query" -> "1")),
+          userData = Some(Map("a" -> "b"))
+        )
+      )
+
+      val res1 = client.execute {
+        save rule rule inIndex indexName
+      }
+
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
+
+      val s = client.execute {
+        get rule "RuleTimeRange" from indexName
+      }
+
+      whenReady(s) { res => res shouldBe (rule);
+      }
+
+    }
+
+    it("should save rule with edits") {
+      val rule = Rule(
+        objectID = "RuleEdits",
+        condition = Condition(
+          pattern = "toto",
+          anchoring = "is"
+        ),
+        consequence = Consequence(
+          params = Some(
+            Map("query" -> Map(
+              "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata"))))))
+        )
+      )
+
+      val res1 = client.execute {
+        save rule rule inIndex indexName
+      }
+
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
+
+      val s = client.execute {
+        get rule "RulesEdits" from indexName
+      }
+
+    }
+
+    it("should save rule with promote and hide") {
+
+      val o = client.execute {
+        index into indexName `object` Value(2, "2")
+      }
+
+      taskShouldBeCreatedAndWaitForIt(o, indexName)
+
+      val a = client.execute {
+        index into indexName `object` Value(3, "3")
+      }
+
+      taskShouldBeCreatedAndWaitForIt(a, indexName)
+
+      val rule = Rule(
+        objectID = "RulePromoteAndHide",
+        condition = Condition(
+          pattern = "a",
+          anchoring = "is"
+        ),
+        consequence = Consequence(
+          hide = Some(Seq(ConsequenceHide("2"))),
+          promote = Some(Seq(ConsequencePromote("3", 1))),
+        )
+      )
+
+      val ret = client.execute {
+        save rule rule inIndex indexName
+      }
+
+      taskShouldBeCreatedAndWaitForIt(ret, indexName)
+
+      val s = client.execute {
+        get rule "RulePromoteAndHide" from indexName
+      }
+
+      whenReady(s) { res => res shouldBe (rule);
+      }
+    }
   }
 
 }

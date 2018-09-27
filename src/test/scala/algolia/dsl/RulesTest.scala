@@ -25,6 +25,8 @@
 
 package algolia.dsl
 
+import java.time.{ZoneId, ZonedDateTime}
+
 import algolia.AlgoliaDsl._
 import algolia.http._
 import algolia.objects._
@@ -165,6 +167,157 @@ class RulesTest extends AlgoliaTest {
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
               """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+
+      it("should serialize correctly with enabled flag") {
+        val rule = Rule(
+          objectID = "rule1",
+          enabled = Some(true),
+          condition = Condition(
+            pattern = "a",
+            anchoring = "is"
+          ),
+          consequence = Consequence(
+            params = Some(Map("query" -> "1")),
+            userData = Some(Map("a" -> "b"))
+          )
+        )
+
+        (save rule rule inIndex "toto" and forwardToReplicas)
+          .build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "rules", "rule1"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+
+      it("should serialize correctly with TimeRange") {
+
+        val from = ZonedDateTime.of(2018, 9, 27, 13, 44, 10, 0, ZoneId.of("UTC").normalized());
+        val until = from.plusDays(5);
+
+        val rule = Rule(
+          objectID = "rule1",
+          enabled = Some(true),
+          validity = Some(Seq(TimeRange(from, until))),
+          condition = Condition(
+            pattern = "a",
+            anchoring = "is"
+          ),
+          consequence = Consequence(
+            params = Some(Map("query" -> "1")),
+            userData = Some(Map("a" -> "b"))
+          )
+        )
+
+        (save rule rule inIndex "toto" and forwardToReplicas)
+          .build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "rules", "rule1"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}},"validity":[{"from":1538055850,"until":1538487850}]})"""),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+
+      it("should serialize correctly with promote and hide") {
+        val rule = Rule(
+          objectID = "rule1",
+          condition = Condition(
+            pattern = "a",
+            anchoring = "is"
+          ),
+          consequence = Consequence(
+            hide = Some(
+              Seq(
+                ConsequenceHide("toto"),
+                ConsequenceHide("tata"),
+              )),
+            promote = Some(
+              Seq(
+                ConsequencePromote("tutu", 1),
+                ConsequencePromote("titi", 2),
+              )),
+          )
+        )
+
+        (save rule rule inIndex "toto" and forwardToReplicas)
+          .build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "rules", "rule1"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"promote":[{"objectID":"tutu","position":1},{"objectID":"titi","position":2}],"hide":[{"objectID":"toto"},{"objectID":"tata"}]}}"""),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+
+      it("should serialize correctly with automatic facet filters") {
+        val rule = Rule(
+          objectID = "rule1",
+          condition = Condition(
+            pattern = "{facet:brand}",
+            anchoring = "is"
+          ),
+          consequence = Consequence(
+            params = Some(Map(
+              "automaticFacetFilters" -> Seq(AutomaticFacetFilters("brand", Some(true), Some(42)))))
+          )
+        )
+
+        (save rule rule inIndex "toto" and forwardToReplicas)
+          .build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "rules", "rule1"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"rule1","condition":{"pattern":"{facet:brand}","anchoring":"is"},"consequence":{"params":{"automaticFacetFilters":[{"facet":"brand","disjunctive":true,"score":42}]}}}"""),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+
+      it("should serialize correctly with edits") {
+        val rule = Rule(
+          objectID = "rule1",
+          condition = Condition(
+            pattern = "toto",
+            anchoring = "is",
+          ),
+          consequence = Consequence(
+            params = Some(
+              Map("query" -> Map(
+                "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata"))))))
+          )
+        )
+
+        (save rule rule inIndex "toto" and forwardToReplicas)
+          .build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "rules", "rule1"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"rule1","condition":{"pattern":"toto","anchoring":"is"},"consequence":{"params":{"query":{"edits":[{"type":"remove","delete":"toto"},{"type":"replace","delete":"toto","insert":"tata"}]}}}}"""),
             isSearch = false,
             requestOptions = None
           )

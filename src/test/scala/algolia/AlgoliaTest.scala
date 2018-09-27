@@ -162,10 +162,10 @@ class AlgoliaTest
         anchoring = "is"
       ),
       consequence = Consequence(
-        params = Some(
-          Map("query" -> Map("remove" -> Seq("1")))
-        ),
-        userData = Some(Map("a" -> "b"))
+        params = Some(Map(
+          "query" -> Map("remove" -> Seq("1"))
+        )),
+        userData = Some(Map("a" -> "b")),
       ),
       description = Some(ruleId)
     )
