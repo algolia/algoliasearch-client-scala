@@ -242,16 +242,16 @@ class RulesTest extends AlgoliaTest {
             anchoring = "is"
           ),
           consequence = Consequence(
-            hide = Some(
-              Seq(
-                ConsequenceHide("toto"),
-                ConsequenceHide("tata"),
-              )),
             promote = Some(
               Seq(
                 ConsequencePromote("tutu", 1),
-                ConsequencePromote("titi", 2),
+                ConsequencePromote("titi", 2)
               )),
+            hide = Some(
+              Seq(
+                ConsequenceHide("toto"),
+                ConsequenceHide("tata")
+              ))
           )
         )
 
@@ -277,8 +277,9 @@ class RulesTest extends AlgoliaTest {
             anchoring = "is"
           ),
           consequence = Consequence(
-            params = Some(Map(
-              "automaticFacetFilters" -> Seq(AutomaticFacetFilters("brand", Some(true), Some(42)))))
+            params = Some(
+              Map("automaticFacetFilters" -> Seq(
+                AutomaticFacetFilters("brand", Some(true), Some(42)))))
           )
         )
 
@@ -301,7 +302,7 @@ class RulesTest extends AlgoliaTest {
           objectID = "rule1",
           condition = Condition(
             pattern = "toto",
-            anchoring = "is",
+            anchoring = "is"
           ),
           consequence = Consequence(
             params = Some(

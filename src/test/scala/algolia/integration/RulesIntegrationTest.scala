@@ -100,7 +100,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("rule1", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res => res.hits should have size 1
+      whenReady(s) { res =>
+        res.hits should have size 1
       }
     }
 
@@ -127,7 +128,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res => res.hits should have size 1
+      whenReady(s) { res =>
+        res.hits should have size 1
       }
     }
 
@@ -154,7 +156,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res => res.hits should have size 0
+      whenReady(s) { res =>
+        res.hits should have size 0
       }
     }
 
@@ -174,7 +177,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
-      whenReady(s) { res => res.hits should have size 2
+      whenReady(s) { res =>
+        res.hits should have size 2
       }
     }
 
@@ -186,10 +190,11 @@ class RulesIntegrationTest extends AlgoliaTest {
           anchoring = "is"
         ),
         consequence = Consequence(
-          params = Some(Map(
-              "automaticFacetFilters" -> Seq(AutomaticFacetFilters("brand", Some(true), Some(42)))
-            )),
-        ),
+          params = Some(
+            Map(
+              "automaticFacetFilters" -> Seq(AutomaticFacetFilters("brand", Some(true), Some(42))))
+          )
+        )
       )
 
       val res1 = client.execute {
@@ -232,7 +237,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         get rule "RuleTimeRange" from indexName
       }
 
-      whenReady(s) { res => res shouldBe (rule);
+      whenReady(s) { res =>
+        res shouldBe (rule);
       }
 
     }
@@ -246,9 +252,9 @@ class RulesIntegrationTest extends AlgoliaTest {
         ),
         consequence = Consequence(
           params = Some(
-            Map("query" -> Map(
-              "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata"))))))
-        )
+            value = Map("query" -> Map(
+              "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata")))))
+          ))
       )
 
       val res1 = client.execute {
@@ -285,7 +291,7 @@ class RulesIntegrationTest extends AlgoliaTest {
         ),
         consequence = Consequence(
           hide = Some(Seq(ConsequenceHide("2"))),
-          promote = Some(Seq(ConsequencePromote("3", 1))),
+          promote = Some(Seq(ConsequencePromote("3", 1)))
         )
       )
 
@@ -299,7 +305,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         get rule "RulePromoteAndHide" from indexName
       }
 
-      whenReady(s) { res => res shouldBe (rule);
+      whenReady(s) { res =>
+        res shouldBe (rule);
       }
     }
   }
