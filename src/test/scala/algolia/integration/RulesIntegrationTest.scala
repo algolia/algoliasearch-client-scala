@@ -251,8 +251,7 @@ class RulesIntegrationTest extends AlgoliaTest {
           anchoring = "is"
         ),
         consequence = Consequence(
-          params = Some(
-            value = Map("query" -> Map(
+          params = Some(Map("query" -> Map(
               "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata")))))
           ))
       )

@@ -227,7 +227,7 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}},"validity":[{"from":1538055850,"until":1538487850}]})"""),
+              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}},"validity":[{"from":1538055850,"until":1538487850}]}"""),
             isSearch = false,
             requestOptions = None
           )
