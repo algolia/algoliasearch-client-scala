@@ -23,7 +23,30 @@
  * THE SOFTWARE.
  */
 
-package algolia.objects
-import java.time.ZonedDateTime
+package algolia.responses
 
-case class TimeRange(from: ZonedDateTime, until: ZonedDateTime)
+case class UserData(userID: String, nbRecords: Int, dataSize: Int)
+
+case class UserDataWithCluster(userID: String, clusterName: String, nbRecords: Int, dataSize: Int)
+
+case class TopUserID(topUsers: Map[String, UserData])
+
+case class ClusterData(clusterName: String, nbRecords: Int, nbUserIDs: Int, dataSize: Int)
+
+case class ClusterList(clusters: Seq[ClusterData])
+
+case class UserIDList(userIDs: Seq[UserDataWithCluster], page: Int, hitsPerPage: Int)
+
+case class UserIDHit(userID: String,
+                     clusterName: String,
+                     nbRecords: Int,
+                     dataSize: Int,
+                     objectID: String,
+                     _highlightResult: Map[String, HighlightResult])
+
+// TODO Use timestamp
+case class SearchUserID(hits: Seq[UserIDHit],
+                        nbHits: Int,
+                        page: Int,
+                        hitsPerPage: Int,
+                        updatedAt: Int)

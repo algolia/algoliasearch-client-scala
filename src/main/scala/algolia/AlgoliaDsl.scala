@@ -63,6 +63,8 @@ trait AlgoliaDsl
     with SynonymsDsl
     with WaitForTaskDsl
     with TaskStatusDsl
+    with AssignDsl
+    with RemoveDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 

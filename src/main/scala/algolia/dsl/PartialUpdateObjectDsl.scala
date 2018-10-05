@@ -26,7 +26,6 @@
 package algolia.dsl
 
 import algolia.definitions._
-import algolia.objects.ApiKey
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -55,13 +54,6 @@ trait PartialUpdateObjectDsl {
 
     def value(value: String): PartialUpdateObjectOperationDefinition =
       PartialUpdateObjectOperationDefinition(AddUnique, value = Some(value))
-
-  }
-
-  case object remove {
-
-    def value(value: String): PartialUpdateObjectOperationDefinition =
-      PartialUpdateObjectOperationDefinition(Remove, value = Some(value))
 
   }
 

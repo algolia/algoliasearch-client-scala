@@ -23,7 +23,33 @@
  * THE SOFTWARE.
  */
 
-package algolia.objects
-import java.time.ZonedDateTime
+package algolia.dsl
 
-case class TimeRange(from: ZonedDateTime, until: ZonedDateTime)
+import algolia.{AlgoliaClient, Executable}
+import algolia.definitions.{PartialUpdateObjectOperationDefinition, Remove, RemoveUserIDDefinition}
+import algolia.responses.Deleted
+import org.json4s.Formats
+
+import scala.concurrent.{ExecutionContext, Future}
+
+trait RemoveDsl {
+
+  implicit val formats: Formats
+
+  case object remove {
+
+    def value(value: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(Remove, value = Some(value))
+
+    def userID(userID: String) = RemoveUserIDDefinition(userID)
+
+  }
+
+  implicit object RemoveUserIDExecutable extends Executable[RemoveUserIDDefinition, Deleted] {
+    override def apply(client: AlgoliaClient, query: RemoveUserIDDefinition)(
+        implicit executor: ExecutionContext): Future[Deleted] = {
+      client.request[Deleted](query.build())
+    }
+  }
+
+}

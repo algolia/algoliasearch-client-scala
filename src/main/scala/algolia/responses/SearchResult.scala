@@ -90,6 +90,8 @@ trait Hit extends ObjectID {
 
 }
 
+// TODO: IIRC fullyHighlighted may not be returned, so here we would need to
+// change its type from Boolean to Option[Boolean].
 case class HighlightResult(value: String,
                            matchLevel: String,
                            matchedWords: Iterable[String],

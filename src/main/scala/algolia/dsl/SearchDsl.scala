@@ -26,13 +26,8 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl.In
-import algolia.definitions.{
-  SearchDefinition,
-  SearchFacetDefinition,
-  SearchRulesDefinition,
-  SearchSynonymsDefinition
-}
-import algolia.responses.{SearchFacetResult, SearchResult}
+import algolia.definitions._
+import algolia.responses.{SearchFacetResult, SearchResult, SearchUserID}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
@@ -50,6 +45,8 @@ trait SearchDsl {
 
     def rules(i: In): SearchRulesDefinition = SearchRulesDefinition()
 
+    def userIDs(query: String) = SearchUserIDDefinition(query)
+
   }
 
   implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, SearchResult] {
@@ -64,6 +61,14 @@ trait SearchDsl {
     override def apply(client: AlgoliaClient, query: SearchFacetDefinition)(
         implicit executor: ExecutionContext): Future[SearchFacetResult] = {
       client.request[SearchFacetResult](query.build())
+    }
+  }
+
+  implicit object SearchUserIDsExecutable
+      extends Executable[SearchUserIDDefinition, SearchUserID] {
+    override def apply(client: AlgoliaClient, query: SearchUserIDDefinition)(
+        implicit executor: ExecutionContext): Future[SearchUserID] = {
+      client.request[SearchUserID](query.build())
     }
   }
 

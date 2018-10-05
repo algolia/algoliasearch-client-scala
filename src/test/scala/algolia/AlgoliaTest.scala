@@ -47,9 +47,9 @@ class AlgoliaTest
     with EitherValues
     with Eventually {
 
-  val applicationId: String = System.getenv("APPLICATION_ID")
-  val apiKey: String = System.getenv("API_KEY")
-  val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
+  lazy val applicationId: String = System.getenv("APPLICATION_ID")
+  lazy val apiKey: String = System.getenv("API_KEY")
+  lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
       AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
   }

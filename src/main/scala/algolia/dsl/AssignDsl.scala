@@ -23,7 +23,30 @@
  * THE SOFTWARE.
  */
 
-package algolia.objects
-import java.time.ZonedDateTime
+package algolia.dsl
+import algolia.definitions.AssignUserIDDefinition
+import algolia.inputs.UserIDAssignment
+import algolia.{AlgoliaClient, Executable}
+import algolia.responses.Created
+import org.json4s.Formats
 
-case class TimeRange(from: ZonedDateTime, until: ZonedDateTime)
+import scala.concurrent.{ExecutionContext, Future}
+
+trait AssignDsl {
+
+  implicit val formats: Formats
+
+  case object assign {
+
+    def userID(assignment: UserIDAssignment): AssignUserIDDefinition =
+      AssignUserIDDefinition(assignment)
+
+  }
+
+  implicit object AssignUserIDExecutable extends Executable[AssignUserIDDefinition, Created] {
+    override def apply(client: AlgoliaClient, query: AssignUserIDDefinition)(
+        implicit executor: ExecutionContext): Future[Created] = {
+      client.request[Created](query.build())
+    }
+  }
+}
