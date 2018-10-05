@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package algolia.objects
-import java.time.ZonedDateTime
+package algolia.responses
 
-case class TimeRange(from: ZonedDateTime, until: ZonedDateTime)
+// TODO Use timestamp
+case class Deleted(deletedAt: String)

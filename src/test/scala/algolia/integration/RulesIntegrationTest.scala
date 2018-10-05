@@ -251,9 +251,15 @@ class RulesIntegrationTest extends AlgoliaTest {
           anchoring = "is"
         ),
         consequence = Consequence(
-          params = Some(Map("query" -> Map(
-              "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata")))))
-          ))
+          params = Some(
+            Map(
+              "query" -> Map(
+                "edits" -> Seq(
+                  Edit("remove", "toto"),
+                  Edit("replace", "toto", Some("tata"))
+                )
+              )))
+        )
       )
 
       val res1 = client.execute {

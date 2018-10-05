@@ -37,4 +37,12 @@ case class RequestOptions(forwardedFor: Option[String] = None,
     extraQueryParameters.getOrElse(Map.empty)
   }
 
+  private[algolia] def addExtraHeaders(m: Map[String, String]): RequestOptions = {
+    RequestOptions(
+      forwardedFor = forwardedFor,
+      extraHeaders = Some(generateExtraHeaders() ++ m),
+      extraQueryParameters = extraQueryParameters
+    )
+  }
+
 }

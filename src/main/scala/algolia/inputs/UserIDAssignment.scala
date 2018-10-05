@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  */
 
-package algolia.objects
-import java.time.ZonedDateTime
+package algolia.inputs
 
-case class TimeRange(from: ZonedDateTime, until: ZonedDateTime)
+case class UserIDAssignment(userID: String, cluster: String)

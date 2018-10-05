@@ -27,7 +27,7 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl.ABTests
 import algolia.definitions._
-import algolia.responses.{GetObject, Results}
+import algolia.responses.{GetObject, Results, TopUserID, UserDataWithCluster}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.JsonAST.JObject
@@ -62,6 +62,10 @@ trait GetDsl {
 
     def all(abTests: ABTests) = GetABTestsDefinition()
 
+    def topUserID = GetTopUserIDDefinition()
+
+    def userID(userID: String) = GetUserIDDefinition(userID)
+
   }
 
   implicit object GetObjectDefinitionExecutable
@@ -82,6 +86,21 @@ trait GetDsl {
       client.request[Results](query.build())
     }
 
+  }
+
+  implicit object GetTopUserIDExecutable extends Executable[GetTopUserIDDefinition, TopUserID] {
+    override def apply(client: AlgoliaClient, query: GetTopUserIDDefinition)(
+        implicit executor: ExecutionContext): Future[TopUserID] = {
+      client.request[TopUserID](query.build())
+    }
+  }
+
+  implicit object GetUserIDExecutable
+      extends Executable[GetUserIDDefinition, UserDataWithCluster] {
+    override def apply(client: AlgoliaClient, query: GetUserIDDefinition)(
+        implicit executor: ExecutionContext): Future[UserDataWithCluster] = {
+      client.request[UserDataWithCluster](query.build())
+    }
   }
 
 }

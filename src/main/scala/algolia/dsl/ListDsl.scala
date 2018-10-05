@@ -25,20 +25,33 @@
 
 package algolia.dsl
 
-import algolia.definitions.{ListIndexesDefinition, ListKeysDefinition}
-import algolia.responses.Indices
+import algolia.definitions.{
+  ListClustersDefinition,
+  ListIndexesDefinition,
+  ListKeysDefinition,
+  ListUserIDsDefinition
+}
+import algolia.responses.{ClusterList, Indices, UserIDList}
 import algolia.{AlgoliaClient, Executable}
+import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ListDsl {
 
+  implicit val formats: Formats
+
   case object list {
+
     def indices = ListIndexesDefinition()
 
     def indexes = ListIndexesDefinition()
 
     def keys = ListKeysDefinition()
+
+    def clusters = ListClustersDefinition()
+
+    def userIDs = ListUserIDsDefinition()
 
     @deprecated("use without index", "1.27.0")
     def keysFrom(indexName: String) =
@@ -50,6 +63,20 @@ trait ListDsl {
     override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
         implicit executor: ExecutionContext): Future[Indices] = {
       client.request[Indices](query.build())
+    }
+  }
+
+  implicit object ListClustersExecutable extends Executable[ListClustersDefinition, ClusterList] {
+    override def apply(client: AlgoliaClient, query: ListClustersDefinition)(
+        implicit executor: ExecutionContext): Future[ClusterList] = {
+      client.request[ClusterList](query.build())
+    }
+  }
+
+  implicit object ListUserIDsExecutable extends Executable[ListUserIDsDefinition, UserIDList] {
+    override def apply(client: AlgoliaClient, query: ListUserIDsDefinition)(
+        implicit executor: ExecutionContext): Future[UserIDList] = {
+      client.request[UserIDList](query.build())
     }
   }
 
