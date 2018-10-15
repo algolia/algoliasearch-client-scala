@@ -51,6 +51,7 @@ case class SearchResult(hits: Seq[JObject],
                         // For getRankingInfo
                         serverUsed: Option[String],
                         parsedQuery: Option[String],
+                        appliedRules: Option[Map[String, String]],
                         // For multiqueries
                         processed: Option[Boolean],
                         index: Option[String]) {
