@@ -63,6 +63,7 @@ trait AlgoliaDsl
     with SynonymsDsl
     with WaitForTaskDsl
     with TaskStatusDsl
+    with RenameDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 
