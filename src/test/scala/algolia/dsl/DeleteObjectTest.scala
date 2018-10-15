@@ -26,7 +26,7 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
+import algolia.{AlgoliaTest}
 import algolia.http.{DELETE, HttpPayload, POST}
 
 class DeleteObjectTest extends AlgoliaTest {
@@ -39,6 +39,18 @@ class DeleteObjectTest extends AlgoliaTest {
 
     it("deletes object with inverse DSL") {
       delete objectId "oid" from "toto"
+    }
+
+    it("deletes object empty objectId") {
+      the[IllegalArgumentException] thrownBy (delete from "toto").build()
+    }
+
+    it("deletes object empty objectID") {
+      the[IllegalArgumentException] thrownBy (delete from "toto" objectId "")
+    }
+
+    it("deletes object whitespaces objectID") {
+      the[IllegalArgumentException] thrownBy (delete from "toto" objectId "   ")
     }
 
     it("should call API") {

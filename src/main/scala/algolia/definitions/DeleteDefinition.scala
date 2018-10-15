@@ -44,7 +44,9 @@ case class DeleteObjectDefinition(
   def index(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
 
   def objectId(objectId: String): DeleteObjectDefinition =
-    copy(oid = Some(objectId))
+    if (objectId.trim.isEmpty)
+      throw new IllegalArgumentException("objectID can't be empty or whitespaces")
+    else copy(oid = Some(objectId))
 
   def objectIds(objectIds: Traversable[String]): BatchDefinition =
     BatchDefinition(objectIds.map { oid =>
@@ -57,11 +59,14 @@ case class DeleteObjectDefinition(
   override def options(requestOptions: RequestOptions): DeleteObjectDefinition =
     copy(requestOptions = Some(requestOptions))
 
-  override private[algolia] def build(): HttpPayload =
+  override private[algolia] def build(): HttpPayload = {
+    if (oid == None) throw new IllegalArgumentException("ObjectID can't None")
+
     HttpPayload(http.DELETE,
                 Seq("1", "indexes") ++ index ++ oid,
                 isSearch = false,
                 requestOptions = requestOptions)
+  }
 }
 
 case class DeleteIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
