@@ -109,4 +109,5 @@ case class RankingInfo(nbTypos: Int,
                        nbExactWords: Int,
                        words: Int,
                        filters: Int,
+                       promoted: Option[Boolean],
                        matchedGeoLocation: Option[Map[String, Float]])
