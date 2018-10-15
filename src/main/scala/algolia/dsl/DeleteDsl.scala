@@ -44,7 +44,7 @@ trait DeleteDsl {
 
     //Object
     def objectId(objectId: String) =
-      DeleteObjectDefinition(oid = Some(objectId))
+      DeleteObjectDefinition(objectId = Some(objectId))
 
     //Object
     def from(index: String) = DeleteObjectDefinition(index = Some(index))

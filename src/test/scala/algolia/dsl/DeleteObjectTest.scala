@@ -26,7 +26,7 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl._
-import algolia.{AlgoliaTest}
+import algolia.AlgoliaTest
 import algolia.http.{DELETE, HttpPayload, POST}
 
 class DeleteObjectTest extends AlgoliaTest {

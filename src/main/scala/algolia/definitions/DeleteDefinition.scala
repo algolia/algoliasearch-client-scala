@@ -33,7 +33,7 @@ import org.json4s.native.Serialization.write
 
 case class DeleteObjectDefinition(
     index: Option[String] = None,
-    oid: Option[String] = None,
+    objectId: Option[String] = None,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
 
@@ -46,7 +46,7 @@ case class DeleteObjectDefinition(
   def objectId(objectId: String): DeleteObjectDefinition =
     if (objectId.trim.isEmpty)
       throw new IllegalArgumentException("objectID can't be empty or whitespaces")
-    else copy(oid = Some(objectId))
+    else copy(objectId = Some(objectId))
 
   def objectIds(objectIds: Traversable[String]): BatchDefinition =
     BatchDefinition(objectIds.map { oid =>
@@ -60,10 +60,10 @@ case class DeleteObjectDefinition(
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
-    if (oid == None) throw new IllegalArgumentException("ObjectID can't None")
+    if (objectId == None) throw new IllegalArgumentException("ObjectID can't None")
 
     HttpPayload(http.DELETE,
-                Seq("1", "indexes") ++ index ++ oid,
+                Seq("1", "indexes") ++ index ++ objectId,
                 isSearch = false,
                 requestOptions = requestOptions)
   }
