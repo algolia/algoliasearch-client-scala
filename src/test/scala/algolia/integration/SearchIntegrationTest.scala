@@ -101,7 +101,7 @@ class SearchIntegrationTest extends AlgoliaTest {
               "name" -> HighlightResult("<em>a</em>lgolia",
                                         "full",
                                         Seq("a"),
-                                        fullyHighlighted = false))),
+                                        fullyHighlighted = Some(false)))),
           None,
           None,
           None

@@ -95,7 +95,7 @@ trait Hit extends ObjectID {
 case class HighlightResult(value: String,
                            matchLevel: String,
                            matchedWords: Iterable[String],
-                           fullyHighlighted: Boolean)
+                           fullyHighlighted: Option[Boolean])
 
 case class SnippetResult(value: String, matchLevel: String)
 
