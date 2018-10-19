@@ -28,6 +28,7 @@ package algolia.dsl
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http.{HttpPayload, POST}
+import algolia.inputs.SafeDeleteObjectOperation
 
 class BatchTest extends AlgoliaTest {
 
@@ -171,15 +172,15 @@ class BatchTest extends AlgoliaTest {
 
       it("should deletes multiple objects") {
         batch(
-          delete from "test1" objectId "1",
-          delete from "test2" objectId "2"
+          delete objectFromIndex SafeDeleteObjectOperation("test1", "1").get,
+          delete objectFromIndex SafeDeleteObjectOperation("test2", "2").get
         )
       }
 
       it("should call the API") {
         val build = batch(
-          delete from "test1" objectId "1",
-          delete from "test2" objectId "2"
+          delete objectFromIndex SafeDeleteObjectOperation("test1", "1").get,
+          delete objectFromIndex SafeDeleteObjectOperation("test2", "2").get
         ).build()
 
         val body = """

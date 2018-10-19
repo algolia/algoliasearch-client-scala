@@ -26,23 +26,20 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
+import algolia.{AlgoliaTest, inputs}
 import algolia.http.{DELETE, HttpPayload, POST}
+import algolia.inputs.SafeDeleteObjectOperation
 
 class DeleteObjectTest extends AlgoliaTest {
 
   describe("delete") {
 
     it("deletes object") {
-      delete from "toto" objectId "oid"
-    }
-
-    it("deletes object with inverse DSL") {
-      delete objectId "oid" from "toto"
+      delete objectFromIndex SafeDeleteObjectOperation("toto", "oid").get
     }
 
     it("should call API") {
-      (delete from "toto" objectId "oid").build() should be(
+      (delete objectFromIndex SafeDeleteObjectOperation("toto", "oid").get).build() should be(
         HttpPayload(
           DELETE,
           Seq("1", "indexes", "toto", "oid"),
