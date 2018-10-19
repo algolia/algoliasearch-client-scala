@@ -26,6 +26,7 @@
 package algolia.dsl
 
 import algolia.definitions._
+import algolia.inputs.SafeDeleteObjectOperation
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -43,10 +44,13 @@ trait DeleteDsl {
       DeleteIndexDefinition(index)
 
     //Object
+    @deprecated("use objectFromIndex", "1.30.0")
     def objectId(objectId: String) =
       DeleteObjectDefinition(oid = Some(objectId))
 
-    //Object
+    def objectFromIndex(op: SafeDeleteObjectOperation) = SafeDeleteObjectDefinition(op)
+
+    //Object(s)
     def from(index: String) = DeleteObjectDefinition(index = Some(index))
 
     def key(keyName: String) = DeleteKeyDefinition(keyName)

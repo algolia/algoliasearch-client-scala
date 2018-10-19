@@ -41,8 +41,10 @@ case class DeleteObjectDefinition(
 
   def from(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
 
+  @deprecated("use objectFromIndex", "1.30.0")
   def index(ind: String): DeleteObjectDefinition = copy(index = Some(ind))
 
+  @deprecated("use objectFromIndex", "1.30.0")
   def objectId(objectId: String): DeleteObjectDefinition =
     copy(oid = Some(objectId))
 

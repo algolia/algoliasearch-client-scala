@@ -70,6 +70,9 @@ case class BatchDefinition(
       case DeleteObjectDefinition(Some(index), Some(oid), _) =>
         Traversable(DeleteObjectOperation(index, oid))
 
+      case SafeDeleteObjectDefinition(op, _) =>
+        Traversable(DeleteObjectOperation(op.index, op.objectID))
+
       case DeleteIndexDefinition(index, _) =>
         Traversable(DeleteIndexOperation(index))
 
