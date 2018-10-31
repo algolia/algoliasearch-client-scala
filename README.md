@@ -60,7 +60,7 @@ You can find the full reference on [Algolia's website](https://www.algolia.com/d
 
 ## Supported platforms
 
-This API client only supports Scala 2.11 & 2.12.
+The API client only supports Scala 2.11 & 2.12.
 
 ## Install
 
@@ -101,16 +101,16 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 
 #### DSL
 
-The main goal of this client is to provide a human _accessible_ and _readable_ DSL for using Algolia search.
+The main goal of this client is to provide a human-accessible and readable DSL for using AlgoliaSearch.
 
 The entry point of the DSL is the [`algolia.AlgoliaDSL` object](https://github.com/algolia/algoliasearch-client-scala/blob/master/src/main/scala/algolia/AlgoliaDsl.scala).
 This DSL is used in the `execute` method of [`algolia.AlgoliaClient`](https://github.com/algolia/algoliasearch-client-scala/blob/master/src/main/scala/algolia/AlgoliaClient.scala).
 
-As we want to provide human readable DSL, there is more than one way to use this DSL. For example, to get an object by its `objectID`:
+As we want to provide human-readable DSL, there's more than one way to use this DSL. For example, to get an object by its `objectID`:
 ```scala
 client.execute { from index "index" objectId "myId" }
 
-//or
+// or
 
 client.execute { get / "index" / "myId" }
 ```
@@ -118,7 +118,7 @@ client.execute { get / "index" / "myId" }
 #### Future
 
 The `execute` method always returns a [`scala.concurrent.Future`](http://www.scala-lang.org/api/2.11.7/#scala.concurrent.Future).
-Depending on the operation it will be parametrized by a `case class`. For example:
+Depending on the operation, it's parametrized by a `case class`. For example:
 ```scala
 val future: Future[Search] =
     client.execute {
@@ -127,9 +127,10 @@ val future: Future[Search] =
 ```
 
 #### JSON as case class
-Putting or getting objects from the API is wrapped into `case class` automatically by [`json4s`](http://json4s.org).
 
-If you want to get objects just search for it and unwrap the result:
+Putting or getting objects from the API is wrapped into `case class` automatically with [`json4s`](http://json4s.org).
+
+If you want to get objects, search for them and unwrap the result:
 ```scala
 case class Contact(firstname: String,
                    lastname: String,
@@ -167,7 +168,7 @@ val future: Future[Seq[EnhanceContact]] =
         }
 ```
 
-For indexing documents, just pass an instance of your `case class` to the DSL:
+For indexing documents, pass an instance of your `case class` to the DSL:
 ```scala
 client.execute {
     index into "contacts" `object` Contact("Jimmie", "Barninger", 93, "California Paint")
@@ -191,13 +192,13 @@ val client = new AlgoliaClient("YourApplicationID", "YourAPIKey")
 ## Push data
 
 ```scala
-//For the DSL
+// For the DSL
 import algolia.AlgoliaDsl._
 
-//For basic Future support, you might want to change this by your own ExecutionContext
+// For basic Future support, you might want to change this by your own ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-//case class of your objects
+// case class of your objects
 case class Contact(firstname: String,
                    lastname: String,
                    followers: Int,
@@ -218,9 +219,9 @@ Settings can be customized to fine tune the search behavior. For example, you ca
 
 ```scala
 client.execute {
-	changeSettings of "myIndex" `with` IndexSettings(
-		customRanking = Some(Seq(CustomRanking.desc("followers")))
-	)
+    changeSettings of "myIndex" `with` IndexSettings(
+        customRanking = Some(Seq(CustomRanking.desc("followers")))
+    )
 }
 ```
 
@@ -231,9 +232,9 @@ In this case, the order of attributes is very important to decide which hit is t
 
 ```scala
 client.execute {
-	changeSettings of "myIndex" `with` IndexSettings(
-		searchableAttributes = Some(Seq("lastname", "firstname", "company"))
-	)
+    changeSettings of "myIndex" `with` IndexSettings(
+        searchableAttributes = Some(Seq("lastname", "firstname", "company"))
+    )
 }
 ```
 
@@ -242,16 +243,16 @@ client.execute {
 You can now search for contacts using `firstname`, `lastname`, `company`, etc. (even with typos):
 
 ```scala
-// search by firstname
+// Search for a first name
 client.execute { search into "contacts" query Query(query = Some("jimmie")) }
 
-// search a firstname with typo
+// Search for a first name with typo
 client.execute { search into "contacts" query Query(query = Some("jimie")) }
 
-// search for a company
+// Search for a company
 client.execute { search into "contacts" query Query(query = Some("california paint")) }
 
-// search for a firstname & company
+// Search for a first name and a company
 client.execute { search into "contacts" query Query(query = Some("jimmie paint")) }
 ```
 
@@ -342,7 +343,7 @@ search.start();
 
 - [Search index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
 - [Search for facet values](https://algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=scala)
-- [Search multiple indexes](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=scala)
+- [Search multiple indices](https://algolia.com/doc/api-reference/api-methods/multiple-queries/?language=scala)
 - [Browse index](https://algolia.com/doc/api-reference/api-methods/browse/?language=scala)
 
 
@@ -351,7 +352,7 @@ search.start();
 ### Indexing
 
 - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=scala)
-- [Update objects](https://algolia.com/doc/api-reference/api-methods/update-objects/?language=scala)
+- [Update objects](https://algolia.com/doc/api-reference/api-methods/save-objects/?language=scala)
 - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=scala)
 - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=scala)
 - [Delete by](https://algolia.com/doc/api-reference/api-methods/delete-by/?language=scala)
@@ -407,13 +408,13 @@ search.start();
 
 ### Query rules
 
-- [Save rule](https://algolia.com/doc/api-reference/api-methods/rules-save/?language=scala)
-- [Batch rules](https://algolia.com/doc/api-reference/api-methods/rules-save-batch/?language=scala)
-- [Get rule](https://algolia.com/doc/api-reference/api-methods/rules-get/?language=scala)
-- [Delete rule](https://algolia.com/doc/api-reference/api-methods/rules-delete/?language=scala)
-- [Clear rules](https://algolia.com/doc/api-reference/api-methods/rules-clear/?language=scala)
-- [Search rules](https://algolia.com/doc/api-reference/api-methods/rules-search/?language=scala)
-- [Export rules](https://algolia.com/doc/api-reference/api-methods/rules-export/?language=scala)
+- [Save rule](https://algolia.com/doc/api-reference/api-methods/save-rule/?language=scala)
+- [Batch rules](https://algolia.com/doc/api-reference/api-methods/batch-rules/?language=scala)
+- [Get rule](https://algolia.com/doc/api-reference/api-methods/get-rule/?language=scala)
+- [Delete rule](https://algolia.com/doc/api-reference/api-methods/delete-rule/?language=scala)
+- [Clear rules](https://algolia.com/doc/api-reference/api-methods/clear-rules/?language=scala)
+- [Search rules](https://algolia.com/doc/api-reference/api-methods/search-rules/?language=scala)
+- [Export rules](https://algolia.com/doc/api-reference/api-methods/export-rules/?language=scala)
 
 
 
