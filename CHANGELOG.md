@@ -1,5 +1,31 @@
 # ChangeLog
 
+# [1.30.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.29.0...1.30.0) (2018-11-30)
+
+### Summary
+
+Hello everyone,
+
+Big release today. It includes a lot of changes added since the release of the
+V2 of our PHP API client and implements new features related to Query Rules.
+We've also added a few methods related to the new enterprise-only Multi-Cluster
+Management (MCM) which will help to scale users data beyond a single Algolia
+server.
+
+### Changes
+
+- **misc:** Update README ([091035a](https://github.com/algolia/algoliasearch-client-scala/commit/091035a))
+- **fixed:** Introduce 'delete objectFromIndex X' to deprecate 'delete object X from index Y' ([3c37724](https://github.com/algolia/algoliasearch-client-scala/commit/3c37724))
+- **added:** Expose promoted field in `_rankingInfo` of query response when debugging query rules with getRankingInfo ([9574ab4](https://github.com/algolia/algoliasearch-client-scala/commit/9574ab4))
+- **added:** Expose appliedRules field in query response when debugging query rules with getRankingInfo ([7a4298c](https://github.com/algolia/algoliasearch-client-scala/commit/7a4298c))
+- **changed:** fix type of HighlightResult.fullyHighlighted from Boolean to Option[Boolean] as this field may not be present ([97a0aea](https://github.com/algolia/algoliasearch-client-scala/commit/97a0aea))
+- **added:** Implement methods for Multi Cluster Manangement (MCM) ([2f0cac6](https://github.com/algolia/algoliasearch-client-scala/commit/2f0cac6))
+- **removed:** Disable CircleCI for now (will experiment later on) ([344bee8](https://github.com/algolia/algoliasearch-client-scala/commit/344bee8))
+- **misc:** Update README ([44996f0](https://github.com/algolia/algoliasearch-client-scala/commit/44996f0))
+- **added:** Query Rules V2 ([ef6e587](https://github.com/algolia/algoliasearch-client-scala/commit/ef6e587))
+- **chore:** Add CircleCI configuration ([127e8cb](https://github.com/algolia/algoliasearch-client-scala/commit/127e8cb))
+- **chore:** Bump snapshot to 1.29.1 ([8ee38f8](https://github.com/algolia/algoliasearch-client-scala/commit/8ee38f8))
+
 # [1.29.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.28.0...1.29.0) (2018-09-04)
 
 ### Summary
