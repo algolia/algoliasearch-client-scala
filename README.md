@@ -339,6 +339,12 @@ search.start();
 
 
 
+### Personalization
+
+
+
+
+
 ### Search
 
 - [Search index](https://algolia.com/doc/api-reference/api-methods/search/?language=scala)
@@ -352,10 +358,12 @@ search.start();
 ### Indexing
 
 - [Add objects](https://algolia.com/doc/api-reference/api-methods/add-objects/?language=scala)
-- [Update objects](https://algolia.com/doc/api-reference/api-methods/save-objects/?language=scala)
+- [Save objects](https://algolia.com/doc/api-reference/api-methods/save-objects/?language=scala)
 - [Partial update objects](https://algolia.com/doc/api-reference/api-methods/partial-update-objects/?language=scala)
 - [Delete objects](https://algolia.com/doc/api-reference/api-methods/delete-objects/?language=scala)
+- [Replace all objects](https://algolia.com/doc/api-reference/api-methods/replace-all-objects/?language=scala)
 - [Delete by](https://algolia.com/doc/api-reference/api-methods/delete-by/?language=scala)
+- [Clear objects](https://algolia.com/doc/api-reference/api-methods/clear-objects/?language=scala)
 - [Get objects](https://algolia.com/doc/api-reference/api-methods/get-objects/?language=scala)
 - [Custom batch](https://algolia.com/doc/api-reference/api-methods/batch/?language=scala)
 
@@ -366,17 +374,17 @@ search.start();
 
 - [Get settings](https://algolia.com/doc/api-reference/api-methods/get-settings/?language=scala)
 - [Set settings](https://algolia.com/doc/api-reference/api-methods/set-settings/?language=scala)
+- [Copy settings](https://algolia.com/doc/api-reference/api-methods/copy-settings/?language=scala)
 
 
 
 
 ### Manage indices
 
-- [List indexes](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=scala)
+- [List indices](https://algolia.com/doc/api-reference/api-methods/list-indices/?language=scala)
 - [Delete index](https://algolia.com/doc/api-reference/api-methods/delete-index/?language=scala)
 - [Copy index](https://algolia.com/doc/api-reference/api-methods/copy-index/?language=scala)
 - [Move index](https://algolia.com/doc/api-reference/api-methods/move-index/?language=scala)
-- [Clear index](https://algolia.com/doc/api-reference/api-methods/clear-index/?language=scala)
 
 
 
@@ -401,6 +409,8 @@ search.start();
 - [Clear all synonyms](https://algolia.com/doc/api-reference/api-methods/clear-synonyms/?language=scala)
 - [Get synonym](https://algolia.com/doc/api-reference/api-methods/get-synonym/?language=scala)
 - [Search synonyms](https://algolia.com/doc/api-reference/api-methods/search-synonyms/?language=scala)
+- [Replace all synonyms](https://algolia.com/doc/api-reference/api-methods/replace-all-synonyms/?language=scala)
+- [Copy synonyms](https://algolia.com/doc/api-reference/api-methods/copy-synonyms/?language=scala)
 - [Export Synonyms](https://algolia.com/doc/api-reference/api-methods/export-synonyms/?language=scala)
 
 
@@ -414,6 +424,8 @@ search.start();
 - [Delete rule](https://algolia.com/doc/api-reference/api-methods/delete-rule/?language=scala)
 - [Clear rules](https://algolia.com/doc/api-reference/api-methods/clear-rules/?language=scala)
 - [Search rules](https://algolia.com/doc/api-reference/api-methods/search-rules/?language=scala)
+- [Replace all rules](https://algolia.com/doc/api-reference/api-methods/replace-all-rules/?language=scala)
+- [Copy rules](https://algolia.com/doc/api-reference/api-methods/copy-rules/?language=scala)
 - [Export rules](https://algolia.com/doc/api-reference/api-methods/export-rules/?language=scala)
 
 
