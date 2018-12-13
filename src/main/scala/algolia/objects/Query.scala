@@ -107,6 +107,8 @@ case class Query(
                  restrictSources: Option[String] = None,
                  /* Browse */
                  cursor: Option[String] = None,
+                 /* Personalization */
+                 enablePersonalization: Option[Boolean] = None,
                  /* CUSTOM */
                  customParameters: Option[Map[String, String]] = None) {
 
