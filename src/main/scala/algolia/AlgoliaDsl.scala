@@ -65,6 +65,7 @@ trait AlgoliaDsl
     with TaskStatusDsl
     with AssignDsl
     with RemoveDsl
+    with SendDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 
