@@ -82,6 +82,7 @@ class AlgoliaClient(applicationId: String,
       ))
 
   val analyticsHost: String = "https://analytics.algolia.com"
+  val insightsHost: String = "https://insights.algolia.io"
 
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
@@ -129,6 +130,8 @@ class AlgoliaClient(applicationId: String,
       implicit executor: ExecutionContext): Future[T] = {
     if (payload.isAnalytics) {
       requestAnalytics(payload)
+    } else if (payload.isInsights) {
+      requestInsights(payload)
     } else {
       requestSearch(payload)
     }
@@ -140,6 +143,15 @@ class AlgoliaClient(applicationId: String,
       case Failure(e) =>
         logger.debug("Analytics API call failed", e)
         Future.failed(new AlgoliaClientException("Analytics API call failed", e))
+    }
+  }
+
+  private[algolia] def requestInsights[T: Manifest](payload: HttpPayload)(
+      implicit executor: ExecutionContext): Future[T] = {
+    httpClient.request[T](insightsHost, headers, payload).andThen {
+      case Failure(e) =>
+        logger.debug("Insights API call failed", e)
+        Future.failed(new AlgoliaClientException("Insights API call failed", e))
     }
   }
 
