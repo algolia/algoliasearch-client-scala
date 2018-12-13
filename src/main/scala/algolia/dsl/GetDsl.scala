@@ -27,6 +27,7 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl.ABTests
 import algolia.definitions._
+import algolia.objects.Strategy
 import algolia.responses.{GetObject, Results, TopUserID, UserDataWithCluster}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -66,6 +67,9 @@ trait GetDsl {
 
     def userID(userID: String) = GetUserIDDefinition(userID)
 
+    // Personalization
+    def personalizationStrategy() = GetPersonalizationStrategyDefinition()
+
   }
 
   implicit object GetObjectDefinitionExecutable
@@ -100,6 +104,14 @@ trait GetDsl {
     override def apply(client: AlgoliaClient, query: GetUserIDDefinition)(
         implicit executor: ExecutionContext): Future[UserDataWithCluster] = {
       client.request[UserDataWithCluster](query.build())
+    }
+  }
+
+  implicit object GetPersonalizationStrategyExecutable
+      extends Executable[GetPersonalizationStrategyDefinition, Strategy] {
+    override def apply(client: AlgoliaClient, query: GetPersonalizationStrategyDefinition)(
+        implicit executor: ExecutionContext): Future[Strategy] = {
+      client.request[Strategy](query.build())
     }
   }
 
