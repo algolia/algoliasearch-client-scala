@@ -86,4 +86,12 @@ trait DeleteDsl {
     }
   }
 
+  implicit object SafeDeleteObjectDefinitionExecutable
+    extends Executable[SafeDeleteObjectDefinition, Task] {
+    override def apply(client: AlgoliaClient, query: SafeDeleteObjectDefinition)(
+      implicit executor: ExecutionContext): Future[Task] = {
+      client.request[Task](query.build())
+    }
+  }
+
 }
