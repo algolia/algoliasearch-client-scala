@@ -1,5 +1,22 @@
 # ChangeLog
 
+# [1.31.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.30.0...1.31.0) (2018-12-17)
+
+### Summary
+
+Hello everyone,
+
+Quick release of the new Insights Client which will let you interact with the Insights API, responsible for handling the interactions with Algolia Insights services. This new version also adds support for the setting and retrieving the Personalization strategy of an Algolia application
+
+### Changes
+
+- **misc:** Fix scalafmt errors ([6d98741](https://github.com/algolia/algoliasearch-client-scala/commit/6d98741))
+- **misc:** Add missing Executable typeclass for SafeDeleteObjectDefinition ([fb82bfa](https://github.com/algolia/algoliasearch-client-scala/commit/fb82bfa))
+- **misc:** added: Add get/set personalizationStrategy for Personalization API ([1ab4332](https://github.com/algolia/algoliasearch-client-scala/commit/1ab4332))
+- **misc:** added: Implement `send event/events` DSL for Insights API ([a08f8ef](https://github.com/algolia/algoliasearch-client-scala/commit/a08f8ef))
+- **misc:** Update README ([d641d9a](https://github.com/algolia/algoliasearch-client-scala/commit/d641d9a))
+- **chore:** Bump snapshot to 1.30.1 ([1a1fab1](https://github.com/algolia/algoliasearch-client-scala/commit/1a1fab1))
+
 # [1.30.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.29.0...1.30.0) (2018-11-30)
 
 ### Summary
