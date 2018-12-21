@@ -68,6 +68,7 @@ case class IndexSettings(
     queryType: Option[QueryType] = None,
     removeWordsIfNoResults: Option[String] = None,
     advancedSyntax: Option[Boolean] = None,
+    advancedSyntaxFeatures: Option[Seq[String]] = None,
     optionalWords: Option[Seq[String]] = None,
     removeStopWords: Option[RemoveStopWords] = None,
     disablePrefixOnAttributes: Option[Seq[String]] = None,
