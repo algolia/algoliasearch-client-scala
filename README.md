@@ -1,7 +1,6 @@
 # Algolia Search API Client for Scala
 
-[Algolia Search](https://www.algolia.com) is a hosted full-text, numerical,
-and faceted search engine capable of delivering realtime results from the first keystroke.
+[Algolia Search](https://www.algolia.com) is a hosted search engine capable of delivering realtime results from the first keystroke.
 
 The **Algolia Search API Client for Scala** lets
 you easily use the [Algolia Search REST API](https://www.algolia.com/doc/rest-api/search) from
@@ -181,7 +180,7 @@ In 30 seconds, this quick start tutorial will show you how to index and search o
 
 ### Initialize the client
 
-To begin, you will need to initialize the client. In order to do this you will need your **Application ID** and **API Key**.
+To start, you need to initialize the client. To do this, you need your **Application ID** and **API Key**.
 You can find both on [your Algolia account](https://www.algolia.com/api-keys).
 
 ```scala
@@ -215,7 +214,7 @@ val indexing2: Future[Indexing] = client.execute {
 
 ## Configure
 
-Settings can be customized to fine tune the search behavior. For example, you can add a custom sort by number of followers to further enhance the built-in relevance:
+You can customize settings to fine tune the search behavior. For example, you can add a custom ranking by number of followers to further enhance the built-in relevance:
 
 ```scala
 client.execute {
@@ -227,8 +226,8 @@ client.execute {
 
 You can also configure the list of attributes you want to index by order of importance (most important first).
 
-**Note:** The Algolia engine is designed to suggest results as you type, which means you'll generally search by prefix.
-In this case, the order of attributes is very important to decide which hit is the best:
+**Note:** Algolia is designed to suggest results as you type, which means you'll generally search by prefix.
+In this case, the order of attributes is crucial to decide which hit is the best.
 
 ```scala
 client.execute {
@@ -240,7 +239,7 @@ client.execute {
 
 ## Search
 
-You can now search for contacts using `firstname`, `lastname`, `company`, etc. (even with typos):
+You can now search for contacts by `firstname`, `lastname`, `company`, etc. (even with typos):
 
 ```scala
 // Search for a first name
@@ -258,11 +257,11 @@ client.execute { search into "contacts" query Query(query = Some("jimmie paint")
 
 ## Search UI
 
-**Warning:** If you are building a web application, you may be more interested in using one of our
-[frontend search UI libraries](https://www.algolia.com/doc/guides/search-ui/search-libraries/)
+**Warning:** If you're building a web application, you may be interested in using one of our
+[front-end search UI libraries](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
 
-The following example shows how to build a front-end search quickly using
-[InstantSearch.js](https://community.algolia.com/instantsearch.js/)
+The following example shows how to quickly build a front-end search using
+[InstantSearch.js](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/)
 
 ### index.html
 
@@ -270,15 +269,13 @@ The following example shows how to build a front-end search quickly using
 <!doctype html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.3/dist/instantsearch.min.css">
-  <!-- Always use `2.x` versions in production rather than `2` to mitigate any side effects on your website,
-  Find the latest version on InstantSearch.js website: https://community.algolia.com/instantsearch.js/v2/guides/usage.html -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.1.0/themes/algolia.css" />
 </head>
 <body>
   <header>
     <div>
        <input id="search-input" placeholder="Search for products">
-       <!-- We use a specific placeholder in the input to guides users in their search. -->
+       <!-- We use a specific placeholder in the input to guide users in their search. -->
     
   </header>
   <main>
@@ -288,11 +285,14 @@ The following example shows how to build a front-end search quickly using
 
   <script type="text/html" id="hit-template">
     
-      <p class="hit-name">{{{_highlightResult.firstname.value}}} {{{_highlightResult.lastname.value}}}</p>
+      <p class="hit-name">
+        {}{ "attribute": "firstname" }{{/helpers.highlight}}
+        {}{ "attribute": "lastname" }{{/helpers.highlight}}
+      </p>
     
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.3/dist/instantsearch.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0"></script>
   <script src="app.js"></script>
 </body>
 ```
@@ -300,11 +300,15 @@ The following example shows how to build a front-end search quickly using
 ### app.js
 
 ```js
+// Replace with your own values
+var searchClient = algoliasearch(
+  'YourApplicationID',
+  'YourAPIKey' // search only API key, no ADMIN key
+);
+
 var search = instantsearch({
-  // Replace with your own values
-  appId: 'YourApplicationID',
-  apiKey: 'YourSearchOnlyAPIKey', // search only API key, no ADMIN key
-  indexName: 'contacts',
+  indexName: 'instant_search',
+  searchClient: searchClient,
   routing: true,
   searchParameters: {
     hitsPerPage: 10
@@ -341,6 +345,8 @@ search.start();
 
 ### Personalization
 
+- [Add strategy](https://algolia.com/doc/api-reference/api-methods/add-strategy/?language=scala)
+- [Get strategy](https://algolia.com/doc/api-reference/api-methods/get-strategy/?language=scala)
 
 
 
@@ -438,6 +444,20 @@ search.start();
 - [List A/B tests](https://algolia.com/doc/api-reference/api-methods/list-ab-tests/?language=scala)
 - [Stop A/B test](https://algolia.com/doc/api-reference/api-methods/stop-ab-test/?language=scala)
 - [Delete A/B test](https://algolia.com/doc/api-reference/api-methods/delete-ab-test/?language=scala)
+
+
+
+
+### Insights
+
+- [Clicked Object IDs After Search](https://algolia.com/doc/api-reference/api-methods/clicked-object-ids-after-search/?language=scala)
+- [Clicked Object IDs](https://algolia.com/doc/api-reference/api-methods/clicked-object-ids/?language=scala)
+- [Clicked Filters](https://algolia.com/doc/api-reference/api-methods/clicked-filters/?language=scala)
+- [Converted Objects IDs After Search](https://algolia.com/doc/api-reference/api-methods/converted-object-ids-after-search/?language=scala)
+- [Converted Object IDs](https://algolia.com/doc/api-reference/api-methods/converted-object-ids/?language=scala)
+- [Converted Filters](https://algolia.com/doc/api-reference/api-methods/converted-filters/?language=scala)
+- [Viewed Object IDs](https://algolia.com/doc/api-reference/api-methods/viewed-object-ids/?language=scala)
+- [Viewed Filters](https://algolia.com/doc/api-reference/api-methods/viewed-filters/?language=scala)
 
 
 
