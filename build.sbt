@@ -12,7 +12,7 @@ scalaVersion := "2.12.2"
 
 coverageEnabled := false
 
-val asyncHttpClientVersion = "2.0.33"
+val asyncHttpClientVersion = "2.6.0"
 val json4sVersion = "3.5.2"
 val slf4jVersion = "1.7.25"
 val scalaUriVersion = "0.4.16"
