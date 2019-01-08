@@ -4,7 +4,7 @@ name := "algoliasearch-scala"
 
 description := "Scala client for Algolia Search API"
 
-version := "1.31.1-SNAPSHOT"
+version := "1.32.0"
 
 crossScalaVersions := Seq("2.11.11", "2.12.2")
 

@@ -1,5 +1,21 @@
 # ChangeLog
 
+# [1.32.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.31.0...1.32.0) (2019-01-08)
+
+### Summary
+
+Hello everyone,
+
+Quick release to add the advancedSyntaxFeatures parameters and a few network fixes.
+
+### Changes
+
+- **misc:** Update README ([8c9b263](https://github.com/algolia/algoliasearch-client-scala/commit/8c9b263))
+- **added:** Support for query/setting parameter advancedSyntaxFeatures ([8c86fea](https://github.com/algolia/algoliasearch-client-scala/commit/8c86fea))
+- **fixed:** Ensure that the DnsNameResolver is closed when the AlgoliaClient is. (#511) ([9c25f35](https://github.com/algolia/algoliasearch-client-scala/commit/9c25f35))
+- **chore:** Update: async-http-client (#510) ([45fd1ee](https://github.com/algolia/algoliasearch-client-scala/commit/45fd1ee))
+- **chore:** Bump snapshot to 1.31.1 ([7cd2156](https://github.com/algolia/algoliasearch-client-scala/commit/7cd2156))
+
 # [1.31.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.30.0...1.31.0) (2018-12-17)
 
 ### Summary
