@@ -28,31 +28,21 @@ package algolia.integration
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.objects.{Acl, ApiKey}
-import algolia.responses.{AllKeys, CreateUpdateKey}
 
 import scala.language.postfixOps
-import scala.concurrent.Future
 
 class ApiKeyIntegrationTest extends AlgoliaTest {
 
+  var keyName = ""
+
   describe("global keys") {
 
-    it("should list keys") {
-      val result: Future[AllKeys] = AlgoliaTest.client.execute {
-        list keys
-      }
-
-      whenReady(result) { keys =>
-        keys.keys shouldNot be(empty)
-      }
-    }
-
-    it("should do stuff with keys") {
+    it("should add/get/list/update/delete/restore a key") {
       val addKey = AlgoliaTest.client.execute {
+
         add key ApiKey(acl = Some(Seq(Acl.addObject)))
       }
 
-      var keyName = ""
       whenReady(addKey) { r =>
         r.key shouldNot be(empty)
         keyName = r.key
@@ -68,11 +58,20 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
         r.acl should equal(Some(Seq(Acl.addObject)))
       }
 
+      val listKeys = AlgoliaTest.client.execute {
+        list keys
+      }
+
+      whenReady(listKeys) { r =>
+        r.keys shouldNot be(empty)
+      }
+
       val updateKey = AlgoliaTest.client.execute {
+
         update key keyName `with` ApiKey(validity = Some(10))
       }
 
-      whenReady(updateKey) { (r: CreateUpdateKey) =>
+      whenReady(updateKey) { r =>
         r.key should be(keyName)
       }
 
@@ -81,6 +80,51 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
       }
 
       whenReady(deleteKey) { r =>
+        r.deletedAt shouldNot be(empty)
+      }
+
+      println(keyName)
+
+      var isKeyDeleted = false
+
+      while (!isKeyDeleted) {
+        val getKey = AlgoliaTest.client.execute {
+          get key keyName
+        }
+
+        getKey.onComplete { t =>
+          isKeyDeleted = t.isFailure
+        }
+
+        Thread.sleep(800)
+      }
+
+      val restoreKey = AlgoliaTest.client.execute {
+        restore key keyName
+      }
+
+      whenReady(restoreKey) { r =>
+        var isKeyRestored = false
+
+        while (!isKeyRestored) {
+
+          val getRestoredKey = AlgoliaTest.client.execute {
+            get key keyName
+          }
+
+          getRestoredKey.onComplete { t =>
+            isKeyRestored = t.isFailure
+          }
+
+          Thread.sleep(800)
+        }
+      }
+
+      val deleteKeyAfterRestore = AlgoliaTest.client.execute {
+        delete key keyName
+      }
+
+      whenReady(deleteKeyAfterRestore) { r =>
         r.deletedAt shouldNot be(empty)
       }
     }

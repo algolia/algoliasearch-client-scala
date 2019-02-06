@@ -23,14 +23,31 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.dsl
 
-import algolia.objects.ApiKey
+import algolia.definitions._
+import algolia.responses.RestoreKey
+import algolia.{AlgoliaClient, Executable}
+import org.json4s.Formats
 
-case class CreateUpdateKey(key: String, createdAt: Option[String])
+import scala.concurrent.{ExecutionContext, Future}
 
-case class DeleteKey(deletedAt: String)
+trait RestoreDsl {
 
-case class AllKeys(keys: Seq[ApiKey])
+  implicit val formats: Formats
 
-case class RestoreKey(createdAt: Option[String])
+  case object restore {
+
+    def key(key: String) = RestoreKeyDefinition(key)
+
+  }
+
+  implicit object RestoreKeyDefinitionExecutable
+      extends Executable[RestoreKeyDefinition, RestoreKey] {
+    override def apply(client: AlgoliaClient, query: RestoreKeyDefinition)(
+        implicit executor: ExecutionContext): Future[RestoreKey] = {
+      client.request[RestoreKey](query.build())
+    }
+  }
+
+}
