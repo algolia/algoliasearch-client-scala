@@ -89,6 +89,25 @@ case class AddKeyDefinition(
   }
 }
 
+case class RestoreKeyDefinition(key: String, requestOptions: Option[RequestOptions] = None)(
+    implicit val formats: Formats)
+    extends Definition {
+  type T = RestoreKeyDefinition
+
+  override def options(requestOptions: RequestOptions): RestoreKeyDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build(): HttpPayload = {
+    HttpPayload(
+      POST,
+      Seq("1", "keys", key, "restore"),
+      body = None,
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+}
+
 case class DeleteKeyDefinition(keyName: String,
                                indexName: Option[String] = None,
                                requestOptions: Option[RequestOptions] = None)
