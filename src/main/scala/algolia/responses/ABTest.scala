@@ -27,6 +27,8 @@ package algolia.responses
 
 import java.time.LocalDateTime
 
+import algolia.objects.Query
+
 case class ABTestsResponse(abtests: Seq[ABTestResponse], count: Int, total: Int)
 
 case class ABTestResponse(abTestID: Int,
@@ -48,4 +50,5 @@ case class VariantResponse(averageClickPosition: Option[Int],
                            noResultCount: Option[Int],
                            searchCount: Option[Int],
                            trafficPercentage: Int,
-                           userCount: Option[Int])
+                           userCount: Option[Int],
+                           customSearchParameters: Option[Query])

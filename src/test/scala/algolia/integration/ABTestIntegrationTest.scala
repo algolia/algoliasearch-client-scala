@@ -32,7 +32,7 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.inputs.{ABTest, ABTestVariant}
 import algolia.`4XXAPIException`
-
+import algolia.objects.{IgnorePlurals, Query}
 import org.scalatest.RecoverMethods._
 
 class ABTestIntegrationTest extends AlgoliaTest {
@@ -60,9 +60,21 @@ class ABTestIntegrationTest extends AlgoliaTest {
     endAt = now.plus(10, ChronoUnit.DAYS)
   )
 
+  def dummyAATest = ABTest(
+    name = s"aaTestName-$nowStr",
+    variants = Seq(
+      ABTestVariant(indexName1, 90),
+      ABTestVariant(indexName1,
+                    10,
+                    customSearchParameters =
+                      Some(Query(ignorePlurals = Some(IgnorePlurals.`true`))))
+    ),
+    endAt = now.plus(1, ChronoUnit.DAYS)
+  )
+
   describe("AB testing") {
 
-    it("should send an API test") {
+    it("should send an AB test") {
       val inputAbTest = dummyABTest
 
       taskShouldBeCreatedAndWaitForIt(client.execute(add abTest inputAbTest), indexName1)
@@ -93,7 +105,40 @@ class ABTestIntegrationTest extends AlgoliaTest {
       }
     }
 
-    it("should stop an API test") {
+    it("should send an AA test") {
+      val inputAaTest = dummyAATest
+
+      taskShouldBeCreatedAndWaitForIt(client.execute(add abTest inputAaTest), indexName1)
+
+      val task = client.execute(get all abTests)
+
+      whenReady(task) { abTests =>
+        abTests.abtests should have size 1
+        abTests.abtests.map { abTest =>
+          {
+            abTest.name should be(inputAaTest.name)
+            abTest.endAt should be(inputAaTest.endAt)
+
+            abTest.variants.size should be(inputAaTest.variants.size)
+            abTest.variants.forall { variant =>
+              val isVariantFound =
+                inputAaTest.variants
+                  .map { expectedVariant =>
+                    expectedVariant.index == variant.index &&
+                    expectedVariant.trafficPercentage == variant.trafficPercentage &&
+                    expectedVariant.customSearchParameters == variant.customSearchParameters
+                  }
+                  .reduce((a, b) => a || b)
+
+              isVariantFound
+            }
+          }
+        }
+      }
+
+    }
+
+    it("should stop an AB test") {
       val inputAbTest = dummyABTest
 
       val addTask = client.execute(add abTest inputAbTest)
@@ -112,7 +157,7 @@ class ABTestIntegrationTest extends AlgoliaTest {
       }
     }
 
-    it("should delete an API test") {
+    it("should delete an AB test") {
       val inputAbTest = dummyABTest
 
       val addTask = client.execute(add abTest inputAbTest)
