@@ -42,6 +42,7 @@ case class Query(
                  maxFacetHits: Option[Int] = None,
                  percentileComputation: Option[Boolean] = None,
                  queryLanguages: Option[Seq[String]] = None,
+                 enableABTest: Option[Boolean] = None,
                  /* Attributes */
                  attributesToRetrieve: Option[Seq[String]] = None,
                  restrictSearchableAttributes: Option[Seq[String]] = None,
