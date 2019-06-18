@@ -36,6 +36,7 @@ case class IndexSettings(
     queryLanguages: Option[Seq[String]] = None,
     attributeCriteriaComputedByMinProximity: Option[Boolean] = None,
     primary: Option[String] = None,
+    userData: Option[Any] = None,
     /* Attributes */
     attributesToIndex: Option[Seq[AttributesToIndex]] = None,
     searchableAttributes: Option[Seq[SearchableAttributes]] = None,
