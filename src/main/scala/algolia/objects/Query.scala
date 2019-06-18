@@ -94,6 +94,7 @@ case class Query(
                  /* Search */
                  query: Option[String] = None,
                  private[algolia] val facetQuery: Option[String] = None,
+                 similarQuery: Option[String] = None,
                  /* Typos */
                  minWordSizefor1Typo: Option[Int] = None,
                  minWordSizefor2Typos: Option[Int] = None,
