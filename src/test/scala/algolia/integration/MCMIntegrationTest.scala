@@ -25,7 +25,8 @@
 
 package algolia.integration
 
-import java.time.{LocalDateTime, ZoneOffset}
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneOffset, ZonedDateTime}
 
 import algolia.AlgoliaDsl._
 import algolia.inputs.UserIDAssignment
@@ -38,32 +39,34 @@ import scala.language.postfixOps
 
 class MCMIntegrationTest extends AlgoliaTest {
 
-  override lazy val applicationId: String = System.getenv("APPLICATION_ID_MCM")
-  override lazy val apiKey: String = System.getenv("API_KEY_MCM")
-  override lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
-    override val httpClient: AlgoliaHttpClient =
-      AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
-  }
+  lazy val mcmClient: AlgoliaClient =
+    new AlgoliaClient(System.getenv("APPLICATION_ID_MCM"), System.getenv("API_KEY_MCM")) {
+      override val httpClient: AlgoliaHttpClient =
+        AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
+    }
 
   // As we use the same application ID for integration testing for all API clients, the
   // way we differentiate userIDs is to prepend a `LANG-client-` prefix to each userID.
-  val userIDPrefix = "scala-client-"
+  val date: String =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd").format(ZonedDateTime.now(ZoneOffset.UTC))
+  val userIDPrefix =
+    s"scala-client-$date-${System.getProperty("user.name")}"
 
   def hasScalaUserIDPrefix(u: UserDataWithCluster): Boolean = u.userID.startsWith(userIDPrefix)
 
   it("should assign userID properly") {
     // Make sure we have at least 2 clusters and retrieve the first one
-    val listClusters = client.execute(list clusters)
+    val listClusters = mcmClient.execute(list clusters)
     val cluster: ClusterData = whenReady(listClusters) { res =>
       res.clusters.size should be > 1
       res.clusters.head
     }
 
     // Delete any preexisting user
-    var listUsersFuture = client.execute(list userIDs)
+    var listUsersFuture = mcmClient.execute(list userIDs)
     val existingUserIDs = whenReady(listUsersFuture)(_.userIDs).filter(hasScalaUserIDPrefix)
     val removeExistingUsersFutures =
-      existingUserIDs.map(id => client.execute(remove userID id.userID))
+      existingUserIDs.map(id => mcmClient.execute(remove userID id.userID))
     Await
       .result(
         Future.sequence(removeExistingUsersFutures),
@@ -71,7 +74,7 @@ class MCMIntegrationTest extends AlgoliaTest {
       )
     Thread.sleep(3000)
 
-    listUsersFuture = client.execute(list userIDs)
+    listUsersFuture = mcmClient.execute(list userIDs)
     whenReady(listUsersFuture)(_.userIDs).count(hasScalaUserIDPrefix) should be(0)
 
     // Assign one user to the first cluster and make sure it is assigned
@@ -80,14 +83,14 @@ class MCMIntegrationTest extends AlgoliaTest {
     val userID = userIDPrefix + (if (travisBuildID == null) "local" else travisBuildID) + userIDSuffix
     Await
       .result(
-        client.execute(assign userID UserIDAssignment(userID, cluster.clusterName)),
+        mcmClient.execute(assign userID UserIDAssignment(userID, cluster.clusterName)),
         10 seconds
       )
     Thread.sleep(3000)
 
     Await
       .result(
-        client.execute(search userIDs userID cluster cluster.clusterName),
+        mcmClient.execute(search userIDs userID cluster cluster.clusterName),
         10 seconds
       )
       .hits

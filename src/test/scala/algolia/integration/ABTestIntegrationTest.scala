@@ -33,12 +33,13 @@ import algolia.AlgoliaTest
 import algolia.inputs.{ABTest, ABTestVariant}
 import algolia.`4XXAPIException`
 import algolia.objects.{IgnorePlurals, Query}
+
 import org.scalatest.RecoverMethods._
 
 class ABTestIntegrationTest extends AlgoliaTest {
 
-  val now = LocalDateTime.now
-  val nowStr = now.atOffset(ZoneOffset.UTC).toEpochSecond.toString
+  val now: LocalDateTime = LocalDateTime.now
+  val nowStr: String = now.atOffset(ZoneOffset.UTC).toEpochSecond.toString
   val indexName1 = s"indexAbTest1-$nowStr"
   val indexName2 = s"indexAbTest2-$nowStr"
 
@@ -57,7 +58,7 @@ class ABTestIntegrationTest extends AlgoliaTest {
       ABTestVariant(indexName1, 60, Some("a description")),
       ABTestVariant(indexName2, 40)
     ),
-    endAt = now.plus(10, ChronoUnit.DAYS)
+    endAt = now.plus(6, ChronoUnit.DAYS)
   )
 
   def dummyAATest = ABTest(
@@ -77,9 +78,10 @@ class ABTestIntegrationTest extends AlgoliaTest {
     it("should send an AB test") {
       val inputAbTest = dummyABTest
 
-      taskShouldBeCreatedAndWaitForIt(client.execute(add abTest inputAbTest), indexName1)
+      taskShouldBeCreatedAndWaitForIt(AlgoliaTest.client.execute(add abTest inputAbTest),
+                                      indexName1)
 
-      val task = client.execute(get all abTests)
+      val task = AlgoliaTest.client.execute(get all abTests)
       whenReady(task) { abTests =>
         abTests.abtests should have size 1
         abTests.abtests.map { abTest =>
@@ -108,9 +110,10 @@ class ABTestIntegrationTest extends AlgoliaTest {
     it("should send an AA test") {
       val inputAaTest = dummyAATest
 
-      taskShouldBeCreatedAndWaitForIt(client.execute(add abTest inputAaTest), indexName1)
+      taskShouldBeCreatedAndWaitForIt(AlgoliaTest.client.execute(add abTest inputAaTest),
+                                      indexName1)
 
-      val task = client.execute(get all abTests)
+      val task = AlgoliaTest.client.execute(get all abTests)
 
       whenReady(task) { abTests =>
         abTests.abtests should have size 1
@@ -141,16 +144,16 @@ class ABTestIntegrationTest extends AlgoliaTest {
     it("should stop an AB test") {
       val inputAbTest = dummyABTest
 
-      val addTask = client.execute(add abTest inputAbTest)
+      val addTask = AlgoliaTest.client.execute(add abTest inputAbTest)
       val abTestID = whenReady(addTask) { res =>
         res.abTestID
       }
       taskShouldBeCreatedAndWaitForIt(addTask, indexName1)
 
-      val stopTask = client.execute(stop abTest abTestID)
+      val stopTask = AlgoliaTest.client.execute(stop abTest abTestID)
       taskShouldBeCreatedAndWaitForIt(stopTask, indexName1)
 
-      val getTask = client.execute(get abTest abTestID)
+      val getTask = AlgoliaTest.client.execute(get abTest abTestID)
       whenReady(getTask) { abTest =>
         abTest.abTestID should be(abTestID)
         abTest.status should be("stopped")
@@ -160,19 +163,19 @@ class ABTestIntegrationTest extends AlgoliaTest {
     it("should delete an AB test") {
       val inputAbTest = dummyABTest
 
-      val addTask = client.execute(add abTest inputAbTest)
+      val addTask = AlgoliaTest.client.execute(add abTest inputAbTest)
       val abTestID = whenReady(addTask) { res =>
         res.abTestID
       }
       taskShouldBeCreatedAndWaitForIt(addTask, indexName1)
 
-      val deleteTask = client.execute(delete abTest abTestID)
+      val deleteTask = AlgoliaTest.client.execute(delete abTest abTestID)
       whenReady(deleteTask) { res =>
         res
       }
 
       recoverToSucceededIf[`4XXAPIException`] {
-        client.execute(get abTest abTestID)
+        AlgoliaTest.client.execute(get abTest abTestID)
       }
     }
   }

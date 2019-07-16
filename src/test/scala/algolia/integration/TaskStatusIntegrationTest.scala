@@ -33,39 +33,43 @@ import scala.concurrent.Future
 
 class TaskStatusIntegrationTest extends AlgoliaTest {
 
+  val indexToGetTaskStatus: String = getTestIndexName("indexToGetTaskStatus")
+
   after {
-    clearIndices("indexToGetTaskStatus")
+    clearIndices(indexToGetTaskStatus)
   }
 
-  it("should get the status of a single object task") {
-    val create: Future[TaskIndexing] = client.execute {
-      index into "indexToGetTaskStatus" `object` ObjectToGet("1", "toto")
-    }
+  describe("task") {
+    it("should get the status of a single object task") {
+      val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+        index into indexToGetTaskStatus `object` ObjectToGet("1", "toto")
+      }
 
-    val task = taskShouldBeCreated(create)
+      val task = taskShouldBeCreated(create)
 
-    eventually {
-      val status = client.execute { getStatus task task from "indexToGetTaskStatus" }
-      whenReady(status) { result =>
-        result.status shouldBe "published"
+      eventually {
+        val status = AlgoliaTest.client.execute { getStatus task task from indexToGetTaskStatus }
+        whenReady(status) { result =>
+          result.status shouldBe "published"
+        }
       }
     }
-  }
 
-  it("should get the status of a multiple objects task") {
-    val create: Future[TasksMultipleIndex] = client.execute {
-      batch(
-        index into "indexToGetTaskStatus" `object` ObjectToGet("1", "toto"),
-        index into "indexToGetTaskStatus" `object` ObjectToGet("2", "tata")
-      )
-    }
+    it("should get the status of a multiple objects task") {
+      val create: Future[TasksMultipleIndex] = AlgoliaTest.client.execute {
+        batch(
+          index into indexToGetTaskStatus `object` ObjectToGet("1", "toto"),
+          index into indexToGetTaskStatus `object` ObjectToGet("2", "tata")
+        )
+      }
 
-    val task = taskShouldBeCreated(create)
+      val task = taskShouldBeCreated(create)
 
-    eventually {
-      val status = client.execute { getStatus task task from "indexToGetTaskStatus" }
-      whenReady(status) { result =>
-        result.status shouldBe "published"
+      eventually {
+        val status = AlgoliaTest.client.execute { getStatus task task from indexToGetTaskStatus }
+        whenReady(status) { result =>
+          result.status shouldBe "published"
+        }
       }
     }
   }

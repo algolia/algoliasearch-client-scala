@@ -25,7 +25,7 @@
 
 package algolia.dsl
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDateTime
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest

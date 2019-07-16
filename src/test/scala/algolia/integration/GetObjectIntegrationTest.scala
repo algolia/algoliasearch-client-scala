@@ -33,21 +33,23 @@ import scala.concurrent.Future
 
 class GetObjectIntegrationTest extends AlgoliaTest {
 
+  val indexToGet: String = getTestIndexName("indexToGet")
+
   after {
-    clearIndices("indexToGet")
+    clearIndices(indexToGet)
   }
 
   it("should get object") {
-    val create: Future[TasksMultipleIndex] = client.execute {
+    val create: Future[TasksMultipleIndex] = AlgoliaTest.client.execute {
       batch(
-        index into "indexToGet" `object` ObjectToGet("1", "toto")
+        index into indexToGet `object` ObjectToGet("1", "toto")
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToGet")
+    taskShouldBeCreatedAndWaitForIt(create, indexToGet)
 
-    val request: Future[GetObject] = client.execute {
-      get from "indexToGet" objectId "1"
+    val request: Future[GetObject] = AlgoliaTest.client.execute {
+      get from indexToGet objectId "1"
     }
 
     whenReady(request) { result =>
@@ -56,17 +58,17 @@ class GetObjectIntegrationTest extends AlgoliaTest {
   }
 
   it("should get multiple objects") {
-    val create: Future[TasksMultipleIndex] = client.execute {
+    val create: Future[TasksMultipleIndex] = AlgoliaTest.client.execute {
       batch(
-        index into "indexToGet" `object` ObjectToGet("1", "toto"),
-        index into "indexToGet" `object` ObjectToGet("2", "tata")
+        index into indexToGet `object` ObjectToGet("1", "toto"),
+        index into indexToGet `object` ObjectToGet("2", "tata")
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToGet")
+    taskShouldBeCreatedAndWaitForIt(create, indexToGet)
 
-    val request: Future[Results] = client.execute {
-      get from "indexToGet" objectIds Seq("1", "2")
+    val request: Future[Results] = AlgoliaTest.client.execute {
+      get from indexToGet objectIds Seq("1", "2")
     }
 
     whenReady(request) { results =>

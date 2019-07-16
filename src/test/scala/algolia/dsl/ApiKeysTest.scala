@@ -32,6 +32,7 @@ import algolia.objects.{Acl, ApiKey}
 import org.json4s.Formats
 import org.json4s.native.JsonMethods._
 import org.json4s.native.Serialization._
+
 import scala.language.postfixOps
 
 class ApiKeysTest extends AlgoliaTest {

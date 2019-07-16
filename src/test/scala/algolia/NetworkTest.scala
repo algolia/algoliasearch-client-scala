@@ -37,14 +37,14 @@ class NetworkTest extends AlgoliaTest {
 
   describe("timeout on DNS resolution") {
 
-    val apiClient = new AlgoliaClient(applicationId, apiKey) {
+    val apiClient = new AlgoliaClient(AlgoliaTest.applicationId, AlgoliaTest.apiKey) {
       override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,
           utils,
           Seq(
             s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
-            s"https://$applicationId-1.algolianet.com"
+            s"https://applicationId-1.algolianet.com"
           ),
           indexingHosts
         )
@@ -72,7 +72,7 @@ class NetworkTest extends AlgoliaTest {
 
   describe("TCP connect timeout") {
 
-    val apiClient = new AlgoliaClient(applicationId, apiKey) {
+    val apiClient = new AlgoliaClient(AlgoliaTest.applicationId, AlgoliaTest.apiKey) {
       override val httpClient: AlgoliaHttpClient = AlgoliaHttpClient(
         AlgoliaClientConfiguration.default.copy(httpConnectTimeoutMs = 1000)
       )
@@ -83,7 +83,7 @@ class NetworkTest extends AlgoliaTest {
           utils,
           Seq(
             s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
-            s"https://$applicationId-1.algolianet.com"
+            s"https://applicationId-1.algolianet.com"
           ),
           indexingHosts
         )
@@ -111,7 +111,7 @@ class NetworkTest extends AlgoliaTest {
 
   describe("UnknownHostException on DNS resolution") {
 
-    val apiClient = new AlgoliaClient(applicationId, apiKey) {
+    val apiClient = new AlgoliaClient(AlgoliaTest.applicationId, AlgoliaTest.apiKey) {
 
       override lazy val hostsStatuses =
         HostsStatuses(
@@ -119,7 +119,7 @@ class NetworkTest extends AlgoliaTest {
           utils,
           Seq(
             s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
-            s"https://$applicationId-1.algolianet.com"
+            s"https://applicationId-1.algolianet.com"
           ),
           indexingHosts
         )
@@ -146,7 +146,7 @@ class NetworkTest extends AlgoliaTest {
 
   describe("UnknownHostException on the last resolution") {
 
-    val apiClient = new AlgoliaClient(applicationId, apiKey) {
+    val apiClient = new AlgoliaClient(AlgoliaTest.applicationId, AlgoliaTest.apiKey) {
       override lazy val hostsStatuses =
         HostsStatuses(
           AlgoliaClientConfiguration.default,

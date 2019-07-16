@@ -35,36 +35,45 @@ import scala.language.postfixOps
 
 class IndicesIntegrationTest extends AlgoliaTest {
 
+  val index1: String = getTestIndexName("index1")
+  val index2: String = getTestIndexName("index2")
+  val indexToDelete: String = getTestIndexName("indexToDelete")
+  val indexToClear: String = getTestIndexName("indexToClear")
+  val indexToCopy_before: String = getTestIndexName("indexToCopy_before")
+  val indexToCopy_after: String = getTestIndexName("indexToCopy_after")
+  val indexToMove_before: String = getTestIndexName("indexToMove_before")
+  val indexToMove_after: String = getTestIndexName("indexToMove_after")
+
   after {
     clearIndices(
-      "index1",
-      "index2",
-      "indexToDelete",
-      "indexToClear",
-      "indexToCopy_before",
-      "indexToCopy_after",
-      "indexToMove_before",
-      "indexToMove_after"
+      index1,
+      index2,
+      indexToDelete,
+      indexToClear,
+      indexToCopy_before,
+      indexToCopy_after,
+      indexToMove_before,
+      indexToMove_after
     )
   }
 
   it("should create indices") {
-    val create: Future[TaskIndexing] = client.execute {
-      index into "index1" `object` Obj("1")
+    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+      index into index1 `object` Obj("1")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index1")
+    taskShouldBeCreatedAndWaitForIt(create, index1)
   }
 
   it("should index UTF-8 strings") {
-    val create: Future[TaskIndexing] = client.execute {
-      index into "index1" `object` Obj("Bézier")
+    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+      index into index1 `object` Obj("Bézier")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index1")
+    taskShouldBeCreatedAndWaitForIt(create, index1)
 
-    val query: Future[SearchResult] = client.execute {
-      search into "index1" query Query(query = Some("Bézier"))
+    val query: Future[SearchResult] = AlgoliaTest.client.execute {
+      search into index1 query Query(query = Some("Bézier"))
     }
 
     whenReady(query) { result =>
@@ -73,59 +82,59 @@ class IndicesIntegrationTest extends AlgoliaTest {
   }
 
   it("should list indices") {
-    val create: Future[TasksMultipleIndex] = client.execute {
+    val create: Future[TasksMultipleIndex] = AlgoliaTest.client.execute {
       batch(
-        index into "index1" `object` Obj("1"),
-        index into "index2" `object` Obj("1")
+        index into index1 `object` Obj("1"),
+        index into index2 `object` Obj("1")
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "index2")
+    taskShouldBeCreatedAndWaitForIt(create, index2)
 
-    val indices: Future[Indices] = client.execute {
+    val indices: Future[Indices] = AlgoliaTest.client.execute {
       list indices
     }
     whenReady(indices) { result =>
-      result.items.map(_.name) should (contain("index1") and contain("index2"))
+      result.items.map(_.name) should (contain(index1) and contain(index2))
     }
   }
 
   it("should delete an index") {
-    val create: Future[TaskIndexing] = client.execute {
-      index into "indexToDelete" `object` Obj("1")
+    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+      index into indexToDelete `object` Obj("1")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToDelete")
+    taskShouldBeCreatedAndWaitForIt(create, indexToDelete)
 
-    val del = client.execute {
-      delete index "indexToDelete"
+    val del = AlgoliaTest.client.execute {
+      delete index indexToDelete
     }
 
-    taskShouldBeCreatedAndWaitForIt(del, "indexToDelete")
+    taskShouldBeCreatedAndWaitForIt(del, indexToDelete)
 
-    val indices: Future[Indices] = client.execute {
+    val indices: Future[Indices] = AlgoliaTest.client.execute {
       list indices
     }
     whenReady(indices) { result =>
-      result.items.map(_.name) should not contain "indexToDelete"
+      result.items.map(_.name) should not contain indexToDelete
     }
   }
 
   it("should clear index") {
-    val create: Future[TaskIndexing] = client.execute {
-      index into "indexToClear" `object` Obj("1")
+    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+      index into indexToClear `object` Obj("1")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToClear")
+    taskShouldBeCreatedAndWaitForIt(create, indexToClear)
 
-    val del = client.execute {
-      clear index "indexToClear"
+    val del = AlgoliaTest.client.execute {
+      clear index indexToClear
     }
 
-    taskShouldBeCreatedAndWaitForIt(del, "indexToClear")
+    taskShouldBeCreatedAndWaitForIt(del, indexToClear)
 
-    val list: Future[SearchResult] = client.execute {
-      search into "indexToClear" query Query(query = Some(""))
+    val list: Future[SearchResult] = AlgoliaTest.client.execute {
+      search into indexToClear query Query(query = Some(""))
     }
 
     whenReady(list) { result =>
@@ -134,26 +143,26 @@ class IndicesIntegrationTest extends AlgoliaTest {
   }
 
   it("should copy index") {
-    val del = client.execute {
-      clear index "indexToCopy_before"
+    val del = AlgoliaTest.client.execute {
+      clear index indexToCopy_before
     }
 
-    taskShouldBeCreatedAndWaitForIt(del, "indexToCopy_before")
+    taskShouldBeCreatedAndWaitForIt(del, indexToCopy_before)
 
-    val create: Future[TaskIndexing] = client.execute {
-      index into "indexToCopy_before" `object` Obj("1")
+    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+      index into indexToCopy_before `object` Obj("1")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToCopy_before")
+    taskShouldBeCreatedAndWaitForIt(create, indexToCopy_before)
 
-    val copying = client.execute {
-      copy index "indexToCopy_before" to "indexToCopy_after"
+    val copying = AlgoliaTest.client.execute {
+      copy index indexToCopy_before to indexToCopy_after
     }
 
-    taskShouldBeCreatedAndWaitForIt(copying, "indexToCopy_after")
+    taskShouldBeCreatedAndWaitForIt(copying, indexToCopy_after)
 
-    val list: Future[SearchResult] = client.execute {
-      search into "indexToCopy_before" query Query(query = Some(""))
+    val list: Future[SearchResult] = AlgoliaTest.client.execute {
+      search into indexToCopy_before query Query(query = Some(""))
     }
 
     whenReady(list) { result =>
@@ -162,24 +171,24 @@ class IndicesIntegrationTest extends AlgoliaTest {
   }
 
   it("should move index") {
-    val create: Future[TaskIndexing] = client.execute {
-      index into "indexToMove_before" `object` Obj("1")
+    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
+      index into indexToMove_before `object` Obj("1")
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToMove_before")
+    taskShouldBeCreatedAndWaitForIt(create, indexToMove_before)
 
-    val copying: Future[Task] = client.execute {
-      move index "indexToMove_before" to "indexToMove_after"
+    val copying: Future[Task] = AlgoliaTest.client.execute {
+      move index indexToMove_before to indexToMove_after
     }
 
-    taskShouldBeCreatedAndWaitForIt(copying, "indexToMove_after")
+    taskShouldBeCreatedAndWaitForIt(copying, indexToMove_after)
 
-    val indices: Future[Indices] = client.execute {
+    val indices: Future[Indices] = AlgoliaTest.client.execute {
       list indices
     }
 
     whenReady(indices) { result =>
-      result.items.map(_.name) should (contain("indexToMove_after") and not contain "indexToMove_before")
+      result.items.map(_.name) should (contain(indexToMove_after) and not contain indexToMove_before)
     }
   }
 
