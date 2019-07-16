@@ -12,13 +12,13 @@ scalaVersion := "2.12.2"
 
 coverageEnabled := false
 
-val asyncHttpClientVersion = "2.6.0"
+val asyncHttpClientVersion = "2.10.1"
 val json4sVersion = "3.5.2"
 val slf4jVersion = "1.7.25"
 val scalaUriVersion = "0.4.16"
 
 val logbackVersion = "1.2.3"
-val scalaTestVersion = "3.0.1"
+val scalaTestVersion = "3.0.8"
 val scalaMockVersion = "3.4.2"
 val scalacheckVersion = "1.12.6"
 
@@ -97,6 +97,8 @@ lazy val myProject = project
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "algolia"
   )
+
+testOptions in Test += Tests.Argument("-P10")
 
 publishMavenStyle := true
 
