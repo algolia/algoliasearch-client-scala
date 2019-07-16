@@ -27,28 +27,30 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.objects.{SearchableAttributes, IndexSettings}
+import algolia.objects.{IndexSettings, SearchableAttributes}
 import algolia.responses._
 
 import scala.concurrent.Future
 
 class IndexSettingsIntegrationTest extends AlgoliaTest {
 
+  val indexToChangeSettings: String = getTestIndexName("indexToChangeSettings")
+
   after {
-    clearIndices("indexToChangeSettings")
+    clearIndices(indexToChangeSettings)
   }
 
   it("should get settings") {
-    val create = client.execute {
+    val create = AlgoliaTest.client.execute {
       batch(
-        index into "indexToChangeSettings" `object` ObjectToGet("1", "toto")
+        index into indexToChangeSettings `object` ObjectToGet("1", "toto")
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(create, "indexToChangeSettings")
+    taskShouldBeCreatedAndWaitForIt(create, indexToChangeSettings)
 
-    val request: Future[IndexSettings] = client.execute {
-      settings of "indexToChangeSettings"
+    val request: Future[IndexSettings] = AlgoliaTest.client.execute {
+      settings of indexToChangeSettings
     }
 
     whenReady(request) { result =>
@@ -57,16 +59,16 @@ class IndexSettingsIntegrationTest extends AlgoliaTest {
   }
 
   it("should set settings") {
-    val change: Future[Task] = client.execute {
-      setSettings of "indexToChangeSettings" `with` IndexSettings(
+    val change: Future[Task] = AlgoliaTest.client.execute {
+      setSettings of indexToChangeSettings `with` IndexSettings(
         searchableAttributes = Some(Seq(SearchableAttributes.attribute("att")))
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(change, "indexToChangeSettings")
+    taskShouldBeCreatedAndWaitForIt(change, indexToChangeSettings)
 
-    val request: Future[IndexSettings] = client.execute {
-      settings of "indexToChangeSettings"
+    val request: Future[IndexSettings] = AlgoliaTest.client.execute {
+      settings of indexToChangeSettings
     }
 
     whenReady(request) { result =>

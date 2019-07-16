@@ -25,24 +25,26 @@
 
 package algolia.integration
 
-import algolia.{AlgoliaClientException, AlgoliaTest}
 import algolia.AlgoliaDsl._
 import algolia.objects.Query
+import algolia.{AlgoliaClientException, AlgoliaTest}
 
 class AlgoliaClientIntegrationTest extends AlgoliaTest {
 
   describe("requests") {
 
+    val indexThatDoesNotExists = getTestIndexName("indexThatDoesNotExists")
+
     it("404") {
       //will result in a 404
-      val s = client.execute {
-        search into "indexThatDoesNotExists" query Query(query = Some("a"))
+      val s = AlgoliaTest.client.execute {
+        search into indexThatDoesNotExists query Query(query = Some("a"))
       }
 
       whenReady(s.failed) { e =>
         e shouldBe a[AlgoliaClientException]
         e.asInstanceOf[AlgoliaClientException].getMessage should be(
-          "Failure \"Index indexThatDoesNotExists does not exist\", response status: 404")
+          "Failure \"Index " + indexThatDoesNotExists + " does not exist\", response status: 404")
       }
 
     }

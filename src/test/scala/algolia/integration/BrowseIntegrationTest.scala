@@ -34,28 +34,30 @@ import scala.concurrent.Future
 
 class BrowseIntegrationTest extends AlgoliaTest {
 
+  val indexToBrowse: String = getTestIndexName("indexToBrowse")
+
   after {
-    clearIndices("indexToBrowse")
+    clearIndices(indexToBrowse)
   }
 
   before {
-    val b: Future[TasksMultipleIndex] = client.execute {
+    val b: Future[TasksMultipleIndex] = AlgoliaTest.client.execute {
       batch(
-        index into "indexToBrowse" `object` Test("algolia1", 10, alien = false),
-        index into "indexToBrowse" `object` Test("algolia2", 10, alien = false),
-        index into "indexToBrowse" `object` Test("algolia3", 10, alien = false),
-        index into "indexToBrowse" `object` Test("anything", 10, alien = false)
+        index into indexToBrowse `object` Test("algolia1", 10, alien = false),
+        index into indexToBrowse `object` Test("algolia2", 10, alien = false),
+        index into indexToBrowse `object` Test("algolia3", 10, alien = false),
+        index into indexToBrowse `object` Test("anything", 10, alien = false)
       )
     }
 
-    taskShouldBeCreatedAndWaitForIt(b, "indexToBrowse")
+    taskShouldBeCreatedAndWaitForIt(b, indexToBrowse)
   }
 
   describe("browse") {
 
     it("should browse and not get a cursor") {
-      val s = client.execute {
-        browse index "indexToBrowse"
+      val s = AlgoliaTest.client.execute {
+        browse index indexToBrowse
       }
 
       whenReady(s) { result =>
@@ -65,8 +67,8 @@ class BrowseIntegrationTest extends AlgoliaTest {
     }
 
     it("should browse with query and get a cursor") {
-      val s = client.execute {
-        browse index "indexToBrowse" query Query(query = Some("algolia"), hitsPerPage = Some(1))
+      val s = AlgoliaTest.client.execute {
+        browse index indexToBrowse query Query(query = Some("algolia"), hitsPerPage = Some(1))
       }
 
       val c = whenReady(s) { result =>
@@ -75,8 +77,8 @@ class BrowseIntegrationTest extends AlgoliaTest {
         result.cursor.get
       }
 
-      val s2 = client.execute {
-        browse index "indexToBrowse" from c
+      val s2 = AlgoliaTest.client.execute {
+        browse index indexToBrowse from c
       }
 
       whenReady(s2) { result =>

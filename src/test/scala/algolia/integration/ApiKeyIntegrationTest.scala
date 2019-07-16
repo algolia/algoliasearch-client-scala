@@ -29,8 +29,8 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.objects.{Acl, ApiKey}
 import algolia.responses.{AllKeys, CreateUpdateKey}
-import scala.language.postfixOps
 
+import scala.language.postfixOps
 import scala.concurrent.Future
 
 class ApiKeyIntegrationTest extends AlgoliaTest {
@@ -38,7 +38,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
   describe("global keys") {
 
     it("should list keys") {
-      val result: Future[AllKeys] = client.execute {
+      val result: Future[AllKeys] = AlgoliaTest.client.execute {
         list keys
       }
 
@@ -48,7 +48,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
     }
 
     it("should do stuff with keys") {
-      val addKey = client.execute {
+      val addKey = AlgoliaTest.client.execute {
         add key ApiKey(acl = Some(Seq(Acl.addObject)))
       }
 
@@ -60,7 +60,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
 
       Thread.sleep(5000) //ok let's wait propagation
 
-      val getKey = client.execute {
+      val getKey = AlgoliaTest.client.execute {
         get key keyName
       }
 
@@ -68,7 +68,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
         r.acl should equal(Some(Seq(Acl.addObject)))
       }
 
-      val updateKey = client.execute {
+      val updateKey = AlgoliaTest.client.execute {
         update key keyName `with` ApiKey(validity = Some(10))
       }
 
@@ -76,7 +76,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
         r.key should be(keyName)
       }
 
-      val deleteKey = client.execute {
+      val deleteKey = AlgoliaTest.client.execute {
         delete key keyName
       }
 

@@ -25,7 +25,7 @@
 
 package algolia.integration
 
-import algolia.responses.{Logs, LogType}
+import algolia.responses.{LogType, Logs}
 import algolia.AlgoliaTest
 import algolia.AlgoliaDsl._
 
@@ -33,23 +33,25 @@ import scala.concurrent.Future
 
 class LogIntegrationTest extends AlgoliaTest {
 
+  val indexToSearch: String = getTestIndexName("indexToSearch")
+
   after {
     clearIndices(
-      "indexToSearch"
+      indexToSearch
     )
   }
 
   before {
     val obj = Test("algolia", 10, alien = false)
-    val insert1 = client.execute {
-      index into "indexToSearch" objectId "563481290" `object` obj
+    val insert1 = AlgoliaTest.client.execute {
+      index into indexToSearch objectId "563481290" `object` obj
     }
 
-    taskShouldBeCreatedAndWaitForIt(insert1, "indexToSearch")
+    taskShouldBeCreatedAndWaitForIt(insert1, indexToSearch)
   }
 
   it("should get the logs") {
-    val result: Future[Logs] = client.execute {
+    val result: Future[Logs] = AlgoliaTest.client.execute {
       getLogs offset 0 length 10 `type` LogType.all
     }
 

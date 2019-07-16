@@ -35,26 +35,26 @@ import scala.concurrent.Future
 
 class AlgoliaSyncHelperTest extends AlgoliaTest {
 
-  val helper = AlgoliaSyncHelper(client)
+  val helper = AlgoliaSyncHelper(AlgoliaTest.client)
   val list: Seq[Value] = 1.to(100).map(i => Value(i, i.toString))
   val syns: Seq[Synonym.Synonym] =
     1.to(10).map(i => Synonym.Synonym(s"obj_$i", Seq(s"a_$i", s"b_$i")))
   val rules: Seq[Rule] = 1.to(10).map(i => generateRule(s"obj_$i"))
 
   before {
-    val insert = client.execute {
+    val insert = AlgoliaTest.client.execute {
       index into "testBrowseSync" objects list
     }
 
     taskShouldBeCreatedAndWaitForIt(insert, "testBrowseSync")
 
-    val insertSynonyms = client.execute {
+    val insertSynonyms = AlgoliaTest.client.execute {
       save synonyms syns inIndex "testBrowseSync"
     }
 
     taskShouldBeCreatedAndWaitForIt(insertSynonyms, "testBrowseSync")
 
-    val insertRules = client.execute {
+    val insertRules = AlgoliaTest.client.execute {
       save rules rules inIndex "testBrowseSync"
     }
 
@@ -92,7 +92,7 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     it("should delete with a query") {
       val delete = helper.deleteByQuery[Value]("testBrowseSync", query)
       val tasksToWait = whenReady(delete) { res =>
-        Future.traverse(res)(i => client.execute(waitFor task i from "testBrowseSync"))
+        Future.traverse(res)(i => AlgoliaTest.client.execute(waitFor task i from "testBrowseSync"))
       }
 
       whenReady(tasksToWait) { res =>

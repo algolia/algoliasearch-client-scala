@@ -32,17 +32,18 @@ import algolia.objects.Query
 class DeleteByIntegrationTest extends AlgoliaTest {
 
   val list: Seq[Value] = 1 to 100 map (i => Value(i, i.toString))
+  val testDeleteBy: String = getTestIndexName("testDeleteBy")
 
   before {
-    val insert = client.execute {
-      index into "testDeleteBy" objects list
+    val insert = AlgoliaTest.client.execute {
+      index into testDeleteBy objects list
     }
 
-    taskShouldBeCreatedAndWaitForIt(insert, "testDeleteBy")
+    taskShouldBeCreatedAndWaitForIt(insert, testDeleteBy)
   }
 
   after {
-    clearIndices("testDeleteBy")
+    clearIndices(testDeleteBy)
   }
 
   describe("delete by query") {
@@ -50,11 +51,11 @@ class DeleteByIntegrationTest extends AlgoliaTest {
     val query = Query(filters = Some("int > 10"))
 
     it("should delete with a query") {
-      val d = client.execute {
-        delete from "testDeleteBy" by query
+      val d = AlgoliaTest.client.execute {
+        delete from testDeleteBy by query
       }
 
-      taskShouldBeCreatedAndWaitForIt(d, "testDeleteBy")
+      taskShouldBeCreatedAndWaitForIt(d, testDeleteBy)
     }
 
   }

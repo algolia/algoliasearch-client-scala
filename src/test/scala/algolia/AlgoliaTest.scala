@@ -25,6 +25,8 @@
 
 package algolia
 
+import java.time.{ZoneOffset, ZonedDateTime}
+
 import algolia.AlgoliaDsl._
 import algolia.objects.{Condition, Consequence, Rule}
 import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
@@ -34,6 +36,19 @@ import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Millis, Seconds, Span}
 
 import scala.concurrent.{ExecutionContext, Future}
+
+object AlgoliaTest {
+
+  lazy val userName: String = System.getProperty("user.name")
+  lazy val osName: String = System.getProperty("os.name").trim
+  lazy val scalaVersion: String = util.Properties.versionNumberString
+  lazy val applicationId: String = System.getenv("APPLICATION_ID")
+  lazy val apiKey: String = System.getenv("API_KEY")
+  lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
+    override val httpClient: AlgoliaHttpClient =
+      AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
+  }
+}
 
 class AlgoliaTest
     extends FunSpec
@@ -47,20 +62,13 @@ class AlgoliaTest
     with EitherValues
     with Eventually {
 
-  lazy val applicationId: String = System.getenv("APPLICATION_ID")
-  lazy val apiKey: String = System.getenv("API_KEY")
-  lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
-    override val httpClient: AlgoliaHttpClient =
-      AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
-  }
+  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   implicit val patience: PatienceConfig =
     PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
 
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-
   override protected def afterAll(): Unit = {
-    client.close()
+    //   AlgoliaTest.client.close()
   }
 
   def taskShouldBeCreated(task: Future[AlgoliaTask])(implicit ec: ExecutionContext): AlgoliaTask = {
@@ -74,7 +82,7 @@ class AlgoliaTest
       implicit ec: ExecutionContext): Unit = {
     val t: AlgoliaTask = taskShouldBeCreated(task)
 
-    val waiting = client.execute {
+    val waiting = AlgoliaTest.client.execute {
       waitFor task t from index maxDelay (60 * 10 * 1000) //600 seconds
     }
 
@@ -87,7 +95,7 @@ class AlgoliaTest
     tasks.foreach {
       case (index, taskID) =>
         taskID should not be 0
-        val f = client.execute { waitFor task taskID from index }
+        val f = AlgoliaTest.client.execute { waitFor task taskID from index }
         whenReady(f) { status =>
           status
         }
@@ -96,8 +104,14 @@ class AlgoliaTest
 
   case class DummyObject(objectID: String)
 
+  def getTestIndexName(indexName: String): String = {
+    val utc = ZonedDateTime.now(ZoneOffset.UTC)
+    s"scala_${AlgoliaTest.scalaVersion}_${AlgoliaTest.osName}_${AlgoliaTest.userName}_$indexName"
+      .replaceAll("\\s", "")
+  }
+
   def createIndices(indices: String*): TasksMultipleIndex = {
-    val add = client.execute {
+    val add = AlgoliaTest.client.execute {
       batch(indices.map { i =>
         index into i `object` DummyObject("one")
       })
@@ -117,7 +131,7 @@ class AlgoliaTest
   }
 
   def deleteOnePageOfABTests(): Boolean = {
-    val f = client.execute {
+    val f = AlgoliaTest.client.execute {
       get all abTests
     }
 
@@ -127,7 +141,7 @@ class AlgoliaTest
       val ids = res.abtests.map(_.abTestID)
 
       val futures = ids.map { id =>
-        client.execute {
+        AlgoliaTest.client.execute {
           delete abTest id
         }
       }
@@ -143,7 +157,7 @@ class AlgoliaTest
   }
 
   def clearIndices(indices: String*): TasksMultipleIndex = {
-    val del = client.execute {
+    val del = AlgoliaTest.client.execute {
       batch(indices.map { i =>
         delete index i
       })

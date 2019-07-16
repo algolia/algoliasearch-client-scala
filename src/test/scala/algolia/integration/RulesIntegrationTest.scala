@@ -33,7 +33,7 @@ import algolia.{AlgoliaClientException, AlgoliaDsl, AlgoliaTest}
 
 class RulesIntegrationTest extends AlgoliaTest {
 
-  val indexName = "indexToRule"
+  val indexName: String = getTestIndexName("indexToRule")
 
   after {
     clearIndices(indexName)
@@ -42,19 +42,19 @@ class RulesIntegrationTest extends AlgoliaTest {
   describe("rules") {
 
     it("should save a rule") {
-      val o = client.execute {
+      val o = AlgoliaTest.client.execute {
         index into indexName `object` Value(1, "1")
       }
 
       taskShouldBeCreatedAndWaitForIt(o, indexName)
 
-      val res = client.execute {
+      val res = AlgoliaTest.client.execute {
         save rule generateRule("rule1") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res, indexName)
 
-      val r = client.execute {
+      val r = AlgoliaTest.client.execute {
         get rule "rule1" from indexName
       }
 
@@ -65,7 +65,7 @@ class RulesIntegrationTest extends AlgoliaTest {
     }
 
     it("should not save a rule with empty objectID") {
-      val f = client.execute {
+      val f = AlgoliaTest.client.execute {
         save rule generateRule("") inIndex indexName
       }
 
@@ -78,25 +78,25 @@ class RulesIntegrationTest extends AlgoliaTest {
     }
 
     it("should search rules") {
-      val o = client.execute {
+      val o = AlgoliaTest.client.execute {
         index into indexName `object` Value(1, "1")
       }
 
       taskShouldBeCreatedAndWaitForIt(o, indexName)
 
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rule generateRule("rule1") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val res2 = client.execute {
+      val res2 = AlgoliaTest.client.execute {
         save rule generateRule("rule2") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         search rules in index indexName query QueryRules("rule1", hitsPerPage = Some(10))
       }
 
@@ -106,25 +106,25 @@ class RulesIntegrationTest extends AlgoliaTest {
     }
 
     it("should delete rule") {
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rule generateRule("rule1") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val res2 = client.execute {
+      val res2 = AlgoliaTest.client.execute {
         save rule generateRule("rule2") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
-      val d = client.execute {
+      val d = AlgoliaTest.client.execute {
         delete rule "rule1" from indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(d, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
@@ -134,25 +134,25 @@ class RulesIntegrationTest extends AlgoliaTest {
     }
 
     it("should clear rules") {
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rule generateRule("rule1") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val res2 = client.execute {
+      val res2 = AlgoliaTest.client.execute {
         save rule generateRule("rule2") inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
-      val d = client.execute {
+      val d = AlgoliaTest.client.execute {
         clear rules AlgoliaDsl.of index indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(d, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
@@ -167,13 +167,13 @@ class RulesIntegrationTest extends AlgoliaTest {
         generateRule("rule2")
       )
 
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rules rulesToInsert inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
       }
 
@@ -197,13 +197,13 @@ class RulesIntegrationTest extends AlgoliaTest {
         )
       )
 
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rule rule inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         get rule "RuleAutomaticFacetFilters" from indexName
       }
     }
@@ -227,13 +227,13 @@ class RulesIntegrationTest extends AlgoliaTest {
         )
       )
 
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rule rule inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         get rule "RuleTimeRange" from indexName
       }
 
@@ -262,13 +262,13 @@ class RulesIntegrationTest extends AlgoliaTest {
         )
       )
 
-      val res1 = client.execute {
+      val res1 = AlgoliaTest.client.execute {
         save rule rule inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         get rule "RulesEdits" from indexName
       }
 
@@ -276,13 +276,13 @@ class RulesIntegrationTest extends AlgoliaTest {
 
     it("should save rule with promote and hide") {
 
-      val o = client.execute {
+      val o = AlgoliaTest.client.execute {
         index into indexName `object` Value(2, "2")
       }
 
       taskShouldBeCreatedAndWaitForIt(o, indexName)
 
-      val a = client.execute {
+      val a = AlgoliaTest.client.execute {
         index into indexName `object` Value(3, "3")
       }
 
@@ -300,13 +300,13 @@ class RulesIntegrationTest extends AlgoliaTest {
         )
       )
 
-      val ret = client.execute {
+      val ret = AlgoliaTest.client.execute {
         save rule rule inIndex indexName
       }
 
       taskShouldBeCreatedAndWaitForIt(ret, indexName)
 
-      val s = client.execute {
+      val s = AlgoliaTest.client.execute {
         get rule "RulePromoteAndHide" from indexName
       }
 
