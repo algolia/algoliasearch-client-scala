@@ -29,10 +29,12 @@ import java.net.UnknownHostException
 import java.util.concurrent.{ExecutionException, TimeUnit}
 
 import algolia.AlgoliaDsl._
+import org.scalatest.DoNotDiscover
 
 import scala.concurrent.duration._
 import scala.util.Try
 
+@DoNotDiscover
 class NetworkTest extends AlgoliaTest {
 
   describe("timeout on DNS resolution") {
@@ -44,7 +46,7 @@ class NetworkTest extends AlgoliaTest {
           utils,
           Seq(
             s"https://scala-dsn.algolia.biz", //Special domain that timeout on DNS resolution
-            s"https://applicationId-1.algolianet.com"
+            s"https://$AlgoliaTest.applicationId-1.algolianet.com"
           ),
           indexingHosts
         )
@@ -83,7 +85,7 @@ class NetworkTest extends AlgoliaTest {
           utils,
           Seq(
             s"https://notcp-xx-1.algolianet.com", //Special domain that timeout on connect=
-            s"https://applicationId-1.algolianet.com"
+            s"https://$AlgoliaTest.applicationId-1.algolianet.com"
           ),
           indexingHosts
         )
@@ -119,7 +121,7 @@ class NetworkTest extends AlgoliaTest {
           utils,
           Seq(
             s"https://will-not-exists-ever.algolianet.com", //Should return UnknownHostException
-            s"https://applicationId-1.algolianet.com"
+            s"https://$AlgoliaTest.applicationId-1.algolianet.com"
           ),
           indexingHosts
         )
