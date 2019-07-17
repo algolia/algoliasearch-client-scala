@@ -9,5 +9,4 @@ jdk:
 before_script:
   - "sbt ++$TRAVIS_SCALA_VERSION scalafmtTest"
 
-script: "sbt ++$TRAVIS_SCALA_VERSION -J-Dsun.net.maxDatagramSockets=2048 clean coverage test"
-after_success: "sbt ++$TRAVIS_SCALA_VERSION coverageReport coveralls"
+script: "sbt ++$TRAVIS_SCALA_VERSION -J-Dsun.net.maxDatagramSockets=2048 clean test"
