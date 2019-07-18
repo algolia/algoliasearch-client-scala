@@ -51,12 +51,11 @@ class SearchIntegrationTest extends AlgoliaTest {
       index into indexName objectId "563481290" `object` obj
     }
 
-    taskShouldBeCreatedAndWaitForIt(insert1, indexName)
-
     val insert2 = AlgoliaTest.client.execute {
       index into indexToSearch2 `object` Test("algolia2", 10, alien = false)
     }
 
+    taskShouldBeCreatedAndWaitForIt(insert1, indexName)
     taskShouldBeCreatedAndWaitForIt(insert2, indexToSearch2)
   }
 
