@@ -106,7 +106,7 @@ class AlgoliaTest
 
   def getTestIndexName(indexName: String): String = {
     val utc = ZonedDateTime.now(ZoneOffset.UTC)
-    s"scala_${AlgoliaTest.scalaVersion}_${AlgoliaTest.osName}_${AlgoliaTest.userName}_$indexName"
+    s"scala_${AlgoliaTest.scalaVersion}_${utc}_${AlgoliaTest.osName}_${AlgoliaTest.userName}_$indexName"
       .replaceAll("\\s", "")
   }
 
