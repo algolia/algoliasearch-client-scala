@@ -25,6 +25,7 @@
 
 package algolia.dsl
 
+import java.time.ZonedDateTime
 import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
 
 import algolia.definitions.{WaitForTaskDefinition, WaitForTimeoutException}
@@ -53,7 +54,7 @@ trait WaitForTaskDsl {
         override def newThread(r: Runnable): Thread = {
           val t = Executors.defaultThreadFactory().newThread(r)
           t.setDaemon(true)
-          t.setName("algolia-waitfor-thread")
+          t.setName("algolia-waitfor-thread-" + ZonedDateTime.now())
           t
         }
       }
