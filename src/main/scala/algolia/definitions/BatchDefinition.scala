@@ -98,7 +98,7 @@ case class BatchDefinition(
                                                   _) =>
         val body = Map(
           "objectID" -> objectId,
-          attribute -> PartialUpdateObject(operation.name, value)
+          attribute -> PartialUpdateObjectNoCreate(operation.name, value)
         )
         Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
 
