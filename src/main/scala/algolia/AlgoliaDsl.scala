@@ -259,7 +259,7 @@ object AlgoliaDsl extends AlgoliaDsl {
             val objectID = (x \ "objectID").extract[String]
             val synonymType = (x \ "type").extract[String]
 
-            synonymType match {
+            synonymType.toLowerCase match {
               case SynonymType.synonym.name =>
                 Synonym.Synonym(objectID, (x \ "synonyms").extract[Seq[String]])
               case SynonymType.altCorrection1.name =>

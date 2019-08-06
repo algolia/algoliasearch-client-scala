@@ -126,7 +126,7 @@ object SynonymType {
   }
 
   case object oneWaySynonym extends SynonymType {
-    override val name: String = "oneWaySynonym"
+    override val name: String = "onewaysynonym"
   }
 
   case object placeholder extends SynonymType {
@@ -134,11 +134,11 @@ object SynonymType {
   }
 
   case object altCorrection1 extends SynonymType {
-    override val name: String = "altCorrection1"
+    override val name: String = "altcorrection1"
   }
 
   case object altCorrection2 extends SynonymType {
-    override val name: String = "altCorrection2"
+    override val name: String = "altcorrection2"
   }
 
 }
