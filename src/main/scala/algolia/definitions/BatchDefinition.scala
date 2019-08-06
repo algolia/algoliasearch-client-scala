@@ -112,8 +112,12 @@ case class BatchDefinition(
       case IndexingBatchDefinition(_, defs, _) =>
         defs.flatMap(transform)
 
-      case PartialUpdateOneObjectDefinition(index, Some(obj), _, _) =>
-        Traversable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
+      case PartialUpdateOneObjectDefinition(index, Some(obj), createIfNotExists, _) =>
+        if (createIfNotExists) {
+          Traversable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
+        } else {
+          Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(obj), Some(index)))
+        }
     }
   }
 }
