@@ -1,5 +1,23 @@
 # ChangeLog
 
+## [1.34.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.33.0...1.34.0) (2019-08-07)
+
+### Chore
+
+- **travis**: switch from OracleJDK to OpenJDK and try to speed-up Travis builds ([a30966d](https://github.com/algolia/algoliasearch-client-scala/commit/a30966d))
+
+### Test
+
+- remove println statement in tests ([987aeda](https://github.com/algolia/algoliasearch-client-scala/commit/987aeda))
+- add more tests regarding partialUpdate payloads (with and without createIfNotExists, within batch or not) ([7935b99](https://github.com/algolia/algoliasearch-client-scala/commit/7935b99))
+
+### Fix
+
+- **partialUpdate**: correctly handle createIfNotExists option when partialUpdate is used for multiple objects ([60a8fa0](https://github.com/algolia/algoliasearch-client-scala/commit/60a8fa0))
+- make synonyms lowercase to be able to communicate with server and parse its responses. ([8d6b41a](https://github.com/algolia/algoliasearch-client-scala/commit/8d6b41a))
+
+
+
 ## [1.33.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.32.0...1.33.0) (2019-07-18)
 
 ### Added
