@@ -34,6 +34,7 @@ case class IndexSettings(
     minProximity: Option[Int] = None,
     keepDiacriticsOnCharacters: Option[String] = None,
     queryLanguages: Option[Seq[String]] = None,
+    indexLanguages: Option[Seq[String]] = None,
     attributeCriteriaComputedByMinProximity: Option[Boolean] = None,
     primary: Option[String] = None,
     userData: Option[Any] = None,
