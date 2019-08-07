@@ -83,8 +83,6 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
         r.deletedAt shouldNot be(empty)
       }
 
-      println(keyName)
-
       var isKeyDeleted = false
 
       while (!isKeyDeleted) {
