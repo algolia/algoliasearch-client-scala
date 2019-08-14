@@ -219,7 +219,8 @@ class RulesIntegrationTest extends AlgoliaTest {
         validity = Some(Seq(TimeRange(from, until))),
         condition = Condition(
           pattern = "a",
-          anchoring = "is"
+          anchoring = "is",
+          alternatives = Some(Alternatives.`true`)
         ),
         consequence = Consequence(
           params = Some(Map("query" -> "1")),
