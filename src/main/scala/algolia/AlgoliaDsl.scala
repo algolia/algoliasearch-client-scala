@@ -87,7 +87,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new RemoveStopWordsSerializer +
       new IgnorePluralsSerializer +
       new LocalDateTimeSerializer +
-      new ZonedDateTimeSerializer
+      new ZonedDateTimeSerializer +
+      new AlternativesSerializer
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -314,6 +315,16 @@ object AlgoliaDsl extends AlgoliaDsl {
           case RemoveStopWords.`true` => JBool(true)
           case RemoveStopWords.`false` => JBool(false)
           case RemoveStopWords.list(i) => JString(i.mkString(","))
+        }))
+
+  class AlternativesSerializer
+      extends CustomSerializer[Alternatives](_ =>
+        ({
+          case JBool(true) => Alternatives.`true`
+          case JBool(false) => Alternatives.`false`
+        }, {
+          case Alternatives.`true` => JBool(true)
+          case Alternatives.`false` => JBool(false)
         }))
 
   class IgnorePluralsSerializer
