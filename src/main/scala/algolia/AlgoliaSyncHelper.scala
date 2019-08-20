@@ -81,6 +81,38 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
     }
   }
 
+  def findFirstObject[T <: ObjectID: Manifest](index: String,
+                                               searchQuery: Query,
+                                               predicate: T => Boolean,
+                                               doNotPaginate: Boolean = false)(
+      implicit duration: Duration,
+      executor: ExecutionContext): Option[HitsWithPosition[T]] = {
+    val res = Await.result(client.execute(search into index query searchQuery), duration)
+
+    if (res.page.isEmpty || res.nbPages.isEmpty) {
+      return None
+    }
+
+    val page = res.page.get
+    val nbPages = res.nbPages.get
+    val hits = res.as[T]
+
+    hits.zipWithIndex
+      .find(hit => predicate(hit._1)) match {
+      case Some(hit) => Some(HitsWithPosition(hit._1, page, hit._2))
+      case None => {
+        val hasNextPage = page + 1 < nbPages
+
+        if (doNotPaginate || !hasNextPage) {
+          None
+        } else {
+          val newQuery = searchQuery.copy(page = Option(page + 1))
+          findFirstObject(index, newQuery, predicate, doNotPaginate)
+        }
+      }
+    }
+  }
+
   def exportSynonyms(index: String, hitsPerPage: Int = 1000)(
       implicit duration: Duration,
       executor: ExecutionContext): Iterator[Seq[AbstractSynonym]] = {

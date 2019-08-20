@@ -27,11 +27,12 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaSyncHelper._
-import algolia.objects.{AbstractSynonym, Query, Rule, Synonym}
+import algolia.objects._
 import algolia.responses._
 import algolia.{AlgoliaSyncHelper, AlgoliaTest}
 
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 class AlgoliaSyncHelperTest extends AlgoliaTest {
 
@@ -111,6 +112,69 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
       }
     }
 
+  }
+
+  case class Employee(company: String, name: String, objectID: String) extends ObjectID
+
+  describe("search response helpers") {
+
+    val objs = Seq(
+      Employee("Algolia", "Julien Lemoine", "julien-lemoine"),
+      Employee("Algolia", "Nicolas Dessaigne", "nicolas-dessaigne"),
+      Employee("Amazon", "Jeff Bezos", "1000"),
+      Employee("Apple", "Steve Jobs", "1020"),
+      Employee("Apple", "Steve Wozniak", "1030"),
+      Employee("Arista Networks", "Jayshree Ullal", "1040"),
+      Employee("Google", "Larry Page", "1050"),
+      Employee("Google", "Rob Pike", "1060"),
+      Employee("Google", "Sergueï Brin", "1070"),
+      Employee("Microsoft", "Bill Gates", "1080"),
+      Employee("SpaceX", "Elon Musk", "1090"),
+      Employee("Tesla", "Elon Musk", "1100"),
+      Employee("Yahoo", "Marissa Mayer", "1110")
+    )
+
+    it("should find the first object correctly") {
+      val indexName = "testFindFirstObject"
+
+      val clearTask = Await.result(helper.client.execute(clear index indexName), Duration.Inf)
+      Await.result(helper.client.execute(waitFor task clearTask from indexName), Duration.Inf)
+
+      val indexingTask = Await.result(
+        helper.client.execute(index into indexName objects objs),
+        Duration.Inf
+      )
+      Await.result(helper.client.execute(waitFor task indexingTask from indexName), Duration.Inf)
+
+      helper.findFirstObject(indexName, Query(), (_: Employee) => false) should be(None)
+
+      var obj = helper.findFirstObject(indexName, Query(), (_: Employee) => true)
+      obj should not be (None)
+      obj.get.page should be(0)
+      obj.get.position should be(0)
+
+      val predicate = (e: Employee) => e.company == "Apple"
+
+      helper.findFirstObject(indexName, Query(query = Some("algolia")), predicate) should be(None)
+
+      helper.findFirstObject(indexName,
+                             Query(
+                               query = Some(""),
+                               hitsPerPage = Some(5)
+                             ),
+                             predicate,
+                             doNotPaginate = true) should be(None)
+
+      obj = helper.findFirstObject(indexName,
+                                   Query(
+                                     query = Some(""),
+                                     hitsPerPage = Some(5)
+                                   ),
+                                   predicate)
+      obj should not be (None)
+      obj.get.page should be(2)
+      obj.get.position should be(0)
+    }
   }
 
   describe("export synonyms") {
