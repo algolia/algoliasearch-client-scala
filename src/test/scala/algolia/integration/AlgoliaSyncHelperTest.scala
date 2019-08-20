@@ -134,6 +134,27 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
       Employee("Yahoo", "Marissa Mayer", "1110")
     )
 
+    it("should find the search results' position correctly") {
+      val indexName = "testGetObjectIDPosition"
+
+      val clearTask = Await.result(helper.client.execute(clear index indexName), Duration.Inf)
+      Await.result(helper.client.execute(waitFor task clearTask from indexName), Duration.Inf)
+
+      val indexingTask = Await.result(
+        helper.client.execute(index into indexName objects objs),
+        Duration.Inf
+      )
+      Await.result(helper.client.execute(waitFor task indexingTask from indexName), Duration.Inf)
+
+      val res = Await.result(
+        helper.client.execute(search into indexName query Query(query = Some("algolia"))),
+        Duration.Inf)
+
+      res.getObjectIDPosition[Employee]("nicolas-dessaigne") should be(Some(0))
+      res.getObjectIDPosition[Employee]("julien-lemoine") should be(Some(1))
+      res.getObjectIDPosition[Employee]("") should be(None)
+    }
+
     it("should find the first object correctly") {
       val indexName = "testFindFirstObject"
 
