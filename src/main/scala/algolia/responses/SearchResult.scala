@@ -66,6 +66,12 @@ case class SearchResult(hits: Seq[JObject],
 
   def asWithObjectID[T <: ObjectID: Manifest]: Seq[T] = hits.map(_.extract[T])
 
+  def getObjectIDPosition[T <: ObjectID: Manifest](objectID: String): Option[Int] =
+    hits
+      .map(_.extract[T])
+      .zipWithIndex
+      .find(_._1.objectID.equals(objectID))
+      .map(_._2)
 }
 
 case class SearchSynonymResult(hits: Seq[AbstractSynonym], nbHits: Int)
