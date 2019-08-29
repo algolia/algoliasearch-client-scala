@@ -66,7 +66,7 @@ case class SearchResult(hits: Seq[JObject],
 
   def asWithObjectID[T <: ObjectID: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  def getObjectIDPosition[T <: ObjectID: Manifest](objectID: String): Option[Int] =
+  def getObjectPosition[T <: ObjectID: Manifest](objectID: String): Option[Int] =
     hits
       .map(_.extract[T])
       .zipWithIndex
