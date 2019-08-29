@@ -156,7 +156,7 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     }
 
     it("should find the first object correctly") {
-      val indexName = "testFindFirstObject"
+      val indexName = "testFindObject"
 
       val clearTask = Await.result(helper.client.execute(clear index indexName), Duration.Inf)
       Await.result(helper.client.execute(waitFor task clearTask from indexName), Duration.Inf)
@@ -167,31 +167,31 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
       )
       Await.result(helper.client.execute(waitFor task indexingTask from indexName), Duration.Inf)
 
-      helper.findFirstObject(indexName, Query(), (_: Employee) => false) should be(None)
+      helper.findObject(indexName, Query(), (_: Employee) => false) should be(None)
 
-      var obj = helper.findFirstObject(indexName, Query(), (_: Employee) => true)
+      var obj = helper.findObject(indexName, Query(), (_: Employee) => true)
       obj should not be (None)
       obj.get.page should be(0)
       obj.get.position should be(0)
 
       val predicate = (e: Employee) => e.company == "Apple"
 
-      helper.findFirstObject(indexName, Query(query = Some("algolia")), predicate) should be(None)
+      helper.findObject(indexName, Query(query = Some("algolia")), predicate) should be(None)
 
-      helper.findFirstObject(indexName,
-                             Query(
-                               query = Some(""),
-                               hitsPerPage = Some(5)
-                             ),
-                             predicate,
-                             doNotPaginate = true) should be(None)
+      helper.findObject(indexName,
+                        Query(
+                          query = Some(""),
+                          hitsPerPage = Some(5)
+                        ),
+                        predicate,
+                        paginate = false) should be(None)
 
-      obj = helper.findFirstObject(indexName,
-                                   Query(
-                                     query = Some(""),
-                                     hitsPerPage = Some(5)
-                                   ),
-                                   predicate)
+      obj = helper.findObject(indexName,
+                              Query(
+                                query = Some(""),
+                                hitsPerPage = Some(5)
+                              ),
+                              predicate)
       obj should not be (None)
       obj.get.page should be(2)
       obj.get.position should be(0)
