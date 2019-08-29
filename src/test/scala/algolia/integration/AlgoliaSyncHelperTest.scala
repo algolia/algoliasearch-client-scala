@@ -135,7 +135,7 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     )
 
     it("should find the search results' position correctly") {
-      val indexName = "testGetObjectIDPosition"
+      val indexName = "testGetObjectPosition"
 
       val clearTask = Await.result(helper.client.execute(clear index indexName), Duration.Inf)
       Await.result(helper.client.execute(waitFor task clearTask from indexName), Duration.Inf)
@@ -150,9 +150,9 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
         helper.client.execute(search into indexName query Query(query = Some("algolia"))),
         Duration.Inf)
 
-      res.getObjectIDPosition[Employee]("nicolas-dessaigne") should be(Some(0))
-      res.getObjectIDPosition[Employee]("julien-lemoine") should be(Some(1))
-      res.getObjectIDPosition[Employee]("") should be(None)
+      res.getObjectPosition[Employee]("nicolas-dessaigne") should be(Some(0))
+      res.getObjectPosition[Employee]("julien-lemoine") should be(Some(1))
+      res.getObjectPosition[Employee]("") should be(None)
     }
 
     it("should find the first object correctly") {
