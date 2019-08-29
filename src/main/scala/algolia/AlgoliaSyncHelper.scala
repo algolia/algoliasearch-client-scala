@@ -81,10 +81,10 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
     }
   }
 
-  def findFirstObject[T <: ObjectID: Manifest](index: String,
-                                               searchQuery: Query,
-                                               predicate: T => Boolean,
-                                               doNotPaginate: Boolean = false)(
+  def findObject[T <: ObjectID: Manifest](index: String,
+                                          searchQuery: Query,
+                                          predicate: T => Boolean,
+                                          paginate: Boolean = true)(
       implicit duration: Duration,
       executor: ExecutionContext): Option[HitsWithPosition[T]] = {
     val res = Await.result(client.execute(search into index query searchQuery), duration)
@@ -103,11 +103,11 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
       case None => {
         val hasNextPage = page + 1 < nbPages
 
-        if (doNotPaginate || !hasNextPage) {
+        if (!paginate || !hasNextPage) {
           None
         } else {
           val newQuery = searchQuery.copy(page = Option(page + 1))
-          findFirstObject(index, newQuery, predicate, doNotPaginate)
+          findObject(index, newQuery, predicate, paginate)
         }
       }
     }
