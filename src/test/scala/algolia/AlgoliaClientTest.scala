@@ -318,8 +318,8 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         apiClient.hostsStatuses.hostStatuses.asScala should be(
           Map(
-            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1l),
-            "https://a-1.algolianet.com" -> HostStatus(up = true, 1l)
+            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1L),
+            "https://a-1.algolianet.com" -> HostStatus(up = true, 1L)
           ))
 
         mockRequest1 returning Future.successful(successfulRequest1)
@@ -332,8 +332,8 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         apiClient.hostsStatuses.hostStatuses.asScala should be(
           Map(
-            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1l),
-            "https://a-1.algolianet.com" -> HostStatus(up = true, 1l)
+            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1L),
+            "https://a-1.algolianet.com" -> HostStatus(up = true, 1L)
           ))
       }
 
@@ -478,8 +478,8 @@ class AlgoliaClientTest extends AlgoliaTest {
     val apiClient = new AlgoliaClient("APPID", "APIKEY")
 
     it("should generate a secured api key") {
-      val secureApiKey = apiClient.generateSecuredApiKey("PRIVATE_API_KEY",
-                                                         Query(tagFilters = Some(Seq("user_42"))))
+      val secureApiKey =
+        apiClient.generateSecuredApiKey("PRIVATE_API_KEY", Query(tagFilters = Some(Seq("user_42"))))
       secureApiKey should be(
         "ZWRjMDQyY2Y0MDM1OThiZjM0MmEyM2VlNjVmOWY2YTczYzc3YWJiMzdhMjIzMDY5M2VmY2RjNmQ0MmI5NWU3NHRhZ0ZpbHRlcnM9dXNlcl80Mg==")
     }
