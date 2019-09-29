@@ -70,7 +70,7 @@ case class IndexingDefinition(
     val body: Option[String] = obj.map(o => write(o))
     val verb = objectId match {
       case Some(_) => http.PUT
-      case None    => http.POST
+      case None => http.POST
     }
 
     HttpPayload(verb,
