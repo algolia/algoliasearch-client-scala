@@ -52,7 +52,7 @@ case class IndexingDefinition(
         IndexingDefinition(index, Some(oid), Some(o))
     })
 
-  def objects(objects: Traversable[AnyRef]): IndexingBatchDefinition =
+  def objects(objects: Iterable[AnyRef]): IndexingBatchDefinition =
     IndexingBatchDefinition(index, objects.map { obj =>
       copy(index = index, obj = Some(obj))
     })
@@ -70,7 +70,7 @@ case class IndexingDefinition(
     val body: Option[String] = obj.map(o => write(o))
     val verb = objectId match {
       case Some(_) => http.PUT
-      case None => http.POST
+      case None    => http.POST
     }
 
     HttpPayload(verb,

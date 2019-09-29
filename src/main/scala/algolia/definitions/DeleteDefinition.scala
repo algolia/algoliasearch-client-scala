@@ -48,7 +48,7 @@ case class DeleteObjectDefinition(
   def objectId(objectId: String): DeleteObjectDefinition =
     copy(oid = Some(objectId))
 
-  def objectIds(objectIds: Traversable[String]): BatchDefinition =
+  def objectIds(objectIds: Iterable[String]): BatchDefinition =
     BatchDefinition(objectIds.map { oid =>
       DeleteObjectDefinition(index, Some(oid))
     })

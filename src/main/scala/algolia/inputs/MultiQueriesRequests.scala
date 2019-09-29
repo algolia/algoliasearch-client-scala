@@ -25,6 +25,6 @@
 
 package algolia.inputs
 
-case class MultiQueriesRequests(requests: Traversable[MultiQueriesRequest])
+case class MultiQueriesRequests(requests: Iterable[MultiQueriesRequest])
 
 case class MultiQueriesRequest(indexName: String, params: Option[String])
