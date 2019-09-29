@@ -57,7 +57,7 @@ case class BatchDefinition(
     definition match {
       case IndexingDefinition(index, None, Some(obj), _) =>
         hasObjectId(obj) match {
-          case (true, o)  => Iterable(UpdateObjectOperation(o, Some(index)))
+          case (true, o) => Iterable(UpdateObjectOperation(o, Some(index)))
           case (false, o) => Iterable(AddObjectOperation(o, Some(index)))
         }
 
