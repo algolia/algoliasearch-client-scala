@@ -319,8 +319,8 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         apiClient.hostsStatuses.hostStatuses.asScala should be(
           Map(
-            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1l),
-            "https://a-1.algolianet.com" -> HostStatus(up = true, 1l)
+            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1L),
+            "https://a-1.algolianet.com" -> HostStatus(up = true, 1L)
           ))
 
         mockRequest1 returning Future.successful(successfulRequest1)
@@ -333,8 +333,8 @@ class AlgoliaClientTest extends AlgoliaTest {
 
         apiClient.hostsStatuses.hostStatuses.asScala should be(
           Map(
-            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1l),
-            "https://a-1.algolianet.com" -> HostStatus(up = true, 1l)
+            "https://a-dsn.algolia.net" -> HostStatus(up = false, 1L),
+            "https://a-1.algolianet.com" -> HostStatus(up = true, 1L)
           ))
       }
 
