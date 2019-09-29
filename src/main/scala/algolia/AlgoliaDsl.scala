@@ -123,7 +123,7 @@ object AlgoliaDsl extends AlgoliaDsl {
           case AttributesToIndex.unordered(attr) =>
             JString(s"unordered($attr)")
           case AttributesToIndex.attribute(attr) => JString(attr)
-          case AttributesToIndex.attributes(attributes @ _ *) =>
+          case AttributesToIndex.attributes(attributes @ _*) =>
             JString(attributes.mkString(","))
         }))
 
@@ -139,7 +139,7 @@ object AlgoliaDsl extends AlgoliaDsl {
           case SearchableAttributes.unordered(attr) =>
             JString(s"unordered($attr)")
           case SearchableAttributes.attribute(attr) => JString(attr)
-          case SearchableAttributes.attributes(attributes @ _ *) =>
+          case SearchableAttributes.attributes(attributes @ _*) =>
             JString(attributes.mkString(","))
         }))
 
@@ -156,47 +156,47 @@ object AlgoliaDsl extends AlgoliaDsl {
   class RankingSerializer
       extends CustomSerializer[Ranking](_ =>
         ({
-          case JString(asc(attr)) => Ranking.asc(attr)
-          case JString(desc(attr)) => Ranking.desc(attr)
-          case JString("typo") => Ranking.typo
-          case JString("geo") => Ranking.geo
-          case JString("words") => Ranking.words
+          case JString(asc(attr))   => Ranking.asc(attr)
+          case JString(desc(attr))  => Ranking.desc(attr)
+          case JString("typo")      => Ranking.typo
+          case JString("geo")       => Ranking.geo
+          case JString("words")     => Ranking.words
           case JString("proximity") => Ranking.proximity
           case JString("attribute") => Ranking.attribute
-          case JString("exact") => Ranking.exact
-          case JString("custom") => Ranking.custom
-          case JString("filters") => Ranking.filters
+          case JString("exact")     => Ranking.exact
+          case JString("custom")    => Ranking.custom
+          case JString("filters")   => Ranking.filters
         }, {
-          case Ranking.asc(attribute) => JString(s"asc($attribute)")
+          case Ranking.asc(attribute)  => JString(s"asc($attribute)")
           case Ranking.desc(attribute) => JString(s"desc($attribute)")
-          case Ranking.typo => JString("typo")
-          case Ranking.geo => JString("geo")
-          case Ranking.words => JString("words")
-          case Ranking.proximity => JString("proximity")
-          case Ranking.attribute => JString("attribute")
-          case Ranking.exact => JString("exact")
-          case Ranking.custom => JString("custom")
-          case Ranking.filters => JString("filters")
+          case Ranking.typo            => JString("typo")
+          case Ranking.geo             => JString("geo")
+          case Ranking.words           => JString("words")
+          case Ranking.proximity       => JString("proximity")
+          case Ranking.attribute       => JString("attribute")
+          case Ranking.exact           => JString("exact")
+          case Ranking.custom          => JString("custom")
+          case Ranking.filters         => JString("filters")
         }))
 
   class CustomRankingSerializer
       extends CustomSerializer[CustomRanking](_ =>
         ({
-          case JString(asc(attr)) => CustomRanking.asc(attr)
+          case JString(asc(attr))  => CustomRanking.asc(attr)
           case JString(desc(attr)) => CustomRanking.desc(attr)
         }, {
-          case CustomRanking.asc(attribute) => JString(s"asc($attribute)")
+          case CustomRanking.asc(attribute)  => JString(s"asc($attribute)")
           case CustomRanking.desc(attribute) => JString(s"desc($attribute)")
         }))
 
   class QueryTypeSerializer
       extends CustomSerializer[QueryType](_ =>
         ({
-          case JString("prefixAll") => QueryType.prefixAll
+          case JString("prefixAll")  => QueryType.prefixAll
           case JString("prefixLast") => QueryType.prefixLast
           case JString("prefixNone") => QueryType.prefixNone
         }, {
-          case QueryType.prefixAll => JString("prefixAll")
+          case QueryType.prefixAll  => JString("prefixAll")
           case QueryType.prefixLast => JString("prefixLast")
           case QueryType.prefixNone => JString("prefixNone")
         }))
@@ -204,39 +204,39 @@ object AlgoliaDsl extends AlgoliaDsl {
   class TypoToleranceSerializer
       extends CustomSerializer[TypoTolerance](_ =>
         ({
-          case JString("true") => TypoTolerance.`true`
-          case JString("false") => TypoTolerance.`false`
-          case JString("min") => TypoTolerance.min
+          case JString("true")   => TypoTolerance.`true`
+          case JString("false")  => TypoTolerance.`false`
+          case JString("min")    => TypoTolerance.min
           case JString("strict") => TypoTolerance.strict
         }, {
-          case TypoTolerance.`true` => JString("true")
+          case TypoTolerance.`true`  => JString("true")
           case TypoTolerance.`false` => JString("false")
-          case TypoTolerance.min => JString("min")
-          case TypoTolerance.strict => JString("strict")
+          case TypoTolerance.min     => JString("min")
+          case TypoTolerance.strict  => JString("strict")
         }))
 
   class AclSerializer
       extends CustomSerializer[Acl](_ =>
         ({
-          case JString("search") => Acl.search
-          case JString("browse") => Acl.browse
-          case JString("addObject") => Acl.addObject
+          case JString("search")       => Acl.search
+          case JString("browse")       => Acl.browse
+          case JString("addObject")    => Acl.addObject
           case JString("deleteObject") => Acl.deleteObject
-          case JString("deleteIndex") => Acl.deleteIndex
-          case JString("settings") => Acl.settings
+          case JString("deleteIndex")  => Acl.deleteIndex
+          case JString("settings")     => Acl.settings
           case JString("editSettings") => Acl.editSettings
-          case JString("analytics") => Acl.analytics
-          case JString("listIndexes") => Acl.listIndexes
+          case JString("analytics")    => Acl.analytics
+          case JString("listIndexes")  => Acl.listIndexes
         }, {
-          case Acl.search => JString("search")
-          case Acl.browse => JString("browse")
-          case Acl.addObject => JString("addObject")
+          case Acl.search       => JString("search")
+          case Acl.browse       => JString("browse")
+          case Acl.addObject    => JString("addObject")
           case Acl.deleteObject => JString("deleteObject")
-          case Acl.deleteIndex => JString("deleteIndex")
-          case Acl.settings => JString("settings")
+          case Acl.deleteIndex  => JString("deleteIndex")
+          case Acl.settings     => JString("settings")
           case Acl.editSettings => JString("editSettings")
-          case Acl.analytics => JString("analytics")
-          case Acl.listIndexes => JString("listIndexes")
+          case Acl.analytics    => JString("analytics")
+          case Acl.listIndexes  => JString("listIndexes")
         }))
 
   class QuerySynonymsSerializer
@@ -297,23 +297,23 @@ object AlgoliaDsl extends AlgoliaDsl {
   class DistinctSerializer
       extends CustomSerializer[Distinct](_ =>
         ({
-          case JBool(true) => Distinct.`true`
+          case JBool(true)  => Distinct.`true`
           case JBool(false) => Distinct.`false`
-          case JInt(i) => Distinct.int(i.toInt)
+          case JInt(i)      => Distinct.int(i.toInt)
         }, {
-          case Distinct.`true` => JBool(true)
+          case Distinct.`true`  => JBool(true)
           case Distinct.`false` => JBool(false)
-          case Distinct.int(i) => JInt(i)
+          case Distinct.int(i)  => JInt(i)
         }))
 
   class RemoveStopWordsSerializer
       extends CustomSerializer[RemoveStopWords](_ =>
         ({
-          case JBool(true) => RemoveStopWords.`true`
-          case JBool(false) => RemoveStopWords.`false`
+          case JBool(true)   => RemoveStopWords.`true`
+          case JBool(false)  => RemoveStopWords.`false`
           case JString(list) => RemoveStopWords.list(list.split(","))
         }, {
-          case RemoveStopWords.`true` => JBool(true)
+          case RemoveStopWords.`true`  => JBool(true)
           case RemoveStopWords.`false` => JBool(false)
           case RemoveStopWords.list(i) => JString(i.mkString(","))
         }))
@@ -321,21 +321,21 @@ object AlgoliaDsl extends AlgoliaDsl {
   class AlternativesSerializer
       extends CustomSerializer[Alternatives](_ =>
         ({
-          case JBool(true) => Alternatives.`true`
+          case JBool(true)  => Alternatives.`true`
           case JBool(false) => Alternatives.`false`
         }, {
-          case Alternatives.`true` => JBool(true)
+          case Alternatives.`true`  => JBool(true)
           case Alternatives.`false` => JBool(false)
         }))
 
   class IgnorePluralsSerializer
       extends CustomSerializer[IgnorePlurals](_ =>
         ({
-          case JBool(true) => IgnorePlurals.`true`
-          case JBool(false) => IgnorePlurals.`false`
+          case JBool(true)   => IgnorePlurals.`true`
+          case JBool(false)  => IgnorePlurals.`false`
           case JString(list) => IgnorePlurals.list(list.split(","))
         }, {
-          case IgnorePlurals.`true` => JBool(true)
+          case IgnorePlurals.`true`  => JBool(true)
           case IgnorePlurals.`false` => JBool(false)
           case IgnorePlurals.list(i) => JString(i.mkString(","))
         }))
@@ -359,9 +359,9 @@ object AlgoliaDsl extends AlgoliaDsl {
       extends CustomSerializer[ZonedDateTime](_ =>
         ({
           case JInt(l) =>
-            ZonedDateTime.ofInstant(Instant.ofEpochSecond(l.longValue()), ZoneOffset.UTC)
+            ZonedDateTime.ofInstant(Instant.ofEpochSecond(l.longValue), ZoneOffset.UTC)
         }, {
-          case ts: ZonedDateTime => JInt(ts.toEpochSecond())
+          case ts: ZonedDateTime => JInt(BigInt(ts.toEpochSecond))
         }))
 
   case object forwardToSlaves extends ForwardToReplicas

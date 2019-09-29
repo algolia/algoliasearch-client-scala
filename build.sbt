@@ -6,21 +6,21 @@ description := "Scala client for Algolia Search API"
 
 version := "1.34.0"
 
-crossScalaVersions := Seq("2.11.11", "2.12.2")
+crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.13.1"
 
 coverageEnabled := false
 
 val asyncHttpClientVersion = "2.10.1"
-val json4sVersion = "3.5.2"
+val json4sVersion = "3.6.7"
 val slf4jVersion = "1.7.25"
-val scalaUriVersion = "0.4.16"
+val scalaUriVersion = "1.4.10"
 
 val logbackVersion = "1.2.3"
 val scalaTestVersion = "3.0.8"
-val scalaMockVersion = "3.4.2"
-val scalacheckVersion = "1.12.6"
+val scalaMockVersion = "4.4.0"
+val scalacheckVersion = "1.14.2"
 
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
 
@@ -35,20 +35,18 @@ libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
 libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
-libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % "test"
+libraryDependencies += "org.scalamock" %% "scalamock" % scalaMockVersion % "test"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion % "test"
 
 scalacOptions ++= Seq(
   "-deprecation",
-  "-Xfatal-warnings",
+  // "-Xfatal-warnings",
   "-feature", //Emit warning and location for usages of features that should be imported explicitly.
   "-encoding",
   "UTF-8",
   "-unchecked", //Enable additional warnings where generated code depends on assumptions
-  "-Yno-adapted-args",
   "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
-  "-Xfuture"
+  "-Ywarn-numeric-widen"
 )
 
 /**

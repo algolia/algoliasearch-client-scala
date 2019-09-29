@@ -29,7 +29,7 @@ import java.net.InetAddress
 
 import algolia.objects.RequestOptions
 import io.netty.resolver.NameResolver
-import com.netaporter.uri.dsl._
+import io.lemonlabs.uri.dsl._
 import org.asynchttpclient.{Request, RequestBuilder}
 
 private[algolia] sealed trait HttpVerb
