@@ -47,7 +47,7 @@ case class IndexingBatchDefinition(
     val operations = definitions.map {
       case IndexingDefinition(_, None, Some(obj), _) =>
         hasObjectId(obj) match {
-          case (true, o)  => UpdateObjectOperation(o)
+          case (true, o) => UpdateObjectOperation(o)
           case (false, o) => AddObjectOperation(o)
         }
 

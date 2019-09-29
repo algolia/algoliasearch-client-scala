@@ -479,7 +479,8 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     it("should generate a secured api key") {
       val secureApiKey =
-        apiClient.generateSecuredApiKey("PRIVATE_API_KEY", Query(tagFilters = Some(Seq("user_42"))))
+        apiClient.generateSecuredApiKey("PRIVATE_API_KEY",
+                                        Query(tagFilters = Some(Seq("user_42"))))
       secureApiKey should be(
         "ZWRjMDQyY2Y0MDM1OThiZjM0MmEyM2VlNjVmOWY2YTczYzc3YWJiMzdhMjIzMDY5M2VmY2RjNmQ0MmI5NWU3NHRhZ0ZpbHRlcnM9dXNlcl80Mg==")
     }
