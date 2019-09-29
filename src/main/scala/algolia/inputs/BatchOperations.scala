@@ -25,7 +25,7 @@
 
 package algolia.inputs
 
-case class BatchOperations(requests: Traversable[BatchOperation[_ <: AnyRef]])
+case class BatchOperations(requests: Iterable[BatchOperation[_ <: AnyRef]])
 
 sealed trait BatchOperation[T <: AnyRef] {
 

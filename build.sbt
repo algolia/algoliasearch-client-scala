@@ -33,10 +33,10 @@ libraryDependencies += "org.slf4j" % "slf4j-api" % slf4jVersion
 libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 
 //Testing
-libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
-libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
-libraryDependencies += "org.scalamock" %% "scalamock" % scalaMockVersion % "test"
-libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % Test
+libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test
+libraryDependencies += "org.scalamock" %% "scalamock" % scalaMockVersion % Test
+libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion % Test
 
 scalacOptions ++= Seq(
   "-deprecation",

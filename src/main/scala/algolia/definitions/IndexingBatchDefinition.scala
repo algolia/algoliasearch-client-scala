@@ -33,7 +33,7 @@ import org.json4s.native.Serialization._
 
 case class IndexingBatchDefinition(
     index: String,
-    definitions: Traversable[Definition] = Traversable(),
+    definitions: Iterable[Definition] = Iterable(),
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition
     with BatchOperationUtils {
@@ -47,7 +47,7 @@ case class IndexingBatchDefinition(
     val operations = definitions.map {
       case IndexingDefinition(_, None, Some(obj), _) =>
         hasObjectId(obj) match {
-          case (true, o) => UpdateObjectOperation(o)
+          case (true, o)  => UpdateObjectOperation(o)
           case (false, o) => AddObjectOperation(o)
         }
 

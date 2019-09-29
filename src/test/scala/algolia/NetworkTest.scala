@@ -30,6 +30,7 @@ import java.util.concurrent.{ExecutionException, TimeUnit}
 
 import algolia.AlgoliaDsl._
 import org.scalatest.DoNotDiscover
+import org.scalatest.TryValues._
 
 import scala.concurrent.duration._
 import scala.util.Try
@@ -55,9 +56,8 @@ class NetworkTest extends AlgoliaTest {
     it("should answer within 200 * 6 milliseconds") {
       val request = apiClient.httpClient.dnsNameResolver.resolve("https://scala-dsn.algolia.biz")
       val result = Try(request.get(200 * 6, TimeUnit.MILLISECONDS))
-      result shouldBe 'failure
-      result.failed.get shouldBe a[ExecutionException]
-      result.failed.get.getCause shouldBe a[UnknownHostException]
+      result.failure.exception shouldBe a[ExecutionException]
+      result.failure.exception.getCause shouldBe a[UnknownHostException]
     }
 
     it("should answer within 1 minute") {
