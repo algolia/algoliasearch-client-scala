@@ -116,7 +116,7 @@ object AlgoliaDsl extends AlgoliaDsl {
           case JString(searchableAttributesUnordered(attr)) =>
             AttributesToIndex.unordered(attr)
           case JString(searchableAttributesAttributes(attrs)) =>
-            AttributesToIndex.attributes(attrs.split(","): _*)
+            AttributesToIndex.attributes(attrs.split(",").toIndexedSeq: _*)
           case JString(attr) => AttributesToIndex.attribute(attr)
         }, {
           case AttributesToIndex.unordered(attr) =>
@@ -132,7 +132,7 @@ object AlgoliaDsl extends AlgoliaDsl {
           case JString(searchableAttributesUnordered(attr)) =>
             SearchableAttributes.unordered(attr)
           case JString(searchableAttributesAttributes(attrs)) =>
-            SearchableAttributes.attributes(attrs.split(","): _*)
+            SearchableAttributes.attributes(attrs.split(",").toIndexedSeq: _*)
           case JString(attr) => SearchableAttributes.attribute(attr)
         }, {
           case SearchableAttributes.unordered(attr) =>
@@ -310,7 +310,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         ({
           case JBool(true)   => RemoveStopWords.`true`
           case JBool(false)  => RemoveStopWords.`false`
-          case JString(list) => RemoveStopWords.list(list.split(","))
+          case JString(list) => RemoveStopWords.list(list.split(",").toSeq)
         }, {
           case RemoveStopWords.`true`  => JBool(true)
           case RemoveStopWords.`false` => JBool(false)
@@ -332,7 +332,7 @@ object AlgoliaDsl extends AlgoliaDsl {
         ({
           case JBool(true)   => IgnorePlurals.`true`
           case JBool(false)  => IgnorePlurals.`false`
-          case JString(list) => IgnorePlurals.list(list.split(","))
+          case JString(list) => IgnorePlurals.list(list.split(",").toSeq)
         }, {
           case IgnorePlurals.`true`  => JBool(true)
           case IgnorePlurals.`false` => JBool(false)

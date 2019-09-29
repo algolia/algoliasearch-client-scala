@@ -36,7 +36,7 @@ trait BatchDsl {
 
   implicit val formats: Formats
 
-  def batch(batches: Traversable[Definition]): BatchDefinition = {
+  def batch(batches: Iterable[Definition]): BatchDefinition = {
     BatchDefinition(batches)
   }
 

@@ -37,7 +37,7 @@ trait MultiQueriesDefinitionDsl {
   implicit val formats: Formats
 
   @deprecated("use multipleQueries", "1.27.1")
-  def multiQueries(queries: Traversable[SearchDefinition]): MultiQueriesDefinition = {
+  def multiQueries(queries: Iterable[SearchDefinition]): MultiQueriesDefinition = {
     MultiQueriesDefinition(queries)
   }
 
@@ -46,7 +46,7 @@ trait MultiQueriesDefinitionDsl {
     MultiQueriesDefinition(queries)
   }
 
-  def multipleQueries(queries: Traversable[SearchDefinition]): MultiQueriesDefinition = {
+  def multipleQueries(queries: Iterable[SearchDefinition]): MultiQueriesDefinition = {
     MultiQueriesDefinition(queries)
   }
 

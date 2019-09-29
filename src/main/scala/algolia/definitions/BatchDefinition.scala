@@ -33,7 +33,7 @@ import org.json4s.native.Serialization._
 import org.json4s.{Extraction, Formats}
 
 case class BatchDefinition(
-    definitions: Traversable[Definition],
+    definitions: Iterable[Definition],
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition
     with BatchOperationUtils {
@@ -53,28 +53,28 @@ case class BatchDefinition(
     )
   }
 
-  private def transform(definition: Definition): Traversable[BatchOperation[JValue]] = {
+  private def transform(definition: Definition): Iterable[BatchOperation[JValue]] = {
     definition match {
       case IndexingDefinition(index, None, Some(obj), _) =>
         hasObjectId(obj) match {
-          case (true, o) => Traversable(UpdateObjectOperation(o, Some(index)))
-          case (false, o) => Traversable(AddObjectOperation(o, Some(index)))
+          case (true, o)  => Iterable(UpdateObjectOperation(o, Some(index)))
+          case (false, o) => Iterable(AddObjectOperation(o, Some(index)))
         }
 
       case IndexingDefinition(index, Some(objectId), Some(obj), _) =>
-        Traversable(UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
+        Iterable(UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
 
       case ClearIndexDefinition(index, _) =>
-        Traversable(ClearIndexOperation(index))
+        Iterable(ClearIndexOperation(index))
 
       case DeleteObjectDefinition(Some(index), Some(oid), _) =>
-        Traversable(DeleteObjectOperation(index, oid))
+        Iterable(DeleteObjectOperation(index, oid))
 
       case SafeDeleteObjectDefinition(op, _) =>
-        Traversable(DeleteObjectOperation(op.index, op.objectID))
+        Iterable(DeleteObjectOperation(op.index, op.objectID))
 
       case DeleteIndexDefinition(index, _) =>
-        Traversable(DeleteIndexOperation(index))
+        Iterable(DeleteIndexOperation(index))
 
       case PartialUpdateObjectOperationDefinition(operation,
                                                   index,
@@ -87,7 +87,7 @@ case class BatchDefinition(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
-        Traversable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
+        Iterable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
 
       case PartialUpdateObjectOperationDefinition(operation,
                                                   index,
@@ -100,23 +100,23 @@ case class BatchDefinition(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
-        Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
+        Iterable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
 
       case PartialUpdateObjectDefinition(index, Some(objectId), Some(attribute), value, _) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> value
         )
-        Traversable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
+        Iterable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
 
       case IndexingBatchDefinition(_, defs, _) =>
         defs.flatMap(transform)
 
       case PartialUpdateOneObjectDefinition(index, Some(obj), createIfNotExists, _) =>
         if (createIfNotExists) {
-          Traversable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
+          Iterable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
         } else {
-          Traversable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(obj), Some(index)))
+          Iterable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(obj), Some(index)))
         }
     }
   }

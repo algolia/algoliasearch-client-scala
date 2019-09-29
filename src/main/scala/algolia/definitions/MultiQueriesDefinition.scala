@@ -32,7 +32,7 @@ import org.json4s.Formats
 import org.json4s.native.Serialization._
 
 case class MultiQueriesDefinition(
-    definitions: Traversable[SearchDefinition],
+    definitions: Iterable[SearchDefinition],
     strategy: Option[MultiQueries.Strategy] = None,
     requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
     extends Definition {
