@@ -48,7 +48,7 @@ case class SearchResult(hits: Seq[JObject],
                         params: String,
                         message: Option[String],
                         aroundLatLng: Option[String],
-                        automaticRadius: Option[Int],
+                        automaticRadius: Option[String],
                         facets_stats: Option[Map[String, Float]],
                         // For getRankingInfo
                         serverUsed: Option[String],
