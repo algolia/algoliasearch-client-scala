@@ -26,7 +26,7 @@
 package algolia.definitions
 
 import algolia.http.{DELETE, GET, HttpPayload, POST}
-import algolia.inputs.UserIDAssignment
+import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.objects.RequestOptions
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
@@ -61,6 +61,32 @@ case class AssignUserIDDefinition(
     )
   }
 
+}
+
+case class AssignUserIDsDefinition(
+    assignment: UserIDsAssignment,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    extends Definition {
+
+  override type T = AssignUserIDsDefinition
+
+  override def options(requestOptions: RequestOptions): AssignUserIDsDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build(): HttpPayload = {
+    val body = Map(
+      "cluster" -> assignment.cluster,
+      "users" -> assignment.userIDs
+    )
+
+    HttpPayload(
+      POST,
+      Seq("1", "clusters", "mapping", "batch"),
+      body = Some(write(body)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
 }
 
 case class GetTopUserIDDefinition(requestOptions: Option[RequestOptions] = None)

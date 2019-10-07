@@ -24,8 +24,8 @@
  */
 
 package algolia.dsl
-import algolia.definitions.AssignUserIDDefinition
-import algolia.inputs.UserIDAssignment
+import algolia.definitions.{AssignUserIDDefinition, AssignUserIDsDefinition}
+import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.{AlgoliaClient, Executable}
 import algolia.responses.Created
 import org.json4s.Formats
@@ -41,10 +41,20 @@ trait AssignDsl {
     def userID(assignment: UserIDAssignment): AssignUserIDDefinition =
       AssignUserIDDefinition(assignment)
 
+    def userIDs(assignment: UserIDsAssignment): AssignUserIDsDefinition =
+      AssignUserIDsDefinition(assignment)
+
   }
 
   implicit object AssignUserIDExecutable extends Executable[AssignUserIDDefinition, Created] {
     override def apply(client: AlgoliaClient, query: AssignUserIDDefinition)(
+        implicit executor: ExecutionContext): Future[Created] = {
+      client.request[Created](query.build())
+    }
+  }
+
+  implicit object AssignUserIDsExecutable extends Executable[AssignUserIDsDefinition, Created] {
+    override def apply(client: AlgoliaClient, query: AssignUserIDsDefinition)(
         implicit executor: ExecutionContext): Future[Created] = {
       client.request[Created](query.build())
     }

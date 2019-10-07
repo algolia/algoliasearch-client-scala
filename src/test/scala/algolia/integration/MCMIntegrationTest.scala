@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneOffset, ZonedDateTime}
 
 import algolia.AlgoliaDsl._
-import algolia.inputs.UserIDAssignment
+import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.responses.{ClusterData, UserDataWithCluster}
 import algolia.{AlgoliaClient, AlgoliaClientConfiguration, AlgoliaHttpClient, AlgoliaTest}
 
@@ -86,14 +86,26 @@ class MCMIntegrationTest extends AlgoliaTest {
         mcmClient.execute(assign userID UserIDAssignment(userID, cluster.clusterName)),
         10 seconds
       )
-    Thread.sleep(3000)
 
     Await
+      .result(
+        mcmClient.execute(
+          assign userIDs UserIDsAssignment(Seq(userID + "-1", userID + "-2"), cluster.clusterName)
+        ),
+        10 seconds
+      )
+
+    Thread.sleep(3000)
+
+    val hits = Await
       .result(
         mcmClient.execute(search userIDs userID cluster cluster.clusterName),
         10 seconds
       )
       .hits
-      .exists(_.userID == userID) should be(true)
+
+    Seq(userID, userID + "-1", userID + "-2").foreach(
+      u => hits.exists(_.userID == u) should be(true)
+    )
   }
 }
