@@ -27,15 +27,17 @@ package algolia
 
 import java.nio.charset.Charset
 import java.util.Base64
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 
 import algolia.http.HttpPayload
 import algolia.objects.Query
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.util.matching.Regex
+import scala.util.{Failure, Success, Try}
 
 /**
   * The AlgoliaClient to query Algolia
@@ -97,6 +99,8 @@ class AlgoliaClient(applicationId: String,
   )
 
   private val HMAC_SHA256 = "HmacSHA256"
+  private val UTF8_CHARSET = Charset.forName("UTF8")
+
   private[algolia] lazy val hostsStatuses =
     HostsStatuses(configuration, utils, queryHosts, indexingHosts)
 
@@ -110,7 +114,22 @@ class AlgoliaClient(applicationId: String,
     val queryStr = query.copy(userToken = userToken).toParam
     val key = hmac(privateApiKey, queryStr)
 
-    new String(Base64.getEncoder.encode(s"$key$queryStr".getBytes(Charset.forName("UTF8"))))
+    new String(Base64.getEncoder.encode(s"$key$queryStr".getBytes(UTF8_CHARSET)))
+  }
+
+  def getSecuredApiKeyRemainingValidity(securedApiKey: String): Option[Duration] = {
+    val decoded = new String(Base64.getDecoder.decode(securedApiKey), UTF8_CHARSET)
+    val keyWithValidUntil: Regex = """validUntil=(\d{1,10})""".r.unanchored
+
+    decoded match {
+      case keyWithValidUntil(validUntil) => {
+        Try(Duration(validUntil + " seconds")) match {
+          case Success(d) => Some(d)
+          case Failure(e) => None
+        }
+      }
+      case _ => None
+    }
   }
 
   private def hmac(key: String, msg: String): String = {
