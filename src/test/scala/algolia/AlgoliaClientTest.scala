@@ -33,6 +33,7 @@ import algolia.http.{GET, HttpPayload}
 import algolia.objects.Query
 import algolia.responses.{Task, TaskStatus}
 
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlgoliaClientTest extends AlgoliaTest {
@@ -478,8 +479,9 @@ class AlgoliaClientTest extends AlgoliaTest {
     val apiClient = new AlgoliaClient("APPID", "APIKEY")
 
     it("should generate a secured api key") {
-      val secureApiKey = apiClient.generateSecuredApiKey("PRIVATE_API_KEY",
-                                                         Query(tagFilters = Some(Seq("user_42"))))
+      val secureApiKey =
+        apiClient.generateSecuredApiKey("PRIVATE_API_KEY",
+                                        Query(tagFilters = Some(Seq("user_42"))))
       secureApiKey should be(
         "ZWRjMDQyY2Y0MDM1OThiZjM0MmEyM2VlNjVmOWY2YTczYzc3YWJiMzdhMjIzMDY5M2VmY2RjNmQ0MmI5NWU3NHRhZ0ZpbHRlcnM9dXNlcl80Mg==")
     }
@@ -490,6 +492,27 @@ class AlgoliaClientTest extends AlgoliaTest {
                                                          Some("userToken"))
       secureApiKey should be(
         "MDc3N2VlNzkwNDY1MjRjOGFmNGJhYmVmOWI1YTM1YzYxOGQ1NWMzNjBlYWMwM2FmODY0N2VmNjMyOTE5YTAwYnRhZ0ZpbHRlcnM9dXNlcl80MiZ1c2VyVG9rZW49dXNlclRva2Vu")
+    }
+
+    it("should generate a secured api whose validity has not expired") {
+      val securedApiKey =
+        apiClient.generateSecuredApiKey("PRIVATE_API_KEY", Query(validUntil = Some(10 * 60)))
+
+      val remainingValidity: Option[Duration] =
+        apiClient.getSecuredApiKeyRemainingValidity(securedApiKey)
+
+      remainingValidity should not be None
+      remainingValidity.get.toSeconds should be > 9 * 60L
+    }
+
+    it("should generate a secured api whose validity has expired") {
+      val securedApiKey =
+        apiClient.generateSecuredApiKey("PRIVATE_API_KEY", Query(validUntil = Some(-10 * 60)))
+
+      val remainingValidity: Option[Duration] =
+        apiClient.getSecuredApiKeyRemainingValidity(securedApiKey)
+
+      remainingValidity should be(None)
     }
 
   }
