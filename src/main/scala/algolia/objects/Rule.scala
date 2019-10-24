@@ -38,6 +38,7 @@ case class Condition(pattern: String,
                      alternatives: Option[Alternatives] = None)
 
 case class Consequence(params: Option[Map[String, Any]] = None,
+                       filterPromotes: Option[Boolean] = None,
                        promote: Option[Iterable[ConsequencePromote]] = None,
                        hide: Option[Iterable[ConsequenceHide]] = None,
                        userData: Option[Map[String, Any]] = None)
