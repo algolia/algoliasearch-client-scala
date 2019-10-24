@@ -223,6 +223,7 @@ class RulesIntegrationTest extends AlgoliaTest {
           alternatives = Some(Alternatives.`true`)
         ),
         consequence = Consequence(
+          filterPromotes = Some(false),
           params = Some(Map("query" -> "1")),
           userData = Some(Map("a" -> "b"))
         )
