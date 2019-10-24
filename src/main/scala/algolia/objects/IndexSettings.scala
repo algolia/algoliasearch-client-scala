@@ -38,6 +38,7 @@ case class IndexSettings(
     attributeCriteriaComputedByMinProximity: Option[Boolean] = None,
     primary: Option[String] = None,
     userData: Option[Any] = None,
+    customNormalization: Option[Map[String, Map[String, String]]] = None,
     /* Attributes */
     attributesToIndex: Option[Seq[AttributesToIndex]] = None,
     searchableAttributes: Option[Seq[SearchableAttributes]] = None,
