@@ -63,11 +63,13 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return generic object") {
       val s = AlgoliaTest.client.execute {
-        search into indexName query Query(query = Some("a"))
+        search into indexName query Query(query = Some("a"),
+                                          explain = Some(Seq("match.alternatives")))
       }
 
       whenReady(s) { result =>
         result.hits should have length 1
+        result.explain.get.`match`.get.alternatives.get should have length 1
         (result.hits.head \ "name").values should be("algolia")
         (result.hits.head \ "age").values should be(10)
         (result.hits.head \ "alien").values shouldBe false

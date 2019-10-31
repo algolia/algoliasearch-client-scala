@@ -43,6 +43,7 @@ case class Query(
                  percentileComputation: Option[Boolean] = None,
                  queryLanguages: Option[Seq[String]] = None,
                  enableABTest: Option[Boolean] = None,
+                 explain: Option[Seq[String]] = None,
                  /* Attributes */
                  attributesToRetrieve: Option[Seq[String]] = None,
                  restrictSearchableAttributes: Option[Seq[String]] = None,
@@ -128,6 +129,7 @@ case class Query(
       "getRankingInfo" -> getRankingInfo.map(_.toString),
       "numericFilters" -> numericFilters.map(_.mkString(",")),
       "tagFilters" -> tagFilters.map(_.mkString(",")),
+      "explain" -> explain.map(_.mkString(",")),
       "analytics" -> analytics.map(_.toString),
       "analyticsTags" -> analyticsTags.map(_.mkString(",")),
       "synonyms" -> synonyms.map(_.toString),
