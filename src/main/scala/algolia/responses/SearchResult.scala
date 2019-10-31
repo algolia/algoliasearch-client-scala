@@ -56,7 +56,9 @@ case class SearchResult(hits: Seq[JObject],
                         appliedRules: Option[Map[String, String]],
                         // For multiqueries
                         processed: Option[Boolean],
-                        index: Option[String]) {
+                        index: Option[String],
+                        // advanced
+                        explain: Option[Explain]) {
 
   implicit val formats: Formats = org.json4s.DefaultFormats
 
