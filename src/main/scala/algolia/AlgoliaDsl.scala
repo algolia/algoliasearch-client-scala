@@ -64,6 +64,7 @@ trait AlgoliaDsl
     with WaitForTaskDsl
     with TaskStatusDsl
     with AssignDsl
+    with HasDsl
     with RemoveDsl
     with SendDsl
     with SetDsl

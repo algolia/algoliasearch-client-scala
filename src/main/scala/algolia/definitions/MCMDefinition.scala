@@ -202,6 +202,30 @@ case class RemoveUserIDDefinition(userID: String, requestOptions: Option[Request
 
 }
 
+case class HadPendingMappingsDefinition(
+    pending: Boolean = false,
+    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    extends Definition {
+
+  override type T = HadPendingMappingsDefinition
+
+  override def options(requestOptions: RequestOptions): HadPendingMappingsDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  val queryParameters: Option[Map[String, String]] = Some(Map("getClusters" -> pending.toString))
+
+  override private[algolia] def build(): HttpPayload = {
+    HttpPayload(
+      GET,
+      Seq("1", "clusters", "mapping", "pending"),
+      isSearch = false,
+      queryParameters = queryParameters,
+      requestOptions = requestOptions
+    )
+  }
+
+}
+
 case class SearchUserIDDefinition(
     query: String,
     cluster: String = "",

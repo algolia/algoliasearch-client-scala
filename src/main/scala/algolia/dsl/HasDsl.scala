@@ -23,32 +23,31 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.dsl
 
-case class UserData(userID: String, nbRecords: Int, dataSize: Int)
+import algolia.definitions.HadPendingMappingsDefinition
+import algolia.responses.HasPendingMappings
+import org.json4s.Formats
+import algolia.{AlgoliaClient, Executable}
 
-case class UserDataWithCluster(userID: String, clusterName: String, nbRecords: Int, dataSize: Int)
+import scala.concurrent.{ExecutionContext, Future}
 
-case class TopUserID(topUsers: Map[String, UserData])
+trait HasDsl {
 
-case class ClusterData(clusterName: String, nbRecords: Int, nbUserIDs: Int, dataSize: Int)
+  implicit val formats: Formats
 
-case class ClusterList(clusters: Seq[ClusterData])
+  case object has {
+    def pendingMappings(pending: Boolean) = HadPendingMappingsDefinition(pending)
 
-case class UserIDList(userIDs: Seq[UserDataWithCluster], page: Int, hitsPerPage: Int)
+    def pendingMappings() = HadPendingMappingsDefinition()
+  }
 
-case class UserIDHit(userID: String,
-                     clusterName: String,
-                     nbRecords: Int,
-                     dataSize: Int,
-                     objectID: String,
-                     _highlightResult: Map[String, HighlightResult])
+  implicit object HadPendingMappingsDefinitionExecutable
+      extends Executable[HadPendingMappingsDefinition, HasPendingMappings] {
+    override def apply(client: AlgoliaClient, query: HadPendingMappingsDefinition)(
+        implicit executor: ExecutionContext): Future[HasPendingMappings] = {
+      client.request[HasPendingMappings](query.build())
+    }
+  }
 
-// TODO Use timestamp
-case class SearchUserID(hits: Seq[UserIDHit],
-                        nbHits: Int,
-                        page: Int,
-                        hitsPerPage: Int,
-                        updatedAt: Int)
-
-case class HasPendingMappings(pending: Boolean, clusters: Option[Map[String, Seq[String]]])
+}
