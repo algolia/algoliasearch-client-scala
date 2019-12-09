@@ -107,5 +107,11 @@ class MCMIntegrationTest extends AlgoliaTest {
     Seq(userID, userID + "-1", userID + "-2").foreach(
       u => hits.exists(_.userID == u) should be(true)
     )
+
+    val mappingFuture = mcmClient execute (has pendingMappings)
+    noException should be thrownBy whenReady(mappingFuture) { res =>
+      res.pending should not be None
+    }
+
   }
 }
