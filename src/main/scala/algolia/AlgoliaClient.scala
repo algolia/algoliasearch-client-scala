@@ -85,6 +85,8 @@ class AlgoliaClient(applicationId: String,
 
   val analyticsHost: String = "https://analytics.algolia.com"
   val insightsHost: String = "https://insights.algolia.io"
+  /* Recommendation default host is set as 'var' because the region might be overridden. */
+  var recommendationHost: String = "https://recommendation.us.algolia.com"
 
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
@@ -151,6 +153,8 @@ class AlgoliaClient(applicationId: String,
       requestAnalytics(payload)
     } else if (payload.isInsights) {
       requestInsights(payload)
+    } else if (payload.isRecommendation) {
+      requestRecommendation(payload)
     } else {
       requestSearch(payload)
     }
@@ -162,6 +166,15 @@ class AlgoliaClient(applicationId: String,
       case Failure(e) =>
         logger.debug("Analytics API call failed", e)
         Future.failed(new AlgoliaClientException("Analytics API call failed", e))
+    }
+  }
+
+  private[algolia] def requestRecommendation[T: Manifest](payload: HttpPayload)(
+      implicit executor: ExecutionContext): Future[T] = {
+    httpClient.request[T](recommendationHost, headers, payload).andThen {
+      case Failure(e) =>
+        logger.debug("Recommendation API call failed", e)
+        Future.failed(new AlgoliaClientException("Recommendation API call failed", e))
     }
   }
 
