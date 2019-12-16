@@ -57,6 +57,7 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
                                         isSearch: Boolean,
                                         isAnalytics: Boolean = false,
                                         isInsights: Boolean = false,
+                                        isRecommendation: Boolean = false,
                                         requestOptions: Option[RequestOptions]) {
 
   def apply(host: String,

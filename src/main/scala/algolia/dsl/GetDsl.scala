@@ -28,7 +28,7 @@ package algolia.dsl
 import algolia.AlgoliaDsl.ABTests
 import algolia.definitions._
 import algolia.objects.Strategy
-import algolia.responses.{GetObject, Results, TopUserID, UserDataWithCluster}
+import algolia.responses.{GetObject, GetStrategyResponse, Results, TopUserID, UserDataWithCluster}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.JsonAST.JObject
@@ -72,6 +72,8 @@ trait GetDsl {
       "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
       "1.34")
     def personalizationStrategy() = GetPersonalizationStrategyDefinition()
+
+    def personalizationRecommendationStrategy() = GetRecommendationStrategyDefinition()
 
   }
 
@@ -118,6 +120,14 @@ trait GetDsl {
     override def apply(client: AlgoliaClient, query: GetPersonalizationStrategyDefinition)(
         implicit executor: ExecutionContext): Future[Strategy] = {
       client.request[Strategy](query.build())
+    }
+  }
+
+  implicit object GetPersonalizationRecommendationStrategy
+      extends Executable[GetRecommendationStrategyDefinition, GetStrategyResponse] {
+    override def apply(client: AlgoliaClient, query: GetRecommendationStrategyDefinition)(
+        implicit executor: ExecutionContext): Future[GetStrategyResponse] = {
+      client.request[GetStrategyResponse](query.build())
     }
   }
 

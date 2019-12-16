@@ -25,14 +25,13 @@
 
 package algolia.dsl
 
-import algolia.{AlgoliaClient, Executable}
 import algolia.definitions.{
-  GetPersonalizationStrategyDefinition,
-  SetPersonalizationStrategyDefinition
+  SetPersonalizationStrategyDefinition,
+  SetRecommendationStrategyDefinition
 }
-import algolia.inputs._
-import algolia.objects.Strategy
-import algolia.responses.SetStrategyResult
+import algolia.objects.{SetStrategyRequest, Strategy}
+import algolia.responses.{SetStrategyResponse, SetStrategyResult}
+import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,6 +47,9 @@ trait SetDsl {
     def personalizationStrategy(s: Strategy): SetPersonalizationStrategyDefinition =
       SetPersonalizationStrategyDefinition(s)
 
+    def personalizationRecommendationStrategy(
+        strategy: SetStrategyRequest): SetRecommendationStrategyDefinition =
+      SetRecommendationStrategyDefinition(strategy)
   }
 
   @deprecated(
@@ -61,4 +63,11 @@ trait SetDsl {
     }
   }
 
+  implicit object SetPersonalizationRecommendationStrategy
+      extends Executable[SetRecommendationStrategyDefinition, SetStrategyResponse] {
+    override def apply(client: AlgoliaClient, query: SetRecommendationStrategyDefinition)(
+        implicit executor: ExecutionContext): Future[SetStrategyResponse] = {
+      client.request[SetStrategyResponse](query.build())
+    }
+  }
 }
