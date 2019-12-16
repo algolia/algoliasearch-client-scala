@@ -42,11 +42,17 @@ trait SetDsl {
 
   case object set {
 
+    @deprecated(
+      "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+      "1.34")
     def personalizationStrategy(s: Strategy): SetPersonalizationStrategyDefinition =
       SetPersonalizationStrategyDefinition(s)
 
   }
 
+  @deprecated(
+    "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+    "1.34")
   implicit object SetPersonalizationStrategyExecutable
       extends Executable[SetPersonalizationStrategyDefinition, SetStrategyResult] {
     override def apply(client: AlgoliaClient, query: SetPersonalizationStrategyDefinition)(
