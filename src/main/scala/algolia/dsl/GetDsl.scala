@@ -68,6 +68,9 @@ trait GetDsl {
     def userID(userID: String) = GetUserIDDefinition(userID)
 
     // Personalization
+    @deprecated(
+      "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+      "1.34")
     def personalizationStrategy() = GetPersonalizationStrategyDefinition()
 
   }
@@ -107,6 +110,9 @@ trait GetDsl {
     }
   }
 
+  @deprecated(
+    "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+    "1.34")
   implicit object GetPersonalizationStrategyExecutable
       extends Executable[GetPersonalizationStrategyDefinition, Strategy] {
     override def apply(client: AlgoliaClient, query: GetPersonalizationStrategyDefinition)(
