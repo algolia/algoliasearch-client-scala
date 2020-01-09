@@ -12,15 +12,15 @@ scalaVersion := "2.13.1"
 
 coverageEnabled := false
 
-val asyncHttpClientVersion = "2.10.1"
+val asyncHttpClientVersion = "2.10.4"
 val json4sVersion = "3.6.7"
-val slf4jVersion = "1.7.25"
+val slf4jVersion = "1.7.30"
 val scalaUriVersion = "1.4.10"
 
-val logbackVersion = "1.2.3"
-val scalaTestVersion = "3.0.8"
+val scalaTestVersion = "3.1.0"
+val scalacheckVersion = "1.14.3"
 val scalaMockVersion = "4.4.0"
-val scalacheckVersion = "1.14.2"
+val logbackVersion = "1.2.3"
 
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
 
