@@ -31,7 +31,9 @@ import algolia.AlgoliaDsl._
 import algolia.objects.{Condition, Consequence, Rule}
 import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest._
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, EitherValues, Inside, Inspectors}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Millis, Seconds, Span}
 
@@ -51,7 +53,7 @@ object AlgoliaTest {
 }
 
 class AlgoliaTest
-    extends FunSpec
+    extends AnyFunSpec
     with Matchers
     with BeforeAndAfter
     with BeforeAndAfterAll
