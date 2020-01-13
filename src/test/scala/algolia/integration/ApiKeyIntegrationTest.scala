@@ -111,7 +111,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
           }
 
           getRestoredKey.onComplete { t =>
-            isKeyRestored = t.isFailure
+            isKeyRestored = t.isSuccess
           }
 
           Thread.sleep(800)
