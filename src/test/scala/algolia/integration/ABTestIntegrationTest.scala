@@ -33,7 +33,6 @@ import algolia.AlgoliaTest
 import algolia.inputs.{ABTest, ABTestVariant}
 import algolia.`4XXAPIException`
 import algolia.objects.{IgnorePlurals, Query}
-
 import org.scalatest.RecoverMethods._
 
 class ABTestIntegrationTest extends AlgoliaTest {

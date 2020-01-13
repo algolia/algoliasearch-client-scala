@@ -32,11 +32,13 @@ import algolia.AlgoliaDsl._
 import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.responses.{ClusterData, UserDataWithCluster}
 import algolia.{AlgoliaClient, AlgoliaClientConfiguration, AlgoliaHttpClient, AlgoliaTest}
+import org.scalatest.Ignore
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
+@Ignore
 class MCMIntegrationTest extends AlgoliaTest {
 
   lazy val mcmClient: AlgoliaClient =
