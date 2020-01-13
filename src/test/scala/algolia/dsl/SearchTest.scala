@@ -29,6 +29,8 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http._
 import algolia.objects._
+import org.json4s._
+import org.json4s.native.JsonMethods._
 
 class SearchTest extends AlgoliaTest {
 
@@ -102,16 +104,28 @@ class SearchTest extends AlgoliaTest {
         queryLanguages = Some(Seq("attr1", "attr2"))
       )
 
-      (search into "indexName" query q).build() should be(
-        HttpPayload(
-          POST,
-          List("1", "indexes", "indexName", "query"),
-          body = Some(
-            """{"params":"numericFilters=1%2C2&alternativesAsExact=true%2Cfalse&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&queryLanguages=attr1%2Cattr2&responseFields=att7%2Catt8&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e%2Ca&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=%5B%5B1%2C2%2C3%2C4%2C5%2C6%5D%5D&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=%5B%5B1%2C2%2C3%2C4%5D%5D&removeStopWords=false&attributesToHighlight=att5&advancedSyntaxFeatures=exactPhrase%2CexcludeWords&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
-          isSearch = true,
-          requestOptions = None
-        )
-      )
+      val payload = (search into "indexName" query q).build()
+
+      payload.verb should be(POST)
+      payload.path should be(List("1", "indexes", "indexName", "query"))
+      payload.isSearch should be(true)
+      payload.requestOptions should be(None)
+
+      val body = payload.body.getOrElse("""{"params": ""}""")
+
+      val params =
+        parse(body)
+          .extract[Map[String, String]]
+          .getOrElse("params", "")
+          .split("&")
+          .sorted
+
+      val expected =
+        "numericFilters=1%2C2&alternativesAsExact=true%2Cfalse&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&queryLanguages=attr1%2Cattr2&responseFields=att7%2Catt8&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e%2Ca&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=%5B%5B1%2C2%2C3%2C4%2C5%2C6%5D%5D&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=%5B%5B1%2C2%2C3%2C4%5D%5D&removeStopWords=false&attributesToHighlight=att5&advancedSyntaxFeatures=exactPhrase%2CexcludeWords&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"
+          .split("&")
+          .sorted
+
+      params should be(expected)
     }
 
     it("should call the API with a search with custom parameters") {
@@ -214,16 +228,28 @@ class SearchTest extends AlgoliaTest {
         userToken = Some("userToken")
       )
 
-      (search into "indexName" query q).build() should be(
-        HttpPayload(
-          POST,
-          List("1", "indexes", "indexName", "query"),
-          body = Some(
-            """{"params":"numericFilters=1%2C2&alternativesAsExact=true%2Cfalse&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&facetQuery=facetQuery&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e%2Ca&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=%5B%5B1%2C2%2C3%2C4%2C5%2C6%5D%5D&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=%5B%5B1%2C2%2C3%2C4%5D%5D&removeStopWords=false&attributesToHighlight=att5&advancedSyntaxFeatures=exactPhrase%2CexcludeWords&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"}"""),
-          isSearch = true,
-          requestOptions = None
-        )
-      )
+      val payload = (search into "indexName" query q).build()
+
+      payload.verb should be(POST)
+      payload.path should be(List("1", "indexes", "indexName", "query"))
+      payload.isSearch should be(true)
+      payload.requestOptions should be(None)
+
+      val body = payload.body.getOrElse("""{"params": ""}""")
+
+      val params =
+        parse(body)
+          .extract[Map[String, String]]
+          .getOrElse("params", "")
+          .split("&")
+          .sorted
+
+      val expected =
+        "numericFilters=1%2C2&alternativesAsExact=true%2Cfalse&attributesToRetrieve=att4&advancedSyntax=true&synonyms=true&tagFilters=tag1&disableTypoToleranceOnAttributes=att2%2Catt3&snippetEllipsisText=%E2%80%A6&restrictSearchableAttributes=att1%2Catt2&userToken=userToken&facetFilters=facet2&aroundLatLngViaIP=true&allowTyposOnNumericTokens=true&minWordSizefor2Typos=2&facetQuery=facetQuery&optionalWords=le%2Cla&page=1&minimumAroundRadius=30&aroundLatLng=1%2C2&analyticsTags=a%2Cb&query=query&ignorePlurals=false&getRankingInfo=true&highlightPreTag=%3Cem%3E&aroundPrecision=20&maxValuesPerFacet=1&attributesToSnippet=att6%3A1&exactOnSingleWordQuery=e%2Ca&replaceSynonymsInHighlight=false&aroundRadius=0&filters=filter&distinct=1&minWordSizefor1Typo=1&analytics=true&typoTolerance=strict&insidePolygon=%5B%5B1%2C2%2C3%2C4%2C5%2C6%5D%5D&hitsPerPage=19&queryType=prefixAll&facets=facet1&minProximity=10&insideBoundingBox=%5B%5B1%2C2%2C3%2C4%5D%5D&removeStopWords=false&attributesToHighlight=att5&advancedSyntaxFeatures=exactPhrase%2CexcludeWords&removeWordsIfNoResults=allOptional&highlightPostTag=%3C%2Fem%3E"
+          .split("&")
+          .sorted
+
+      params should be(expected)
     }
 
     it("should call the API with a search with custom parameters") {
