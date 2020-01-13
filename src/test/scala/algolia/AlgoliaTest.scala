@@ -69,10 +69,6 @@ class AlgoliaTest
   implicit val patience: PatienceConfig =
     PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
 
-  override protected def afterAll(): Unit = {
-    //   AlgoliaTest.client.close()
-  }
-
   def taskShouldBeCreated(task: Future[AlgoliaTask])(implicit ec: ExecutionContext): AlgoliaTask = {
     whenReady(task) { result =>
       result.idToWaitFor should not be 0
