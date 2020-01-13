@@ -42,7 +42,8 @@ class AlgoliaClientTest extends AlgoliaTest {
     override def shuffle(seq: Seq[String]): Seq[String] = seq
   }
 
-  val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClient]
+  class AlgoliaHttpClientForScalaMock extends AlgoliaHttpClient
+  val mockHttpClient: AlgoliaHttpClient = mock[AlgoliaHttpClientForScalaMock]
   val emptyHeaders: Map[String, String] = Map()
 
   def mockedClient(utils: AlgoliaUtils = notSoRandom): AlgoliaClient =
