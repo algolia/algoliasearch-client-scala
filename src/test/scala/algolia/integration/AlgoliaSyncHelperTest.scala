@@ -36,6 +36,8 @@ import scala.concurrent.{Await, Future}
 
 class AlgoliaSyncHelperTest extends AlgoliaTest {
 
+  import scala.collection.compat._
+
   val helper = AlgoliaSyncHelper(AlgoliaTest.client)
   val list: Seq[Value] = 1.to(100).map(i => Value(i, i.toString))
   val syns: Seq[Synonym.Synonym] =
@@ -76,7 +78,7 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
         helper.browse[Value]("testBrowseSync", query)
 
       res should have size 10
-      forAll(res.toIterable) { r =>
+      forAll(res.iterator.to(Iterable)) { r =>
         r should have size 10
         forAll(r) { v =>
           v.int should (be >= 1 and be <= 100)
@@ -104,7 +106,7 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
         helper.browse[Value]("testBrowseSync", query)
 
       res should have size 1
-      forAll(res.toIterable) { r =>
+      forAll(res.iterator.to(Iterable)) { r =>
         r should have size 10
         forAll(r) { v =>
           v.int should (be >= 1 and be <= 10)

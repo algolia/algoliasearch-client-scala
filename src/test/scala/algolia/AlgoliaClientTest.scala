@@ -304,7 +304,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         override def now(): Long = date.toLong
       }
 
-      import scala.collection.JavaConverters._
+      import scala.jdk.CollectionConverters._
 
       it("should not reconnect to the same host twice if it fails") {
         val apiClient: AlgoliaClient = mockedClient(fixNow(1))
