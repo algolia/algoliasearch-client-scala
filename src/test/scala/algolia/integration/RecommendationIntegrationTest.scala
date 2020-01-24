@@ -27,15 +27,24 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
+import algolia.responses.GetStrategyResponse
+
+import scala.concurrent.Future
+import scala.language.postfixOps
 
 class RecommendationIntegrationTest extends AlgoliaTest {
 
   describe("recommendation API test") {
+
     it("should get personalization strategy without failing") {
-      val task = AlgoliaTest.client.execute(get personalizationRecommendationStrategy ())
+      val task: Future[GetStrategyResponse] = AlgoliaTest.client.execute {
+        get personalizationRecommendationStrategy
+      }
+
       whenReady(task) { strategy =>
         strategy should not be None
       }
     }
+
   }
 }
