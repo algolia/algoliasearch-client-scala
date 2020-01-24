@@ -16,6 +16,7 @@ val asyncHttpClientVersion = "2.10.4"
 val json4sVersion = "3.6.7"
 val slf4jVersion = "1.7.30"
 val scalaUriVersion = "1.4.10"
+val scalaCollectionCompat = "2.1.3"
 
 val scalaTestVersion = "3.1.0"
 val scalacheckVersion = "1.14.3"
@@ -29,8 +30,8 @@ libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
 
 libraryDependencies += "org.slf4j" % "slf4j-api" % slf4jVersion
-
 libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompat
 
 //Testing
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % Test
@@ -40,7 +41,7 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion % T
 
 scalacOptions ++= Seq(
   "-deprecation",
-  // "-Xfatal-warnings",
+  "-Xfatal-warnings",
   "-feature", //Emit warning and location for usages of features that should be imported explicitly.
   "-encoding",
   "UTF-8",
