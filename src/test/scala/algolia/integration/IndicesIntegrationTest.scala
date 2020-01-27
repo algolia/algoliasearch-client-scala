@@ -26,7 +26,7 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
+import algolia.{AlgoliaClientException, AlgoliaTest}
 import algolia.objects.Query
 import algolia.responses._
 
@@ -44,7 +44,7 @@ class IndicesIntegrationTest extends AlgoliaTest {
   val indexToMove_before: String = getTestIndexName("indexToMove_before")
   val indexToMove_after: String = getTestIndexName("indexToMove_after")
 
-  after {
+  override protected def afterAll(): Unit = {
     clearIndices(
       index1,
       index2,
@@ -55,14 +55,6 @@ class IndicesIntegrationTest extends AlgoliaTest {
       indexToMove_before,
       indexToMove_after
     )
-  }
-
-  it("should create indices") {
-    val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
-      index into index1 `object` Obj("1")
-    }
-
-    taskShouldBeCreatedAndWaitForIt(create, index1)
   }
 
   it("should index UTF-8 strings") {
@@ -112,11 +104,13 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(del, indexToDelete)
 
-    val indices: Future[Indices] = AlgoliaTest.client.execute {
-      list indices
+    val f = AlgoliaTest.client.execute {
+      get objectId "1" from indexToDelete
     }
-    whenReady(indices) { result =>
-      result.items.map(_.name) should not contain indexToDelete
+
+    whenReady(f.failed) { e =>
+      e shouldBe a[AlgoliaClientException]
+      e.getMessage should include(s"Index '${indexToDelete}' does not exist")
     }
   }
 
@@ -143,12 +137,6 @@ class IndicesIntegrationTest extends AlgoliaTest {
   }
 
   it("should copy index") {
-    val del = AlgoliaTest.client.execute {
-      clear index indexToCopy_before
-    }
-
-    taskShouldBeCreatedAndWaitForIt(del, indexToCopy_before)
-
     val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
       index into indexToCopy_before `object` Obj("1")
     }
@@ -177,18 +165,19 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
     taskShouldBeCreatedAndWaitForIt(create, indexToMove_before)
 
-    val copying: Future[Task] = AlgoliaTest.client.execute {
+    val moving: Future[Task] = AlgoliaTest.client.execute {
       move index indexToMove_before to indexToMove_after
     }
 
-    taskShouldBeCreatedAndWaitForIt(copying, indexToMove_after)
+    taskShouldBeCreatedAndWaitForIt(moving, indexToMove_after)
 
-    val indices: Future[Indices] = AlgoliaTest.client.execute {
-      list indices
+    val f: Future[GetObject] = AlgoliaTest.client.execute {
+      get objectId "1" from indexToMove_before
     }
 
-    whenReady(indices) { result =>
-      result.items.map(_.name) should (contain(indexToMove_after) and not contain indexToMove_before)
+    whenReady(f.failed) { e =>
+      e shouldBe a[AlgoliaClientException]
+      e.getMessage should include(s"Index '${indexToMove_before}' does not exist")
     }
   }
 
