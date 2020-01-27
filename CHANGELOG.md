@@ -1,5 +1,56 @@
 # ChangeLog
 
+## [1.35.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.34.0...1.35.0) (2020-01-27)
+
+### Refactor
+
+- adds filterPromotes e2e test ([ffb2af0](https://github.com/algolia/algoliasearch-client-scala/commit/ffb2af0))
+- adds alternatives condition test ([54e25f2](https://github.com/algolia/algoliasearch-client-scala/commit/54e25f2))
+
+### Fix
+
+- **search**: correctly type automaticRadius field of search response ([28548f8](https://github.com/algolia/algoliasearch-client-scala/commit/28548f8))
+
+### Misc
+
+- Run formatter ([a6dd5ad](https://github.com/algolia/algoliasearch-client-scala/commit/a6dd5ad))
+- Resolved deprecations ([fa7f75e](https://github.com/algolia/algoliasearch-client-scala/commit/fa7f75e))
+- Add support for Scala 2.13 ([7fead9c](https://github.com/algolia/algoliasearch-client-scala/commit/7fead9c))
+- insights endpoints ([9adab9f](https://github.com/algolia/algoliasearch-client-scala/commit/9adab9f))
+
+### Feat
+
+- adds RecommendationClient ([b92ba38](https://github.com/algolia/algoliasearch-client-scala/commit/b92ba38))
+
+    The personalization strategy endpoint is migrating from the Search API
+    to the Recommendation API.
+    
+    To use the Recommendation API, one must now use Recommendation methods instead
+    of Insights one.
+
+- **mcm**: has pending mappings ([ebaa539](https://github.com/algolia/algoliasearch-client-scala/commit/ebaa539))
+
+    Get cluster pending (migrating, creating, deleting) mapping state.
+    Query cluster pending mapping status, and optionally get cluster mapping
+
+- adds explain feature ([e24e7d0](https://github.com/algolia/algoliasearch-client-scala/commit/e24e7d0))
+- adds customNormalization in IndexSettings [changelog] ([21e1249](https://github.com/algolia/algoliasearch-client-scala/commit/21e1249))
+- adds filterPromotes in QueryRules [changelog] ([f0e4681](https://github.com/algolia/algoliasearch-client-scala/commit/f0e4681))
+- **key**: implement getSecuredApiKeyRemainingValidity method ([ba95e83](https://github.com/algolia/algoliasearch-client-scala/commit/ba95e83))
+- **mcm**: implement `assign userIDs` to assign multiple userIDs at once ([b5a8c6a](https://github.com/algolia/algoliasearch-client-scala/commit/b5a8c6a))
+- **index**: rename getObjectIDPosition into getObjectPosition ([5a69022](https://github.com/algolia/algoliasearch-client-scala/commit/5a69022))
+- **index**: rename findFirstObject into findObject ([47fbad5](https://github.com/algolia/algoliasearch-client-scala/commit/47fbad5))
+
+    Besides the name, the `doNotPaginate` parameter was also turned into
+    `paginate` so the boolean is easier to read and defaults to true.
+
+- getObjectIDPosition() method ([027c7ec](https://github.com/algolia/algoliasearch-client-scala/commit/027c7ec))
+- findFirstObject() method ([edda902](https://github.com/algolia/algoliasearch-client-scala/commit/edda902))
+- Alternatives in QueryRule Conditions ([c977cbb](https://github.com/algolia/algoliasearch-client-scala/commit/c977cbb))
+- indexLanguages settings properties ([fa593ab](https://github.com/algolia/algoliasearch-client-scala/commit/fa593ab))
+
+
+
 ## [1.34.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.33.0...1.34.0) (2019-08-07)
 
 ### Chore
