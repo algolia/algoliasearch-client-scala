@@ -33,29 +33,20 @@ import scala.concurrent.Future
 
 class LogIntegrationTest extends AlgoliaTest {
 
-  val indexToSearch: String = getTestIndexName("indexToSearch")
-
-  after {
-    clearIndices(
-      indexToSearch
-    )
-  }
-
-  before {
-    val obj = Test("algolia", 10, alien = false)
-    val insert1 = AlgoliaTest.client.execute {
-      index into indexToSearch objectId "563481290" `object` obj
-    }
-
-    taskShouldBeCreatedAndWaitForIt(insert1, indexToSearch)
-  }
+  val indexName: String = getTestIndexName("indexToSearch")
 
   it("should get the logs") {
-    val result: Future[Logs] = AlgoliaTest.client.execute {
+    val indexRes = AlgoliaTest.client.execute {
+      index into indexName `object` Obj("1")
+    }
+
+    taskShouldBeCreatedAndWaitForIt(indexRes, indexName)
+
+    val getLogsRes = AlgoliaTest.client.execute {
       getLogs offset 0 length 10 `type` LogType.all
     }
 
-    whenReady(result) { r =>
+    whenReady(getLogsRes) { r =>
       r.logs shouldNot be(empty)
     }
   }
