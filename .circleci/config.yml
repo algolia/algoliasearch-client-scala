@@ -1,0 +1,72 @@
+version: 2
+
+jobs:
+  compile:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache
+      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '+compile'
+      - save_cache:
+          key: sbt-cache
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.sbt"
+            - "~/.m2"
+  compile-test:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache
+      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '+test:compile'
+      - save_cache:
+          key: sbt-cache
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.sbt"
+            - "~/.m2"
+  format:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache
+      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 'scalafmt'
+      - save_cache:
+          key: sbt-cache
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.sbt"
+            - "~/.m2"
+  test:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache
+      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 'testOnly -- -l SkipInCI'
+      - save_cache:
+          key: sbt-cache
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.sbt"
+            - "~/.m2"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - format
+      - compile
+      - compile-test
+      - test
