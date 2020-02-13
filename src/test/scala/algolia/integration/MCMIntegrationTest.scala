@@ -47,7 +47,8 @@ import scala.language.postfixOps
 class MCMIntegrationTest extends AlgoliaTest {
 
   lazy val mcmClient: AlgoliaClient =
-    new AlgoliaClient(System.getenv("APPLICATION_ID_MCM"), System.getenv("API_KEY_MCM")) {
+    new AlgoliaClient(System.getenv("ALGOLIA_APPLICATION_ID_MCM"),
+                      System.getenv("ALGOLIA_ADMIN_KEY_MCM")) {
       override val httpClient: AlgoliaHttpClient =
         AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
     }

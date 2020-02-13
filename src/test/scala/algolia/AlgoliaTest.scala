@@ -44,8 +44,8 @@ object AlgoliaTest {
   lazy val userName: String = System.getProperty("user.name")
   lazy val osName: String = System.getProperty("os.name").trim
   lazy val scalaVersion: String = util.Properties.versionNumberString
-  lazy val applicationId: String = System.getenv("APPLICATION_ID")
-  lazy val apiKey: String = System.getenv("API_KEY")
+  lazy val applicationId: String = System.getenv("ALGOLIA_APPLICATION_ID_1")
+  lazy val apiKey: String = System.getenv("ALGOLIA_ADMIN_KEY_1")
   lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
       AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
