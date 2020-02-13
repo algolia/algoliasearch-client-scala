@@ -26,7 +26,7 @@
 package algolia.integration
 
 import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
+import algolia.{AlgoliaTest, SkipInCI}
 import algolia.objects.{Acl, ApiKey}
 
 import scala.language.postfixOps
@@ -37,7 +37,7 @@ class ApiKeyIntegrationTest extends AlgoliaTest {
 
   describe("global keys") {
 
-    it("should add/get/list/update/delete/restore a key") {
+    it("should add/get/list/update/delete/restore a key", SkipInCI) {
       val addKey = AlgoliaTest.client.execute {
 
         add key ApiKey(acl = Some(Seq(Acl.addObject)))
