@@ -31,14 +31,19 @@ import java.time.{LocalDateTime, ZoneOffset, ZonedDateTime}
 import algolia.AlgoliaDsl._
 import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.responses.{ClusterData, UserDataWithCluster}
-import algolia.{AlgoliaClient, AlgoliaClientConfiguration, AlgoliaHttpClient, AlgoliaTest}
+import algolia.{
+  AlgoliaClient,
+  AlgoliaClientConfiguration,
+  AlgoliaHttpClient,
+  AlgoliaTest,
+  SkipInCI
+}
 import org.scalatest.Ignore
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
-@Ignore
 class MCMIntegrationTest extends AlgoliaTest {
 
   lazy val mcmClient: AlgoliaClient =
@@ -56,7 +61,7 @@ class MCMIntegrationTest extends AlgoliaTest {
 
   def hasScalaUserIDPrefix(u: UserDataWithCluster): Boolean = u.userID.startsWith(userIDPrefix)
 
-  it("should assign userID properly") {
+  it("should assign userID properly", SkipInCI) {
     // Make sure we have at least 2 clusters and retrieve the first one
     val listClusters = mcmClient.execute(list clusters)
     val cluster: ClusterData = whenReady(listClusters) { res =>
