@@ -1,39 +1,53 @@
 organization := "com.algolia"
-
 name := "algoliasearch-scala"
-
 description := "Scala client for Algolia Search API"
-
-version := "1.35.0"
-
+version := "1.35.1-beta-1"
 crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
-
 scalaVersion := "2.13.1"
-
 coverageEnabled := false
+testOptions in Test += Tests.Argument("-P10")
+publishMavenStyle := true
+publishArtifact in Test := false
+licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+homepage := Some(url("https://github.com/algolia/algoliasearch-client-scala/"))
+scmInfo := Some(
+  ScmInfo(url("https://github.com/algolia/algoliasearch-client-scala"),
+          "scm:git:git@github.com:algolia/algoliasearch-client-scala.git"))
+pomIncludeRepository := { _ =>
+  false
+}
+developers += Developer("algolia",
+                        "Algolia SAS",
+                        "contact@algolia.com",
+                        url("https://github.com/algolia/algoliasearch-client-scala/"))
 
+lazy val root = project
+  .in(file("."))
+  .enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "algolia"
+  )
+
+// Project dependencies
 val asyncHttpClientVersion = "2.10.4"
 val json4sVersion = "3.6.7"
 val slf4jVersion = "1.7.30"
 val scalaUriVersion = "1.4.10"
 val scalaCollectionCompat = "2.1.3"
-
-val scalaTestVersion = "3.1.0"
-val scalacheckVersion = "1.14.3"
-val scalaMockVersion = "4.4.0"
-val logbackVersion = "1.2.3"
-
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
-
 libraryDependencies += "org.json4s" %% "json4s-ast" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
 libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
-
 libraryDependencies += "org.slf4j" % "slf4j-api" % slf4jVersion
 libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
 libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompat
 
-//Testing
+// Testing dependencies
+val scalaTestVersion = "3.1.0"
+val scalacheckVersion = "1.14.3"
+val scalaMockVersion = "4.4.0"
+val logbackVersion = "1.2.3"
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % Test
 libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test
 libraryDependencies += "org.scalamock" %% "scalamock" % scalaMockVersion % Test
@@ -50,18 +64,6 @@ scalacOptions ++= Seq(
   "-Ywarn-numeric-widen"
 )
 
-/**
-  * Publishing to Sonatype & Maven Central
-  *
-  * > gem install github_changelog_generator
-  * > github_changelog_generator -t YOUR_GITHUB_TOKEN --no-unreleased
-  * > sbt publishSigned
-  * > sbt sonatypeRelease
-  *
-  * see: http://www.scala-sbt.org/0.13/docs/Using-Sonatype.html
-  * see: https://github.com/xerial/sbt-sonatype
-  *
-  **/
 headerLicense := Some(
   HeaderLicense.Custom(
     """The MIT License (MIT)
@@ -88,58 +90,3 @@ headerLicense := Some(
       |THE SOFTWARE.
       |""".stripMargin
   ))
-
-lazy val myProject = project
-  .in(file("."))
-  .enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
-  .settings(
-    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "algolia"
-  )
-
-testOptions in Test += Tests.Argument("-P10")
-
-publishMavenStyle := true
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { _ =>
-  false
-}
-
-pomExtra := {
-  <url>https://github.com/algolia/algoliasearch-client-scala</url>
-  <licenses>
-    <license>
-      <name>The MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <connection>scm:git:git@github.com:algolia/algoliasearch-client-scala.git</connection>
-    <url>scm:git:git@github.com:algolia/algoliasearch-client-scala.git</url>
-    <developerConnection>scm:git:git@github.com:algolia/algoliasearch-client-scala.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-  <developers>
-    <developer>
-      <id>algolia</id>
-      <name>Algolia SAS</name>
-      <email>contact@algolia.com</email>
-      <url>https://github.com/algolia/algoliasearch-client-scala</url>
-    </developer>
-  </developers>
-}
-
-publishTo := {
-  if (isSnapshot.value) {
-    Some(Opts.resolver.sonatypeSnapshots)
-  } else {
-    Some(Opts.resolver.sonatypeStaging)
-  }
-}
-
-addCommandAlias("formatAll", ";scalafmt")
-
-addCommandAlias("checkAll", ";compile;test:compile;formatAll")
