@@ -36,7 +36,8 @@ trait IndexingBatchDsl {
   implicit object IndexingBatchDefinitionExecutable
       extends Executable[IndexingBatchDefinition, TasksSingleIndex] {
     override def apply(client: AlgoliaClient, batch: IndexingBatchDefinition)(
-        implicit executor: ExecutionContext): Future[TasksSingleIndex] = {
+        implicit executor: ExecutionContext
+    ): Future[TasksSingleIndex] = {
       client.request[TasksSingleIndex](batch.build())
     }
   }

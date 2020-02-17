@@ -25,20 +25,22 @@
 
 package algolia.responses
 
-case class Log(timestamp: String,
-               method: String,
-               answer_code: String,
-               query_body: String,
-               answer: String,
-               url: String,
-               ip: String,
-               query_headers: String,
-               sha1: String,
-               nb_api_calls: String,
-               processing_time_ms: String,
-               index: Option[String],
-               query_nb_hits: Option[String],
-               exhaustive: Option[Boolean])
+case class Log(
+    timestamp: String,
+    method: String,
+    answer_code: String,
+    query_body: String,
+    answer: String,
+    url: String,
+    ip: String,
+    query_headers: String,
+    sha1: String,
+    nb_api_calls: String,
+    processing_time_ms: String,
+    index: Option[String],
+    query_nb_hits: Option[String],
+    exhaustive: Option[Boolean]
+)
 
 sealed trait LogType {
 

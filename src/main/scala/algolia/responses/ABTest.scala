@@ -31,24 +31,28 @@ import algolia.objects.Query
 
 case class ABTestsResponse(abtests: Seq[ABTestResponse], count: Int, total: Int)
 
-case class ABTestResponse(abTestID: Int,
-                          clickSignificance: Option[Int],
-                          conversionSignificance: Option[Float],
-                          createdAt: LocalDateTime,
-                          endAt: LocalDateTime,
-                          name: String,
-                          status: String,
-                          variants: Seq[VariantResponse])
+case class ABTestResponse(
+    abTestID: Int,
+    clickSignificance: Option[Int],
+    conversionSignificance: Option[Float],
+    createdAt: LocalDateTime,
+    endAt: LocalDateTime,
+    name: String,
+    status: String,
+    variants: Seq[VariantResponse]
+)
 
-case class VariantResponse(averageClickPosition: Option[Int],
-                           clickCount: Option[Int],
-                           clickThroughRate: Option[Float],
-                           conversionCount: Option[Int],
-                           conversionRate: Option[Float],
-                           description: String,
-                           index: String,
-                           noResultCount: Option[Int],
-                           searchCount: Option[Int],
-                           trafficPercentage: Int,
-                           userCount: Option[Int],
-                           customSearchParameters: Option[Query])
+case class VariantResponse(
+    averageClickPosition: Option[Int],
+    clickCount: Option[Int],
+    clickThroughRate: Option[Float],
+    conversionCount: Option[Int],
+    conversionRate: Option[Float],
+    description: String,
+    index: String,
+    noResultCount: Option[Int],
+    searchCount: Option[Int],
+    trafficPercentage: Int,
+    userCount: Option[Int],
+    customSearchParameters: Option[Query]
+)

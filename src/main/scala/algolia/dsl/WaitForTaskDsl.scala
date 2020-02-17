@@ -75,7 +75,8 @@ trait WaitForTaskDsl {
       *
       */
     override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(
-        implicit executor: ExecutionContext): Future[TaskStatus] = {
+        implicit executor: ExecutionContext
+    ): Future[TaskStatus] = {
 
       def request(d: Long, totalDelay: Long): Future[TaskStatus] =
         delay[TaskStatus](d) {
@@ -84,8 +85,11 @@ trait WaitForTaskDsl {
           if (res.status == "published") {
             Future.successful(res)
           } else if (totalDelay > query.maxDelay) {
-            Future.failed(WaitForTimeoutException(
-              s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"))
+            Future.failed(
+              WaitForTimeoutException(
+                s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"
+              )
+            )
           } else {
             request(d * 2, totalDelay + d)
           }

@@ -33,7 +33,8 @@ import org.json4s.native.Serialization.write
 case class SearchDefinition(
     index: String,
     query: Option[Query] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = SearchDefinition
@@ -63,7 +64,8 @@ case class SearchFacetDefinition(
     facetName: String,
     values: String,
     query: Query = Query(),
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = SearchFacetDefinition

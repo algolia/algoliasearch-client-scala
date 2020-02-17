@@ -38,15 +38,18 @@ trait SendDsl {
 
   case object send {
 
-    def event(e: InsightsEvent): InsightsEventDefinition = InsightsEventDefinition(Seq(e))
-    def events(e: Iterable[InsightsEvent]): InsightsEventDefinition = InsightsEventDefinition(e)
+    def event(e: InsightsEvent): InsightsEventDefinition =
+      InsightsEventDefinition(Seq(e))
+    def events(e: Iterable[InsightsEvent]): InsightsEventDefinition =
+      InsightsEventDefinition(e)
 
   }
 
   implicit object SendInsightEventExecutable
       extends Executable[InsightsEventDefinition, InsightsEventResponse] {
     override def apply(client: AlgoliaClient, query: InsightsEventDefinition)(
-        implicit executor: ExecutionContext): Future[InsightsEventResponse] = {
+        implicit executor: ExecutionContext
+    ): Future[InsightsEventResponse] = {
       client.request[InsightsEventResponse](query.build())
     }
   }

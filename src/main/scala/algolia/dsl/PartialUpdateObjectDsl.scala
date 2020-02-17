@@ -39,14 +39,20 @@ trait PartialUpdateObjectDsl {
   case object increment {
 
     def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
-      PartialUpdateObjectOperationDefinition(Increment, attribute = Some(attribute))
+      PartialUpdateObjectOperationDefinition(
+        Increment,
+        attribute = Some(attribute)
+      )
 
   }
 
   case object decrement {
 
     def attribute(attribute: String): PartialUpdateObjectOperationDefinition =
-      PartialUpdateObjectOperationDefinition(Decrement, attribute = Some(attribute))
+      PartialUpdateObjectOperationDefinition(
+        Decrement,
+        attribute = Some(attribute)
+      )
 
   }
 
@@ -76,24 +82,30 @@ trait PartialUpdateObjectDsl {
 
   implicit object PartialUpdateObjectOperationExecutable
       extends Executable[PartialUpdateObjectOperationDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: PartialUpdateObjectOperationDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+    override def apply(
+        client: AlgoliaClient,
+        query: PartialUpdateObjectOperationDefinition
+    )(implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
     }
   }
 
   implicit object PartialUpdateObjectExecutable
       extends Executable[PartialUpdateObjectDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: PartialUpdateObjectDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+    override def apply(
+        client: AlgoliaClient,
+        query: PartialUpdateObjectDefinition
+    )(implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
     }
   }
 
   implicit object PartialUpdateOneObjectDefinitionExecutable
       extends Executable[PartialUpdateOneObjectDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: PartialUpdateOneObjectDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+    override def apply(
+        client: AlgoliaClient,
+        query: PartialUpdateOneObjectDefinition
+    )(implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
     }
   }

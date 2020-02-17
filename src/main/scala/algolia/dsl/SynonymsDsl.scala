@@ -41,7 +41,8 @@ trait SynonymsDsl {
       extends Executable[GetSynonymDefinition, AbstractSynonym] {
 
     override def apply(client: AlgoliaClient, query: GetSynonymDefinition)(
-        implicit executor: ExecutionContext): Future[AbstractSynonym] = {
+        implicit executor: ExecutionContext
+    ): Future[AbstractSynonym] = {
       client.request[AbstractSynonym](query.build())
     }
 
@@ -51,7 +52,8 @@ trait SynonymsDsl {
       extends Executable[DeleteSynonymDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: DeleteSynonymDefinition)(
-        implicit executor: ExecutionContext): Future[SynonymTask] = {
+        implicit executor: ExecutionContext
+    ): Future[SynonymTask] = {
       client.request[SynonymTask](query.build())
     }
 
@@ -61,7 +63,8 @@ trait SynonymsDsl {
       extends Executable[ClearSynonymsDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: ClearSynonymsDefinition)(
-        implicit executor: ExecutionContext): Future[SynonymTask] = {
+        implicit executor: ExecutionContext
+    ): Future[SynonymTask] = {
       client.request[SynonymTask](query.build())
     }
 
@@ -71,7 +74,8 @@ trait SynonymsDsl {
       extends Executable[SaveSynonymDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: SaveSynonymDefinition)(
-        implicit executor: ExecutionContext): Future[SynonymTask] = {
+        implicit executor: ExecutionContext
+    ): Future[SynonymTask] = {
       client.request[SynonymTask](query.build())
     }
 
@@ -81,7 +85,8 @@ trait SynonymsDsl {
       extends Executable[BatchSynonymsDefinition, SynonymTask] {
 
     override def apply(client: AlgoliaClient, query: BatchSynonymsDefinition)(
-        implicit executor: ExecutionContext): Future[SynonymTask] = {
+        implicit executor: ExecutionContext
+    ): Future[SynonymTask] = {
       client.request[SynonymTask](query.build())
     }
 
@@ -91,7 +96,8 @@ trait SynonymsDsl {
       extends Executable[SearchSynonymsDefinition, SearchSynonymResult] {
 
     override def apply(client: AlgoliaClient, query: SearchSynonymsDefinition)(
-        implicit executor: ExecutionContext): Future[SearchSynonymResult] = {
+        implicit executor: ExecutionContext
+    ): Future[SearchSynonymResult] = {
       client.request[SearchSynonymResult](query.build())
     }
 

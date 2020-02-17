@@ -31,11 +31,12 @@ import algolia.responses.LogType
 
 import scala.collection.mutable
 
-case class LogsDefinition(offset: Option[Int] = None,
-                          length: Option[Int] = None,
-                          `type`: Option[LogType] = None,
-                          requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class LogsDefinition(
+    offset: Option[Int] = None,
+    length: Option[Int] = None,
+    `type`: Option[LogType] = None,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = LogsDefinition
 

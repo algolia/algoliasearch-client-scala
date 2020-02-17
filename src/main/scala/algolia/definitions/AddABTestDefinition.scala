@@ -33,7 +33,8 @@ import algolia.objects.RequestOptions
 import org.json4s.Formats
 import org.json4s.native.Serialization._
 
-case class AddABTestDefinition(abtest: ABTest)(implicit val formats: Formats) extends Definition {
+case class AddABTestDefinition(abtest: ABTest)(implicit val formats: Formats)
+    extends Definition {
 
   type T = AddABTestDefinition
 

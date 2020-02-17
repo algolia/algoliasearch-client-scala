@@ -42,9 +42,11 @@ trait CopyDsl {
 
   }
 
-  implicit object CopyIndexDefinitionExecutable extends Executable[CopyIndexDefinition, Task] {
+  implicit object CopyIndexDefinitionExecutable
+      extends Executable[CopyIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: CopyIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
   }

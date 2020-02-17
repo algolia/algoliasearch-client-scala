@@ -64,10 +64,12 @@ class ABTestIntegrationTest extends AlgoliaTest {
     name = s"aaTestName-$nowStr",
     variants = Seq(
       ABTestVariant(indexName1, 90),
-      ABTestVariant(indexName1,
-                    10,
-                    customSearchParameters =
-                      Some(Query(ignorePlurals = Some(IgnorePlurals.`true`))))
+      ABTestVariant(
+        indexName1,
+        10,
+        customSearchParameters =
+          Some(Query(ignorePlurals = Some(IgnorePlurals.`true`)))
+      )
     ),
     endAt = now.plus(1, ChronoUnit.DAYS)
   )
@@ -77,8 +79,10 @@ class ABTestIntegrationTest extends AlgoliaTest {
     it("should send an AB test") {
       val inputAbTest = dummyABTest
 
-      taskShouldBeCreatedAndWaitForIt(AlgoliaTest.client.execute(add abTest inputAbTest),
-                                      indexName1)
+      taskShouldBeCreatedAndWaitForIt(
+        AlgoliaTest.client.execute(add abTest inputAbTest),
+        indexName1
+      )
 
       val task = AlgoliaTest.client.execute(get all abTests)
       whenReady(task) { abTests =>
@@ -109,8 +113,10 @@ class ABTestIntegrationTest extends AlgoliaTest {
     it("should send an AA test") {
       val inputAaTest = dummyAATest
 
-      taskShouldBeCreatedAndWaitForIt(AlgoliaTest.client.execute(add abTest inputAaTest),
-                                      indexName1)
+      taskShouldBeCreatedAndWaitForIt(
+        AlgoliaTest.client.execute(add abTest inputAaTest),
+        indexName1
+      )
 
       val task = AlgoliaTest.client.execute(get all abTests)
 

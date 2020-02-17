@@ -26,7 +26,11 @@
 package algolia.dsl
 
 import algolia.{AlgoliaClient, Executable}
-import algolia.definitions.{PartialUpdateObjectOperationDefinition, Remove, RemoveUserIDDefinition}
+import algolia.definitions.{
+  PartialUpdateObjectOperationDefinition,
+  Remove,
+  RemoveUserIDDefinition
+}
 import algolia.responses.Deleted
 import org.json4s.Formats
 
@@ -45,9 +49,11 @@ trait RemoveDsl {
 
   }
 
-  implicit object RemoveUserIDExecutable extends Executable[RemoveUserIDDefinition, Deleted] {
+  implicit object RemoveUserIDExecutable
+      extends Executable[RemoveUserIDDefinition, Deleted] {
     override def apply(client: AlgoliaClient, query: RemoveUserIDDefinition)(
-        implicit executor: ExecutionContext): Future[Deleted] = {
+        implicit executor: ExecutionContext
+    ): Future[Deleted] = {
       client.request[Deleted](query.build())
     }
   }

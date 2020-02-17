@@ -25,19 +25,25 @@
 
 package algolia.objects
 
-case class RequestOptions(forwardedFor: Option[String] = None,
-                          extraHeaders: Option[Map[String, String]] = None,
-                          extraQueryParameters: Option[Map[String, String]] = None) {
+case class RequestOptions(
+    forwardedFor: Option[String] = None,
+    extraHeaders: Option[Map[String, String]] = None,
+    extraQueryParameters: Option[Map[String, String]] = None
+) {
 
   private[algolia] def generateExtraHeaders(): Map[String, String] = {
-    extraHeaders.getOrElse(Map.empty) ++ forwardedFor.map(f => "X-Forwarded-For" -> f)
+    extraHeaders.getOrElse(Map.empty) ++ forwardedFor.map(f =>
+      "X-Forwarded-For" -> f
+    )
   }
 
   private[algolia] def generateExtraQueryParameters(): Map[String, String] = {
     extraQueryParameters.getOrElse(Map.empty)
   }
 
-  private[algolia] def addExtraHeaders(m: Map[String, String]): RequestOptions = {
+  private[algolia] def addExtraHeaders(
+      m: Map[String, String]
+  ): RequestOptions = {
     RequestOptions(
       forwardedFor = forwardedFor,
       extraHeaders = Some(generateExtraHeaders() ++ m),

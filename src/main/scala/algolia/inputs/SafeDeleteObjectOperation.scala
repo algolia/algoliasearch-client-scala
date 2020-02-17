@@ -31,7 +31,10 @@ class SafeDeleteObjectOperation private (i: String, o: String) {
 }
 
 object SafeDeleteObjectOperation {
-  def apply(index: String, objectID: String): Option[SafeDeleteObjectOperation] = {
+  def apply(
+      index: String,
+      objectID: String
+  ): Option[SafeDeleteObjectOperation] = {
     val trimmedIndex = index.trim
     val trimmedObjectID = objectID.trim
 

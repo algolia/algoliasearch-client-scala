@@ -31,33 +31,47 @@ sealed trait AlgoliaTask {
 
 }
 
-case class Task(taskID: Long, createdAt: Option[String] = None, updatedAt: Option[String] = None)
-    extends AlgoliaTask {
+case class Task(
+    taskID: Long,
+    createdAt: Option[String] = None,
+    updatedAt: Option[String] = None
+) extends AlgoliaTask {
   override val idToWaitFor: Long = taskID
 }
 
-case class TasksSingleIndex(taskID: Long, objectIDs: Seq[String], createdAt: Option[String] = None)
-    extends AlgoliaTask {
+case class TasksSingleIndex(
+    taskID: Long,
+    objectIDs: Seq[String],
+    createdAt: Option[String] = None
+) extends AlgoliaTask {
   override val idToWaitFor: Long = taskID
 }
 
-case class TasksMultipleIndex(taskID: Map[String, Long],
-                              objectIDs: Seq[String],
-                              createdAt: Option[String])
-    extends AlgoliaTask {
+case class TasksMultipleIndex(
+    taskID: Map[String, Long],
+    objectIDs: Seq[String],
+    createdAt: Option[String]
+) extends AlgoliaTask {
   override val idToWaitFor: Long = taskID.values.max
 }
 
-case class TaskIndexing(taskID: Long, objectID: String, createdAt: Option[String] = None)
-    extends AlgoliaTask {
+case class TaskIndexing(
+    taskID: Long,
+    objectID: String,
+    createdAt: Option[String] = None
+) extends AlgoliaTask {
   override val idToWaitFor: Long = taskID
 }
 
-case class SynonymTask(taskID: Long, id: Option[String], updatedAt: Option[String] = None)
-    extends AlgoliaTask {
+case class SynonymTask(
+    taskID: Long,
+    id: Option[String],
+    updatedAt: Option[String] = None
+) extends AlgoliaTask {
   override val idToWaitFor: Long = taskID
 }
 
-case class ABTestTask(abTestID: Int, taskID: Long, index: String) extends AlgoliaTask {
+case class ABTestTask(abTestID: Int, taskID: Long, index: String)
+    extends AlgoliaTask {
   override val idToWaitFor: Long = taskID
 }

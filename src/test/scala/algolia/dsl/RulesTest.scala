@@ -103,15 +103,19 @@ class RulesTest extends AlgoliaTest {
     describe("search") {
 
       it("should search rules of an index") {
-        search rules in index "toto" query QueryRules(query = "s",
-                                                      page = Some(1),
-                                                      hitsPerPage = Some(1))
+        search rules in index "toto" query QueryRules(
+          query = "s",
+          page = Some(1),
+          hitsPerPage = Some(1)
+        )
       }
 
       it("should call API") {
-        (search rules in index "toto" query QueryRules(query = "s",
-                                                       page = Some(1),
-                                                       hitsPerPage = Some(1))).build() should be(
+        (search rules in index "toto" query QueryRules(
+          query = "s",
+          page = Some(1),
+          hitsPerPage = Some(1)
+        )).build() should be(
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "rules", "search"),
@@ -139,7 +143,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}},"description":"rule1"}"""),
+              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}},"description":"rule1"}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -166,7 +171,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""),
+              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -194,7 +200,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""),
+              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -203,7 +210,16 @@ class RulesTest extends AlgoliaTest {
 
       it("should serialize correctly with TimeRange") {
 
-        val from = ZonedDateTime.of(2018, 9, 27, 13, 44, 10, 0, ZoneId.of("UTC").normalized());
+        val from = ZonedDateTime.of(
+          2018,
+          9,
+          27,
+          13,
+          44,
+          10,
+          0,
+          ZoneId.of("UTC").normalized()
+        );
         val until = from.plusDays(5);
 
         val rule = Rule(
@@ -227,7 +243,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}},"validity":[{"from":1538055850,"until":1538487850}]}"""),
+              """{"objectID":"rule1","enabled":true,"condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}},"validity":[{"from":1538055850,"until":1538487850}]}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -246,12 +263,14 @@ class RulesTest extends AlgoliaTest {
               Seq(
                 ConsequencePromote("tutu", 1),
                 ConsequencePromote("titi", 2)
-              )),
+              )
+            ),
             hide = Some(
               Seq(
                 ConsequenceHide("toto"),
                 ConsequenceHide("tata")
-              ))
+              )
+            )
           )
         )
 
@@ -262,7 +281,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"promote":[{"objectID":"tutu","position":1},{"objectID":"titi","position":2}],"hide":[{"objectID":"toto"},{"objectID":"tata"}]}}"""),
+              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"promote":[{"objectID":"tutu","position":1},{"objectID":"titi","position":2}],"hide":[{"objectID":"toto"},{"objectID":"tata"}]}}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -278,8 +298,12 @@ class RulesTest extends AlgoliaTest {
           ),
           consequence = Consequence(
             params = Some(
-              Map("automaticFacetFilters" -> Seq(
-                AutomaticFacetFilters("brand", Some(true), Some(42)))))
+              Map(
+                "automaticFacetFilters" -> Seq(
+                  AutomaticFacetFilters("brand", Some(true), Some(42))
+                )
+              )
+            )
           )
         )
 
@@ -290,7 +314,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"{facet:brand}","anchoring":"is"},"consequence":{"params":{"automaticFacetFilters":[{"facet":"brand","disjunctive":true,"score":42}]}}}"""),
+              """{"objectID":"rule1","condition":{"pattern":"{facet:brand}","anchoring":"is"},"consequence":{"params":{"automaticFacetFilters":[{"facet":"brand","disjunctive":true,"score":42}]}}}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -306,8 +331,15 @@ class RulesTest extends AlgoliaTest {
           ),
           consequence = Consequence(
             params = Some(
-              Map("query" -> Map(
-                "edits" -> Seq(Edit("remove", "toto"), Edit("replace", "toto", Some("tata"))))))
+              Map(
+                "query" -> Map(
+                  "edits" -> Seq(
+                    Edit("remove", "toto"),
+                    Edit("replace", "toto", Some("tata"))
+                  )
+                )
+              )
+            )
           )
         )
 
@@ -318,7 +350,8 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"toto","anchoring":"is"},"consequence":{"params":{"query":{"edits":[{"type":"remove","delete":"toto"},{"type":"replace","delete":"toto","insert":"tata"}]}}}}"""),
+              """{"objectID":"rule1","condition":{"pattern":"toto","anchoring":"is"},"consequence":{"params":{"query":{"edits":[{"type":"remove","delete":"toto"},{"type":"replace","delete":"toto","insert":"tata"}]}}}}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -340,10 +373,12 @@ class RulesTest extends AlgoliaTest {
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "rules", "batch"),
-            queryParameters =
-              Some(Map("forwardToReplicas" -> "true", "clearExistingRules" -> "true")),
+            queryParameters = Some(
+              Map("forwardToReplicas" -> "true", "clearExistingRules" -> "true")
+            ),
             body = Some(
-              """[{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}},"description":"rule1"}]"""),
+              """[{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":{"remove":["1"]}},"userData":{"a":"b"}},"description":"rule1"}]"""
+            ),
             isSearch = false,
             requestOptions = None
           )

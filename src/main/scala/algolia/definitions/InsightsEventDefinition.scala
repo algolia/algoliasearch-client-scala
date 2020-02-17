@@ -33,12 +33,15 @@ import org.json4s.native.Serialization.write
 
 case class InsightsEventDefinition(
     events: Iterable[InsightsEvent],
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = InsightsEventDefinition
 
-  override def options(requestOptions: RequestOptions): InsightsEventDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): InsightsEventDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {

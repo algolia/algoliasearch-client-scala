@@ -25,4 +25,7 @@
 
 package algolia.responses
 
-case class Explain(`match`: Option[QueryMatch], params: Option[Map[String, Object]])
+case class Explain(
+    `match`: Option[QueryMatch],
+    params: Option[Map[String, Object]]
+)

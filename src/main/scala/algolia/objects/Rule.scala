@@ -25,23 +25,29 @@
 
 package algolia.objects
 
-case class Rule(objectID: String,
-                enabled: Option[Boolean] = None,
-                condition: Condition,
-                consequence: Consequence,
-                validity: Option[Iterable[TimeRange]] = None,
-                description: Option[String] = None)
+case class Rule(
+    objectID: String,
+    enabled: Option[Boolean] = None,
+    condition: Condition,
+    consequence: Consequence,
+    validity: Option[Iterable[TimeRange]] = None,
+    description: Option[String] = None
+)
 
-case class Condition(pattern: String,
-                     anchoring: String,
-                     context: Option[String] = None,
-                     alternatives: Option[Alternatives] = None)
+case class Condition(
+    pattern: String,
+    anchoring: String,
+    context: Option[String] = None,
+    alternatives: Option[Alternatives] = None
+)
 
-case class Consequence(params: Option[Map[String, Any]] = None,
-                       filterPromotes: Option[Boolean] = None,
-                       promote: Option[Iterable[ConsequencePromote]] = None,
-                       hide: Option[Iterable[ConsequenceHide]] = None,
-                       userData: Option[Map[String, Any]] = None)
+case class Consequence(
+    params: Option[Map[String, Any]] = None,
+    filterPromotes: Option[Boolean] = None,
+    promote: Option[Iterable[ConsequencePromote]] = None,
+    hide: Option[Iterable[ConsequenceHide]] = None,
+    userData: Option[Map[String, Any]] = None
+)
 
 case class ConsequencePromote(objectID: String, position: Int)
 

@@ -28,8 +28,10 @@ package algolia.definitions
 import algolia.http.{HttpPayload, POST}
 import algolia.objects.RequestOptions
 
-case class ClearIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class ClearIndexDefinition(
+    index: String,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = ClearIndexDefinition
 
@@ -37,9 +39,11 @@ case class ClearIndexDefinition(index: String, requestOptions: Option[RequestOpt
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(POST,
-                Seq("1", "indexes", index, "clear"),
-                isSearch = false,
-                requestOptions = requestOptions)
+    HttpPayload(
+      POST,
+      Seq("1", "indexes", index, "clear"),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
 
 }

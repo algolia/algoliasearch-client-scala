@@ -48,7 +48,9 @@ class TaskStatusIntegrationTest extends AlgoliaTest {
       val task = taskShouldBeCreated(create)
 
       eventually {
-        val status = AlgoliaTest.client.execute { getStatus task task from indexToGetTaskStatus }
+        val status = AlgoliaTest.client.execute {
+          getStatus task task from indexToGetTaskStatus
+        }
         whenReady(status) { result =>
           result.status shouldBe "published"
         }
@@ -66,7 +68,9 @@ class TaskStatusIntegrationTest extends AlgoliaTest {
       val task = taskShouldBeCreated(create)
 
       eventually {
-        val status = AlgoliaTest.client.execute { getStatus task task from indexToGetTaskStatus }
+        val status = AlgoliaTest.client.execute {
+          getStatus task task from indexToGetTaskStatus
+        }
         whenReady(status) { result =>
           result.status shouldBe "published"
         }

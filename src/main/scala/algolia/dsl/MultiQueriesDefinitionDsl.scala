@@ -37,7 +37,9 @@ trait MultiQueriesDefinitionDsl {
   implicit val formats: Formats
 
   @deprecated("use multipleQueries", "1.27.1")
-  def multiQueries(queries: Iterable[SearchDefinition]): MultiQueriesDefinition = {
+  def multiQueries(
+      queries: Iterable[SearchDefinition]
+  ): MultiQueriesDefinition = {
     MultiQueriesDefinition(queries)
   }
 
@@ -46,7 +48,9 @@ trait MultiQueriesDefinitionDsl {
     MultiQueriesDefinition(queries)
   }
 
-  def multipleQueries(queries: Iterable[SearchDefinition]): MultiQueriesDefinition = {
+  def multipleQueries(
+      queries: Iterable[SearchDefinition]
+  ): MultiQueriesDefinition = {
     MultiQueriesDefinition(queries)
   }
 
@@ -57,7 +61,8 @@ trait MultiQueriesDefinitionDsl {
   implicit object MultiQueriesExecutable
       extends Executable[MultiQueriesDefinition, MultiQueriesResult] {
     override def apply(client: AlgoliaClient, query: MultiQueriesDefinition)(
-        implicit executor: ExecutionContext): Future[MultiQueriesResult] = {
+        implicit executor: ExecutionContext
+    ): Future[MultiQueriesResult] = {
       client.request[MultiQueriesResult](query.build())
     }
   }

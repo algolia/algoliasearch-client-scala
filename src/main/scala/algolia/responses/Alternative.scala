@@ -25,8 +25,10 @@
 
 package algolia.responses
 
-case class Alternative(`type`: Option[String],
-                       words: Option[Seq[String]],
-                       typos: Option[Long],
-                       offset: Option[Long],
-                       length: Option[Long])
+case class Alternative(
+    `type`: Option[String],
+    words: Option[Seq[String]],
+    typos: Option[Long],
+    offset: Option[Long],
+    length: Option[Long]
+)

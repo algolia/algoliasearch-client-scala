@@ -27,12 +27,14 @@ package algolia.responses
 
 case class Indices(items: Seq[Index], nbPages: Int)
 
-case class Index(name: String,
-                 createdAt: String,
-                 updatedAt: String,
-                 entries: Int,
-                 dataSize: Int,
-                 fileSize: Int,
-                 lastBuildTimeS: Int,
-                 numberOfPendingTasks: Int,
-                 pendingTask: Boolean)
+case class Index(
+    name: String,
+    createdAt: String,
+    updatedAt: String,
+    entries: Int,
+    dataSize: Int,
+    fileSize: Int,
+    lastBuildTimeS: Int,
+    numberOfPendingTasks: Int,
+    pendingTask: Boolean
+)

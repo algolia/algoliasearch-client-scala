@@ -51,8 +51,9 @@ class HttpPayloadTest extends AlgoliaTest {
 
   }
 
-  val dnsNameResolver
-    : DnsNameResolver = AlgoliaHttpClient(AlgoliaClientConfiguration.default).dnsNameResolver
+  val dnsNameResolver: DnsNameResolver = AlgoliaHttpClient(
+    AlgoliaClientConfiguration.default
+  ).dnsNameResolver
 
   describe("HttpPayload request builder") {
 
@@ -67,18 +68,26 @@ class HttpPayloadTest extends AlgoliaTest {
 
     it("should set the URI") {
       defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getUrl should be(
-        "https://algolia.com/1/indexes")
+        "https://algolia.com/1/indexes"
+      )
     }
 
     it("should set the headers") {
-      defaultPayload("https://algolia.com", Map("header" -> "value"), dnsNameResolver).getHeaders
+      defaultPayload(
+        "https://algolia.com",
+        Map("header" -> "value"),
+        dnsNameResolver
+      ).getHeaders
         .entries()
         .toString should be("[header=value]")
     }
 
     it("should set the dns timeout") {
-      defaultPayload("https://algolia.com", Map("header" -> "value"), dnsNameResolver).getNameResolver should be(
-        dnsNameResolver)
+      defaultPayload(
+        "https://algolia.com",
+        Map("header" -> "value"),
+        dnsNameResolver
+      ).getNameResolver should be(dnsNameResolver)
     }
 
     it("should set the parameters if Some") {
@@ -93,21 +102,28 @@ class HttpPayloadTest extends AlgoliaTest {
 
     it("should not set the parameters if None") {
       defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams should be(
-        empty)
+        empty
+      )
     }
 
     it("should set the body if Some") {
       val bodyPayload = defaultPayload.copy(body = Some("{}"))
-      bodyPayload("https://algolia.com", Map.empty, dnsNameResolver).getStringData should be("{}")
+      bodyPayload("https://algolia.com", Map.empty, dnsNameResolver).getStringData should be(
+        "{}"
+      )
     }
 
     it("should not set the body if None") {
-      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getByteData should be(null)
+      defaultPayload("https://algolia.com", Map.empty, dnsNameResolver).getByteData should be(
+        null
+      )
     }
 
     it("should set headers with request options") {
       val payload = defaultPayload.copy(
-        requestOptions = Some(RequestOptions(extraHeaders = Some(Map("header" -> "value")))))
+        requestOptions =
+          Some(RequestOptions(extraHeaders = Some(Map("header" -> "value"))))
+      )
       payload("https://algolia.com", Map.empty, dnsNameResolver).getHeaders
         .entries()
         .toString should be("[header=value]")
@@ -116,9 +132,12 @@ class HttpPayloadTest extends AlgoliaTest {
     it("should set query options with request options") {
       val payload =
         defaultPayload.copy(
-          requestOptions =
-            Some(RequestOptions(extraQueryParameters = Some(Map("param" -> "value")))))
-      val params = payload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams
+          requestOptions = Some(
+            RequestOptions(extraQueryParameters = Some(Map("param" -> "value")))
+          )
+        )
+      val params =
+        payload("https://algolia.com", Map.empty, dnsNameResolver).getQueryParams
       params should have size 1
       params.get(0).getName should be("param")
       params.get(0).getValue should be("value")

@@ -61,21 +61,26 @@ trait ListDsl {
   implicit object ListIndexesDefinitionExecutable
       extends Executable[ListIndexesDefinition, Indices] {
     override def apply(client: AlgoliaClient, query: ListIndexesDefinition)(
-        implicit executor: ExecutionContext): Future[Indices] = {
+        implicit executor: ExecutionContext
+    ): Future[Indices] = {
       client.request[Indices](query.build())
     }
   }
 
-  implicit object ListClustersExecutable extends Executable[ListClustersDefinition, ClusterList] {
+  implicit object ListClustersExecutable
+      extends Executable[ListClustersDefinition, ClusterList] {
     override def apply(client: AlgoliaClient, query: ListClustersDefinition)(
-        implicit executor: ExecutionContext): Future[ClusterList] = {
+        implicit executor: ExecutionContext
+    ): Future[ClusterList] = {
       client.request[ClusterList](query.build())
     }
   }
 
-  implicit object ListUserIDsExecutable extends Executable[ListUserIDsDefinition, UserIDList] {
+  implicit object ListUserIDsExecutable
+      extends Executable[ListUserIDsDefinition, UserIDList] {
     override def apply(client: AlgoliaClient, query: ListUserIDsDefinition)(
-        implicit executor: ExecutionContext): Future[UserIDList] = {
+        implicit executor: ExecutionContext
+    ): Future[UserIDList] = {
       client.request[UserIDList](query.build())
     }
   }

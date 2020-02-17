@@ -25,7 +25,9 @@
 
 package algolia.objects
 
-case class QuerySynonyms(query: String,
-                         types: Option[Seq[SynonymType]] = None,
-                         page: Option[Int] = None,
-                         hitsPerPage: Option[Int] = None)
+case class QuerySynonyms(
+    query: String,
+    types: Option[Seq[SynonymType]] = None,
+    page: Option[Int] = None,
+    hitsPerPage: Option[Int] = None
+)

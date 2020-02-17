@@ -25,9 +25,11 @@
 
 package algolia.objects
 
-case class QueryRules(query: String,
-                      anchoring: Option[String] = None,
-                      context: Option[String] = None,
-                      page: Option[Int] = None,
-                      hitsPerPage: Option[Int] = None,
-                      nbPages: Option[Int] = None)
+case class QueryRules(
+    query: String,
+    anchoring: Option[String] = None,
+    context: Option[String] = None,
+    page: Option[Int] = None,
+    hitsPerPage: Option[Int] = None,
+    nbPages: Option[Int] = None
+)

@@ -25,7 +25,10 @@
 
 package algolia.dsl
 
-import algolia.definitions.{IndexChangeSettingsDefinition, IndexSettingsDefinition}
+import algolia.definitions.{
+  IndexChangeSettingsDefinition,
+  IndexSettingsDefinition
+}
 import algolia.objects.IndexSettings
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
@@ -58,16 +61,20 @@ trait IndexSettingsDsl {
 
   implicit object IndexSettingsDefinitionExecutable
       extends Executable[IndexSettingsDefinition, IndexSettings] {
-    override def apply(client: AlgoliaClient, settings: IndexSettingsDefinition)(
-        implicit executor: ExecutionContext): Future[IndexSettings] = {
+    override def apply(
+        client: AlgoliaClient,
+        settings: IndexSettingsDefinition
+    )(implicit executor: ExecutionContext): Future[IndexSettings] = {
       client.request[IndexSettings](settings.build())
     }
   }
 
   implicit object IndexChangeSettingsDefinitionExecutable
       extends Executable[IndexChangeSettingsDefinition, Task] {
-    override def apply(client: AlgoliaClient, settings: IndexChangeSettingsDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+    override def apply(
+        client: AlgoliaClient,
+        settings: IndexChangeSettingsDefinition
+    )(implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](settings.build())
     }
   }

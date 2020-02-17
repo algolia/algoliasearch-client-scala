@@ -30,15 +30,17 @@ import algolia.objects.{ApiKey, RequestOptions}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
 
-case class GetKeyDefinition(keyName: String,
-                            indexName: Option[String] = None,
-                            requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class GetKeyDefinition(
+    keyName: String,
+    indexName: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = GetKeyDefinition
 
   @deprecated("use without index", "1.27.0")
-  def from(indexName: String): GetKeyDefinition = copy(indexName = Some(indexName))
+  def from(indexName: String): GetKeyDefinition =
+    copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): GetKeyDefinition =
     copy(requestOptions = Some(requestOptions))
@@ -62,12 +64,14 @@ case class GetKeyDefinition(keyName: String,
 case class AddKeyDefinition(
     key: ApiKey,
     indexName: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
   type T = AddKeyDefinition
 
   @deprecated("use without index", "1.27.0")
-  def to(indexName: String): AddKeyDefinition = copy(indexName = Some(indexName))
+  def to(indexName: String): AddKeyDefinition =
+    copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): AddKeyDefinition =
     copy(requestOptions = Some(requestOptions))
@@ -89,8 +93,10 @@ case class AddKeyDefinition(
   }
 }
 
-case class RestoreKeyDefinition(key: String, requestOptions: Option[RequestOptions] = None)(
-    implicit val formats: Formats)
+case class RestoreKeyDefinition(
+    key: String,
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
   type T = RestoreKeyDefinition
 
@@ -108,15 +114,17 @@ case class RestoreKeyDefinition(key: String, requestOptions: Option[RequestOptio
   }
 }
 
-case class DeleteKeyDefinition(keyName: String,
-                               indexName: Option[String] = None,
-                               requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class DeleteKeyDefinition(
+    keyName: String,
+    indexName: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = DeleteKeyDefinition
 
   @deprecated("use without index", "1.27.0")
-  def from(indexName: String): DeleteKeyDefinition = copy(indexName = Some(indexName))
+  def from(indexName: String): DeleteKeyDefinition =
+    copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): DeleteKeyDefinition =
     copy(requestOptions = Some(requestOptions))
@@ -141,7 +149,8 @@ case class UpdateKeyDefinition(
     keyName: String,
     key: Option[ApiKey] = None,
     indexName: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = UpdateKeyDefinition
@@ -149,7 +158,8 @@ case class UpdateKeyDefinition(
   def `with`(key: ApiKey): UpdateKeyDefinition = copy(key = Some(key))
 
   @deprecated("use without index", "1.27.0")
-  def from(indexName: String): UpdateKeyDefinition = copy(indexName = Some(indexName))
+  def from(indexName: String): UpdateKeyDefinition =
+    copy(indexName = Some(indexName))
 
   override def options(requestOptions: RequestOptions): UpdateKeyDefinition =
     copy(requestOptions = Some(requestOptions))
@@ -171,9 +181,10 @@ case class UpdateKeyDefinition(
   }
 }
 
-case class ListKeysDefinition(indexName: Option[String] = None,
-                              requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class ListKeysDefinition(
+    indexName: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = ListKeysDefinition
 

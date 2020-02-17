@@ -71,8 +71,8 @@ class IndexSettingsTest extends AlgoliaTest {
         requestOptions = None
       )
 
-      (setSettings of "test" `with` IndexSettings() and forwardToReplicas).build() should be(
-        payload)
+      (setSettings of "test" `with` IndexSettings() and forwardToReplicas)
+        .build() should be(payload)
     }
 
   }
@@ -127,42 +127,62 @@ class IndexSettingsTest extends AlgoliaTest {
         case i: IndexSettings =>
           i.attributesToIndex should be(
             Some(
-              Seq(AttributesToIndex.attribute("att1"),
-                  AttributesToIndex.attributes("att2", "att3"),
-                  AttributesToIndex.unordered("att4"))))
+              Seq(
+                AttributesToIndex.attribute("att1"),
+                AttributesToIndex.attributes("att2", "att3"),
+                AttributesToIndex.unordered("att4")
+              )
+            )
+          )
           i.searchableAttributes should be(
             Some(
-              Seq(SearchableAttributes.attribute("att1"),
-                  SearchableAttributes.attributes("att2", "att3"),
-                  SearchableAttributes.unordered("att4"))))
+              Seq(
+                SearchableAttributes.attribute("att1"),
+                SearchableAttributes.attributes("att2", "att3"),
+                SearchableAttributes.unordered("att4")
+              )
+            )
+          )
           i.numericAttributesToIndex should be(
             Some(
               Seq(
                 NumericAttributesToIndex.equalOnly("att5")
-              )))
+              )
+            )
+          )
           i.ranking should be(
             Some(
-              Seq(Ranking.typo,
-                  Ranking.geo,
-                  Ranking.words,
-                  Ranking.proximity,
-                  Ranking.attribute,
-                  Ranking.exact,
-                  Ranking.custom,
-                  Ranking.asc("att6"),
-                  Ranking.desc("att7"))))
+              Seq(
+                Ranking.typo,
+                Ranking.geo,
+                Ranking.words,
+                Ranking.proximity,
+                Ranking.attribute,
+                Ranking.exact,
+                Ranking.custom,
+                Ranking.asc("att6"),
+                Ranking.desc("att7")
+              )
+            )
+          )
           i.customRanking should be(
             Some(
               Seq(
                 CustomRanking.asc("att8"),
                 CustomRanking.desc("att9")
-              )))
+              )
+            )
+          )
           i.typoTolerance should be(Some(TypoTolerance.strict))
           i.distinct should be(Some(Distinct.int(1)))
-          i.removeStopWords should be(Some(RemoveStopWords.list(Seq("fr", "en"))))
+          i.removeStopWords should be(
+            Some(RemoveStopWords.list(Seq("fr", "en")))
+          )
           i.ignorePlurals should be(Some(IgnorePlurals.list(Seq("fr", "en"))))
           i.keepDiacriticsOnCharacters should be(Some("éø"))
-          i.decompoundedAttributes should be(Some(Map("de" -> Seq("attr1", "attr2"))))
+          i.decompoundedAttributes should be(
+            Some(Map("de" -> Seq("attr1", "attr2")))
+          )
       }
 
     }
@@ -170,14 +190,21 @@ class IndexSettingsTest extends AlgoliaTest {
     it("should serialize json") {
       val i = IndexSettings(
         attributesToIndex = Some(
-          Seq(AttributesToIndex.attribute("att1"),
-              AttributesToIndex.attributes("att2", "att3"),
-              AttributesToIndex.unordered("att4"))),
+          Seq(
+            AttributesToIndex.attribute("att1"),
+            AttributesToIndex.attributes("att2", "att3"),
+            AttributesToIndex.unordered("att4")
+          )
+        ),
         searchableAttributes = Some(
-          Seq(SearchableAttributes.attribute("att1"),
-              SearchableAttributes.attributes("att2", "att3"),
-              SearchableAttributes.unordered("att4"))),
-        numericAttributesToIndex = Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
+          Seq(
+            SearchableAttributes.attribute("att1"),
+            SearchableAttributes.attributes("att2", "att3"),
+            SearchableAttributes.unordered("att4")
+          )
+        ),
+        numericAttributesToIndex =
+          Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
         ranking = Some(
           Seq(
             Ranking.typo,
@@ -189,12 +216,14 @@ class IndexSettingsTest extends AlgoliaTest {
             Ranking.custom,
             Ranking.asc("att6"),
             Ranking.desc("att7")
-          )),
+          )
+        ),
         customRanking = Some(
           Seq(
             CustomRanking.asc("att8"),
             CustomRanking.desc("att9")
-          )),
+          )
+        ),
         ignorePlurals = Some(IgnorePlurals.list(Seq("fr", "en"))),
         typoTolerance = Some(TypoTolerance.strict),
         distinct = Some(Distinct.int(1)),

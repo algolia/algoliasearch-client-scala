@@ -97,7 +97,10 @@ class RulesIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search rules in index indexName query QueryRules("rule1", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules(
+          "rule1",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -125,7 +128,10 @@ class RulesIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(d, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules(
+          "",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -153,7 +159,10 @@ class RulesIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(d, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules(
+          "",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -174,7 +183,10 @@ class RulesIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search rules in index indexName query QueryRules("", hitsPerPage = Some(10))
+        search rules in index indexName query QueryRules(
+          "",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -192,7 +204,10 @@ class RulesIntegrationTest extends AlgoliaTest {
         consequence = Consequence(
           params = Some(
             Map(
-              "automaticFacetFilters" -> Seq(AutomaticFacetFilters("brand", Some(true), Some(42))))
+              "automaticFacetFilters" -> Seq(
+                AutomaticFacetFilters("brand", Some(true), Some(42))
+              )
+            )
           )
         )
       )
@@ -210,7 +225,16 @@ class RulesIntegrationTest extends AlgoliaTest {
 
     it("should save rule with time range") {
 
-      val from = ZonedDateTime.of(2018, 9, 27, 13, 44, 10, 0, ZoneId.of("UTC").normalized());
+      val from = ZonedDateTime.of(
+        2018,
+        9,
+        27,
+        13,
+        44,
+        10,
+        0,
+        ZoneId.of("UTC").normalized()
+      );
       val until = from.plusDays(5);
 
       val rule = Rule(
@@ -260,7 +284,9 @@ class RulesIntegrationTest extends AlgoliaTest {
                   Edit("remove", "toto"),
                   Edit("replace", "toto", Some("tata"))
                 )
-              )))
+              )
+            )
+          )
         )
       )
 

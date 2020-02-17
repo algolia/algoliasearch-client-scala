@@ -62,7 +62,9 @@ class CopyIndexTest extends AlgoliaTest {
         HttpPayload(
           POST,
           Seq("1", "indexes", "toto", "operation"),
-          body = Some("""{"operation":"copy","destination":"tata","scope":["settings"]}"""),
+          body = Some(
+            """{"operation":"copy","destination":"tata","scope":["settings"]}"""
+          ),
           isSearch = false,
           requestOptions = None
         )

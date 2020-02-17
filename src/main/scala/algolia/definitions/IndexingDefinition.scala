@@ -38,7 +38,8 @@ case class IndexingDefinition(
     index: String,
     objectId: Option[String] = None,
     obj: Option[AnyRef] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = IndexingDefinition
@@ -70,14 +71,16 @@ case class IndexingDefinition(
     val body: Option[String] = obj.map(o => write(o))
     val verb = objectId match {
       case Some(_) => http.PUT
-      case None => http.POST
+      case None    => http.POST
     }
 
-    HttpPayload(verb,
-                Seq("1", "indexes", index) ++ objectId,
-                body = body,
-                isSearch = false,
-                requestOptions = requestOptions)
+    HttpPayload(
+      verb,
+      Seq("1", "indexes", index) ++ objectId,
+      body = body,
+      isSearch = false,
+      requestOptions = requestOptions
+    )
   }
 }
 
@@ -94,7 +97,8 @@ trait IndexingDsl {
   implicit object IndexingDefinitionExecutable
       extends Executable[IndexingDefinition, TaskIndexing] {
     override def apply(client: AlgoliaClient, query: IndexingDefinition)(
-        implicit executor: ExecutionContext): Future[TaskIndexing] = {
+        implicit executor: ExecutionContext
+    ): Future[TaskIndexing] = {
       client.request[TaskIndexing](query.build())
     }
   }

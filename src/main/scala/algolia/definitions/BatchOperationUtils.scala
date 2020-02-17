@@ -35,7 +35,7 @@ trait BatchOperationUtils {
     val json = Extraction.decompose(obj)
     json \ "objectID" match {
       case JNothing => (false, json)
-      case _ => (true, json)
+      case _        => (true, json)
     }
   }
 

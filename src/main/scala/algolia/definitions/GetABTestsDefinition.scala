@@ -29,12 +29,14 @@ import algolia.http.{GET, HttpPayload}
 import algolia.objects.RequestOptions
 import org.json4s.Formats
 
-case class GetABTestsDefinition(offset: Int = 0, limit: Int = 10)(implicit val formats: Formats)
-    extends Definition {
+case class GetABTestsDefinition(offset: Int = 0, limit: Int = 10)(
+    implicit val formats: Formats
+) extends Definition {
 
   type T = GetABTestsDefinition
 
-  override def options(requestOptions: RequestOptions): GetABTestsDefinition = this
+  override def options(requestOptions: RequestOptions): GetABTestsDefinition =
+    this
 
   def offset(offset: Int): GetABTestsDefinition = copy(offset = offset)
 
@@ -44,7 +46,8 @@ case class GetABTestsDefinition(offset: Int = 0, limit: Int = 10)(implicit val f
     HttpPayload(
       verb = GET,
       path = Seq("2", "abtests"),
-      queryParameters = Some(Map("offset" -> offset.toString, "limit" -> limit.toString)),
+      queryParameters =
+        Some(Map("offset" -> offset.toString, "limit" -> limit.toString)),
       isSearch = false,
       isAnalytics = true,
       requestOptions = None

@@ -28,12 +28,13 @@ package algolia.definitions
 import algolia.http.HttpPayload
 import algolia.objects.RequestOptions
 
-case class WaitForTaskDefinition(taskId: Long,
-                                 index: Option[String] = None,
-                                 baseDelay: Long = 100,
-                                 maxDelay: Long = Long.MaxValue,
-                                 requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class WaitForTaskDefinition(
+    taskId: Long,
+    index: Option[String] = None,
+    baseDelay: Long = 100,
+    maxDelay: Long = Long.MaxValue,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = WaitForTaskDefinition
 
@@ -46,7 +47,8 @@ case class WaitForTaskDefinition(taskId: Long,
   override def options(requestOptions: RequestOptions): WaitForTaskDefinition =
     copy(requestOptions = Some(requestOptions))
 
-  override private[algolia] def build(): HttpPayload = TaskStatusDefinition(taskId, index).build()
+  override private[algolia] def build(): HttpPayload =
+    TaskStatusDefinition(taskId, index).build()
 
 }
 

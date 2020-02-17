@@ -37,49 +37,61 @@ trait RulesDsl {
 
   implicit val formats: Formats
 
-  implicit object GetRuleDefinitionExecutable extends Executable[GetRuleDefinition, Rule] {
+  implicit object GetRuleDefinitionExecutable
+      extends Executable[GetRuleDefinition, Rule] {
 
     override def apply(client: AlgoliaClient, query: GetRuleDefinition)(
-        implicit executor: ExecutionContext): Future[Rule] = {
+        implicit executor: ExecutionContext
+    ): Future[Rule] = {
       client.request[Rule](query.build())
     }
 
   }
 
-  implicit object DeleteRuleDefinitionExecutable extends Executable[DeleteRuleDefinition, Task] {
+  implicit object DeleteRuleDefinitionExecutable
+      extends Executable[DeleteRuleDefinition, Task] {
 
     override def apply(client: AlgoliaClient, query: DeleteRuleDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
 
   }
 
-  implicit object ClearRulesDefinitionExecutable extends Executable[ClearRulesDefinition, Task] {
+  implicit object ClearRulesDefinitionExecutable
+      extends Executable[ClearRulesDefinition, Task] {
 
     override def apply(client: AlgoliaClient, query: ClearRulesDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
 
   }
 
-  implicit object SaveRuleDefinitionExecutable extends Executable[SaveRuleDefinition, Task] {
+  implicit object SaveRuleDefinitionExecutable
+      extends Executable[SaveRuleDefinition, Task] {
 
     override def apply(client: AlgoliaClient, query: SaveRuleDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       if (query.rule.objectID.isEmpty) {
-        return Future.failed(new AlgoliaClientException(s"rule's 'objectID' cannot be empty"))
+        return Future.failed(
+          new AlgoliaClientException(s"rule's 'objectID' cannot be empty")
+        )
       }
       client.request[Task](query.build())
     }
 
   }
 
-  implicit object BatchRulesDefinitionExecutable extends Executable[BatchRulesDefinition, Task] {
+  implicit object BatchRulesDefinitionExecutable
+      extends Executable[BatchRulesDefinition, Task] {
 
     override def apply(client: AlgoliaClient, query: BatchRulesDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
 
@@ -89,7 +101,8 @@ trait RulesDsl {
       extends Executable[SearchRulesDefinition, SearchRuleResult] {
 
     override def apply(client: AlgoliaClient, query: SearchRulesDefinition)(
-        implicit executor: ExecutionContext): Future[SearchRuleResult] = {
+        implicit executor: ExecutionContext
+    ): Future[SearchRuleResult] = {
       client.request[SearchRuleResult](query.build())
     }
 

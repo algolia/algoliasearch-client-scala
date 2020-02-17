@@ -129,7 +129,10 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should add unique value") {
     val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
-      index into indexName `object` PartialUpdateArray(Seq("1", "2"), "addUnique")
+      index into indexName `object` PartialUpdateArray(
+        Seq("1", "2"),
+        "addUnique"
+      )
     }
 
     taskShouldBeCreatedAndWaitForIt(create, indexName)
@@ -151,7 +154,11 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   it("should update a value") {
     val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
-      index into indexName `object` PartialUpdateValue("value", "otherValue", "updateValue")
+      index into indexName `object` PartialUpdateValue(
+        "value",
+        "otherValue",
+        "updateValue"
+      )
     }
 
     taskShouldBeCreatedAndWaitForIt(create, indexName)
@@ -168,7 +175,8 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     whenReady(s) { get =>
       get.as[PartialUpdateValue] should equal(
-        PartialUpdateValue("otherOne", "otherValue", "updateValue"))
+        PartialUpdateValue("otherOne", "otherValue", "updateValue")
+      )
     }
   }
 
@@ -205,9 +213,11 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
     taskShouldBeCreatedAndWaitForIt(create, indexName)
 
     val updating: Future[Task] = AlgoliaTest.client.execute {
-      partialUpdate from indexName `object` PartialUpdateObjWithOtherFields(2,
-                                                                            "toto",
-                                                                            "batch_update")
+      partialUpdate from indexName `object` PartialUpdateObjWithOtherFields(
+        2,
+        "toto",
+        "batch_update"
+      )
     }
 
     taskShouldBeCreatedAndWaitForIt(updating, indexName)
@@ -218,7 +228,8 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     whenReady(s) { get =>
       get.as[PartialUpdateObjWithOtherFields] should equal(
-        PartialUpdateObjWithOtherFields(2, "toto", "batch_update"))
+        PartialUpdateObjWithOtherFields(2, "toto", "batch_update")
+      )
     }
 
   }
@@ -232,9 +243,11 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
     val updating: Future[TasksMultipleIndex] = AlgoliaTest.client.execute {
       batch(
-        partialUpdate from indexName `object` PartialUpdateObjWithOtherFields(2,
-                                                                              "toto",
-                                                                              "batch_update")
+        partialUpdate from indexName `object` PartialUpdateObjWithOtherFields(
+          2,
+          "toto",
+          "batch_update"
+        )
       )
     }
 
@@ -252,11 +265,18 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
 }
 
-case class PartialUpdateObjWithOtherFields(value: Int, name: String, objectID: String)
-    extends ObjectID
+case class PartialUpdateObjWithOtherFields(
+    value: Int,
+    name: String,
+    objectID: String
+) extends ObjectID
 
 case class PartialUpdateObj(value: Int, objectID: String)
 
 case class PartialUpdateArray(values: Seq[String], objectID: String)
 
-case class PartialUpdateValue(value: String, otherValue: String, objectID: String)
+case class PartialUpdateValue(
+    value: String,
+    otherValue: String,
+    objectID: String
+)

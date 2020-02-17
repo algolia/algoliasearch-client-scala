@@ -35,7 +35,8 @@ case class MoveIndexDefinition(
     source: String,
     destination: Option[String] = None,
     scope: Option[Seq[String]] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = MoveIndexDefinition

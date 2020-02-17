@@ -39,7 +39,8 @@ class DeleteObjectTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (delete objectFromIndex SafeDeleteObjectOperation("toto", "oid").get).build() should be(
+      (delete objectFromIndex SafeDeleteObjectOperation("toto", "oid").get)
+        .build() should be(
         HttpPayload(
           DELETE,
           Seq("1", "indexes", "toto", "oid"),
@@ -73,11 +74,13 @@ class DeleteObjectTest extends AlgoliaTest {
           """.stripMargin.split("\n").map(_.trim).mkString
 
         (delete from "toto" objectIds Seq("1", "2")).build() should be(
-          HttpPayload(POST,
-                      List("1", "indexes", "*", "batch"),
-                      body = Some(body),
-                      isSearch = false,
-                      requestOptions = None)
+          HttpPayload(
+            POST,
+            List("1", "indexes", "*", "batch"),
+            body = Some(body),
+            isSearch = false,
+            requestOptions = None
+          )
         )
       }
 

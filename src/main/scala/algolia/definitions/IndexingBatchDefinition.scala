@@ -26,7 +26,11 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.inputs.{AddObjectOperation, BatchOperations, UpdateObjectOperation}
+import algolia.inputs.{
+  AddObjectOperation,
+  BatchOperations,
+  UpdateObjectOperation
+}
 import algolia.objects.RequestOptions
 import org.json4s.Formats
 import org.json4s.native.Serialization._
@@ -34,20 +38,23 @@ import org.json4s.native.Serialization._
 case class IndexingBatchDefinition(
     index: String,
     definitions: Iterable[Definition] = Iterable(),
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition
     with BatchOperationUtils {
 
   type T = IndexingBatchDefinition
 
-  override def options(requestOptions: RequestOptions): IndexingBatchDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): IndexingBatchDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     val operations = definitions.map {
       case IndexingDefinition(_, None, Some(obj), _) =>
         hasObjectId(obj) match {
-          case (true, o) => UpdateObjectOperation(o)
+          case (true, o)  => UpdateObjectOperation(o)
           case (false, o) => AddObjectOperation(o)
         }
 

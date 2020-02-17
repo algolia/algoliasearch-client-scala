@@ -27,15 +27,17 @@ package algolia.responses
 
 import org.json4s.{DefaultFormats, JObject}
 
-case class BrowseResult(cursor: Option[String],
-                        hits: Seq[JObject],
-                        processingTimeMS: Int,
-                        query: String,
-                        params: String,
-                        nbHits: Option[Int],
-                        page: Option[Int],
-                        histPerPage: Option[Int],
-                        nbPages: Option[Int]) {
+case class BrowseResult(
+    cursor: Option[String],
+    hits: Seq[JObject],
+    processingTimeMS: Int,
+    query: String,
+    params: String,
+    nbHits: Option[Int],
+    page: Option[Int],
+    histPerPage: Option[Int],
+    nbPages: Option[Int]
+) {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 

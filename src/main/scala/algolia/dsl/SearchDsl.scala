@@ -49,9 +49,11 @@ trait SearchDsl {
 
   }
 
-  implicit object SearchDefinitionExecutable extends Executable[SearchDefinition, SearchResult] {
+  implicit object SearchDefinitionExecutable
+      extends Executable[SearchDefinition, SearchResult] {
     override def apply(client: AlgoliaClient, query: SearchDefinition)(
-        implicit executor: ExecutionContext): Future[SearchResult] = {
+        implicit executor: ExecutionContext
+    ): Future[SearchResult] = {
       client.request[SearchResult](query.build())
     }
   }
@@ -59,7 +61,8 @@ trait SearchDsl {
   implicit object SearchFacetDefinitionExecutable
       extends Executable[SearchFacetDefinition, SearchFacetResult] {
     override def apply(client: AlgoliaClient, query: SearchFacetDefinition)(
-        implicit executor: ExecutionContext): Future[SearchFacetResult] = {
+        implicit executor: ExecutionContext
+    ): Future[SearchFacetResult] = {
       client.request[SearchFacetResult](query.build())
     }
   }
@@ -67,7 +70,8 @@ trait SearchDsl {
   implicit object SearchUserIDsExecutable
       extends Executable[SearchUserIDDefinition, SearchUserID] {
     override def apply(client: AlgoliaClient, query: SearchUserIDDefinition)(
-        implicit executor: ExecutionContext): Future[SearchUserID] = {
+        implicit executor: ExecutionContext
+    ): Future[SearchUserID] = {
       client.request[SearchUserID](query.build())
     }
   }

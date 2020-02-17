@@ -95,7 +95,9 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     it("should delete with a query") {
       val delete = helper.deleteByQuery[Value]("testBrowseSync", query)
       val tasksToWait = whenReady(delete) { res =>
-        Future.traverse(res)(i => AlgoliaTest.client.execute(waitFor task i from "testBrowseSync"))
+        Future.traverse(res)(i =>
+          AlgoliaTest.client.execute(waitFor task i from "testBrowseSync")
+        )
       }
 
       whenReady(tasksToWait) { res =>
@@ -116,7 +118,8 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
 
   }
 
-  case class Employee(company: String, name: String, objectID: String) extends ObjectID
+  case class Employee(company: String, name: String, objectID: String)
+      extends ObjectID
 
   describe("search response helpers") {
 
@@ -139,18 +142,27 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     it("should find the search results' position correctly") {
       val indexName = "testGetObjectPosition"
 
-      val clearTask = Await.result(helper.client.execute(clear index indexName), Duration.Inf)
-      Await.result(helper.client.execute(waitFor task clearTask from indexName), Duration.Inf)
+      val clearTask =
+        Await.result(helper.client.execute(clear index indexName), Duration.Inf)
+      Await.result(
+        helper.client.execute(waitFor task clearTask from indexName),
+        Duration.Inf
+      )
 
       val indexingTask = Await.result(
         helper.client.execute(index into indexName objects objs),
         Duration.Inf
       )
-      Await.result(helper.client.execute(waitFor task indexingTask from indexName), Duration.Inf)
+      Await.result(
+        helper.client.execute(waitFor task indexingTask from indexName),
+        Duration.Inf
+      )
 
       val res = Await.result(
-        helper.client.execute(search into indexName query Query(query = Some("algolia"))),
-        Duration.Inf)
+        helper.client
+          .execute(search into indexName query Query(query = Some("algolia"))),
+        Duration.Inf
+      )
 
       res.getObjectPosition[Employee]("nicolas-dessaigne") should be(Some(0))
       res.getObjectPosition[Employee]("julien-lemoine") should be(Some(1))
@@ -160,16 +172,25 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
     it("should find the first object correctly") {
       val indexName = "testFindObject"
 
-      val clearTask = Await.result(helper.client.execute(clear index indexName), Duration.Inf)
-      Await.result(helper.client.execute(waitFor task clearTask from indexName), Duration.Inf)
+      val clearTask =
+        Await.result(helper.client.execute(clear index indexName), Duration.Inf)
+      Await.result(
+        helper.client.execute(waitFor task clearTask from indexName),
+        Duration.Inf
+      )
 
       val indexingTask = Await.result(
         helper.client.execute(index into indexName objects objs),
         Duration.Inf
       )
-      Await.result(helper.client.execute(waitFor task indexingTask from indexName), Duration.Inf)
+      Await.result(
+        helper.client.execute(waitFor task indexingTask from indexName),
+        Duration.Inf
+      )
 
-      helper.findObject(indexName, Query(), (_: Employee) => false) should be(None)
+      helper.findObject(indexName, Query(), (_: Employee) => false) should be(
+        None
+      )
 
       var obj = helper.findObject(indexName, Query(), (_: Employee) => true)
       obj should not be (None)
@@ -178,22 +199,28 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
 
       val predicate = (e: Employee) => e.company == "Apple"
 
-      helper.findObject(indexName, Query(query = Some("algolia")), predicate) should be(None)
+      helper.findObject(indexName, Query(query = Some("algolia")), predicate) should be(
+        None
+      )
 
-      helper.findObject(indexName,
-                        Query(
-                          query = Some(""),
-                          hitsPerPage = Some(5)
-                        ),
-                        predicate,
-                        paginate = false) should be(None)
+      helper.findObject(
+        indexName,
+        Query(
+          query = Some(""),
+          hitsPerPage = Some(5)
+        ),
+        predicate,
+        paginate = false
+      ) should be(None)
 
-      obj = helper.findObject(indexName,
-                              Query(
-                                query = Some(""),
-                                hitsPerPage = Some(5)
-                              ),
-                              predicate)
+      obj = helper.findObject(
+        indexName,
+        Query(
+          query = Some(""),
+          hitsPerPage = Some(5)
+        ),
+        predicate
+      )
       obj should not be (None)
       obj.get.page should be(2)
       obj.get.position should be(0)
@@ -203,7 +230,8 @@ class AlgoliaSyncHelperTest extends AlgoliaTest {
   describe("export synonyms") {
 
     it("should export synonyms") {
-      val list: List[AbstractSynonym] = helper.exportSynonyms("testBrowseSync").toList.flatten
+      val list: List[AbstractSynonym] =
+        helper.exportSynonyms("testBrowseSync").toList.flatten
 
       list should have size 10
       forAll(list) { r =>

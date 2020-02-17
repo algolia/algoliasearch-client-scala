@@ -68,7 +68,10 @@ class BrowseIntegrationTest extends AlgoliaTest {
 
     it("should browse with query and get a cursor") {
       val s = AlgoliaTest.client.execute {
-        browse index indexToBrowse query Query(query = Some("algolia"), hitsPerPage = Some(1))
+        browse index indexToBrowse query Query(
+          query = Some("algolia"),
+          hitsPerPage = Some(1)
+        )
       }
 
       val c = whenReady(s) { result =>

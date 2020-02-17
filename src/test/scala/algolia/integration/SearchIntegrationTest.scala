@@ -64,8 +64,10 @@ class SearchIntegrationTest extends AlgoliaTest {
 
     it("should return generic object") {
       val s = AlgoliaTest.client.execute {
-        search into index1 query Query(query = Some("a"),
-                                       explain = Some(Seq("match.alternatives")))
+        search into index1 query Query(
+          query = Some("a"),
+          explain = Some(Seq("match.alternatives"))
+        )
       }
 
       whenReady(s) { result =>
@@ -102,12 +104,20 @@ class SearchIntegrationTest extends AlgoliaTest {
           "563481290",
           Some(
             Map(
-              "name" -> HighlightResult("<em>a</em>lgolia",
-                                        "full",
-                                        Seq("a"),
-                                        fullyHighlighted = Some(false)),
-              "age" -> HighlightResult("10", "none", Seq.empty, fullyHighlighted = None)
-            )),
+              "name" -> HighlightResult(
+                "<em>a</em>lgolia",
+                "full",
+                Seq("a"),
+                fullyHighlighted = Some(false)
+              ),
+              "age" -> HighlightResult(
+                "10",
+                "none",
+                Seq.empty,
+                fullyHighlighted = None
+              )
+            )
+          ),
           None,
           None,
           None
@@ -117,9 +127,15 @@ class SearchIntegrationTest extends AlgoliaTest {
     }
 
     it("should be able to search on insideBoundingBox") {
-      val box = Seq(InsideBoundingBox("1", "2", "3", "4"), InsideBoundingBox("5", "6", "7", "8"))
+      val box = Seq(
+        InsideBoundingBox("1", "2", "3", "4"),
+        InsideBoundingBox("5", "6", "7", "8")
+      )
       val s = AlgoliaTest.client.execute {
-        search into index1 query Query(query = Some("a"), insideBoundingBox = Some(box))
+        search into index1 query Query(
+          query = Some("a"),
+          insideBoundingBox = Some(box)
+        )
       }
 
       whenReady(s) { result =>
@@ -133,7 +149,10 @@ class SearchIntegrationTest extends AlgoliaTest {
         InsidePolygon("7", "8", "9", "10", "11", "12")
       )
       val s = AlgoliaTest.client.execute {
-        search into index1 query Query(query = Some("a"), insidePolygon = Some(polygon))
+        search into index1 query Query(
+          query = Some("a"),
+          insidePolygon = Some(polygon)
+        )
       }
 
       whenReady(s) { result =>
@@ -167,7 +186,9 @@ class SearchIntegrationTest extends AlgoliaTest {
       whenReady(s) { r =>
         r.results should have length 2
         forAll(r.results) { result =>
-          (result.hits.head \ "name").values.toString should startWith("algolia")
+          (result.hits.head \ "name").values.toString should startWith(
+            "algolia"
+          )
           (result.hits.head \ "age").values should be(10)
           (result.hits.head \ "alien").values shouldBe false
         }
@@ -244,14 +265,15 @@ class SearchIntegrationTest extends AlgoliaTest {
 
 case class Test(name: String, age: Int, alien: Boolean)
 
-case class EnhanceTest(name: String,
-                       age: Int,
-                       alien: Boolean,
-                       objectID: String,
-                       _highlightResult: Option[Map[String, HighlightResult]],
-                       _snippetResult: Option[Map[String, SnippetResult]],
-                       _rankingInfo: Option[RankingInfo],
-                       _distinctSeqID: Option[Integer])
-    extends Hit
+case class EnhanceTest(
+    name: String,
+    age: Int,
+    alien: Boolean,
+    objectID: String,
+    _highlightResult: Option[Map[String, HighlightResult]],
+    _snippetResult: Option[Map[String, SnippetResult]],
+    _rankingInfo: Option[RankingInfo],
+    _distinctSeqID: Option[Integer]
+) extends Hit
 
 case class Character(name: String, series: String)

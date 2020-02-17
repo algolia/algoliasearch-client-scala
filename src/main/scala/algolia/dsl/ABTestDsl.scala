@@ -39,7 +39,8 @@ trait ABTestDsl {
   implicit object AddABTestDefinitionExecutable
       extends Executable[AddABTestDefinition, ABTestTask] {
     override def apply(client: AlgoliaClient, query: AddABTestDefinition)(
-        implicit executor: ExecutionContext): Future[ABTestTask] = {
+        implicit executor: ExecutionContext
+    ): Future[ABTestTask] = {
       client.request[ABTestTask](query.build())
     }
   }
@@ -47,7 +48,8 @@ trait ABTestDsl {
   implicit object GetABTestDefinitionExecutable
       extends Executable[GetABTestDefinition, ABTestResponse] {
     override def apply(client: AlgoliaClient, query: GetABTestDefinition)(
-        implicit executor: ExecutionContext): Future[ABTestResponse] = {
+        implicit executor: ExecutionContext
+    ): Future[ABTestResponse] = {
       client.request[ABTestResponse](query.build())
     }
   }
@@ -55,7 +57,8 @@ trait ABTestDsl {
   implicit object StopABTestDefinitionExecutable
       extends Executable[StopABTestDefinition, ABTestTask] {
     override def apply(client: AlgoliaClient, query: StopABTestDefinition)(
-        implicit executor: ExecutionContext): Future[ABTestTask] = {
+        implicit executor: ExecutionContext
+    ): Future[ABTestTask] = {
       client.request[ABTestTask](query.build())
     }
   }
@@ -63,7 +66,8 @@ trait ABTestDsl {
   implicit object DeleteABTestDefinitionExecutable
       extends Executable[DeleteABTestDefinition, ABTestTask] {
     override def apply(client: AlgoliaClient, query: DeleteABTestDefinition)(
-        implicit executor: ExecutionContext): Future[ABTestTask] = {
+        implicit executor: ExecutionContext
+    ): Future[ABTestTask] = {
       client.request[ABTestTask](query.build())
     }
   }
@@ -71,7 +75,8 @@ trait ABTestDsl {
   implicit object GetABTestsDefinitionExecutable
       extends Executable[GetABTestsDefinition, ABTestsResponse] {
     override def apply(client: AlgoliaClient, query: GetABTestsDefinition)(
-        implicit executor: ExecutionContext): Future[ABTestsResponse] = {
+        implicit executor: ExecutionContext
+    ): Future[ABTestsResponse] = {
       client.request[ABTestsResponse](query.build())
     }
   }
