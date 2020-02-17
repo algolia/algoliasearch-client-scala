@@ -40,7 +40,8 @@ lazy val root = project
 
 // Project dependencies
 libraryDependencies += "io.lemonlabs" %% "scala-uri" % "1.4.10"
-libraryDependencies += "org.asynchttpclient" % "async-http-client" % "2.10.4"
+libraryDependencies += "org.asynchttpclient" % "async-http-client" % "2.10.5"
+libraryDependencies += "io.netty" % "netty-resolver-dns" % "4.1.45.Final"
 libraryDependencies += "org.json4s" %% "json4s-ast" % "3.6.7"
 libraryDependencies += "org.json4s" %% "json4s-core" % "3.6.7"
 libraryDependencies += "org.json4s" %% "json4s-native" % "3.6.7"
