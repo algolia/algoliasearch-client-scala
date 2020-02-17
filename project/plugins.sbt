@@ -1,16 +1,5 @@
-//Coverage
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.0")
-addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.1.0")
-
-//Release
+addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.9.0")
+addSbtPlugin("de.heikoseeberger" % "sbt-header" % "5.4.0")
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.6")
-
-//Auto MIT Licence Header
-addSbtPlugin("de.heikoseeberger" % "sbt-header" % "2.0.0")
-
-//Auto version
-addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.7.0")
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2")
-
-//Formatter
-addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.6.8")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.1")
