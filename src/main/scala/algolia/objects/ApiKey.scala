@@ -25,12 +25,14 @@
 
 package algolia.objects
 
-case class ApiKey(validity: Option[Int] = None,
-                  maxQueriesPerIPPerHour: Option[Int] = None,
-                  maxHitsPerQuery: Option[Int] = None,
-                  acl: Option[Seq[Acl]] = None,
-                  indexes: Option[Seq[String]] = None,
-                  referers: Option[Seq[String]] = None,
-                  queryParameters: Option[String] = None,
-                  description: Option[String] = None,
-                  restrictSources: Option[String] = None)
+case class ApiKey(
+    validity: Option[Int] = None,
+    maxQueriesPerIPPerHour: Option[Int] = None,
+    maxHitsPerQuery: Option[Int] = None,
+    acl: Option[Seq[Acl]] = None,
+    indexes: Option[Seq[String]] = None,
+    referers: Option[Seq[String]] = None,
+    queryParameters: Option[String] = None,
+    description: Option[String] = None,
+    restrictSources: Option[String] = None
+)

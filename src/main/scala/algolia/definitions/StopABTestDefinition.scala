@@ -29,7 +29,8 @@ import algolia.http.{HttpPayload, POST}
 import algolia.objects.RequestOptions
 import org.json4s.Formats
 
-case class StopABTestDefinition(id: Int)(implicit val formats: Formats) extends Definition {
+case class StopABTestDefinition(id: Int)(implicit val formats: Formats)
+    extends Definition {
 
   type T = StopABTestDefinition
 

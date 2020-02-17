@@ -34,7 +34,8 @@ import org.json4s.native.Serialization._
 case class GetRuleDefinition(
     objectId: String,
     index: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = GetRuleDefinition
@@ -59,7 +60,8 @@ case class DeleteRuleDefinition(
     objectId: String,
     index: Option[String] = None,
     option: Option[ForwardToReplicas] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = DeleteRuleDefinition
@@ -93,7 +95,8 @@ case class DeleteRuleDefinition(
 case class ClearRulesDefinition(
     index: Option[String] = None,
     option: Option[ForwardToReplicas] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = ClearRulesDefinition
@@ -129,7 +132,8 @@ case class SaveRuleDefinition(
     rule: Rule,
     index: Option[String] = None,
     forwardToReplicas: Option[ForwardToReplicas] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = SaveRuleDefinition
@@ -167,7 +171,8 @@ case class BatchRulesDefinition(
     index: Option[String] = None,
     forwardToReplicas: Option[ForwardToReplicas] = None,
     clearExistingRules: Option[ClearExistingRules] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = BatchRulesDefinition
@@ -188,8 +193,12 @@ case class BatchRulesDefinition(
     val path = Seq("1", "indexes") ++ index ++ Seq("rules", "batch")
 
     var queryParameters = Map.empty[String, String]
-    forwardToReplicas.foreach(_ => queryParameters += ("forwardToReplicas" -> "true"))
-    clearExistingRules.foreach(_ => queryParameters += ("clearExistingRules" -> "true"))
+    forwardToReplicas.foreach(_ =>
+      queryParameters += ("forwardToReplicas" -> "true")
+    )
+    clearExistingRules.foreach(_ =>
+      queryParameters += ("clearExistingRules" -> "true")
+    )
 
     HttpPayload(
       POST,
@@ -205,7 +214,8 @@ case class BatchRulesDefinition(
 case class SearchRulesDefinition(
     indx: Option[String] = None,
     query: Option[QueryRules] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = SearchRulesDefinition
@@ -215,7 +225,8 @@ case class SearchRulesDefinition(
 
   def index(indx: String): SearchRulesDefinition = copy(indx = Some(indx))
 
-  def query(query: QueryRules): SearchRulesDefinition = copy(query = Some(query))
+  def query(query: QueryRules): SearchRulesDefinition =
+    copy(query = Some(query))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(

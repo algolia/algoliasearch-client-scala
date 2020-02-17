@@ -48,7 +48,8 @@ trait DeleteDsl {
     def objectId(objectId: String) =
       DeleteObjectDefinition(oid = Some(objectId))
 
-    def objectFromIndex(op: SafeDeleteObjectOperation) = SafeDeleteObjectDefinition(op)
+    def objectFromIndex(op: SafeDeleteObjectOperation) =
+      SafeDeleteObjectDefinition(op)
 
     //Object(s)
     def from(index: String) = DeleteObjectDefinition(index = Some(index))
@@ -67,29 +68,36 @@ trait DeleteDsl {
   implicit object DeleteObjectDefinitionExecutable
       extends Executable[DeleteObjectDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteObjectDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
   }
 
-  implicit object DeleteIndexDefinitionExecutable extends Executable[DeleteIndexDefinition, Task] {
+  implicit object DeleteIndexDefinitionExecutable
+      extends Executable[DeleteIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
   }
 
-  implicit object DeleteByDefinitionExecutable extends Executable[DeleteByDefinition, Task] {
+  implicit object DeleteByDefinitionExecutable
+      extends Executable[DeleteByDefinition, Task] {
     override def apply(client: AlgoliaClient, query: DeleteByDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
   }
 
   implicit object SafeDeleteObjectDefinitionExecutable
       extends Executable[SafeDeleteObjectDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: SafeDeleteObjectDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+    override def apply(
+        client: AlgoliaClient,
+        query: SafeDeleteObjectDefinition
+    )(implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
     }
   }

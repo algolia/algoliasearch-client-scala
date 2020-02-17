@@ -31,8 +31,10 @@ import algolia.objects.{IndexSettings, RequestOptions}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
 
-case class IndexSettingsDefinition(index: String, requestOptions: Option[RequestOptions] = None)(
-    implicit val formats: Formats)
+case class IndexSettingsDefinition(
+    index: String,
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = IndexSettingsDefinition
@@ -40,7 +42,9 @@ case class IndexSettingsDefinition(index: String, requestOptions: Option[Request
   def `with`(settings: IndexSettings) =
     IndexChangeSettingsDefinition(index, settings)
 
-  override def options(requestOptions: RequestOptions): IndexSettingsDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): IndexSettingsDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -59,12 +63,15 @@ case class IndexChangeSettingsDefinition(
     index: String,
     settings: IndexSettings,
     forward: Option[ForwardToReplicas] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = IndexChangeSettingsDefinition
 
-  override def options(requestOptions: RequestOptions): IndexChangeSettingsDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): IndexChangeSettingsDefinition =
     copy(requestOptions = Some(requestOptions))
 
   def and(forward: ForwardToReplicas): IndexChangeSettingsDefinition =

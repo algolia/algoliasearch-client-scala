@@ -183,12 +183,19 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("partial update") {
 
     it("should partial update") {
-      partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId")
+      partialUpdate from "index" `object` BasicObjectWithObjectID(
+        "name1",
+        1,
+        "myId"
+      )
     }
 
     it("should call API") {
-      (partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId"))
-        .build() should be(
+      (partialUpdate from "index" `object` BasicObjectWithObjectID(
+        "name1",
+        1,
+        "myId"
+      )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
@@ -205,11 +212,19 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("partial update create") {
 
     it("should partial update") {
-      partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId") createIfNotExists true
+      partialUpdate from "index" `object` BasicObjectWithObjectID(
+        "name1",
+        1,
+        "myId"
+      ) createIfNotExists true
     }
 
     it("should call API") {
-      (partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId") createIfNotExists true)
+      (partialUpdate from "index" `object` BasicObjectWithObjectID(
+        "name1",
+        1,
+        "myId"
+      ) createIfNotExists true)
         .build() should be(
         HttpPayload(
           POST,
@@ -227,11 +242,19 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("partial update no create") {
 
     it("should partial update") {
-      partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId") createIfNotExists false
+      partialUpdate from "index" `object` BasicObjectWithObjectID(
+        "name1",
+        1,
+        "myId"
+      ) createIfNotExists false
     }
 
     it("should call API") {
-      (partialUpdate from "index" `object` BasicObjectWithObjectID("name1", 1, "myId") createIfNotExists false)
+      (partialUpdate from "index" `object` BasicObjectWithObjectID(
+        "name1",
+        1,
+        "myId"
+      ) createIfNotExists false)
         .build() should be(
         HttpPayload(
           POST,
@@ -249,18 +272,22 @@ class PartialUpdateObjectTest extends AlgoliaTest {
   describe("partial update objects") {
 
     it("should partial update") {
-      partialUpdate from "index" objects Seq(BasicObjectWithObjectID("name1", 1, "myId"))
+      partialUpdate from "index" objects Seq(
+        BasicObjectWithObjectID("name1", 1, "myId")
+      )
     }
 
     it("should call API") {
-      (partialUpdate from "index" objects Seq(BasicObjectWithObjectID("name1", 1, "myId")))
-        .build() should be(
+      (partialUpdate from "index" objects Seq(
+        BasicObjectWithObjectID("name1", 1, "myId")
+      )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "*", "batch"),
           queryParameters = None,
           body = Some(
-            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObject"}]}"""),
+            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObject"}]}"""
+          ),
           isSearch = false,
           requestOptions = None
         )
@@ -273,19 +300,21 @@ class PartialUpdateObjectTest extends AlgoliaTest {
 
     it("should partial update") {
       partialUpdate from "index" createIfNotExists true objects Seq(
-        BasicObjectWithObjectID("name1", 1, "myId"))
+        BasicObjectWithObjectID("name1", 1, "myId")
+      )
     }
 
     it("should call API") {
       (partialUpdate from "index" createIfNotExists true objects Seq(
-        BasicObjectWithObjectID("name1", 1, "myId")))
-        .build() should be(
+        BasicObjectWithObjectID("name1", 1, "myId")
+      )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "*", "batch"),
           queryParameters = None,
           body = Some(
-            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObject"}]}"""),
+            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObject"}]}"""
+          ),
           isSearch = false,
           requestOptions = None
         )
@@ -298,19 +327,21 @@ class PartialUpdateObjectTest extends AlgoliaTest {
 
     it("should partial update") {
       partialUpdate from "index" createIfNotExists false objects Seq(
-        BasicObjectWithObjectID("name1", 1, "myId"))
+        BasicObjectWithObjectID("name1", 1, "myId")
+      )
     }
 
     it("should call API") {
       (partialUpdate from "index" createIfNotExists false objects Seq(
-        BasicObjectWithObjectID("name1", 1, "myId")))
-        .build() should be(
+        BasicObjectWithObjectID("name1", 1, "myId")
+      )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "*", "batch"),
           queryParameters = None,
           body = Some(
-            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObjectNoCreate"}]}"""),
+            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObjectNoCreate"}]}"""
+          ),
           isSearch = false,
           requestOptions = None
         )

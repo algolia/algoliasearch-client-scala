@@ -35,9 +35,14 @@ class RecommendationTest extends AlgoliaTest {
     it("should produce valid payload") {
       (set personalizationRecommendationStrategy (
         SetStrategyRequest(
-          Seq[EventsScoring](EventsScoring("buy", "conversion", 10),
-                             EventsScoring("add to cart", "conversion", 20)),
-          Seq[FacetsScoring](FacetsScoring("brand", 10), FacetsScoring("category", 20)),
+          Seq[EventsScoring](
+            EventsScoring("buy", "conversion", 10),
+            EventsScoring("add to cart", "conversion", 20)
+          ),
+          Seq[FacetsScoring](
+            FacetsScoring("brand", 10),
+            FacetsScoring("category", 20)
+          ),
           75
         )
       )).build() should be(
@@ -45,7 +50,8 @@ class RecommendationTest extends AlgoliaTest {
           POST,
           Seq("1", "strategies", "personalization"),
           body = Some(
-            "{\"eventsScoring\":[{\"eventName\":\"buy\",\"eventType\":\"conversion\",\"score\":10},{\"eventName\":\"add to cart\",\"eventType\":\"conversion\",\"score\":20}],\"facetsScoring\":[{\"facetName\":\"brand\",\"score\":10},{\"facetName\":\"category\",\"score\":20}],\"personalizationImpact\":75}"),
+            "{\"eventsScoring\":[{\"eventName\":\"buy\",\"eventType\":\"conversion\",\"score\":10},{\"eventName\":\"add to cart\",\"eventType\":\"conversion\",\"score\":20}],\"facetsScoring\":[{\"facetName\":\"brand\",\"score\":10},{\"facetName\":\"category\",\"score\":20}],\"personalizationImpact\":75}"
+          ),
           isSearch = false,
           isRecommendation = true,
           requestOptions = None
@@ -55,7 +61,8 @@ class RecommendationTest extends AlgoliaTest {
 
     it("should override default 'us' host") {
       val recommendationClient = new AlgoliaClient("appID", "apiKEY")
-      recommendationClient.recommendationHost = "https://recommendation.eu.algolia.com"
+      recommendationClient.recommendationHost =
+        "https://recommendation.eu.algolia.com"
       recommendationClient.recommendationHost shouldEqual "https://recommendation.eu.algolia.com"
     }
 

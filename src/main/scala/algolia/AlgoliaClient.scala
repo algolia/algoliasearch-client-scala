@@ -46,18 +46,25 @@ import scala.util.{Failure, Success, Try}
   * @param apiKey The API KEY of your Algolia account
   * @param customHeader Custom headers to add to every requests
   */
-class AlgoliaClient(applicationId: String,
-                    apiKey: String,
-                    customHeader: Map[String, String] = Map.empty,
-                    configuration: AlgoliaClientConfiguration = AlgoliaClientConfiguration.default,
-                    private[algolia] val utils: AlgoliaUtils = AlgoliaUtils) {
+class AlgoliaClient(
+    applicationId: String,
+    apiKey: String,
+    customHeader: Map[String, String] = Map.empty,
+    configuration: AlgoliaClientConfiguration =
+      AlgoliaClientConfiguration.default,
+    private[algolia] val utils: AlgoliaUtils = AlgoliaUtils
+) {
 
   if (applicationId == null || applicationId.isEmpty) {
-    throw new AlgoliaClientException(s"'applicationId' is probably too short: '$applicationId'")
+    throw new AlgoliaClientException(
+      s"'applicationId' is probably too short: '$applicationId'"
+    )
   }
 
   if (apiKey == null || apiKey.isEmpty) {
-    throw new AlgoliaClientException(s"'apiKey' is probably too short: '$apiKey'")
+    throw new AlgoliaClientException(
+      s"'apiKey' is probably too short: '$apiKey'"
+    )
   }
 
   final private val ALGOLIANET_COM_HOST = "algolianet.com"
@@ -68,20 +75,22 @@ class AlgoliaClient(applicationId: String,
   val indexingHosts: Seq[String] =
     s"https://$applicationId.$ALGOLIANET_HOST" +:
       utils.shuffle(
-      Seq(
-        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-      ))
+        Seq(
+          s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+        )
+      )
 
   val queryHosts: Seq[String] =
     s"https://$applicationId-dsn.$ALGOLIANET_HOST" +:
       utils.shuffle(
-      Seq(
-        s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
-        s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
-      ))
+        Seq(
+          s"https://$applicationId-1.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-2.$ALGOLIANET_COM_HOST",
+          s"https://$applicationId-3.$ALGOLIANET_COM_HOST"
+        )
+      )
 
   val analyticsHost: String = "https://analytics.algolia.com"
   val insightsHost: String = "https://insights.algolia.io"
@@ -106,21 +115,30 @@ class AlgoliaClient(applicationId: String,
   private[algolia] lazy val hostsStatuses =
     HostsStatuses(configuration, utils, queryHosts, indexingHosts)
 
-  def execute[QUERY, RESULT](query: QUERY)(implicit executable: Executable[QUERY, RESULT],
-                                           executor: ExecutionContext): Future[RESULT] =
+  def execute[QUERY, RESULT](query: QUERY)(
+      implicit executable: Executable[QUERY, RESULT],
+      executor: ExecutionContext
+  ): Future[RESULT] =
     executable(this, query)
 
-  def generateSecuredApiKey(privateApiKey: String,
-                            query: Query,
-                            userToken: Option[String] = None): String = {
+  def generateSecuredApiKey(
+      privateApiKey: String,
+      query: Query,
+      userToken: Option[String] = None
+  ): String = {
     val queryStr = query.copy(userToken = userToken).toParam
     val key = hmac(privateApiKey, queryStr)
 
-    new String(Base64.getEncoder.encode(s"$key$queryStr".getBytes(UTF8_CHARSET)))
+    new String(
+      Base64.getEncoder.encode(s"$key$queryStr".getBytes(UTF8_CHARSET))
+    )
   }
 
-  def getSecuredApiKeyRemainingValidity(securedApiKey: String): Option[Duration] = {
-    val decoded = new String(Base64.getDecoder.decode(securedApiKey), UTF8_CHARSET)
+  def getSecuredApiKeyRemainingValidity(
+      securedApiKey: String
+  ): Option[Duration] = {
+    val decoded =
+      new String(Base64.getDecoder.decode(securedApiKey), UTF8_CHARSET)
     val keyWithValidUntil: Regex = """validUntil=(\d{1,10})""".r.unanchored
 
     decoded match {
@@ -147,8 +165,9 @@ class AlgoliaClient(applicationId: String,
 
   val logger: Logger = LoggerFactory.getLogger("algoliasearch")
 
-  private[algolia] def request[T: Manifest](payload: HttpPayload)(
-      implicit executor: ExecutionContext): Future[T] = {
+  private[algolia] def request[T: Manifest](
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
     if (payload.isAnalytics) {
       requestAnalytics(payload)
     } else if (payload.isInsights) {
@@ -160,26 +179,32 @@ class AlgoliaClient(applicationId: String,
     }
   }
 
-  private[algolia] def requestAnalytics[T: Manifest](payload: HttpPayload)(
-      implicit executor: ExecutionContext): Future[T] = {
+  private[algolia] def requestAnalytics[T: Manifest](
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
     httpClient.request[T](analyticsHost, headers, payload).andThen {
       case Failure(e) =>
         logger.debug("Analytics API call failed", e)
-        Future.failed(new AlgoliaClientException("Analytics API call failed", e))
+        Future
+          .failed(new AlgoliaClientException("Analytics API call failed", e))
     }
   }
 
-  private[algolia] def requestRecommendation[T: Manifest](payload: HttpPayload)(
-      implicit executor: ExecutionContext): Future[T] = {
+  private[algolia] def requestRecommendation[T: Manifest](
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
     httpClient.request[T](recommendationHost, headers, payload).andThen {
       case Failure(e) =>
         logger.debug("Recommendation API call failed", e)
-        Future.failed(new AlgoliaClientException("Recommendation API call failed", e))
+        Future.failed(
+          new AlgoliaClientException("Recommendation API call failed", e)
+        )
     }
   }
 
-  private[algolia] def requestInsights[T: Manifest](payload: HttpPayload)(
-      implicit executor: ExecutionContext): Future[T] = {
+  private[algolia] def requestInsights[T: Manifest](
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
     httpClient.request[T](insightsHost, headers, payload).andThen {
       case Failure(e) =>
         logger.debug("Insights API call failed", e)
@@ -187,8 +212,9 @@ class AlgoliaClient(applicationId: String,
     }
   }
 
-  private[algolia] def requestSearch[T: Manifest](payload: HttpPayload)(
-      implicit executor: ExecutionContext): Future[T] = {
+  private[algolia] def requestSearch[T: Manifest](
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
     val hosts = if (payload.isSearch) {
       hostsStatuses.queryHostsThatAreUp()
     } else {

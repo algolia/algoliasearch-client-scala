@@ -29,7 +29,8 @@ import algolia.http.{GET, HttpPayload}
 import algolia.objects.RequestOptions
 import org.json4s.Formats
 
-case class GetABTestDefinition(id: Int)(implicit val formats: Formats) extends Definition {
+case class GetABTestDefinition(id: Int)(implicit val formats: Formats)
+    extends Definition {
 
   type T = GetABTestDefinition
 

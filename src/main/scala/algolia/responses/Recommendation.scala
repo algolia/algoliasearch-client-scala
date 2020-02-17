@@ -29,6 +29,8 @@ import algolia.objects.{EventsScoring, FacetsScoring}
 
 case class SetStrategyResponse(status: Int, message: String)
 
-case class GetStrategyResponse(eventsScoring: Option[Seq[EventsScoring]],
-                               facetsScoring: Option[Seq[FacetsScoring]],
-                               personalizationImpact: Option[Int])
+case class GetStrategyResponse(
+    eventsScoring: Option[Seq[EventsScoring]],
+    facetsScoring: Option[Seq[FacetsScoring]],
+    personalizationImpact: Option[Int]
+)

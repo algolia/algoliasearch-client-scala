@@ -47,7 +47,8 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
   @Deprecated
   def deleteByQuery[T <: ObjectID: Manifest](index: String, query: Query)(
       implicit duration: Duration,
-      executor: ExecutionContext): Future[Iterator[TasksMultipleIndex]] = {
+      executor: ExecutionContext
+  ): Future[Iterator[TasksMultipleIndex]] = {
     val res = browse[T](index, query).map { seq =>
       client.execute {
         delete from index objectIds seq.map(_.objectID)
@@ -59,13 +60,14 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
 
   def browse[T <: ObjectID: Manifest](index: String, query: Query)(
       implicit duration: Duration,
-      executor: ExecutionContext): Iterator[Seq[T]] = {
+      executor: ExecutionContext
+  ): Iterator[Seq[T]] = {
     var cursor: CursorState = CursorState.Init
 
     new Iterator[Seq[T]] {
       override def hasNext: Boolean = cursor match {
         case CursorState.Empty => false
-        case _ => true
+        case _                 => true
       }
 
       override def next(): Seq[T] = {
@@ -74,20 +76,27 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
         }
 
         val result = Await.result(future, duration)
-        cursor = result.cursor.fold[CursorState](CursorState.Empty)(CursorState.Full)
+        cursor =
+          result.cursor.fold[CursorState](CursorState.Empty)(CursorState.Full)
 
         result.asWithObjectID[T]
       }
     }
   }
 
-  def findObject[T <: ObjectID: Manifest](index: String,
-                                          searchQuery: Query,
-                                          predicate: T => Boolean,
-                                          paginate: Boolean = true)(
+  def findObject[T <: ObjectID: Manifest](
+      index: String,
+      searchQuery: Query,
+      predicate: T => Boolean,
+      paginate: Boolean = true
+  )(
       implicit duration: Duration,
-      executor: ExecutionContext): Option[HitsWithPosition[T]] = {
-    val res = Await.result(client.execute(search into index query searchQuery), duration)
+      executor: ExecutionContext
+  ): Option[HitsWithPosition[T]] = {
+    val res = Await.result(
+      client.execute(search into index query searchQuery),
+      duration
+    )
 
     if (res.page.isEmpty || res.nbPages.isEmpty) {
       return None
@@ -115,36 +124,51 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
 
   def exportSynonyms(index: String, hitsPerPage: Int = 1000)(
       implicit duration: Duration,
-      executor: ExecutionContext): Iterator[Seq[AbstractSynonym]] = {
-    exportIterator[SearchSynonymsDefinition, AbstractSynonym, SearchSynonymResult](hitsPerPage) {
-      page =>
-        AlgoliaDsl.search synonyms in index index query QuerySynonyms("",
-                                                                      page = Some(page),
-                                                                      hitsPerPage =
-                                                                        Some(hitsPerPage))
+      executor: ExecutionContext
+  ): Iterator[Seq[AbstractSynonym]] = {
+    exportIterator[
+      SearchSynonymsDefinition,
+      AbstractSynonym,
+      SearchSynonymResult
+    ](hitsPerPage) { page =>
+      AlgoliaDsl.search synonyms in index index query QuerySynonyms(
+        "",
+        page = Some(page),
+        hitsPerPage = Some(hitsPerPage)
+      )
     }
   }
 
-  def exportRules(index: String, hitsPerPage: Int = 999 /* bug in the rules, the timit is 999 */ )(
+  def exportRules(
+      index: String,
+      hitsPerPage: Int = 999 /* bug in the rules, the timit is 999 */
+  )(
       implicit duration: Duration,
-      executor: ExecutionContext): Iterator[Seq[Rule]] = {
-    exportIterator[SearchRulesDefinition, Rule, SearchRuleResult](hitsPerPage) { page =>
-      AlgoliaDsl.search rules in index index query QueryRules("",
-                                                              page = Some(page),
-                                                              hitsPerPage = Some(hitsPerPage))
+      executor: ExecutionContext
+  ): Iterator[Seq[Rule]] = {
+    exportIterator[SearchRulesDefinition, Rule, SearchRuleResult](hitsPerPage) {
+      page =>
+        AlgoliaDsl.search rules in index index query QueryRules(
+          "",
+          page = Some(page),
+          hitsPerPage = Some(hitsPerPage)
+        )
     }
   }
 
-  private def exportIterator[Q, A, B <: SearchHits[A]](hitsPerPage: Int)(query: Int => Q)(
+  private def exportIterator[Q, A, B <: SearchHits[A]](
+      hitsPerPage: Int
+  )(query: Int => Q)(
       implicit duration: Duration,
       executable: Executable[Q, B],
-      executor: ExecutionContext): Iterator[Seq[A]] = {
+      executor: ExecutionContext
+  ): Iterator[Seq[A]] = {
     var page: PageState = PageState.Init
 
     new Iterator[Seq[A]] {
       override def hasNext: Boolean = page match {
         case PageState.End => false
-        case _ => true
+        case _             => true
       }
 
       override def next(): Seq[A] = {

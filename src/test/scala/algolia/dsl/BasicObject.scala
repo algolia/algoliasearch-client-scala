@@ -29,4 +29,5 @@ import algolia.responses.ObjectID
 
 case class BasicObject(name: String, age: Int)
 
-case class BasicObjectWithObjectID(name: String, age: Int, objectID: String) extends ObjectID
+case class BasicObjectWithObjectID(name: String, age: Int, objectID: String)
+    extends ObjectID

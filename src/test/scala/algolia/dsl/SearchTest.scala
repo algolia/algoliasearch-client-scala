@@ -167,7 +167,8 @@ class SearchTest extends AlgoliaTest {
 
     it("should call the API") {
       (search into "indexName" facet "facetName" values "facetQuery" query Query(
-        query = Some("a"))).build() should be(
+        query = Some("a")
+      )).build() should be(
         HttpPayload(
           POST,
           List("1", "indexes", "indexName", "facets", "facetName", "query"),

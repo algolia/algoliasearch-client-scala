@@ -34,7 +34,8 @@ import org.json4s.{Extraction, Formats}
 
 case class BatchDefinition(
     definitions: Iterable[Definition],
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition
     with BatchOperationUtils {
 
@@ -53,11 +54,13 @@ case class BatchDefinition(
     )
   }
 
-  private def transform(definition: Definition): Iterable[BatchOperation[JValue]] = {
+  private def transform(
+      definition: Definition
+  ): Iterable[BatchOperation[JValue]] = {
     definition match {
       case IndexingDefinition(index, None, Some(obj), _) =>
         hasObjectId(obj) match {
-          case (true, o) => Iterable(UpdateObjectOperation(o, Some(index)))
+          case (true, o)  => Iterable(UpdateObjectOperation(o, Some(index)))
           case (false, o) => Iterable(AddObjectOperation(o, Some(index)))
         }
 
@@ -76,47 +79,78 @@ case class BatchDefinition(
       case DeleteIndexDefinition(index, _) =>
         Iterable(DeleteIndexOperation(index))
 
-      case PartialUpdateObjectOperationDefinition(operation,
-                                                  index,
-                                                  Some(objectId),
-                                                  Some(attribute),
-                                                  value,
-                                                  true,
-                                                  _) =>
+      case PartialUpdateObjectOperationDefinition(
+          operation,
+          index,
+          Some(objectId),
+          Some(attribute),
+          value,
+          true,
+          _
+          ) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
-        Iterable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
+        Iterable(
+          PartialUpdateObjectOperation(Extraction.decompose(body), index)
+        )
 
-      case PartialUpdateObjectOperationDefinition(operation,
-                                                  index,
-                                                  Some(objectId),
-                                                  Some(attribute),
-                                                  value,
-                                                  false,
-                                                  _) =>
+      case PartialUpdateObjectOperationDefinition(
+          operation,
+          index,
+          Some(objectId),
+          Some(attribute),
+          value,
+          false,
+          _
+          ) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> PartialUpdateObject(operation.name, value)
         )
-        Iterable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(body), index))
+        Iterable(
+          PartialUpdateObjectNoCreateOperation(
+            Extraction.decompose(body),
+            index
+          )
+        )
 
-      case PartialUpdateObjectDefinition(index, Some(objectId), Some(attribute), value, _) =>
+      case PartialUpdateObjectDefinition(
+          index,
+          Some(objectId),
+          Some(attribute),
+          value,
+          _
+          ) =>
         val body = Map(
           "objectID" -> objectId,
           attribute -> value
         )
-        Iterable(PartialUpdateObjectOperation(Extraction.decompose(body), index))
+        Iterable(
+          PartialUpdateObjectOperation(Extraction.decompose(body), index)
+        )
 
       case IndexingBatchDefinition(_, defs, _) =>
         defs.flatMap(transform)
 
-      case PartialUpdateOneObjectDefinition(index, Some(obj), createIfNotExists, _) =>
+      case PartialUpdateOneObjectDefinition(
+          index,
+          Some(obj),
+          createIfNotExists,
+          _
+          ) =>
         if (createIfNotExists) {
-          Iterable(PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index)))
+          Iterable(
+            PartialUpdateObjectOperation(Extraction.decompose(obj), Some(index))
+          )
         } else {
-          Iterable(PartialUpdateObjectNoCreateOperation(Extraction.decompose(obj), Some(index)))
+          Iterable(
+            PartialUpdateObjectNoCreateOperation(
+              Extraction.decompose(obj),
+              Some(index)
+            )
+          )
         }
     }
   }

@@ -61,7 +61,9 @@ class MoveIndexTest extends AlgoliaTest {
         HttpPayload(
           POST,
           Seq("1", "indexes", "toto", "operation"),
-          body = Some("""{"operation":"move","destination":"tata","scope":["settings"]}"""),
+          body = Some(
+            """{"operation":"move","destination":"tata","scope":["settings"]}"""
+          ),
           isSearch = false,
           requestOptions = None
         )

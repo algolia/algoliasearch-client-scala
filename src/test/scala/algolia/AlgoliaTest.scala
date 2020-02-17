@@ -31,7 +31,13 @@ import algolia.AlgoliaDsl._
 import algolia.objects.{Condition, Consequence, Rule}
 import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, EitherValues, Inside, Inspectors}
+import org.scalatest.{
+  BeforeAndAfter,
+  BeforeAndAfterAll,
+  EitherValues,
+  Inside,
+  Inspectors
+}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
@@ -48,7 +54,9 @@ object AlgoliaTest {
   lazy val apiKey: String = System.getenv("ALGOLIA_ADMIN_KEY_1")
   lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
     override val httpClient: AlgoliaHttpClient =
-      AlgoliaHttpClient(AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000))
+      AlgoliaHttpClient(
+        AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000)
+      )
   }
 }
 
@@ -64,12 +72,15 @@ class AlgoliaTest
     with EitherValues
     with Eventually {
 
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  implicit val ec: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 
   implicit val patience: PatienceConfig =
     PatienceConfig(timeout = Span(30000, Seconds), interval = Span(500, Millis))
 
-  def taskShouldBeCreated(task: Future[AlgoliaTask])(implicit ec: ExecutionContext): AlgoliaTask = {
+  def taskShouldBeCreated(
+      task: Future[AlgoliaTask]
+  )(implicit ec: ExecutionContext): AlgoliaTask = {
     whenReady(task) { result =>
       result.idToWaitFor should not be 0
       result
@@ -77,7 +88,8 @@ class AlgoliaTest
   }
 
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
-      implicit ec: ExecutionContext): Unit = {
+      implicit ec: ExecutionContext
+  ): Unit = {
     val t: AlgoliaTask = taskShouldBeCreated(task)
 
     val waiting = AlgoliaTest.client.execute {

@@ -33,12 +33,15 @@ import org.json4s.Formats
 
 case class SafeDeleteObjectDefinition(
     op: SafeDeleteObjectOperation,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = SafeDeleteObjectDefinition
 
-  override def options(requestOptions: RequestOptions): SafeDeleteObjectDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): SafeDeleteObjectDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =

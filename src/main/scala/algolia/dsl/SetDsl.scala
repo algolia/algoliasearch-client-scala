@@ -43,30 +43,45 @@ trait SetDsl {
 
     @deprecated(
       "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
-      "1.34")
-    def personalizationStrategy(s: Strategy): SetPersonalizationStrategyDefinition =
+      "1.34"
+    )
+    def personalizationStrategy(
+        s: Strategy
+    ): SetPersonalizationStrategyDefinition =
       SetPersonalizationStrategyDefinition(s)
 
     def personalizationRecommendationStrategy(
-        strategy: SetStrategyRequest): SetRecommendationStrategyDefinition =
+        strategy: SetStrategyRequest
+    ): SetRecommendationStrategyDefinition =
       SetRecommendationStrategyDefinition(strategy)
   }
 
   @deprecated(
     "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
-    "1.34")
+    "1.34"
+  )
   implicit object SetPersonalizationStrategyExecutable
-      extends Executable[SetPersonalizationStrategyDefinition, SetStrategyResult] {
-    override def apply(client: AlgoliaClient, query: SetPersonalizationStrategyDefinition)(
-        implicit executor: ExecutionContext): Future[SetStrategyResult] = {
+      extends Executable[
+        SetPersonalizationStrategyDefinition,
+        SetStrategyResult
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: SetPersonalizationStrategyDefinition
+    )(implicit executor: ExecutionContext): Future[SetStrategyResult] = {
       client.request[SetStrategyResult](query.build())
     }
   }
 
   implicit object SetPersonalizationRecommendationStrategy
-      extends Executable[SetRecommendationStrategyDefinition, SetStrategyResponse] {
-    override def apply(client: AlgoliaClient, query: SetRecommendationStrategyDefinition)(
-        implicit executor: ExecutionContext): Future[SetStrategyResponse] = {
+      extends Executable[
+        SetRecommendationStrategyDefinition,
+        SetStrategyResponse
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: SetRecommendationStrategyDefinition
+    )(implicit executor: ExecutionContext): Future[SetStrategyResponse] = {
       client.request[SetStrategyResponse](query.build())
     }
   }

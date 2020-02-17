@@ -26,7 +26,11 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl.Of
-import algolia.definitions.{ClearIndexDefinition, ClearRulesDefinition, ClearSynonymsDefinition}
+import algolia.definitions.{
+  ClearIndexDefinition,
+  ClearRulesDefinition,
+  ClearSynonymsDefinition
+}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -48,9 +52,11 @@ trait ClearDsl {
 
   }
 
-  implicit object ClearIndexDefinitionExecutable extends Executable[ClearIndexDefinition, Task] {
+  implicit object ClearIndexDefinitionExecutable
+      extends Executable[ClearIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
   }

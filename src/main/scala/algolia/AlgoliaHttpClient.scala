@@ -40,7 +40,9 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.{Failure, Success}
 
 case class AlgoliaHttpClient(
-    configuration: AlgoliaClientConfiguration = AlgoliaClientConfiguration.default) {
+    configuration: AlgoliaClientConfiguration =
+      AlgoliaClientConfiguration.default
+) {
 
   val asyncClientConfig: DefaultAsyncHttpClientConfig =
     new DefaultAsyncHttpClientConfig.Builder()
@@ -67,37 +69,44 @@ case class AlgoliaHttpClient(
     _httpClient.close()
   }
 
-  def request[T: Manifest](host: String, headers: Map[String, String], payload: HttpPayload)(
-      implicit executor: ExecutionContext): Future[T] = {
+  def request[T: Manifest](
+      host: String,
+      headers: Map[String, String],
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
     val request = payload(host, headers, dnsNameResolver)
     logger.debug(s"Trying $host")
     logger.debug(s"Query ${payload.toString(host)}")
     makeRequest(host, request, responseHandler)
   }
 
-  def responseHandler[T: Manifest]: AsyncCompletionHandler[T] = new AsyncCompletionHandler[T] {
+  def responseHandler[T: Manifest]: AsyncCompletionHandler[T] =
+    new AsyncCompletionHandler[T] {
 
-    override def onCompleted(response: Response): T = {
-      logger.debug("Response: {}", response.getResponseBody)
-      response.getStatusCode / 100 match {
-        case 2 =>
-          val a = fromJson(response).extract[T]
-          a
-        case 4 =>
-          throw `4XXAPIException`(response.getStatusCode,
-                                  (fromJson(response) \ "message").extract[String])
-        case _ =>
-          logger.debug(s"Got HTTP code ${response.getStatusCode}, no retry")
-          throw UnexpectedResponseException(response.getStatusCode)
+      override def onCompleted(response: Response): T = {
+        logger.debug("Response: {}", response.getResponseBody)
+        response.getStatusCode / 100 match {
+          case 2 =>
+            val a = fromJson(response).extract[T]
+            a
+          case 4 =>
+            throw `4XXAPIException`(
+              response.getStatusCode,
+              (fromJson(response) \ "message").extract[String]
+            )
+          case _ =>
+            logger.debug(s"Got HTTP code ${response.getStatusCode}, no retry")
+            throw UnexpectedResponseException(response.getStatusCode)
+        }
       }
     }
-  }
 
   def fromJson(r: Response): JValue =
     parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
 
   def makeRequest[T](host: String, request: Request, handler: AsyncHandler[T])(
-      implicit executor: ExecutionContext): Future[T] = {
+      implicit executor: ExecutionContext
+  ): Future[T] = {
     val javaFuture = _httpClient.executeRequest(request, handler)
     val promise = Promise[T]()
     val runnable = new java.lang.Runnable {
@@ -127,7 +136,9 @@ case class AlgoliaHttpClient(
 }
 
 case class `4XXAPIException`(code: Int, message: String)
-    extends Exception("Failure \"%s\", response status: %d".format(message, code))
+    extends Exception(
+      "Failure \"%s\", response status: %d".format(message, code)
+    )
 
 case class UnexpectedResponseException(code: Int)
     extends Exception("Unexpected response status: %d".format(code))

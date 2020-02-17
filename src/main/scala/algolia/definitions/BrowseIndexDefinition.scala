@@ -33,7 +33,8 @@ case class BrowseIndexDefinition(
     source: String,
     query: Option[Query] = None,
     cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = BrowseIndexDefinition

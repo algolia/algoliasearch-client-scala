@@ -32,33 +32,35 @@ private[algolia] trait SearchHits[A] {
   val hits: Seq[A]
 }
 
-case class SearchResult(hits: Seq[JObject],
-                        nbHits: Int,
-                        processingTimeMS: Int,
-                        hitsPerPage: Option[Int],
-                        page: Option[Int],
-                        nbPages: Option[Int],
-                        offset: Option[Int],
-                        length: Option[Int],
-                        facets: Option[Map[String, Map[String, Int]]],
-                        exhaustiveFacetsCount: Option[Boolean],
-                        exhaustiveNbHits: Option[Boolean],
-                        query: String,
-                        queryAfterRemoval: Option[String],
-                        params: String,
-                        message: Option[String],
-                        aroundLatLng: Option[String],
-                        automaticRadius: Option[String],
-                        facets_stats: Option[Map[String, Float]],
-                        // For getRankingInfo
-                        serverUsed: Option[String],
-                        parsedQuery: Option[String],
-                        appliedRules: Option[Map[String, String]],
-                        // For multiqueries
-                        processed: Option[Boolean],
-                        index: Option[String],
-                        // advanced
-                        explain: Option[Explain]) {
+case class SearchResult(
+    hits: Seq[JObject],
+    nbHits: Int,
+    processingTimeMS: Int,
+    hitsPerPage: Option[Int],
+    page: Option[Int],
+    nbPages: Option[Int],
+    offset: Option[Int],
+    length: Option[Int],
+    facets: Option[Map[String, Map[String, Int]]],
+    exhaustiveFacetsCount: Option[Boolean],
+    exhaustiveNbHits: Option[Boolean],
+    query: String,
+    queryAfterRemoval: Option[String],
+    params: String,
+    message: Option[String],
+    aroundLatLng: Option[String],
+    automaticRadius: Option[String],
+    facets_stats: Option[Map[String, Float]],
+    // For getRankingInfo
+    serverUsed: Option[String],
+    parsedQuery: Option[String],
+    appliedRules: Option[Map[String, String]],
+    // For multiqueries
+    processed: Option[Boolean],
+    index: Option[String],
+    // advanced
+    explain: Option[Explain]
+) {
 
   implicit val formats: Formats = org.json4s.DefaultFormats
 
@@ -68,7 +70,9 @@ case class SearchResult(hits: Seq[JObject],
 
   def asWithObjectID[T <: ObjectID: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  def getObjectPosition[T <: ObjectID: Manifest](objectID: String): Option[Int] =
+  def getObjectPosition[T <: ObjectID: Manifest](
+      objectID: String
+  ): Option[Int] =
     hits
       .map(_.extract[T])
       .zipWithIndex
@@ -79,7 +83,8 @@ case class SearchResult(hits: Seq[JObject],
 case class SearchSynonymResult(hits: Seq[AbstractSynonym], nbHits: Int)
     extends SearchHits[AbstractSynonym]
 
-case class SearchRuleResult(hits: Seq[Rule], nbHits: Int) extends SearchHits[Rule]
+case class SearchRuleResult(hits: Seq[Rule], nbHits: Int)
+    extends SearchHits[Rule]
 
 case class MultiQueriesResult(results: Seq[SearchResult])
 
@@ -103,21 +108,25 @@ trait Hit extends ObjectID {
 
 // TODO: IIRC fullyHighlighted may not be returned, so here we would need to
 // change its type from Boolean to Option[Boolean].
-case class HighlightResult(value: String,
-                           matchLevel: String,
-                           matchedWords: Iterable[String],
-                           fullyHighlighted: Option[Boolean])
+case class HighlightResult(
+    value: String,
+    matchLevel: String,
+    matchedWords: Iterable[String],
+    fullyHighlighted: Option[Boolean]
+)
 
 case class SnippetResult(value: String, matchLevel: String)
 
-case class RankingInfo(nbTypos: Int,
-                       firstMatchedWord: Int,
-                       proximityDistance: Int,
-                       userScore: Int,
-                       geoDistance: Int,
-                       geoPrecision: Int,
-                       nbExactWords: Int,
-                       words: Int,
-                       filters: Int,
-                       promoted: Option[Boolean],
-                       matchedGeoLocation: Option[Map[String, Float]])
+case class RankingInfo(
+    nbTypos: Int,
+    firstMatchedWord: Int,
+    proximityDistance: Int,
+    userScore: Int,
+    geoDistance: Int,
+    geoPrecision: Int,
+    nbExactWords: Int,
+    words: Int,
+    filters: Int,
+    promoted: Option[Boolean],
+    matchedGeoLocation: Option[Map[String, Float]]
+)

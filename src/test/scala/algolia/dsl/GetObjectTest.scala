@@ -43,13 +43,15 @@ class GetObjectTest extends AlgoliaTest {
 
     it("should call API") {
       val payload =
-        HttpPayload(GET,
-                    Seq("1", "indexes", "test", "myId"),
-                    queryParameters = Some(Map("attributesToRetrieve" -> "a,b")),
-                    isSearch = true,
-                    requestOptions = None)
-      (get objectId "myId" from "test" attributesToRetrieve Seq("a", "b")).build() should be(
-        payload)
+        HttpPayload(
+          GET,
+          Seq("1", "indexes", "test", "myId"),
+          queryParameters = Some(Map("attributesToRetrieve" -> "a,b")),
+          isSearch = true,
+          requestOptions = None
+        )
+      (get objectId "myId" from "test" attributesToRetrieve Seq("a", "b"))
+        .build() should be(payload)
     }
 
   }
@@ -76,12 +78,16 @@ class GetObjectTest extends AlgoliaTest {
         """.stripMargin.split("\n").map(_.trim).mkString
 
       val payload =
-        HttpPayload(POST,
-                    Seq("1", "indexes", "*", "objects"),
-                    body = Some(body),
-                    isSearch = true,
-                    requestOptions = None)
-      (get from "test" objectIds Seq("myId1", "myId2")).build() should be(payload)
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "*", "objects"),
+          body = Some(body),
+          isSearch = true,
+          requestOptions = None
+        )
+      (get from "test" objectIds Seq("myId1", "myId2")).build() should be(
+        payload
+      )
     }
 
   }

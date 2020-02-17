@@ -41,9 +41,11 @@ trait LogsDsl {
   @deprecated("use getLogs", "1.27.1")
   def logs() = LogsDefinition()
 
-  implicit object LogsDefinitionExecutable extends Executable[LogsDefinition, Logs] {
+  implicit object LogsDefinitionExecutable
+      extends Executable[LogsDefinition, Logs] {
     override def apply(client: AlgoliaClient, query: LogsDefinition)(
-        implicit executor: ExecutionContext): Future[Logs] = {
+        implicit executor: ExecutionContext
+    ): Future[Logs] = {
       client.request[Logs](query.build())
     }
   }

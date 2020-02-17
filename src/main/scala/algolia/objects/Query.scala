@@ -28,93 +28,94 @@ package algolia.objects
 import java.net.URLEncoder
 
 case class Query(
-                 /* Advanced */
-                 distinct: Option[Distinct] = None,
-                 getRankingInfo: Option[Boolean] = None,
-                 numericFilters: Option[Seq[String]] = None,
-                 tagFilters: Option[Seq[String]] = None,
-                 analytics: Option[Boolean] = None,
-                 analyticsTags: Option[Seq[String]] = None,
-                 synonyms: Option[Boolean] = None,
-                 replaceSynonymsInHighlight: Option[Boolean] = None,
-                 minProximity: Option[Int] = None,
-                 responseFields: Option[Seq[String]] = None,
-                 maxFacetHits: Option[Int] = None,
-                 percentileComputation: Option[Boolean] = None,
-                 queryLanguages: Option[Seq[String]] = None,
-                 enableABTest: Option[Boolean] = None,
-                 explain: Option[Seq[String]] = None,
-                 /* Attributes */
-                 attributesToRetrieve: Option[Seq[String]] = None,
-                 restrictSearchableAttributes: Option[Seq[String]] = None,
-                 /* Filtering faceting */
-                 filters: Option[String] = None,
-                 facets: Option[Seq[String]] = None,
-                 maxValuesPerFacet: Option[Int] = None,
-                 facetFilters: Option[Seq[String]] = None,
-                 facetingAfterDistinct: Option[Boolean] = None,
-                 sortFacetValuesBy: Option[String] = None,
-                 /* Geo Search */
-                 aroundLatLng: Option[AroundLatLng] = None,
-                 aroundLatLngViaIP: Option[Boolean] = None,
-                 aroundRadius: Option[AroundRadius] = None,
-                 aroundPrecision: Option[Int] = None,
-                 minimumAroundRadius: Option[Int] = None,
-                 insideBoundingBox: Option[Seq[InsideBoundingBox]] = None,
-                 insidePolygon: Option[Seq[InsidePolygon]] = None,
-                 /* Highlighting Snippeting */
-                 attributesToHighlight: Option[Seq[String]] = None,
-                 attributesToSnippet: Option[Seq[String]] = None,
-                 highlightPreTag: Option[String] = None,
-                 highlightPostTag: Option[String] = None,
-                 snippetEllipsisText: Option[String] = None,
-                 restrictHighlightAndSnippetArrays: Option[Boolean] = None,
-                 /* Pagination */
-                 page: Option[Int] = None,
-                 hitsPerPage: Option[Int] = None,
-                 offset: Option[Int] = None,
-                 length: Option[Int] = None,
-                 /* Performance */
-                 //Nothing in Query
+    /* Advanced */
+    distinct: Option[Distinct] = None,
+    getRankingInfo: Option[Boolean] = None,
+    numericFilters: Option[Seq[String]] = None,
+    tagFilters: Option[Seq[String]] = None,
+    analytics: Option[Boolean] = None,
+    analyticsTags: Option[Seq[String]] = None,
+    synonyms: Option[Boolean] = None,
+    replaceSynonymsInHighlight: Option[Boolean] = None,
+    minProximity: Option[Int] = None,
+    responseFields: Option[Seq[String]] = None,
+    maxFacetHits: Option[Int] = None,
+    percentileComputation: Option[Boolean] = None,
+    queryLanguages: Option[Seq[String]] = None,
+    enableABTest: Option[Boolean] = None,
+    explain: Option[Seq[String]] = None,
+    /* Attributes */
+    attributesToRetrieve: Option[Seq[String]] = None,
+    restrictSearchableAttributes: Option[Seq[String]] = None,
+    /* Filtering faceting */
+    filters: Option[String] = None,
+    facets: Option[Seq[String]] = None,
+    maxValuesPerFacet: Option[Int] = None,
+    facetFilters: Option[Seq[String]] = None,
+    facetingAfterDistinct: Option[Boolean] = None,
+    sortFacetValuesBy: Option[String] = None,
+    /* Geo Search */
+    aroundLatLng: Option[AroundLatLng] = None,
+    aroundLatLngViaIP: Option[Boolean] = None,
+    aroundRadius: Option[AroundRadius] = None,
+    aroundPrecision: Option[Int] = None,
+    minimumAroundRadius: Option[Int] = None,
+    insideBoundingBox: Option[Seq[InsideBoundingBox]] = None,
+    insidePolygon: Option[Seq[InsidePolygon]] = None,
+    /* Highlighting Snippeting */
+    attributesToHighlight: Option[Seq[String]] = None,
+    attributesToSnippet: Option[Seq[String]] = None,
+    highlightPreTag: Option[String] = None,
+    highlightPostTag: Option[String] = None,
+    snippetEllipsisText: Option[String] = None,
+    restrictHighlightAndSnippetArrays: Option[Boolean] = None,
+    /* Pagination */
+    page: Option[Int] = None,
+    hitsPerPage: Option[Int] = None,
+    offset: Option[Int] = None,
+    length: Option[Int] = None,
+    /* Performance */
+    //Nothing in Query
 
-                 /* Query rules */
-                 enableRules: Option[Boolean] = None,
-                 ruleContexts: Option[Seq[String]] = None,
-                 /* Query strategy */
-                 queryType: Option[QueryType] = None,
-                 removeWordsIfNoResults: Option[RemoveWordsIfNoResults] = None,
-                 advancedSyntax: Option[Boolean] = None,
-                 advancedSyntaxFeatures: Option[Seq[String]] = None,
-                 optionalWords: Option[Seq[String]] = None,
-                 removeStopWords: Option[RemoveStopWords] = None,
-                 disableExactOnAttributes: Option[Seq[String]] = None,
-                 exactOnSingleWordQuery: Option[Seq[String]] = None,
-                 alternativesAsExact: Option[Seq[String]] = None,
-                 /* Ranking */
-                 //Nothing in Query
+    /* Query rules */
+    enableRules: Option[Boolean] = None,
+    ruleContexts: Option[Seq[String]] = None,
+    /* Query strategy */
+    queryType: Option[QueryType] = None,
+    removeWordsIfNoResults: Option[RemoveWordsIfNoResults] = None,
+    advancedSyntax: Option[Boolean] = None,
+    advancedSyntaxFeatures: Option[Seq[String]] = None,
+    optionalWords: Option[Seq[String]] = None,
+    removeStopWords: Option[RemoveStopWords] = None,
+    disableExactOnAttributes: Option[Seq[String]] = None,
+    exactOnSingleWordQuery: Option[Seq[String]] = None,
+    alternativesAsExact: Option[Seq[String]] = None,
+    /* Ranking */
+    //Nothing in Query
 
-                 /* Search */
-                 query: Option[String] = None,
-                 private[algolia] val facetQuery: Option[String] = None,
-                 similarQuery: Option[String] = None,
-                 /* Typos */
-                 minWordSizefor1Typo: Option[Int] = None,
-                 minWordSizefor2Typos: Option[Int] = None,
-                 typoTolerance: Option[TypoTolerance] = None,
-                 allowTyposOnNumericTokens: Option[Boolean] = None,
-                 ignorePlurals: Option[IgnorePlurals] = None,
-                 disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
-                 /* Secured API Keys */
-                 userToken: Option[String] = None,
-                 validUntil: Option[Int] = None,
-                 restrictIndices: Option[Seq[String]] = None,
-                 restrictSources: Option[String] = None,
-                 /* Browse */
-                 cursor: Option[String] = None,
-                 /* Personalization */
-                 enablePersonalization: Option[Boolean] = None,
-                 /* CUSTOM */
-                 customParameters: Option[Map[String, String]] = None) {
+    /* Search */
+    query: Option[String] = None,
+    private[algolia] val facetQuery: Option[String] = None,
+    similarQuery: Option[String] = None,
+    /* Typos */
+    minWordSizefor1Typo: Option[Int] = None,
+    minWordSizefor2Typos: Option[Int] = None,
+    typoTolerance: Option[TypoTolerance] = None,
+    allowTyposOnNumericTokens: Option[Boolean] = None,
+    ignorePlurals: Option[IgnorePlurals] = None,
+    disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
+    /* Secured API Keys */
+    userToken: Option[String] = None,
+    validUntil: Option[Int] = None,
+    restrictIndices: Option[Seq[String]] = None,
+    restrictSources: Option[String] = None,
+    /* Browse */
+    cursor: Option[String] = None,
+    /* Personalization */
+    enablePersonalization: Option[Boolean] = None,
+    /* CUSTOM */
+    customParameters: Option[Map[String, String]] = None
+) {
 
   def toParam: String = {
     toQueryParam
@@ -133,7 +134,9 @@ case class Query(
       "analytics" -> analytics.map(_.toString),
       "analyticsTags" -> analyticsTags.map(_.mkString(",")),
       "synonyms" -> synonyms.map(_.toString),
-      "replaceSynonymsInHighlight" -> replaceSynonymsInHighlight.map(_.toString),
+      "replaceSynonymsInHighlight" -> replaceSynonymsInHighlight.map(
+        _.toString
+      ),
       "minProximity" -> minProximity.map(_.toString),
       "responseFields" -> responseFields.map(_.mkString(",")),
       "maxFacetHits" -> maxFacetHits.map(_.toString),
@@ -141,7 +144,9 @@ case class Query(
       "queryLanguages" -> queryLanguages.map(_.mkString(",")),
       /* Attributes */
       "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
-      "restrictSearchableAttributes" -> restrictSearchableAttributes.map(_.mkString(",")),
+      "restrictSearchableAttributes" -> restrictSearchableAttributes.map(
+        _.mkString(",")
+      ),
       /* Filtering faceting */
       "filters" -> filters,
       "facets" -> facets.map(_.mkString(",")),
@@ -155,15 +160,20 @@ case class Query(
       "aroundRadius" -> aroundRadius.map(_.name),
       "aroundPrecision" -> aroundPrecision.map(_.toString),
       "minimumAroundRadius" -> minimumAroundRadius.map(_.toString),
-      "insideBoundingBox" -> insideBoundingBox.map(e => s"[${e.map(_.toString).mkString(",")}]"),
-      "insidePolygon" -> insidePolygon.map(e => s"[${e.map(_.toString).mkString(",")}]"),
+      "insideBoundingBox" -> insideBoundingBox.map(e =>
+        s"[${e.map(_.toString).mkString(",")}]"
+      ),
+      "insidePolygon" -> insidePolygon.map(e =>
+        s"[${e.map(_.toString).mkString(",")}]"
+      ),
       /* Highlighting Snippeting */
       "attributesToHighlight" -> attributesToHighlight.map(_.mkString(",")),
       "attributesToSnippet" -> attributesToSnippet.map(_.mkString(",")),
       "highlightPreTag" -> highlightPreTag,
       "highlightPostTag" -> highlightPostTag,
       "snippetEllipsisText" -> snippetEllipsisText,
-      "restrictHighlightAndSnippetArrays" -> restrictHighlightAndSnippetArrays.map(_.toString),
+      "restrictHighlightAndSnippetArrays" -> restrictHighlightAndSnippetArrays
+        .map(_.toString),
       /* Pagination */
       "page" -> page.map(_.toString),
       "hitsPerPage" -> hitsPerPage.map(_.toString),
@@ -182,7 +192,9 @@ case class Query(
       "advancedSyntaxFeatures" -> advancedSyntaxFeatures.map(_.mkString(",")),
       "optionalWords" -> optionalWords.map(_.mkString(",")),
       "removeStopWords" -> removeStopWords.map(_.value),
-      "disableExactOnAttributes" -> disableExactOnAttributes.map(_.mkString(",")),
+      "disableExactOnAttributes" -> disableExactOnAttributes.map(
+        _.mkString(",")
+      ),
       "exactOnSingleWordQuery" -> exactOnSingleWordQuery.map(_.mkString(",")),
       "alternativesAsExact" -> alternativesAsExact.map(_.mkString(",")),
       /* Ranking */
@@ -197,7 +209,8 @@ case class Query(
       "typoTolerance" -> typoTolerance.map(_.name),
       "allowTyposOnNumericTokens" -> allowTyposOnNumericTokens.map(_.toString),
       "ignorePlurals" -> ignorePlurals.map(_.value),
-      "disableTypoToleranceOnAttributes" -> disableTypoToleranceOnAttributes.map(_.mkString(",")),
+      "disableTypoToleranceOnAttributes" -> disableTypoToleranceOnAttributes
+        .map(_.mkString(",")),
       /* Secured API Keys */
       "userToken" -> userToken,
       "validUntil" -> validUntil.map(_.toString),

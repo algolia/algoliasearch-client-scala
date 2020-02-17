@@ -46,7 +46,8 @@ trait BrowseDsl {
   implicit object BrowseIndexDefinitionExecutable
       extends Executable[BrowseIndexDefinition, BrowseResult] {
     override def apply(client: AlgoliaClient, query: BrowseIndexDefinition)(
-        implicit executor: ExecutionContext): Future[BrowseResult] = {
+        implicit executor: ExecutionContext
+    ): Future[BrowseResult] = {
       client.request[BrowseResult](query.build())
     }
   }

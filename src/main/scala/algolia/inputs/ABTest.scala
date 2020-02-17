@@ -29,9 +29,15 @@ import java.time.LocalDateTime
 
 import algolia.objects.Query
 
-case class ABTest(name: String, variants: Seq[ABTestVariant], endAt: LocalDateTime)
+case class ABTest(
+    name: String,
+    variants: Seq[ABTestVariant],
+    endAt: LocalDateTime
+)
 
-case class ABTestVariant(index: String,
-                         trafficPercentage: Int,
-                         description: Option[String] = None,
-                         customSearchParameters: Option[Query] = None)
+case class ABTestVariant(
+    index: String,
+    trafficPercentage: Int,
+    description: Option[String] = None,
+    customSearchParameters: Option[Query] = None
+)

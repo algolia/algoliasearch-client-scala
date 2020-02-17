@@ -71,8 +71,10 @@ class SynonymIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(res2, indexToSynonym)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms("altcorrection1",
-                                                                    hitsPerPage = Some(10))
+        search synonyms in index indexToSynonym query QuerySynonyms(
+          "altcorrection1",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -100,7 +102,10 @@ class SynonymIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(d, indexToSynonym)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms("", hitsPerPage = Some(10))
+        search synonyms in index indexToSynonym query QuerySynonyms(
+          "",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -128,7 +133,10 @@ class SynonymIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(d, indexToSynonym)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms("", hitsPerPage = Some(10))
+        search synonyms in index indexToSynonym query QuerySynonyms(
+          "",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>
@@ -149,7 +157,10 @@ class SynonymIntegrationTest extends AlgoliaTest {
       taskShouldBeCreatedAndWaitForIt(res1, indexToSynonym)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms("", hitsPerPage = Some(10))
+        search synonyms in index indexToSynonym query QuerySynonyms(
+          "",
+          hitsPerPage = Some(10)
+        )
       }
 
       whenReady(s) { res =>

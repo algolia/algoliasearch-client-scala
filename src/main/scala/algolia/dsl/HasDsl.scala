@@ -37,15 +37,18 @@ trait HasDsl {
   implicit val formats: Formats
 
   case object has {
-    def pendingMappings(pending: Boolean) = HadPendingMappingsDefinition(pending)
+    def pendingMappings(pending: Boolean) =
+      HadPendingMappingsDefinition(pending)
 
     def pendingMappings() = HadPendingMappingsDefinition()
   }
 
   implicit object HadPendingMappingsDefinitionExecutable
       extends Executable[HadPendingMappingsDefinition, HasPendingMappings] {
-    override def apply(client: AlgoliaClient, query: HadPendingMappingsDefinition)(
-        implicit executor: ExecutionContext): Future[HasPendingMappings] = {
+    override def apply(
+        client: AlgoliaClient,
+        query: HadPendingMappingsDefinition
+    )(implicit executor: ExecutionContext): Future[HasPendingMappings] = {
       client.request[HasPendingMappings](query.build())
     }
   }

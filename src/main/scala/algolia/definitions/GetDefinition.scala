@@ -35,7 +35,8 @@ case class GetObjectDefinition(
     index: Option[String] = None,
     oid: Option[String] = None,
     attributesToRetrieve: Iterable[String] = Iterable.empty,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = GetObjectDefinition
@@ -48,7 +49,9 @@ case class GetObjectDefinition(
   def objectId(objectId: String): GetObjectDefinition =
     copy(oid = Some(objectId))
 
-  def attributesToRetrieve(attributesToRetrieve: Iterable[String]): GetObjectDefinition =
+  def attributesToRetrieve(
+      attributesToRetrieve: Iterable[String]
+  ): GetObjectDefinition =
     copy(attributesToRetrieve = attributesToRetrieve)
 
   override def options(requestOptions: RequestOptions): GetObjectDefinition =
@@ -61,7 +64,8 @@ case class GetObjectDefinition(
       Some(
         Map(
           "attributesToRetrieve" -> attributesToRetrieve.mkString(",")
-        ))
+        )
+      )
     }
 
     HttpPayload(
@@ -77,7 +81,8 @@ case class GetObjectDefinition(
 case class GetObjectsDefinition(
     index: Option[String],
     oids: Seq[String] = Seq(),
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = GetObjectsDefinition

@@ -46,16 +46,20 @@ trait AssignDsl {
 
   }
 
-  implicit object AssignUserIDExecutable extends Executable[AssignUserIDDefinition, Created] {
+  implicit object AssignUserIDExecutable
+      extends Executable[AssignUserIDDefinition, Created] {
     override def apply(client: AlgoliaClient, query: AssignUserIDDefinition)(
-        implicit executor: ExecutionContext): Future[Created] = {
+        implicit executor: ExecutionContext
+    ): Future[Created] = {
       client.request[Created](query.build())
     }
   }
 
-  implicit object AssignUserIDsExecutable extends Executable[AssignUserIDsDefinition, Created] {
+  implicit object AssignUserIDsExecutable
+      extends Executable[AssignUserIDsDefinition, Created] {
     override def apply(client: AlgoliaClient, query: AssignUserIDsDefinition)(
-        implicit executor: ExecutionContext): Future[Created] = {
+        implicit executor: ExecutionContext
+    ): Future[Created] = {
       client.request[Created](query.build())
     }
   }

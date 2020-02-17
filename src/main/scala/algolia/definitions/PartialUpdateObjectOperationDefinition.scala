@@ -63,7 +63,8 @@ case class PartialUpdateObjectOperationDefinition(
     attribute: Option[String] = None,
     value: Option[Any] = None,
     createIfNotExists: Boolean = true,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = PartialUpdateObjectOperationDefinition
@@ -87,10 +88,13 @@ case class PartialUpdateObjectOperationDefinition(
     copy(index = Some(index))
 
   def createIfNotExists(
-      createIfNotExists: Boolean = false): PartialUpdateObjectOperationDefinition =
+      createIfNotExists: Boolean = false
+  ): PartialUpdateObjectOperationDefinition =
     copy(createIfNotExists = createIfNotExists)
 
-  override def options(requestOptions: RequestOptions): PartialUpdateObjectOperationDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): PartialUpdateObjectOperationDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -121,7 +125,8 @@ case class PartialUpdateObjectDefinition(
     objectId: Option[String] = None,
     attribute: Option[String] = None,
     value: Option[Any] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = PartialUpdateObjectDefinition
@@ -135,7 +140,9 @@ case class PartialUpdateObjectDefinition(
   def from(index: String): PartialUpdateObjectDefinition =
     copy(index = Some(index))
 
-  override def options(requestOptions: RequestOptions): PartialUpdateObjectDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): PartialUpdateObjectDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -158,7 +165,8 @@ case class PartialUpdateOneObjectDefinition(
     index: String,
     `object`: Option[ObjectID] = None,
     createIfNotExists: Boolean = true,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
   override type T = PartialUpdateOneObjectDefinition
 
@@ -179,10 +187,14 @@ case class PartialUpdateOneObjectDefinition(
     )
   }
 
-  def createIfNotExists(createIfNotExists: Boolean = false): PartialUpdateOneObjectDefinition =
+  def createIfNotExists(
+      createIfNotExists: Boolean = false
+  ): PartialUpdateOneObjectDefinition =
     copy(createIfNotExists = createIfNotExists)
 
-  override def options(requestOptions: RequestOptions): PartialUpdateOneObjectDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): PartialUpdateOneObjectDefinition =
     copy(requestOptions = Some(requestOptions))
 
   def `object`[T <: ObjectID](obj: T): PartialUpdateOneObjectDefinition =
@@ -191,7 +203,13 @@ case class PartialUpdateOneObjectDefinition(
   def objects[T <: ObjectID](objects: Iterable[T]): BatchDefinition =
     BatchDefinition(
       objects.map(o =>
-        PartialUpdateOneObjectDefinition(index, Some(o), createIfNotExists, requestOptions)),
+        PartialUpdateOneObjectDefinition(
+          index,
+          Some(o),
+          createIfNotExists,
+          requestOptions
+        )
+      ),
       requestOptions
     )
 

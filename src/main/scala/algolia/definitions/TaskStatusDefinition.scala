@@ -28,10 +28,11 @@ package algolia.definitions
 import algolia.http.{GET, HttpPayload}
 import algolia.objects.RequestOptions
 
-case class TaskStatusDefinition(taskId: Long,
-                                index: Option[String] = None,
-                                requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class TaskStatusDefinition(
+    taskId: Long,
+    index: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = TaskStatusDefinition
 

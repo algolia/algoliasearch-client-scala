@@ -33,7 +33,8 @@ import org.json4s.native.Serialization.write
 
 case class AssignUserIDDefinition(
     assignment: UserIDAssignment,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = AssignUserIDDefinition
@@ -45,7 +46,7 @@ case class AssignUserIDDefinition(
     val extraHeaders = Map("X-Algolia-User-ID" -> assignment.userID)
     val newRequestOptions = requestOptions match {
       case Some(opts) => opts.addExtraHeaders(extraHeaders)
-      case None => RequestOptions(extraHeaders = Some(extraHeaders))
+      case None       => RequestOptions(extraHeaders = Some(extraHeaders))
     }
 
     val body = Map(
@@ -65,12 +66,15 @@ case class AssignUserIDDefinition(
 
 case class AssignUserIDsDefinition(
     assignment: UserIDsAssignment,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = AssignUserIDsDefinition
 
-  override def options(requestOptions: RequestOptions): AssignUserIDsDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): AssignUserIDsDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -106,8 +110,10 @@ case class GetTopUserIDDefinition(requestOptions: Option[RequestOptions] = None)
     )
 }
 
-case class GetUserIDDefinition(userID: String, requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class GetUserIDDefinition(
+    userID: String,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   override type T = GetUserIDDefinition
 
@@ -146,7 +152,8 @@ case class ListClustersDefinition(requestOptions: Option[RequestOptions] = None)
 case class ListUserIDsDefinition(
     page: Int = 0,
     hitsPerPage: Int = 20,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = ListUserIDsDefinition
@@ -177,8 +184,10 @@ case class ListUserIDsDefinition(
 
 }
 
-case class RemoveUserIDDefinition(userID: String, requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class RemoveUserIDDefinition(
+    userID: String,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   override type T = RemoveUserIDDefinition
 
@@ -189,7 +198,7 @@ case class RemoveUserIDDefinition(userID: String, requestOptions: Option[Request
     val extraHeaders = Map("X-Algolia-User-ID" -> userID)
     val newRequestOptions = requestOptions match {
       case Some(opts) => opts.addExtraHeaders(extraHeaders)
-      case None => RequestOptions(extraHeaders = Some(extraHeaders))
+      case None       => RequestOptions(extraHeaders = Some(extraHeaders))
     }
 
     HttpPayload(
@@ -204,15 +213,20 @@ case class RemoveUserIDDefinition(userID: String, requestOptions: Option[Request
 
 case class HadPendingMappingsDefinition(
     pending: Boolean = false,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = HadPendingMappingsDefinition
 
-  override def options(requestOptions: RequestOptions): HadPendingMappingsDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): HadPendingMappingsDefinition =
     copy(requestOptions = Some(requestOptions))
 
-  val queryParameters: Option[Map[String, String]] = Some(Map("getClusters" -> pending.toString))
+  val queryParameters: Option[Map[String, String]] = Some(
+    Map("getClusters" -> pending.toString)
+  )
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
@@ -231,7 +245,8 @@ case class SearchUserIDDefinition(
     cluster: String = "",
     page: Int = 0,
     hitsPerPage: Int = 20,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = SearchUserIDDefinition

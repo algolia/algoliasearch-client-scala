@@ -68,7 +68,8 @@ class SaveObjectTest extends AlgoliaTest {
               POST,
               List("1", "indexes", "toto", "batch"),
               body = Some(
-                """{"requests":[{"body":{"name":"algolia","age":2},"action":"addObject"}]}"""),
+                """{"requests":[{"body":{"name":"algolia","age":2},"action":"addObject"}]}"""
+              ),
               isSearch = false,
               requestOptions = None
             )
@@ -76,13 +77,15 @@ class SaveObjectTest extends AlgoliaTest {
         }
 
         it("with objectID should call API ") {
-          (index into "toto" objects Seq(BasicObjectWithObjectID("algolia", 2, "id")))
-            .build() should be(
+          (index into "toto" objects Seq(
+            BasicObjectWithObjectID("algolia", 2, "id")
+          )).build() should be(
             HttpPayload(
               POST,
               List("1", "indexes", "toto", "batch"),
               body = Some(
-                """{"requests":[{"body":{"name":"algolia","age":2,"objectID":"id"},"action":"updateObject"}]}"""),
+                """{"requests":[{"body":{"name":"algolia","age":2,"objectID":"id"},"action":"updateObject"}]}"""
+              ),
               isSearch = false,
               requestOptions = None
             )
@@ -127,7 +130,8 @@ class SaveObjectTest extends AlgoliaTest {
               POST,
               List("1", "indexes", "toto", "batch"),
               body = Some(
-                """{"requests":[{"body":{"objectID":"1","name":"algolia","age":2},"action":"updateObject"}]}"""),
+                """{"requests":[{"body":{"objectID":"1","name":"algolia","age":2},"action":"updateObject"}]}"""
+              ),
               isSearch = false,
               requestOptions = None
             )

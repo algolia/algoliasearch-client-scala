@@ -177,7 +177,9 @@ class IndicesIntegrationTest extends AlgoliaTest {
 
     whenReady(f.failed) { e =>
       e shouldBe a[AlgoliaClientException]
-      e.getMessage should include(s"Index '${indexToMove_before}' does not exist")
+      e.getMessage should include(
+        s"Index '${indexToMove_before}' does not exist"
+      )
     }
   }
 

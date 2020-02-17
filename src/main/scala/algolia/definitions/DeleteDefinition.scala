@@ -34,7 +34,8 @@ import org.json4s.native.Serialization.write
 case class DeleteObjectDefinition(
     index: Option[String] = None,
     oid: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = DeleteObjectDefinition
@@ -60,14 +61,18 @@ case class DeleteObjectDefinition(
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE,
-                Seq("1", "indexes") ++ index ++ oid,
-                isSearch = false,
-                requestOptions = requestOptions)
+    HttpPayload(
+      http.DELETE,
+      Seq("1", "indexes") ++ index ++ oid,
+      isSearch = false,
+      requestOptions = requestOptions
+    )
 }
 
-case class DeleteIndexDefinition(index: String, requestOptions: Option[RequestOptions] = None)
-    extends Definition {
+case class DeleteIndexDefinition(
+    index: String,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
 
   type T = DeleteIndexDefinition
 
@@ -75,28 +80,33 @@ case class DeleteIndexDefinition(index: String, requestOptions: Option[RequestOp
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =
-    HttpPayload(http.DELETE,
-                Seq("1", "indexes", index),
-                isSearch = false,
-                requestOptions = requestOptions)
+    HttpPayload(
+      http.DELETE,
+      Seq("1", "indexes", index),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
 
 }
 
 case class DeleteByDefinition(
     index: Option[String],
     query: Query,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
   type T = DeleteByDefinition
 
   override private[algolia] def build(): HttpPayload = {
     val body = Map("params" -> query.toParam)
 
-    HttpPayload(http.POST,
-                Seq("1", "indexes") ++ index ++ Some("deleteByQuery"),
-                isSearch = false,
-                body = Some(write(body)),
-                requestOptions = requestOptions)
+    HttpPayload(
+      http.POST,
+      Seq("1", "indexes") ++ index ++ Some("deleteByQuery"),
+      isSearch = false,
+      body = Some(write(body)),
+      requestOptions = requestOptions
+    )
   }
 
   override def options(requestOptions: RequestOptions): DeleteByDefinition =

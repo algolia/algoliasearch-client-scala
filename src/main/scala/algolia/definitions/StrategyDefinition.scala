@@ -31,13 +31,16 @@ import algolia.objects.RequestOptions
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
-case class GetPersonalizationStrategyDefinition(requestOptions: Option[RequestOptions] = None)(
-    implicit val formats: Formats)
+case class GetPersonalizationStrategyDefinition(
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = GetPersonalizationStrategyDefinition
 
-  override def options(requestOptions: RequestOptions): GetPersonalizationStrategyDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): GetPersonalizationStrategyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
@@ -53,12 +56,15 @@ case class GetPersonalizationStrategyDefinition(requestOptions: Option[RequestOp
 
 case class SetPersonalizationStrategyDefinition(
     s: Strategy,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   override type T = SetPersonalizationStrategyDefinition
 
-  override def options(requestOptions: RequestOptions): SetPersonalizationStrategyDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): SetPersonalizationStrategyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {

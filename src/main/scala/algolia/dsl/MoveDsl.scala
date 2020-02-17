@@ -42,9 +42,11 @@ trait MoveDsl {
 
   }
 
-  implicit object MoveIndexDefinitionExecutable extends Executable[MoveIndexDefinition, Task] {
+  implicit object MoveIndexDefinitionExecutable
+      extends Executable[MoveIndexDefinition, Task] {
     override def apply(client: AlgoliaClient, query: MoveIndexDefinition)(
-        implicit executor: ExecutionContext): Future[Task] = {
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
       client.request[Task](query.build())
     }
   }

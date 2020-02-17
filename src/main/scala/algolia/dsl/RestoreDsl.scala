@@ -45,7 +45,8 @@ trait RestoreDsl {
   implicit object RestoreKeyDefinitionExecutable
       extends Executable[RestoreKeyDefinition, RestoreKey] {
     override def apply(client: AlgoliaClient, query: RestoreKeyDefinition)(
-        implicit executor: ExecutionContext): Future[RestoreKey] = {
+        implicit executor: ExecutionContext
+    ): Future[RestoreKey] = {
       client.request[RestoreKey](query.build())
     }
   }

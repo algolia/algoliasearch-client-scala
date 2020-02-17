@@ -106,7 +106,8 @@ class SynonymsTest extends AlgoliaTest {
           query = "s",
           types = Some(Seq(SynonymType.placeholder, SynonymType.synonym)),
           page = Some(1),
-          hitsPerPage = Some(1))
+          hitsPerPage = Some(1)
+        )
       }
 
       it("should call API") {
@@ -114,11 +115,14 @@ class SynonymsTest extends AlgoliaTest {
           query = "s",
           types = Some(Seq(SynonymType.placeholder, SynonymType.synonym)),
           page = Some(1),
-          hitsPerPage = Some(1))).build() should be(
+          hitsPerPage = Some(1)
+        )).build() should be(
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "synonyms", "search"),
-            body = Some("""{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""),
+            body = Some(
+              """{"query":"s","type":"placeholder,synonym","page":1,"hitsPerPage":1}"""
+            ),
             isSearch = true,
             requestOptions = None
           )
@@ -142,7 +146,8 @@ class SynonymsTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "synonyms", "oid"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}"""),
+              """{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}"""
+            ),
             isSearch = false,
             requestOptions = None
           )
@@ -164,10 +169,15 @@ class SynonymsTest extends AlgoliaTest {
           HttpPayload(
             POST,
             Seq("1", "indexes", "toto", "synonyms", "batch"),
-            queryParameters =
-              Some(Map("forwardToReplicas" -> "true", "replaceExistingSynonyms" -> "true")),
+            queryParameters = Some(
+              Map(
+                "forwardToReplicas" -> "true",
+                "replaceExistingSynonyms" -> "true"
+              )
+            ),
             body = Some(
-              """[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""),
+              """[{"objectID":"oid","placeholder":"1","replacements":["2","3"],"type":"placeholder"}]"""
+            ),
             isSearch = false,
             requestOptions = None
           )

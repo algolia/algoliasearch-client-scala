@@ -29,10 +29,12 @@ import java.util.concurrent.ConcurrentHashMap
 
 import org.slf4j.{Logger, LoggerFactory}
 
-case class HostsStatuses(configuration: AlgoliaClientConfiguration,
-                         utils: AlgoliaUtils,
-                         queryHosts: Seq[String],
-                         indexingHosts: Seq[String]) {
+case class HostsStatuses(
+    configuration: AlgoliaClientConfiguration,
+    utils: AlgoliaUtils,
+    queryHosts: Seq[String],
+    indexingHosts: Seq[String]
+) {
 
   private[algolia] val hostStatuses: ConcurrentHashMap[String, HostStatus] =
     new ConcurrentHashMap[String, HostStatus](5)
@@ -54,7 +56,8 @@ case class HostsStatuses(configuration: AlgoliaClientConfiguration,
   def queryHostsThatAreUp(): Seq[String] = hostsThatAreUp(queryHosts)
 
   private def hostsThatAreUp(hosts: Seq[String]): Seq[String] = {
-    val filteredHosts = hosts.filter(h => isUpOrCouldBeRetried(getHostStatus(h)))
+    val filteredHosts = hosts.filter(h => isUpOrCouldBeRetried(getHostStatus(h))
+    )
     if (filteredHosts.isEmpty) {
       hosts
     } else {

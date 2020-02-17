@@ -29,6 +29,8 @@ case class FacetsScoring(facetName: String, score: Int)
 
 case class EventsScoring(eventName: String, eventType: String, score: Int)
 
-case class SetStrategyRequest(eventsScoring: Seq[EventsScoring],
-                              facetsScoring: Seq[FacetsScoring],
-                              personalizationImpact: Int)
+case class SetStrategyRequest(
+    eventsScoring: Seq[EventsScoring],
+    facetsScoring: Seq[FacetsScoring],
+    personalizationImpact: Int
+)

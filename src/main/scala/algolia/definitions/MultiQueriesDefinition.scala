@@ -34,7 +34,8 @@ import org.json4s.native.Serialization._
 case class MultiQueriesDefinition(
     definitions: Iterable[SearchDefinition],
     strategy: Option[MultiQueries.Strategy] = None,
-    requestOptions: Option[RequestOptions] = None)(implicit val formats: Formats)
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
     extends Definition {
 
   type T = MultiQueriesDefinition

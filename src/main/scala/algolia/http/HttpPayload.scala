@@ -50,19 +50,23 @@ private[algolia] case object DELETE extends HttpVerb {
   override def toString: String = "DELETE"
 }
 
-private[algolia] case class HttpPayload(verb: HttpVerb,
-                                        path: Seq[String],
-                                        queryParameters: Option[Map[String, String]] = None,
-                                        body: Option[String] = None,
-                                        isSearch: Boolean,
-                                        isAnalytics: Boolean = false,
-                                        isInsights: Boolean = false,
-                                        isRecommendation: Boolean = false,
-                                        requestOptions: Option[RequestOptions]) {
+private[algolia] case class HttpPayload(
+    verb: HttpVerb,
+    path: Seq[String],
+    queryParameters: Option[Map[String, String]] = None,
+    body: Option[String] = None,
+    isSearch: Boolean,
+    isAnalytics: Boolean = false,
+    isInsights: Boolean = false,
+    isRecommendation: Boolean = false,
+    requestOptions: Option[RequestOptions]
+) {
 
-  def apply(host: String,
-            headers: Map[String, String],
-            dnsNameResolver: NameResolver[InetAddress]): Request = {
+  def apply(
+      host: String,
+      headers: Map[String, String],
+      dnsNameResolver: NameResolver[InetAddress]
+  ): Request = {
     val uri = path.foldLeft(host)((url, p) => url / p)
 
     var builder: RequestBuilder =
@@ -82,7 +86,9 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
     )
 
     requestOptions.foreach { r =>
-      r.generateExtraHeaders().foreach { case (k, v) => builder = builder.addHeader(k, v) }
+      r.generateExtraHeaders().foreach {
+        case (k, v) => builder = builder.addHeader(k, v)
+      }
       r.generateExtraQueryParameters().foreach {
         case (k, v) => builder = builder.addQueryParam(k, v)
       }
@@ -95,7 +101,9 @@ private[algolia] case class HttpPayload(verb: HttpVerb,
 
   def toString(host: String): String = {
     val _path = path.foldLeft("")(_ + "/" + _)
-    val _query = queryParameters.fold("")(_.foldLeft("") { case (acc, (k, v)) => s"$acc&$k=$v" })
+    val _query = queryParameters.fold("")(_.foldLeft("") {
+      case (acc, (k, v)) => s"$acc&$k=$v"
+    })
     val _body = body.map(b => s", '$b'").getOrElse("")
 
     s"$verb $host${_path}${_query}${_body}"

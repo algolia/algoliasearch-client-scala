@@ -28,14 +28,18 @@ import algolia.AlgoliaTest
 
 class SafeDeleteObjectOperationTest extends AlgoliaTest {
 
-  it("should produce a valid SafeDeleteObjectOperation with non-empty parameters") {
+  it(
+    "should produce a valid SafeDeleteObjectOperation with non-empty parameters"
+  ) {
     val op = SafeDeleteObjectOperation("index1", "objectID1")
     op should not be (None)
     op.get.index should be("index1")
     op.get.objectID should be("objectID1")
   }
 
-  it("should not produce a valid SafeDeleteObjectOperation with empty parameters") {
+  it(
+    "should not produce a valid SafeDeleteObjectOperation with empty parameters"
+  ) {
     SafeDeleteObjectOperation("", "") should be(None)
     SafeDeleteObjectOperation("not empty", "") should be(None)
     SafeDeleteObjectOperation("", "not empty") should be(None)

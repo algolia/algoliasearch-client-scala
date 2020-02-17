@@ -44,7 +44,8 @@ class AlgoliaClientIntegrationTest extends AlgoliaTest {
       whenReady(s.failed) { e =>
         e shouldBe a[AlgoliaClientException]
         e.asInstanceOf[AlgoliaClientException].getMessage should be(
-          "Failure \"Index " + indexThatDoesNotExists + " does not exist\", response status: 404")
+          "Failure \"Index " + indexThatDoesNotExists + " does not exist\", response status: 404"
+        )
       }
 
     }

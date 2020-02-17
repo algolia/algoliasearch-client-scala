@@ -25,12 +25,14 @@
 
 package algolia
 
-case class AlgoliaClientConfiguration(httpConnectTimeoutMs: Int,
-                                      //httpSocketTimeout in HttpClient
-                                      httpReadTimeoutMs: Int,
-                                      httpRequestTimeoutMs: Int,
-                                      dnsTimeoutMs: Int,
-                                      hostDownTimeoutMs: Int) {}
+case class AlgoliaClientConfiguration(
+    httpConnectTimeoutMs: Int,
+    //httpSocketTimeout in HttpClient
+    httpReadTimeoutMs: Int,
+    httpRequestTimeoutMs: Int,
+    dnsTimeoutMs: Int,
+    hostDownTimeoutMs: Int
+) {}
 
 object AlgoliaClientConfiguration {
 
