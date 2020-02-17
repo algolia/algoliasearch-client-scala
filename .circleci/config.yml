@@ -1,62 +1,67 @@
-version: 2
+version: 2.1
 
 jobs:
-  compile:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    steps:
-      - checkout
-      - restore_cache:
-          key: sbt-cache
-      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '+compile'
-      - save_cache:
-          key: sbt-cache
-          paths:
-            - "~/.ivy2/cache"
-            - "~/.sbt"
-            - "~/.m2"
-  compile-test:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    steps:
-      - checkout
-      - restore_cache:
-          key: sbt-cache
-      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '+test:compile'
-      - save_cache:
-          key: sbt-cache
-          paths:
-            - "~/.ivy2/cache"
-            - "~/.sbt"
-            - "~/.m2"
   format:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
-      - restore_cache:
-          key: sbt-cache
-      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 'scalafmt'
-      - save_cache:
-          key: sbt-cache
-          paths:
-            - "~/.ivy2/cache"
-            - "~/.sbt"
-            - "~/.m2"
-  test:
+      - run:
+          name: Check formatting
+          command: cat /dev/null | sbt 'scalafmtCheckAll'
+  test-2-11:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
       - restore_cache:
-          key: sbt-cache
-      - run: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 'testOnly -- -l SkipInCI'
+          key: sbt-cache-2-11
+      - run:
+          name: Retrieve temporary Algolia credentials
+          command: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run:
+          name: Run tests for Scala 2.11.12
+          command: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ 2.11.12 testOnly -- -l SkipInCI'
       - save_cache:
-          key: sbt-cache
+          key: sbt-cache-2-11
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.sbt"
+            - "~/.m2"
+  test-2-12:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache-2-12
+      - run:
+          name: Retrieve temporary Algolia credentials
+          command: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run:
+          name: Run tests for Scala 2.12.10
+          command: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ 2.12.10 testOnly -- -l SkipInCI'
+      - save_cache:
+          key: sbt-cache-2-12
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.sbt"
+            - "~/.m2"
+  test-2-13:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache-2-13
+      - run:
+          name: Retrieve temporary Algolia credentials
+          command: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+      - run:
+          name: Run tests for Scala 2.11.13
+          command: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ 2.13.1 testOnly -- -l SkipInCI'
+      - save_cache:
+          key: sbt-cache-2-13
           paths:
             - "~/.ivy2/cache"
             - "~/.sbt"
@@ -67,6 +72,6 @@ workflows:
   build:
     jobs:
       - format
-      - compile
-      - compile-test
-      - test
+      - test-2-11
+      - test-2-12
+      - test-2-13
