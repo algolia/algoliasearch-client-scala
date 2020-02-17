@@ -1,57 +1,57 @@
 organization := "com.algolia"
 name := "algoliasearch-scala"
 description := "Scala client for Algolia Search API"
-version := "1.35.1-beta-1"
+version := "1.35.1-beta-2"
 crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
 scalaVersion := "2.13.1"
-coverageEnabled := false
 testOptions in Test += Tests.Argument("-P10")
 publishMavenStyle := true
 publishArtifact in Test := false
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 homepage := Some(url("https://github.com/algolia/algoliasearch-client-scala/"))
 scmInfo := Some(
-  ScmInfo(url("https://github.com/algolia/algoliasearch-client-scala"),
-          "scm:git:git@github.com:algolia/algoliasearch-client-scala.git"))
+  ScmInfo(
+    url("https://github.com/algolia/algoliasearch-client-scala"),
+    "scm:git:git@github.com:algolia/algoliasearch-client-scala.git"
+  )
+)
 pomIncludeRepository := { _ =>
   false
 }
-developers += Developer("algolia",
-                        "Algolia SAS",
-                        "contact@algolia.com",
-                        url("https://github.com/algolia/algoliasearch-client-scala/"))
+developers += Developer(
+  "algolia",
+  "Algolia SAS",
+  "contact@algolia.com",
+  url("https://github.com/algolia/algoliasearch-client-scala/")
+)
 
 lazy val root = project
   .in(file("."))
   .enablePlugins(AutomateHeaderPlugin, BuildInfoPlugin)
   .settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "algolia"
+    buildInfoPackage := "algolia",
+    evictionWarningOptions in update := EvictionWarningOptions.default
+      .withWarnTransitiveEvictions(false)
+      .withWarnDirectEvictions(false)
+      .withWarnScalaVersionEviction(false)
+      .withWarnEvictionSummary(false)
   )
 
 // Project dependencies
-val asyncHttpClientVersion = "2.10.4"
-val json4sVersion = "3.6.7"
-val slf4jVersion = "1.7.30"
-val scalaUriVersion = "1.4.10"
-val scalaCollectionCompat = "2.1.3"
-libraryDependencies += "org.asynchttpclient" % "async-http-client" % asyncHttpClientVersion
-libraryDependencies += "org.json4s" %% "json4s-ast" % json4sVersion
-libraryDependencies += "org.json4s" %% "json4s-core" % json4sVersion
-libraryDependencies += "org.json4s" %% "json4s-native" % json4sVersion
-libraryDependencies += "org.slf4j" % "slf4j-api" % slf4jVersion
-libraryDependencies += "io.lemonlabs" %% "scala-uri" % scalaUriVersion
-libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompat
+libraryDependencies += "io.lemonlabs" %% "scala-uri" % "1.4.10"
+libraryDependencies += "org.asynchttpclient" % "async-http-client" % "2.10.4"
+libraryDependencies += "org.json4s" %% "json4s-ast" % "3.6.7"
+libraryDependencies += "org.json4s" %% "json4s-core" % "3.6.7"
+libraryDependencies += "org.json4s" %% "json4s-native" % "3.6.7"
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
+libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.30"
 
 // Testing dependencies
-val scalaTestVersion = "3.1.0"
-val scalacheckVersion = "1.14.3"
-val scalaMockVersion = "4.4.0"
-val logbackVersion = "1.2.3"
-libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % Test
-libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test
-libraryDependencies += "org.scalamock" %% "scalamock" % scalaMockVersion % Test
-libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion % Test
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3" % Test
+//libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
+libraryDependencies += "org.scalamock" %% "scalamock" % "4.4.0" % Test
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % Test
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -89,4 +89,5 @@ headerLicense := Some(
       |OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
       |THE SOFTWARE.
       |""".stripMargin
-  ))
+  )
+)
