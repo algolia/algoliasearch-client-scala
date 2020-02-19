@@ -1,14 +1,42 @@
 version: 2.1
 
+commands:
+  credentials:
+    description: "Fetch temporary credentials if needed"
+    steps:
+      - run:
+          name: Retrieve temporary Algolia credentials if needed
+          command: |
+            if [ -z "BINTRAY_USER" ]; then
+              curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
+            fi
+  test:
+    description: "Run the test for Scala << parameters.scala_version >>"
+    parameters:
+      scala_version:
+        type: string
+    steps:
+      - run:
+          name: Run tests for Scala << parameters.scala_version >>
+          command: |
+            if [ -z "BINTRAY_USER" ]; then
+              cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ << parameters.scala_version >> testOnly -- -l SkipInCI'
+            else
+              cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ << parameters.scala_version >> test'
+            fi
+
+
 jobs:
   format:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
+      - restore_cache:
+            key: sbt-cache-2-13
       - run:
           name: Check formatting
-          command: cat /dev/null | sbt 'scalafmtCheckAll'
+          command: cat /dev/null | sbt '++ 2.13.1 scalafmtCheckAll'
   test-2-11:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -16,12 +44,9 @@ jobs:
       - checkout
       - restore_cache:
           key: sbt-cache-2-11
-      - run:
-          name: Retrieve temporary Algolia credentials
-          command: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run:
-          name: Run tests for Scala 2.11.12
-          command: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ 2.11.12 testOnly -- -l SkipInCI'
+      - credentials
+      - test:
+          scala_version: "2.11.12"
       - save_cache:
           key: sbt-cache-2-11
           paths:
@@ -35,12 +60,9 @@ jobs:
       - checkout
       - restore_cache:
           key: sbt-cache-2-12
-      - run:
-          name: Retrieve temporary Algolia credentials
-          command: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run:
-          name: Run tests for Scala 2.12.10
-          command: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ 2.12.10 testOnly -- -l SkipInCI'
+      - credentials
+      - test:
+          scala_version: "2.12.10"
       - save_cache:
           key: sbt-cache-2-12
           paths:
@@ -54,12 +76,9 @@ jobs:
       - checkout
       - restore_cache:
           key: sbt-cache-2-13
-      - run:
-          name: Retrieve temporary Algolia credentials
-          command: curl -s https://algoliasearch-client-keygen.herokuapp.com | sh >> $BASH_ENV
-      - run:
-          name: Run tests for Scala 2.11.13
-          command: cat /dev/null | sbt -J-Dsun.net.maxDatagramSockets=2048 '++ 2.13.1 testOnly -- -l SkipInCI'
+      - credentials
+      - test:
+          scala_version: "2.13.1"
       - save_cache:
           key: sbt-cache-2-13
           paths:
