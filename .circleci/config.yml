@@ -104,8 +104,12 @@ workflows:
     jobs:
       - format
       - test-2-11
-      - test-2-12
-      - test-2-13
+      - test-2-12:
+          requires:
+            - test-2-11
+      - test-2-13:
+          requires:
+            - test-2-12
       - release:
           requires:
             - format
