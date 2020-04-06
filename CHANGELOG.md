@@ -1,5 +1,13 @@
 # ChangeLog
 
+## [1.35.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.35.0...1.35.1) (2020-04-06)
+
+### Misc
+
+- Add Scala 2.13 support in README ([81d48ff](https://github.com/algolia/algoliasearch-client-scala/commit/81d48ff))
+
+
+
 ## [1.35.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.34.0...1.35.0) (2020-01-27)
 
 ### Refactor
