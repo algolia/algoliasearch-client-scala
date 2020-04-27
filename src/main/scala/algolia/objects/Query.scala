@@ -44,6 +44,7 @@ case class Query(
     queryLanguages: Option[Seq[String]] = None,
     enableABTest: Option[Boolean] = None,
     explain: Option[Seq[String]] = None,
+    naturalLanguages: Option[Seq[String]] = None,
     /* Attributes */
     attributesToRetrieve: Option[Seq[String]] = None,
     restrictSearchableAttributes: Option[Seq[String]] = None,
