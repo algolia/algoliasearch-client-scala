@@ -39,7 +39,15 @@ case class Log(
     processing_time_ms: String,
     index: Option[String],
     query_nb_hits: Option[String],
-    exhaustive: Option[Boolean]
+    exhaustive: Option[Boolean],
+    inner_queries: Seq[InnerQuery]
+)
+
+case class InnerQuery(
+    index_name: String,
+    query_id: Option[String],
+    offset: Option[Int],
+    user_token: Option[String]
 )
 
 sealed trait LogType {
