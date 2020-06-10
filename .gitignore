@@ -1,19 +1,18 @@
 *.class
+*.iml
 *.log
-
-# sbt specific
+.bloop/
 .cache
+.idea
 .lib/
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-gpg.sbt
-
-# Scala-IDE specific
+.metals/
 .scala_dependencies
 .worksheet
-.idea
-*.iml
+dist/*
+gpg.sbt
+lib_managed/
+project/boot/
+project/metals.sbt
+project/plugins/project/
+src_managed/
+target/
