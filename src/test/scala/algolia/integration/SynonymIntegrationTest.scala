@@ -32,23 +32,21 @@ import algolia.{AlgoliaDsl, AlgoliaTest}
 
 class SynonymIntegrationTest extends AlgoliaTest {
 
-  val indexToSynonym: String = getTestIndexName("indexToSynonym")
-
-  after {
-    clearIndices(indexToSynonym)
-  }
+  val baseIndexName: String = getTestIndexName("indexToSynonym")
 
   describe("synonyms") {
 
     it("should save a synonym") {
+      val indexName = baseIndexName + "_save"
+      
       val res = AlgoliaTest.client.execute {
-        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexToSynonym
+        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res, indexName)
 
       val r = AlgoliaTest.client.execute {
-        get synonym "altcorrection1" from indexToSynonym
+        get synonym "altcorrection1" from indexName
       }
 
       whenReady(r) { res =>
@@ -58,20 +56,22 @@ class SynonymIntegrationTest extends AlgoliaTest {
     }
 
     it("should search synonyms") {
+      val indexName = baseIndexName + "_search"
+      
       val res1 = AlgoliaTest.client.execute {
-        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexToSynonym
+        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val res2 = AlgoliaTest.client.execute {
-        save synonym OneWaySynonym("one-way", "a", Seq("b")) inIndex indexToSynonym
+        save synonym OneWaySynonym("one-way", "a", Seq("b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res2, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms(
+        search synonyms in index indexName query QuerySynonyms(
           "altcorrection1",
           hitsPerPage = Some(10)
         )
@@ -83,26 +83,28 @@ class SynonymIntegrationTest extends AlgoliaTest {
     }
 
     it("should delete synonym") {
+      val indexName = baseIndexName + "_delete"
+      
       val res1 = AlgoliaTest.client.execute {
-        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexToSynonym
+        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val res2 = AlgoliaTest.client.execute {
-        save synonym OneWaySynonym("one-way", "a", Seq("b")) inIndex indexToSynonym
+        save synonym OneWaySynonym("one-way", "a", Seq("b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res2, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val d = AlgoliaTest.client.execute {
-        delete synonym "one-way" from indexToSynonym
+        delete synonym "one-way" from indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(d, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(d, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms(
+        search synonyms in index indexName query QuerySynonyms(
           "",
           hitsPerPage = Some(10)
         )
@@ -114,26 +116,28 @@ class SynonymIntegrationTest extends AlgoliaTest {
     }
 
     it("should clear synonyms") {
+      val indexName = baseIndexName + "_clear"
+      
       val res1 = AlgoliaTest.client.execute {
-        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexToSynonym
+        save synonym AltCorrection1("altcorrection1", "p", Seq("a", "b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val res2 = AlgoliaTest.client.execute {
-        save synonym OneWaySynonym("one-way", "a", Seq("b")) inIndex indexToSynonym
+        save synonym OneWaySynonym("one-way", "a", Seq("b")) inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res2, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res2, indexName)
 
       val d = AlgoliaTest.client.execute {
-        clear synonyms AlgoliaDsl.of index indexToSynonym
+        clear synonyms AlgoliaDsl.of index indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(d, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(d, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms(
+        search synonyms in index indexName query QuerySynonyms(
           "",
           hitsPerPage = Some(10)
         )
@@ -145,19 +149,21 @@ class SynonymIntegrationTest extends AlgoliaTest {
     }
 
     it("should batch insert synonyms") {
+      val indexName = baseIndexName + "_batch"
+      
       val synonymsToInsert = Seq(
         AltCorrection1("altcorrection1", "p", Seq("a", "b")),
         OneWaySynonym("one-way", "a", Seq("b"))
       )
 
       val res1 = AlgoliaTest.client.execute {
-        save synonyms synonymsToInsert inIndex indexToSynonym
+        save synonyms synonymsToInsert inIndex indexName
       }
 
-      taskShouldBeCreatedAndWaitForIt(res1, indexToSynonym)
+      taskShouldBeCreatedAndWaitForIt(res1, indexName)
 
       val s = AlgoliaTest.client.execute {
-        search synonyms in index indexToSynonym query QuerySynonyms(
+        search synonyms in index indexName query QuerySynonyms(
           "",
           hitsPerPage = Some(10)
         )
