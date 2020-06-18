@@ -31,16 +31,10 @@ import algolia.AlgoliaDsl._
 import algolia.objects.{Condition, Consequence, Rule}
 import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{
-  BeforeAndAfter,
-  BeforeAndAfterAll,
-  EitherValues,
-  Inside,
-  Inspectors
-}
+import org.scalatest._
+import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Millis, Seconds, Span}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -93,7 +87,7 @@ class AlgoliaTest
     val t: AlgoliaTask = taskShouldBeCreated(task)
 
     val waiting = AlgoliaTest.client.execute {
-      waitFor task t from index maxDelay (60 * 10 * 1000) //600 seconds
+      waitFor task t from index maxDelay (60 * 1000) // 60s
     }
 
     whenReady(waiting) { result =>
