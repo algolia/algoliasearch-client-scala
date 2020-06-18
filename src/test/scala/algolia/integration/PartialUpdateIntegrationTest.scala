@@ -35,10 +35,6 @@ class PartialUpdateIntegrationTest extends AlgoliaTest {
 
   val indexName: String = getTestIndexName("index_partial")
 
-  after {
-    clearIndices(indexName)
-  }
-
   it("should increment value") {
     val create: Future[TaskIndexing] = AlgoliaTest.client.execute {
       index into indexName `object` PartialUpdateObj(1, "increment")
