@@ -98,7 +98,9 @@ class MCMIntegrationTest extends AlgoliaTest {
 
     val hits = Await
       .result(
-        mcmClient.execute(search userIDs userID cluster cluster.clusterName),
+        mcmClient.execute(
+          search userIDs userID cluster cluster.clusterName hitsPerPage 1000
+        ),
         10 seconds
       )
       .hits
