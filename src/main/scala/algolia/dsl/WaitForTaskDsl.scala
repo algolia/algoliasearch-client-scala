@@ -25,15 +25,11 @@
 
 package algolia.dsl
 
-import java.time.ZonedDateTime
-import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
-
 import algolia.definitions.{WaitForTaskDefinition, WaitForTimeoutException}
 import algolia.responses.{AlgoliaTask, TaskStatus}
 import algolia.{AlgoliaClient, Executable}
-import io.netty.util.{HashedWheelTimer, Timeout, TimerTask}
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ExecutionContext, Future}
 
 trait WaitForTaskDsl {
 
@@ -47,19 +43,6 @@ trait WaitForTaskDsl {
 
   implicit object WaitForTaskDefinitionExecutable
       extends Executable[WaitForTaskDefinition, TaskStatus] {
-
-    // Run every 100 ms, use a wheel with 512 buckets
-    private lazy val timer = {
-      val threadFactory = new ThreadFactory {
-        override def newThread(r: Runnable): Thread = {
-          val t = Executors.defaultThreadFactory().newThread(r)
-          t.setDaemon(true)
-          t.setName("algolia-waitfor-thread-" + ZonedDateTime.now())
-          t
-        }
-      }
-      new HashedWheelTimer(threadFactory, 100, TimeUnit.MILLISECONDS, 512)
-    }
 
     /**
       * Wait for the completion of a task
@@ -77,35 +60,35 @@ trait WaitForTaskDsl {
     override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(
         implicit executor: ExecutionContext
     ): Future[TaskStatus] = {
+      val baseDelay = query.baseDelay
+      val cumulatedDelay = 0L
+      val maxDelay = query.maxDelay
 
-      def request(d: Long, totalDelay: Long): Future[TaskStatus] =
-        delay[TaskStatus](d) {
-          client.request[TaskStatus](query.build())
-        }.flatMap { res =>
-          if (res.status == "published") {
-            Future.successful(res)
-          } else if (totalDelay > query.maxDelay) {
-            Future.failed(
-              WaitForTimeoutException(
-                s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"
-              )
+      def request(
+          delay: Long,
+          cumulatedDelay: Long
+      ): Future[TaskStatus] =
+        if (maxDelay < cumulatedDelay) {
+          Future.failed(
+            WaitForTimeoutException(
+              s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${cumulatedDelay}ms"
             )
-          } else {
-            request(d * 2, totalDelay + d)
-          }
+          )
+        } else {
+          client
+            .request[TaskStatus](query.build())
+            .flatMap { res =>
+              if (res.status == "published") Future.successful(res)
+              else {
+                Thread.sleep(delay)
+                request(delay * 2, cumulatedDelay + delay)
+              }
+            }
         }
 
-      request(query.baseDelay, 0L)
+      request(baseDelay, cumulatedDelay)
     }
 
-    private def delay[T](delay: Long)(block: => Future[T]): Future[T] = {
-      val promise = Promise[T]()
-      val task = new TimerTask {
-        override def run(timeout: Timeout): Unit = promise.completeWith(block)
-      }
-      timer.newTimeout(task, delay, TimeUnit.MILLISECONDS)
-      promise.future
-    }
   }
 
 }
