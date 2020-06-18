@@ -31,17 +31,10 @@ import java.time.{LocalDateTime, ZoneOffset, ZonedDateTime}
 import algolia.AlgoliaDsl._
 import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.responses.{ClusterData, UserDataWithCluster}
-import algolia.{
-  AlgoliaClient,
-  AlgoliaClientConfiguration,
-  AlgoliaHttpClient,
-  AlgoliaTest,
-  SkipInCI
-}
-import org.scalatest.Ignore
+import algolia._
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 
 class MCMIntegrationTest extends AlgoliaTest {
@@ -77,29 +70,11 @@ class MCMIntegrationTest extends AlgoliaTest {
       res.clusters.head
     }
 
-    // Delete any preexisting user
-    var listUsersFuture = mcmClient.execute(list userIDs)
-    val existingUserIDs =
-      whenReady(listUsersFuture)(_.userIDs).filter(hasScalaUserIDPrefix)
-    val removeExistingUsersFutures =
-      existingUserIDs.map(id => mcmClient.execute(remove userID id.userID))
-    Await
-      .result(
-        Future.sequence(removeExistingUsersFutures),
-        10 seconds
-      )
-    Thread.sleep(3000)
-
-    listUsersFuture = mcmClient.execute(list userIDs)
-    whenReady(listUsersFuture)(_.userIDs).count(hasScalaUserIDPrefix) should be(
-      0
-    )
-
     // Assign one user to the first cluster and make sure it is assigned
-    val travisBuildID = System.getenv("TRAVIS_BUILD_NUMBER")
+    val circleBuildId = System.getenv("CIRCLE_BUILD_NUM")
     val userIDSuffix = "-" + LocalDateTime.now.toEpochSecond(ZoneOffset.UTC)
-    val userID = userIDPrefix + (if (travisBuildID == null) "local"
-                                 else travisBuildID) + userIDSuffix
+    val userID = userIDPrefix + (if (circleBuildId == null) "local"
+                                 else circleBuildId) + userIDSuffix
     Await
       .result(
         mcmClient.execute(
