@@ -547,42 +547,43 @@ class AlgoliaClientTest extends AlgoliaTest {
       }
     }
 
-    it("task needs 7 retries to be ready") {
-      /*1*/
+    it("task needs 5 retries to be ready") {
+      // 1st request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*2*/
+      // 1ms delay then 2nd request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*4*/
+      // 2ms delay then 3rd request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*8*/
+      // 4ms delay then 4th request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*16*/
+      // 8ms delay then 5th request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
+      // 16ms delay then 6th request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
@@ -591,7 +592,7 @@ class AlgoliaClientTest extends AlgoliaTest {
         .successful(taskPublished)
 
       val res: Future[TaskStatus] = apiClient.execute {
-        waitFor task taskToWait from "toto" baseDelay 1 maxDelay 17
+        waitFor task taskToWait from "toto" baseDelay 1 maxDelay 31
       }
 
       whenReady(res) { result =>
@@ -600,42 +601,42 @@ class AlgoliaClientTest extends AlgoliaTest {
     }
 
     it("future fails after too many retries") {
-      /*1*/
+      // 1st request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*2*/
+      // 1ms delay then 2nd request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*4*/
+      // 2ms delay then 3rd request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*8*/
+      // 4ms delay then 4th request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*16*/
+      // 8ms delay then 5th request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
           _: ExecutionContext
         )) expects ("https://a-1.algolianet.com", emptyHeaders, payload, *, *) returning Future
         .successful(taskInProgress)
-      /*32*/
+      // 16ms delay then 6th request
       (mockHttpClient
         .request[TaskStatus](_: String, _: Map[String, String], _: HttpPayload)(
           _: Manifest[TaskStatus],
@@ -644,12 +645,12 @@ class AlgoliaClientTest extends AlgoliaTest {
         .successful(taskInProgress)
 
       val res: Future[TaskStatus] = apiClient.execute {
-        waitFor task taskToWait from "toto" baseDelay 1 maxDelay 17
+        waitFor task taskToWait from "toto" baseDelay 1 maxDelay 32
       }
 
       whenReady(res.failed) { e =>
         e shouldBe a[WaitForTimeoutException]
-        e should have message "Waiting for task `1` on index `toto` timeout after 32ms"
+        e should have message "Waiting for task `1` on index `toto` timeout after 63ms"
       }
     }
   }
