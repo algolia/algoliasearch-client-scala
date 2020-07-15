@@ -154,9 +154,11 @@ class RulesTest extends AlgoliaTest {
       it("should serialize correctly") {
         val rule = Rule(
           objectID = "rule1",
-          condition = Condition(
-            pattern = "a",
-            anchoring = "is"
+          condition = Some(
+            Condition(
+              pattern = "a",
+              anchoring = "is"
+            )
           ),
           consequence = Consequence(
             params = Some(Map("query" -> "1")),
@@ -179,13 +181,44 @@ class RulesTest extends AlgoliaTest {
         )
       }
 
+      it("should serialize correctly a multi-condition rule") {
+        val rule = Rule(
+          objectID = "rule1",
+          conditions = Some(
+            Seq(
+              Condition(pattern = "a", anchoring = "is")
+            )
+          ),
+          consequence = Consequence(
+            params = Some(Map("query" -> "1")),
+            userData = Some(Map("a" -> "b"))
+          )
+        )
+
+        (save rule rule inIndex "toto" and forwardToReplicas)
+          .build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "indexes", "toto", "rules", "rule1"),
+            queryParameters = Some(Map("forwardToReplicas" -> "true")),
+            body = Some(
+              """{"objectID":"rule1","conditions":[{"pattern":"a","anchoring":"is"}],"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""
+            ),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+
       it("should serialize correctly with enabled flag") {
         val rule = Rule(
           objectID = "rule1",
           enabled = Some(true),
-          condition = Condition(
-            pattern = "a",
-            anchoring = "is"
+          condition = Some(
+            Condition(
+              pattern = "a",
+              anchoring = "is"
+            )
           ),
           consequence = Consequence(
             params = Some(Map("query" -> "1")),
@@ -226,9 +259,11 @@ class RulesTest extends AlgoliaTest {
           objectID = "rule1",
           enabled = Some(true),
           validity = Some(Seq(TimeRange(from, until))),
-          condition = Condition(
-            pattern = "a",
-            anchoring = "is"
+          condition = Some(
+            Condition(
+              pattern = "a",
+              anchoring = "is"
+            )
           ),
           consequence = Consequence(
             params = Some(Map("query" -> "1")),
@@ -254,9 +289,11 @@ class RulesTest extends AlgoliaTest {
       it("should serialize correctly with promote and hide") {
         val rule = Rule(
           objectID = "rule1",
-          condition = Condition(
-            pattern = "a",
-            anchoring = "is"
+          condition = Some(
+            Condition(
+              pattern = "a",
+              anchoring = "is"
+            )
           ),
           consequence = Consequence(
             promote = Some(
@@ -292,9 +329,11 @@ class RulesTest extends AlgoliaTest {
       it("should serialize correctly with automatic facet filters") {
         val rule = Rule(
           objectID = "rule1",
-          condition = Condition(
-            pattern = "{facet:brand}",
-            anchoring = "is"
+          condition = Some(
+            Condition(
+              pattern = "{facet:brand}",
+              anchoring = "is"
+            )
           ),
           consequence = Consequence(
             params = Some(
@@ -325,9 +364,11 @@ class RulesTest extends AlgoliaTest {
       it("should serialize correctly with edits") {
         val rule = Rule(
           objectID = "rule1",
-          condition = Condition(
-            pattern = "toto",
-            anchoring = "is"
+          condition = Some(
+            Condition(
+              pattern = "toto",
+              anchoring = "is"
+            )
           ),
           consequence = Consequence(
             params = Some(

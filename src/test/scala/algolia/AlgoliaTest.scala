@@ -181,9 +181,11 @@ class AlgoliaTest
   def generateRule(ruleId: String): Rule = {
     Rule(
       objectID = ruleId,
-      condition = Condition(
-        pattern = "a",
-        anchoring = "is"
+      condition = Some(
+        Condition(
+          pattern = "a",
+          anchoring = "is"
+        )
       ),
       consequence = Consequence(
         params = Some(
