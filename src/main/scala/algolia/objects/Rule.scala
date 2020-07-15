@@ -28,7 +28,8 @@ package algolia.objects
 case class Rule(
     objectID: String,
     enabled: Option[Boolean] = None,
-    condition: Condition,
+    condition: Option[Condition] = None,
+    conditions: Option[Iterable[Condition]] = None,
     consequence: Consequence,
     validity: Option[Iterable[TimeRange]] = None,
     description: Option[String] = None

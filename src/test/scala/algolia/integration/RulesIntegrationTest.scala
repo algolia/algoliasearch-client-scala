@@ -197,9 +197,11 @@ class RulesIntegrationTest extends AlgoliaTest {
     it("should save rule with automatic facet filters") {
       val rule = Rule(
         objectID = "RuleAutomaticFacetFilters",
-        condition = Condition(
-          pattern = "{facet:brand}",
-          anchoring = "is"
+        condition = Some(
+          Condition(
+            pattern = "{facet:brand}",
+            anchoring = "is"
+          )
         ),
         consequence = Consequence(
           params = Some(
@@ -241,10 +243,12 @@ class RulesIntegrationTest extends AlgoliaTest {
         objectID = "RuleTimeRange",
         enabled = Some(true),
         validity = Some(Seq(TimeRange(from, until))),
-        condition = Condition(
-          pattern = "a",
-          anchoring = "is",
-          alternatives = Some(Alternatives.`true`)
+        condition = Some(
+          Condition(
+            pattern = "a",
+            anchoring = "is",
+            alternatives = Some(Alternatives.`true`)
+          )
         ),
         consequence = Consequence(
           filterPromotes = Some(false),
@@ -272,9 +276,11 @@ class RulesIntegrationTest extends AlgoliaTest {
     it("should save rule with edits") {
       val rule = Rule(
         objectID = "RuleEdits",
-        condition = Condition(
-          pattern = "toto",
-          anchoring = "is"
+        condition = Some(
+          Condition(
+            pattern = "toto",
+            anchoring = "is"
+          )
         ),
         consequence = Consequence(
           params = Some(
@@ -318,9 +324,11 @@ class RulesIntegrationTest extends AlgoliaTest {
 
       val rule = Rule(
         objectID = "RulePromoteAndHide",
-        condition = Condition(
-          pattern = "a",
-          anchoring = "is"
+        condition = Some(
+          Condition(
+            pattern = "a",
+            anchoring = "is"
+          )
         ),
         consequence = Consequence(
           hide = Some(Seq(ConsequenceHide("2"))),
