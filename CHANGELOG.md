@@ -1,5 +1,15 @@
 # ChangeLog
 
+## [1.36.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.35.1...1.36.0) (2020-07-20)
+
+### Feat
+
+- **rule**: implement multi-condition rules ([6b0ef39](https://github.com/algolia/algoliasearch-client-scala/commit/6b0ef39))
+- **search**: expose innerQueries response field when performing a `getLogs` ([fb5a410](https://github.com/algolia/algoliasearch-client-scala/commit/fb5a410))
+- add naturalLanguages ([fca23c0](https://github.com/algolia/algoliasearch-client-scala/commit/fca23c0))
+
+
+
 ## [1.35.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.35.0...1.35.1) (2020-04-06)
 
 ### Misc
