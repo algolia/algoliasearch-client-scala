@@ -17,6 +17,7 @@
   <a href="https://discourse.algolia.com" target="_blank">Community Forum</a>  •
   <a href="http://stackoverflow.com/questions/tagged/algolia" target="_blank">Stack Overflow</a>  •
   <a href="https://github.com/algolia/algoliasearch-client-scala/issues" target="_blank">Report a bug</a>  •
+  <a href="https://www.algolia.com/doc/api-client/troubleshooting/faq/scala/" target="_blank">FAQ</a>  •
   <a href="https://www.algolia.com/support" target="_blank">Support</a>
 </p>
 
@@ -191,6 +192,10 @@ client.execute {
 ```
 
 For full documentation, visit the **[Algolia Scala API Client](https://www.algolia.com/doc/api-client/getting-started/install/scala/)**.
+
+## ❓ Troubleshooting
+
+Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/api-client/troubleshooting/faq/scala/) where you will find answers for the most common issues and gotchas with the client.
 
 ## 📄 License
 Algolia Scala API Client is an open-sourced software licensed under the [MIT license](LICENSE.md).
