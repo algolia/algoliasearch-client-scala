@@ -94,8 +94,8 @@ jobs:
       - run:
           name: Release new version
           command: |
-            if [ -z "BINTRAY_USER" ]; then echo "BINTRAY_USER is not set";  exit 1; fi
-            if [ -z "BINTRAY_PASS" ]; then echo "BINTRAY_PASS is not set";  exit 1; fi
+            if [[ -z "$BINTRAY_USER" ]]; then echo '$BINTRAY_USER is not set';  exit 1; fi
+            if [[ -z "$BINTRAY_PASS" ]]; then echo '$BINTRAY_PASS is not set';  exit 1; fi
             cat /dev/null | sbt '+publish'
 
 workflows:
