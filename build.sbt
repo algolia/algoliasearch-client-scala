@@ -8,6 +8,7 @@ lazy val commonSettings = Seq(
   crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
   libraryDependencies ++= Seq(
     "org.json4s" %% "json4s-native" % "3.6.7",
+    "org.slf4j" % "slf4j-api" % "2.0.0-alpha1",
     "org.scalatest" %% "scalatest" % "3.1.1" % "test"
   ),
   scalacOptions ++= Seq(
@@ -17,28 +18,22 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(core, apacheSync, apacheAsync)
+  .aggregate(algoliasearchScalaCore, algoliasearchScalaApache)
 
-lazy val core = (project in file("algoliasearch-scala-core"))
+lazy val algoliasearchScalaCore = (project in file("algoliasearch-scala-core"))
   .settings(
     commonSettings
   )
 
-lazy val apacheSync = (project in file("algoliasearch-scala-apache-sync"))
-  .dependsOn(core)
+lazy val algoliasearchScalaApache = (project in file("algoliasearch-scala-apache"))
+  .dependsOn(algoliasearchScalaCore % "compile->compile;test->test")
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "org.apache.httpcomponents" % "httpclient" % "4.5.12"
-    )
-  )
-
-lazy val apacheAsync = (project in file("algoliasearch-scala-apache-async"))
-  .dependsOn(core)
-  .settings(
-    commonSettings,
-    libraryDependencies ++= Seq(
-      "org.apache.httpcomponents" % "httpasyncclient" % "4.1.4"
+      "commons-io" % "commons-io" % "2.7",
+      "org.apache.httpcomponents" % "httpasyncclient" % "4.1.4",
+      "ch.qos.logback" % "logback-classic" % "1.3.0-alpha5" % "test",
+      "ch.qos.logback" % "logback-core" % "1.3.0-alpha5" % "test"
     )
   )
 

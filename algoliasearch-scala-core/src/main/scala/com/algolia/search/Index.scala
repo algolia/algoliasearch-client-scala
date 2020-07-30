@@ -1,30 +1,31 @@
 package com.algolia.search
 
 import com.algolia.errors.AlgoliaError
-import com.algolia.requester.{Functor, Requester}
+import com.algolia.requester.Requester
 import com.algolia.search.responses.SaveObjectRes
 import com.algolia.transport.Call.Write
-import com.algolia.transport.Transport._
-import com.algolia.transport.{Post, Transport}
+import com.algolia.transport.{POST, Transport}
 
-class Index[T: Manifest, F[_]](
+import scala.concurrent.{ExecutionContext, Future}
+
+class Index[T: Manifest](
     transport: Transport,
     indexName: String
 )(
     implicit
-    requester: Requester[F],
-    functor: Functor[F]
+    requester: Requester,
+    ex: ExecutionContext
 ) {
 
   private def path(endpoint: String): String = {
-    val urlEncodedIndexName = urlEncode(indexName)
-    val urlEncodedEndpoint = urlEncode(endpoint)
+    val urlEncodedIndexName = Transport.urlEncode(indexName)
+    val urlEncodedEndpoint = Transport.urlEncode(endpoint)
     s"/1/indexes/$urlEncodedIndexName$urlEncodedEndpoint"
   }
 
-  def saveObject(obj: T): F[Either[AlgoliaError, SaveObjectRes]] = {
+  def saveObject(obj: T): Future[Either[AlgoliaError, SaveObjectRes]] = {
     val p = path("")
-    transport.request(Post, p, obj, Write)
+    transport.request[T, SaveObjectRes](POST, p, Some(obj), Write)
   }
 
 }

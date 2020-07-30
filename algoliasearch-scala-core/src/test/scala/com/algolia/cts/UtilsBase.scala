@@ -5,13 +5,15 @@ import java.time.format.DateTimeFormatter
 
 import com.algolia.search.ObjectID
 
-object Utils {
+object UtilsBase {
+
+  object Implicits {}
 
   case class Record(objectID: String) extends ObjectID
 
-  def appId1: String = sys.env.getOrElse("ALGOLIA_APPLICATION_ID_1", "")
-  def adminKey1: String = sys.env.getOrElse("ALGOLIA_ADMIN_KEY_1", "")
-  def searchKey1: String = sys.env.getOrElse("ALGOLIA_SEARCH_KEY_1", "")
+  def appId1: String = sys.env.getOrElse("ALGOLIA_APPLICATION_ID_ANTHONY", "")
+  def adminKey1: String = sys.env.getOrElse("ALGOLIA_ADMIN_KEY_ANTHONY", "")
+  def searchKey1: String = sys.env.getOrElse("ALGOLIA_SEARCH_KEY_ANTHONY", "")
 
   def appId2: String = sys.env.getOrElse("ALGOLIA_APPLICATION_ID_2", "")
   def adminKey2: String = sys.env.getOrElse("ALGOLIA_ADMIN_KEY_2", "")

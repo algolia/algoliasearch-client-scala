@@ -1,15 +1,18 @@
 package com.algolia.search
 
-import com.algolia.requester.{Functor, Requester}
+import com.algolia.requester.Requester
 import com.algolia.transport.Accept._
 import com.algolia.transport._
 
+import scala.concurrent.ExecutionContext
 import scala.util.Random
 
-class Client[F[_]](config: Configuration)(
+class Client(
+    config: Configuration
+)(
     implicit
-    requester: Requester[F],
-    functor: Functor[F]
+    requester: Requester,
+    ex: ExecutionContext
 ) {
   private val transport = Transport(
     config.appID,
@@ -21,8 +24,8 @@ class Client[F[_]](config: Configuration)(
 
   private def defaultHosts(appID: String): Seq[StatefulHost] = {
     Seq(
-      StatefulHost(s"$appID-dsn.com.algolia.net", Read),
-      StatefulHost(s"$appID.com.algolia.net", Write)
+      StatefulHost(s"$appID-dsn.algolia.net", Read),
+      StatefulHost(s"$appID.algolia.net", Write)
     ) ++ Random.shuffle(
       Seq(
         StatefulHost(s"$appID-1.algolianet.com", ReadWrite),
@@ -32,20 +35,20 @@ class Client[F[_]](config: Configuration)(
     )
   }
 
-  def initIndex[T: Manifest](indexName: String): Index[T, F] =
-    new Index[T, F](transport, indexName)
+  def initIndex[T: Manifest](indexName: String): Index[T] =
+    new Index[T](transport, indexName)
 }
 
 object Client {
-  def apply[F[_]](applicationID: String, apiKey: String)(
+  def apply(applicationID: String, apiKey: String)(
       implicit
-      requester: Requester[F],
-      functor: Functor[F]
-  ): Client[F] = new Client(Configuration(applicationID, apiKey))
+      requester: Requester,
+      ex: ExecutionContext
+  ): Client = new Client(Configuration(applicationID, apiKey))
 
-  def apply[F[_]](configuration: Configuration)(
+  def apply(configuration: Configuration)(
       implicit
-      requester: Requester[F],
-      functor: Functor[F]
-  ): Client[F] = new Client(configuration)
+      requester: Requester,
+      ex: ExecutionContext
+  ): Client = new Client(configuration)
 }

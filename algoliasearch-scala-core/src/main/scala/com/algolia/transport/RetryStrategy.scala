@@ -1,6 +1,8 @@
 package com.algolia.transport
 
+import com.algolia.errors.AlgoliaError
 import com.algolia.transport.Call.{Read, Write}
+import com.algolia.transport.Outcome.Success
 
 import scala.concurrent.duration.Duration
 
@@ -9,17 +11,26 @@ case class RetryStrategy(
     readTimeout: Duration,
     writeTimeout: Duration
 ) {
-  def getTryableHosts(kind: Call): Seq[Host] = {
-    def computeTimeout(retryCount: Int): Duration = {
-      val baseTimeout = kind match {
-        case Read  => readTimeout
-        case Write => writeTimeout
-      }
-      baseTimeout * (retryCount + 1)
-    }
 
-    hosts.filter(_.accept(kind)).map(h => Host(h.host, computeTimeout(h.retryCount)))
+  def getTryableHosts(kind: Call): Seq[Host] = {
+    hosts
+      .filter(_.accept(kind))
+      .map(h => Host(h.host, computeTimeout(kind, h.retryCount)))
   }
 
-  def decide(h: Host, code: Int, error: Error): Unit = {}
+  private def computeTimeout(kind: Call, retryCount: Int): Duration = {
+    val baseTimeout = kind match {
+      case Read  => readTimeout
+      case Write => writeTimeout
+    }
+    baseTimeout * (retryCount + 1)
+  }
+
+  def decide(h: Host, code: Int, error: Option[AlgoliaError]): Outcome = {
+    Success
+  }
+
+  private def isZero(code: Int): Boolean = code == 0
+  private def is2xx(code: Int): Boolean = 200 <= code && code < 300
+  private def is4xx(code: Int): Boolean = 400 <= code && code < 400
 }
