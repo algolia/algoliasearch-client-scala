@@ -1,5 +1,13 @@
 # ChangeLog
 
+## [1.37.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.36.0...1.37.0) (2020-08-03)
+
+### Feat
+
+- **search**: expose the enablePersonalization query parameter in settings as well ([d7e27a2](https://github.com/algolia/algoliasearch-client-scala/commit/d7e27a2))
+
+
+
 ## [1.36.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.35.1...1.36.0) (2020-07-20)
 
 ### Feat
