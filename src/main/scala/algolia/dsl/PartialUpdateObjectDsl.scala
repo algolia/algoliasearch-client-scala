@@ -44,6 +44,18 @@ trait PartialUpdateObjectDsl {
         attribute = Some(attribute)
       )
 
+    def from(attribute: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(
+        IncrementFrom,
+        attribute = Some(attribute)
+      )
+
+    def set(attribute: String): PartialUpdateObjectOperationDefinition =
+      PartialUpdateObjectOperationDefinition(
+        IncrementSet,
+        attribute = Some(attribute)
+      )
+
   }
 
   case object decrement {
