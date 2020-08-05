@@ -27,7 +27,6 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.definitions.BatchDefinition
 import algolia.http.{HttpPayload, POST}
 
 class PartialUpdateObjectTest extends AlgoliaTest {
@@ -38,13 +37,47 @@ class PartialUpdateObjectTest extends AlgoliaTest {
       increment attribute "toto" ofObjectId "myId" by 1 from "index"
     }
 
-    it("should call API") {
+    it("should build increment attribute payload") {
       (increment attribute "toto" ofObjectId "myId" by 1 from "index")
         .build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "index", "myId", "partial"),
           body = Some("""{"toto":{"_operation":"Increment","value":1}}"""),
+          isSearch = false,
+          requestOptions = None
+        )
+      )
+    }
+
+    it("should increment from") {
+      increment from "toto" ofObjectId "myId" by 1 from "index"
+    }
+
+    it("should build increment from payload") {
+      (increment from "toto" ofObjectId "myId" by 1 from "index")
+        .build() should be(
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "index", "myId", "partial"),
+          body = Some("""{"toto":{"_operation":"IncrementFrom","value":1}}"""),
+          isSearch = false,
+          requestOptions = None
+        )
+      )
+    }
+
+    it("should increment set") {
+      increment set "toto" ofObjectId "myId" by 1 from "index"
+    }
+
+    it("should build increment set payload") {
+      (increment set "toto" ofObjectId "myId" by 1 from "index")
+        .build() should be(
+        HttpPayload(
+          POST,
+          Seq("1", "indexes", "index", "myId", "partial"),
+          body = Some("""{"toto":{"_operation":"IncrementSet","value":1}}"""),
           isSearch = false,
           requestOptions = None
         )

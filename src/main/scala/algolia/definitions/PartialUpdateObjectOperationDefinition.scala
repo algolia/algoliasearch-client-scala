@@ -56,6 +56,14 @@ case object Remove extends Operation {
   override def name: String = "Remove"
 }
 
+case object IncrementFrom extends Operation {
+  override def name: String = "IncrementFrom"
+}
+
+case object IncrementSet extends Operation {
+  override def name: String = "IncrementSet"
+}
+
 case class PartialUpdateObjectOperationDefinition(
     operation: Operation,
     index: Option[String] = None,
