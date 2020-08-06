@@ -1,5 +1,13 @@
 # ChangeLog
 
+## [1.38.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.37.0...1.38.0) (2020-08-06)
+
+### Feat
+
+- expose 'increment from' and 'increment set' as new partial update operations ([69d61e5](https://github.com/algolia/algoliasearch-client-scala/commit/69d61e5))
+
+
+
 ## [1.37.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.36.0...1.37.0) (2020-08-03)
 
 ### Feat
