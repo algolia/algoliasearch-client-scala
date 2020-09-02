@@ -66,7 +66,7 @@ private[algolia] case class HttpPayload(
       headers: Map[String, String],
       dnsNameResolver: NameResolver[InetAddress]
   ): Request = {
-    val uri = path.foldLeft(host)((url, p) => appendPath(url, p))
+    val uri = path.foldLeft(host)((url, p) => insertPath(url, p))
 
     var builder: RequestBuilder =
       new RequestBuilder().setMethod(verb.toString).setUrl(uri)
@@ -107,6 +107,12 @@ private[algolia] case class HttpPayload(
 
     s"$verb $host${_path}${_query}${_body}"
   }
+
+  private def insertPath(url: String, path: String) =
+    url.indexOf('?') match {
+      case -1 => appendPath(url, path)
+      case i  => appendPath(url.substring(0, i), path) + url.substring(i)
+    }
 
   private def appendPath(url: String, path: String) =
     if (url.endsWith("/")) {
