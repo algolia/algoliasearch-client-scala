@@ -108,10 +108,11 @@ private[algolia] case class HttpPayload(
     s"$verb $host${_path}${_query}${_body}"
   }
 
-  private def appendPath(url: String, path: String ) = if(url.endsWith("/")) {
-    url + path
-  } else {
-    url + "/" + path
-  }
+  private def appendPath(url: String, path: String) =
+    if (url.endsWith("/")) {
+      url + path
+    } else {
+      url + "/" + path
+    }
 
 }
