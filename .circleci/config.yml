@@ -102,14 +102,26 @@ workflows:
   version: 2
   build:
     jobs:
-      - format
-      - test-2-11
+      - format:
+          filters:
+            tags:
+              only: /.*/
+      - test-2-11:
+          filters:
+            tags:
+              only: /.*/
       - test-2-12:
           requires:
             - test-2-11
+          filters:
+            tags:
+              only: /.*/
       - test-2-13:
           requires:
             - test-2-12
+          filters:
+            tags:
+              only: /.*/
       - release:
           requires:
             - format
@@ -117,7 +129,7 @@ workflows:
             - test-2-12
             - test-2-13
           filters:
-            branches:
-              only: master
             tags:
               only: /^[1-9]+.[0-9]+.[0-9]+.*/
+            branches:
+              ignore: /.*/
