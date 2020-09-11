@@ -1,5 +1,13 @@
 # ChangeLog
 
+## [1.38.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.38.0...1.38.1) (2020-09-11)
+
+### Refactor
+
+- remove dependency on scala-uri (#601) ([3b1be2b](https://github.com/algolia/algoliasearch-client-scala/commit/3b1be2b))
+
+
+
 ## [1.38.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.37.0...1.38.0) (2020-08-06)
 
 ### Feat

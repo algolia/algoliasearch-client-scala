@@ -1,7 +1,7 @@
 organization := "com.algolia"
 name := "algoliasearch-scala"
 description := "Scala client for Algolia Search API"
-version := "1.38.0"
+version := "1.38.1"
 crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
 scalaVersion := "2.13.1"
 testOptions in Test += Tests.Argument("-P10")
