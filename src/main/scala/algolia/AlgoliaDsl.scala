@@ -91,13 +91,13 @@ object AlgoliaDsl extends AlgoliaDsl {
       new ZonedDateTimeSerializer +
       new AlternativesSerializer
 
-  val searchableAttributesUnordered: Regex = """^unordered\(([\w-]+)\)$""".r
+  val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
-    """^([\w-]+,[\w-]+[,[\w-]+]*)$""".r
+    """^([\w-\\.]+,[\w-\\.]+[,[\w-\\.]+]*)$""".r
   val numericAttributesToIndexEqualOnly: Regex =
-    """^equalOnly\(([\w-]+)\)$""".r
-  val asc: Regex = """^asc\(([\w-]+)\)$""".r
-  val desc: Regex = """^desc\(([\w-]+)\)$""".r
+    """^equalOnly\(([\w-\\.]+)\)$""".r
+  val asc: Regex = """^asc\(([\w-\\.]+)\)$""".r
+  val desc: Regex = """^desc\(([\w-\\.]+)\)$""".r
 
   sealed trait ForwardToReplicas
 

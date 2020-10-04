@@ -116,7 +116,8 @@ class IndexSettingsTest extends AlgoliaTest {
         |  ],
         |  "customRanking":[
         |    "asc(att8)",
-        |    "desc(att9)"
+        |    "desc(att9)",
+        |    "desc(nested.att10)"
         |  ],
         |  "typoTolerance":"strict",
         |  "ignorePlurals":"fr,en"
@@ -169,7 +170,8 @@ class IndexSettingsTest extends AlgoliaTest {
             Some(
               Seq(
                 CustomRanking.asc("att8"),
-                CustomRanking.desc("att9")
+                CustomRanking.desc("att9"),
+                CustomRanking.desc("nested.att10")
               )
             )
           )
@@ -221,7 +223,8 @@ class IndexSettingsTest extends AlgoliaTest {
         customRanking = Some(
           Seq(
             CustomRanking.asc("att8"),
-            CustomRanking.desc("att9")
+            CustomRanking.desc("att9"),
+            CustomRanking.desc("nested.att10")
           )
         ),
         ignorePlurals = Some(IgnorePlurals.list(Seq("fr", "en"))),
