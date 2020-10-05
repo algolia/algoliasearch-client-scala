@@ -1,5 +1,13 @@
 # ChangeLog
 
+## [1.38.2](https://github.com/algolia/algoliasearch-client-scala/compare/1.38.1...1.38.2) (2020-10-05)
+
+### Fix
+
+- Dot(.) in an attribute name deserialization ([9703d3a](https://github.com/algolia/algoliasearch-client-scala/commit/9703d3a))
+
+
+
 ## [1.38.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.38.0...1.38.1) (2020-09-11)
 
 ### Refactor
