@@ -43,7 +43,7 @@ case class ABTestResponse(
 )
 
 case class VariantResponse(
-    averageClickPosition: Option[Int],
+    averageClickPosition: Option[Float],
     clickCount: Option[Int],
     clickThroughRate: Option[Float],
     conversionCount: Option[Int],
