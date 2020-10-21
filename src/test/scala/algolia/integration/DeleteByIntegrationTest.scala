@@ -28,10 +28,13 @@ package algolia.integration
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.objects.Query
+import algolia.responses.ObjectID
 
 class DeleteByIntegrationTest extends AlgoliaTest {
 
-  val list: Seq[Value] = 1 to 100 map (i => Value(i, i.toString))
+  val list: Seq[ValueTag] = 1 to 100 map (
+      i => ValueTag(i, i.toString, Seq("algolia"))
+  )
   val testDeleteBy: String = getTestIndexName("testDeleteBy")
 
   before {
@@ -60,4 +63,20 @@ class DeleteByIntegrationTest extends AlgoliaTest {
 
   }
 
+  describe("delete by query tag") {
+
+    val query = Query(tagFilters = Some(Seq("algolia")))
+
+    it("should delete with a query ") {
+      val d = AlgoliaTest.client.execute {
+        delete from testDeleteBy by query
+      }
+
+      taskShouldBeCreatedAndWaitForIt(d, testDeleteBy)
+    }
+
+  }
 }
+
+case class ValueTag(int: Int, objectID: String, _tags: Seq[String])
+    extends ObjectID
