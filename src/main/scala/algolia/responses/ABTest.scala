@@ -54,5 +54,6 @@ case class VariantResponse(
     searchCount: Option[Int],
     trafficPercentage: Int,
     userCount: Option[Int],
-    customSearchParameters: Option[Query]
+    customSearchParameters: Option[Query],
+    trackedSearchCount: Option[Int]
 )
