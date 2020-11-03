@@ -1,5 +1,17 @@
 # ChangeLog
 
+## [1.39.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.38.2...1.39.0) (2020-11-03)
+
+### Fix
+
+- **analytics**: check if the type of AB testing average click position is float ([6054744](https://github.com/algolia/algoliasearch-client-scala/commit/6054744))
+
+### Feat
+
+- **cts**: add delete by tag test ([3801d0b](https://github.com/algolia/algoliasearch-client-scala/commit/3801d0b))
+
+
+
 ## [1.38.2](https://github.com/algolia/algoliasearch-client-scala/compare/1.38.1...1.38.2) (2020-10-05)
 
 ### Fix
