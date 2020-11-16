@@ -103,7 +103,10 @@ object AlgoliaDsl extends AlgoliaDsl {
 
   sealed trait ClearExistingRules
 
+  @deprecated("Use ClearExistingSynonyms instead")
   sealed trait ReplaceExistingSynonyms
+
+  sealed trait ClearExistingSynonyms
 
   sealed trait Of
 
@@ -415,7 +418,10 @@ object AlgoliaDsl extends AlgoliaDsl {
 
   case object forwardToReplicas extends ForwardToReplicas
 
+  @deprecated("Use clearExistingSynonyms instead")
   case object replaceExistingSynonyms extends ReplaceExistingSynonyms
+
+  case object clearExistingSynonyms extends ClearExistingSynonyms
 
   case object clearExistingRules extends ClearExistingRules
 
