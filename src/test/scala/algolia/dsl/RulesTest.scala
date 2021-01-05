@@ -25,12 +25,12 @@
 
 package algolia.dsl
 
-import java.time.{ZoneId, ZonedDateTime}
-
 import algolia.AlgoliaDsl._
 import algolia.http._
 import algolia.objects._
 import algolia.{AlgoliaDsl, AlgoliaTest}
+
+import java.time.{ZoneId, ZonedDateTime}
 
 class RulesTest extends AlgoliaTest {
 
@@ -162,7 +162,14 @@ class RulesTest extends AlgoliaTest {
           ),
           consequence = Consequence(
             params = Some(Map("query" -> "1")),
-            userData = Some(Map("a" -> "b"))
+            userData = Some(Map("a" -> "b")),
+            renderingContent = Some(
+              RenderingContent(
+                redirect = Redirect("http://algolia.com/scala"),
+                facetMerchandising = FacetMerchandising(order = Seq("brand")),
+                userData = Some(Map("a" -> "b"))
+              )
+            )
           )
         )
 
@@ -173,10 +180,10 @@ class RulesTest extends AlgoliaTest {
             Seq("1", "indexes", "toto", "rules", "rule1"),
             queryParameters = Some(Map("forwardToReplicas" -> "true")),
             body = Some(
-              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"}}}"""
+              """{"objectID":"rule1","condition":{"pattern":"a","anchoring":"is"},"consequence":{"params":{"query":"1"},"userData":{"a":"b"},"renderingContent":{"redirect":{"url":"http://algolia.com/scala"},"facetMerchandising":{"order":["brand"]},"userData":{"a":"b"}}}}"""
             ),
             isSearch = false,
-            requestOptions = None
+            requestOptions = None,
           )
         )
       }

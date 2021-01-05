@@ -48,9 +48,20 @@ case class Consequence(
     filterPromotes: Option[Boolean] = None,
     promote: Option[Iterable[ConsequencePromote]] = None,
     hide: Option[Iterable[ConsequenceHide]] = None,
-    userData: Option[Map[String, Any]] = None
+    userData: Option[Map[String, Any]] = None,
+    renderingContent: Option[RenderingContent] = None
 )
 
 case class ConsequencePromote(objectID: String, position: Int)
 
 case class ConsequenceHide(objectID: String)
+
+case class RenderingContent(
+    redirect: Redirect,
+    facetMerchandising: FacetMerchandising,
+    userData: Option[Map[String, Any]] = None
+)
+
+case class Redirect(url: String)
+
+case class FacetMerchandising(order: Seq[String])
