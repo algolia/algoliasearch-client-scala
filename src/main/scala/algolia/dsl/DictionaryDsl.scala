@@ -25,31 +25,36 @@
 
 package algolia.dsl
 
-import algolia.definitions._
-import algolia.objects.{AbstractSynonym, Dictionary, DictionaryEntry, Rule}
+import algolia.definitions.SaveDictionaryDefinition
+import algolia.objects.{DictionaryEntry, StopwordEntry}
+import algolia.responses.Task
+import algolia.{AlgoliaClient, AlgoliaClientException, Executable}
 import org.json4s.Formats
 
-trait SaveDsl {
+import scala.concurrent.{ExecutionContext, Future}
+
+trait DictionaryDsl {
 
   implicit val formats: Formats
 
-  object save {
+  abstract class SaveDictionaryDefinitionExecutable[T <: DictionaryEntry]
+      extends Executable[SaveDictionaryDefinition[T], Task] {
 
-    def synonym(synonym: AbstractSynonym) =
-      SaveSynonymDefinition(synonym = synonym)
-
-    def synonyms(synonyms: Iterable[AbstractSynonym]) =
-      BatchSynonymsDefinition(synonyms = synonyms)
-
-    def rule(rule: Rule) =
-      SaveRuleDefinition(rule = rule)
-
-    def rules(rules: Iterable[Rule]) =
-      BatchRulesDefinition(rules = rules)
-
-    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
-      SaveDictionaryDefinition[T](dictionary)
-
+    override def apply(
+        client: AlgoliaClient,
+        query: SaveDictionaryDefinition[T]
+    )(
+        implicit executor: ExecutionContext
+    ): Future[Task] = {
+      if (query.dictionaryEntries.isEmpty) {
+        return Future.failed(
+          new AlgoliaClientException(s"Dictionary entries cannot be empty")
+        )
+      }
+      client.request[Task](query.build())
+    }
   }
 
+  implicit object SaveStopwordDictionaryDefinitionExecutable
+      extends SaveDictionaryDefinitionExecutable[StopwordEntry]
 }

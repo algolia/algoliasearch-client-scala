@@ -23,33 +23,29 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.integration
 
-import algolia.definitions._
-import algolia.objects.{AbstractSynonym, Dictionary, DictionaryEntry, Rule}
-import org.json4s.Formats
+import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
+import algolia.objects.Dictionary.Stopwords
+import algolia.objects._
 
-trait SaveDsl {
+class DictionaryIntegrationTest extends AlgoliaTest {
 
-  implicit val formats: Formats
+  describe("dictionaries") {
 
-  object save {
+    it("should save stop word entries") {
 
-    def synonym(synonym: AbstractSynonym) =
-      SaveSynonymDefinition(synonym = synonym)
+      val stopwords = Seq(StopwordEntry("MyObjectID", "en", "word", "enabled"))
 
-    def synonyms(synonyms: Iterable[AbstractSynonym]) =
-      BatchSynonymsDefinition(synonyms = synonyms)
+      val r = AlgoliaTest.client.execute {
+        save dictionary Stopwords entries stopwords
+      }
 
-    def rule(rule: Rule) =
-      SaveRuleDefinition(rule = rule)
-
-    def rules(rules: Iterable[Rule]) =
-      BatchRulesDefinition(rules = rules)
-
-    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
-      SaveDictionaryDefinition[T](dictionary)
-
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+        res.createdAt shouldBe None
+      }
+    }
   }
-
 }

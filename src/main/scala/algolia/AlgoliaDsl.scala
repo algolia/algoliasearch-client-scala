@@ -69,6 +69,7 @@ trait AlgoliaDsl
     with SendDsl
     with SetDsl
     with RestoreDsl
+    with DictionaryDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 

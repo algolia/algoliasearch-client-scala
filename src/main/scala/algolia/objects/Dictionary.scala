@@ -23,33 +23,47 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.objects
 
-import algolia.definitions._
-import algolia.objects.{AbstractSynonym, Dictionary, DictionaryEntry, Rule}
-import org.json4s.Formats
+sealed trait Dictionary[T <: DictionaryEntry] {
+  val name: String
+}
 
-trait SaveDsl {
+object Dictionary {
 
-  implicit val formats: Formats
-
-  object save {
-
-    def synonym(synonym: AbstractSynonym) =
-      SaveSynonymDefinition(synonym = synonym)
-
-    def synonyms(synonyms: Iterable[AbstractSynonym]) =
-      BatchSynonymsDefinition(synonyms = synonyms)
-
-    def rule(rule: Rule) =
-      SaveRuleDefinition(rule = rule)
-
-    def rules(rules: Iterable[Rule]) =
-      BatchRulesDefinition(rules = rules)
-
-    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
-      SaveDictionaryDefinition[T](dictionary)
-
+  case object Plurals extends Dictionary[PluralEntry] {
+    override val name: String = "plural"
   }
 
+  case object Stopwords extends Dictionary[StopwordEntry] {
+    override val name: String = "stopwords"
+  }
+  case object Compounds extends Dictionary[CompoundEntry] {
+    override val name: String = "compounds"
+  }
 }
+
+sealed trait DictionaryEntry {
+  val objectID: String
+  val language: String
+}
+
+case class StopwordEntry(
+    objectID: String,
+    language: String,
+    word: String,
+    state: String
+) extends DictionaryEntry
+
+case class PluralEntry(
+    objectID: String,
+    language: String,
+    words: Seq[String]
+) extends DictionaryEntry
+
+case class CompoundEntry(
+    objectID: String,
+    language: String,
+    word: String,
+    decomposition: Seq[String]
+) extends DictionaryEntry

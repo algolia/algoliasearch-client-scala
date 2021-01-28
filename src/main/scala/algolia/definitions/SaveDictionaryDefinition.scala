@@ -23,33 +23,47 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.definitions
 
-import algolia.definitions._
-import algolia.objects.{AbstractSynonym, Dictionary, DictionaryEntry, Rule}
+import algolia.http.{HttpPayload, POST}
+import algolia.objects.{Dictionary, DictionaryEntry, RequestOptions}
 import org.json4s.Formats
+import org.json4s.native.Serialization.write
 
-trait SaveDsl {
+case class SaveDictionaryDefinition[A <: DictionaryEntry](
+    dictionary: Dictionary[A],
+    dictionaryEntries: Seq[A] = List(),
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends Definition {
 
-  implicit val formats: Formats
+  override type T = SaveDictionaryDefinition[A]
 
-  object save {
+  def entries(entries: Seq[A]): SaveDictionaryDefinition[A] =
+    copy(dictionaryEntries = entries)
 
-    def synonym(synonym: AbstractSynonym) =
-      SaveSynonymDefinition(synonym = synonym)
+  override private[algolia] def build() = {
+    val path = Seq("1", "dictionaries", dictionary.name, "batch")
+    val body = Map(
+      "clearExistingDictionaryEntries" -> false,
+      "requests" -> dictionaryEntries.map(entry =>
+        Map(
+          "action" -> "addEntry",
+          "body" -> entry
+        )
+      )
+    )
 
-    def synonyms(synonyms: Iterable[AbstractSynonym]) =
-      BatchSynonymsDefinition(synonyms = synonyms)
-
-    def rule(rule: Rule) =
-      SaveRuleDefinition(rule = rule)
-
-    def rules(rules: Iterable[Rule]) =
-      BatchRulesDefinition(rules = rules)
-
-    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
-      SaveDictionaryDefinition[T](dictionary)
-
+    HttpPayload(
+      POST,
+      path,
+      body = Some(write(body)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
   }
 
+  override def options(
+      requestOptions: RequestOptions
+  ): SaveDictionaryDefinition[A] = copy(requestOptions = Some(requestOptions))
 }
