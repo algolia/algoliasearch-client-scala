@@ -23,44 +23,20 @@
  * THE SOFTWARE.
  */
 
-package algolia.integration
+package algolia.responses
 
-import algolia.AlgoliaDsl._
-import algolia.AlgoliaTest
-import algolia.objects.Dictionary.Stopwords
-import algolia.objects._
+import org.json4s.{Formats, JObject}
 
-import java.util.UUID
+case class SearchDictionaryResult(
+    hits: Seq[JObject],
+    nbHits: Int,
+    page: Int,
+    nbPages: Int
+) {
 
-class DictionaryIntegrationTest extends AlgoliaTest {
+  implicit val formats: Formats = org.json4s.DefaultFormats
 
-  describe("dictionaries") {
+  def asHit[T <: Hit: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-    val client = AlgoliaTest.client2
-    val id = UUID.randomUUID().toString
-    val stopwords = Seq(StopwordEntry("MyObjectID", "en", "upper", "enabled"))
-
-    it("should save stop word entries") {
-      val r = client.execute {
-        save dictionary Stopwords entries stopwords
-      }
-
-      appTaskShouldBeCreatedAndWaitForIt(client, r)
-
-      whenReady(r) { res =>
-        res.updatedAt shouldNot be(None)
-      }
-    }
-
-    it("should search for stop words entries") {
-      val r = client.execute {
-        search into Stopwords query QueryDictionary(query = Some("MyObjectID"))
-      }
-
-      whenReady(r) { res =>
-        println(res)
-        res.hits shouldNot have size 0
-      }
-    }
-  }
+  def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
 }

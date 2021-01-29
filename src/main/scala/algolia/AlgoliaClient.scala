@@ -25,15 +25,15 @@
 
 package algolia
 
-import java.nio.charset.Charset
-import java.util.Base64
-
 import algolia.http.HttpPayload
-import algolia.objects.Query
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
+import algolia.objects.{DictionaryEntry, Query}
+import algolia.responses.SearchDictionaryResult
 import org.slf4j.{Logger, LoggerFactory}
 
+import java.nio.charset.Charset
+import java.util.Base64
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex

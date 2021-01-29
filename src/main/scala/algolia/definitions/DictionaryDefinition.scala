@@ -26,7 +26,12 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Dictionary, DictionaryEntry, RequestOptions}
+import algolia.objects.{
+  Dictionary,
+  DictionaryEntry,
+  QueryDictionary,
+  RequestOptions
+}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
@@ -66,4 +71,32 @@ case class SaveDictionaryDefinition[A <: DictionaryEntry](
   override def options(
       requestOptions: RequestOptions
   ): SaveDictionaryDefinition[A] = copy(requestOptions = Some(requestOptions))
+}
+
+case class SearchDictionaryDefinition[A <: DictionaryEntry](
+    dictionary: Dictionary[A],
+    query: QueryDictionary = QueryDictionary(),
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends Definition {
+
+  override type T = SearchDictionaryDefinition[A]
+
+  def query(q: QueryDictionary): SearchDictionaryDefinition[A] = copy(query = q)
+
+  override private[algolia] def build() = {
+    val path = Seq("1", "dictionaries", dictionary.name, "search")
+    val body = query.toQueryParam
+    HttpPayload(
+      POST,
+      path,
+      body = Some(write(body)),
+      isSearch = true,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(
+      requestOptions: RequestOptions
+  ): SearchDictionaryDefinition[A] = copy(requestOptions = Some(requestOptions))
 }

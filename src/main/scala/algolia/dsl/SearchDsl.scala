@@ -27,6 +27,7 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl.In
 import algolia.definitions._
+import algolia.objects.{Dictionary, DictionaryEntry}
 import algolia.responses.{SearchFacetResult, SearchResult, SearchUserID}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -47,6 +48,10 @@ trait SearchDsl {
 
     def userIDs(query: String) = SearchUserIDDefinition(query)
 
+    def into[T <: DictionaryEntry](
+        dictionary: Dictionary[T]
+    ): SearchDictionaryDefinition[T] =
+      SearchDictionaryDefinition[T](dictionary)
   }
 
   implicit object SearchDefinitionExecutable

@@ -25,9 +25,17 @@
 
 package algolia.dsl
 
-import algolia.definitions.SaveDictionaryDefinition
-import algolia.objects.{DictionaryEntry, StopwordEntry}
-import algolia.responses.Task
+import algolia.definitions.{
+  SaveDictionaryDefinition,
+  SearchDictionaryDefinition
+}
+import algolia.objects.{
+  CompoundEntry,
+  DictionaryEntry,
+  PluralEntry,
+  StopwordEntry
+}
+import algolia.responses.{DictionaryTask, SearchDictionaryResult}
 import algolia.{AlgoliaClient, AlgoliaClientException, Executable}
 import org.json4s.Formats
 
@@ -37,24 +45,57 @@ trait DictionaryDsl {
 
   implicit val formats: Formats
 
-  abstract class SaveDictionaryDefinitionExecutable[T <: DictionaryEntry]
-      extends Executable[SaveDictionaryDefinition[T], Task] {
+  // Save Dictionary Definition
+
+  implicit object SaveStopwordDictionaryDefinitionExecutable
+      extends SaveDictionaryDefinitionExecutable[StopwordEntry]
+
+  implicit object SavePluralDictionaryDefinitionExecutable
+      extends SaveDictionaryDefinitionExecutable[PluralEntry]
+
+  implicit object SaveCompoundDictionaryDefinitionExecutable
+      extends SaveDictionaryDefinitionExecutable[CompoundEntry]
+
+  sealed abstract class SaveDictionaryDefinitionExecutable[T <: DictionaryEntry]
+      extends Executable[SaveDictionaryDefinition[T], DictionaryTask] {
 
     override def apply(
         client: AlgoliaClient,
         query: SaveDictionaryDefinition[T]
     )(
         implicit executor: ExecutionContext
-    ): Future[Task] = {
+    ): Future[DictionaryTask] = {
       if (query.dictionaryEntries.isEmpty) {
         return Future.failed(
           new AlgoliaClientException(s"Dictionary entries cannot be empty")
         )
       }
-      client.request[Task](query.build())
+      client.request[DictionaryTask](query.build())
     }
   }
 
-  implicit object SaveStopwordDictionaryDefinitionExecutable
-      extends SaveDictionaryDefinitionExecutable[StopwordEntry]
+  //Search Dictionary Definition
+
+  implicit object SearchStopwordDictionaryDefinitionExecutable
+      extends SearchDictionaryDefinitionExecutable[StopwordEntry]
+
+  implicit object SearchPluralDictionaryDefinitionExecutable
+      extends SearchDictionaryDefinitionExecutable[PluralEntry]
+
+  implicit object SearchCompoundDictionaryDefinitionExecutable
+      extends SearchDictionaryDefinitionExecutable[CompoundEntry]
+
+  sealed abstract class SearchDictionaryDefinitionExecutable[
+      T <: DictionaryEntry
+  ] extends Executable[SearchDictionaryDefinition[T], SearchDictionaryResult] {
+
+    override def apply(
+        client: AlgoliaClient,
+        query: SearchDictionaryDefinition[T]
+    )(
+        implicit executor: ExecutionContext
+    ): Future[SearchDictionaryResult] = {
+      client.requestSearch[SearchDictionaryResult](query.build())
+    }
+  }
 }
