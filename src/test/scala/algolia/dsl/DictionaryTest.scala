@@ -28,23 +28,25 @@ package algolia.dsl
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Dictionary, StopwordEntry}
+import algolia.objects.Dictionary.Stopwords
+import algolia.objects.{QueryDictionary, StopwordEntry}
 import org.json4s.native.Serialization.write
 
 class DictionaryTest extends AlgoliaTest {
 
   describe("dictionary") {
 
-    describe("save entry to stop word dictionary") {
+    val stopwordEntry = StopwordEntry("MyObjectID", "en", "word", "enabled")
+    val stopwordEntries = Seq(stopwordEntry)
 
-      val stopwords = Seq(StopwordEntry("MyObjectID", "en", "word", "enabled"))
+    describe("save entries to stop word dictionary") {
 
-      it("should save entry") {
-        save dictionary Dictionary.Stopwords entries stopwords
+      it("should save entries") {
+        save dictionary Stopwords entries stopwordEntries
       }
 
       it("should call API") {
-        (save dictionary Dictionary.Stopwords entries stopwords)
+        (save dictionary Stopwords entries stopwordEntries)
           .build() should be(
           HttpPayload(
             POST,
@@ -53,7 +55,7 @@ class DictionaryTest extends AlgoliaTest {
               write(
                 Map(
                   "clearExistingDictionaryEntries" -> false,
-                  "requests" -> stopwords.map(entry =>
+                  "requests" -> stopwordEntries.map(entry =>
                     Map(
                       "action" -> "addEntry",
                       "body" -> entry
@@ -63,6 +65,122 @@ class DictionaryTest extends AlgoliaTest {
               )
             ),
             isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+    }
+
+    describe("replace entries in stop word dictionary") {
+
+      it("should replace entries") {
+        replace dictionary Stopwords entries stopwordEntries
+      }
+
+      it("should call API") {
+        (replace dictionary Stopwords entries stopwordEntries)
+          .build() should be(
+          HttpPayload(
+            POST,
+            Seq("1", "dictionaries", "stopwords", "batch"),
+            body = Some(
+              write(
+                Map(
+                  "clearExistingDictionaryEntries" -> true,
+                  "requests" -> stopwordEntries.map(entry =>
+                    Map(
+                      "action" -> "addEntry",
+                      "body" -> entry
+                    )
+                  )
+                )
+              )
+            ),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+    }
+
+    describe("delete entries in stop word dictionary") {
+
+      it("should delete entries") {
+        delete dictionary Stopwords entries Seq(stopwordEntry.objectID)
+      }
+
+      it("should call API") {
+        (delete dictionary Stopwords entries Seq(stopwordEntry.objectID))
+          .build() should be(
+          HttpPayload(
+            POST,
+            Seq("1", "dictionaries", "stopwords", "batch"),
+            body = Some(
+              write(
+                Map(
+                  "clearExistingDictionaryEntries" -> false,
+                  "requests" -> Seq(
+                    Map(
+                      "action" -> "deleteEntry",
+                      "body" -> Map("objectID" -> stopwordEntry.objectID)
+                    )
+                  )
+                )
+              )
+            ),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+    }
+
+    describe("clear all entries in stop word dictionary") {
+
+      it("should clear entries") {
+        clear dictionary Stopwords
+      }
+
+      it("should call API") {
+        (clear dictionary Stopwords).build() should be(
+          HttpPayload(
+            POST,
+            Seq("1", "dictionaries", "stopwords", "batch"),
+            body = Some(
+              write(
+                Map(
+                  "clearExistingDictionaryEntries" -> true,
+                  "requests" -> Seq.empty
+                )
+              )
+            ),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+    }
+
+    describe("search stop word dictionary") {
+
+      it("should search for entity") {
+        search into Stopwords query QueryDictionary(query = Some("MyObjectID"))
+      }
+
+      it("should call API") {
+        (search into Stopwords query QueryDictionary(query = Some("MyObjectID")
+        )).build() should be(
+          HttpPayload(
+            POST,
+            Seq("1", "dictionaries", "stopwords", "search"),
+            body = Some(
+              write(
+                Map(
+                  "query" -> "MyObjectID"
+                )
+              )
+            ),
+            isSearch = true,
             requestOptions = None
           )
         )

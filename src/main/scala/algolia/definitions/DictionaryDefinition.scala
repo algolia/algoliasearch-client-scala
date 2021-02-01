@@ -134,9 +134,7 @@ case class DeleteDictionaryDefinition(
   override private[algolia] def build() = {
     val body = buildBody(
       entries = objectIDs.map(entry => Map("objectID" -> entry)),
-      action = "deleteEntry",
-      clearExistingDictionaryEntries = true
-    )
+      action = "deleteEntry")
 
     HttpPayload(
       POST,
