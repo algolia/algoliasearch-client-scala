@@ -26,12 +26,7 @@
 package algolia.dsl
 
 import algolia.definitions._
-import algolia.objects.{
-  CompoundEntry,
-  DictionaryEntry,
-  PluralEntry,
-  StopwordEntry
-}
+import algolia.objects.{CompoundEntry, DictionaryEntry, DictionarySettings, PluralEntry, StopwordEntry}
 import algolia.responses.{DictionaryTask, SearchDictionaryResult}
 import algolia.{AlgoliaClient, AlgoliaClientException, Executable}
 import org.json4s.Formats
@@ -101,7 +96,7 @@ trait DictionaryDsl {
     }
   }
 
-  //Delete Dictionary Definition
+  // Delete Dictionary Definition
 
   implicit object DeleteDictionaryDefinitionExecutable
       extends Executable[DeleteDictionaryDefinition, DictionaryTask] {
@@ -121,7 +116,7 @@ trait DictionaryDsl {
     }
   }
 
-  //Delete Dictionary Definition
+  // Clear Dictionary Definition
 
   implicit object ClearDictionaryDefinitionExecutable
       extends Executable[ClearDictionaryDefinition, DictionaryTask] {
@@ -136,7 +131,7 @@ trait DictionaryDsl {
     }
   }
 
-  //Search Dictionary Definition
+  // Search Dictionary Definition
 
   implicit object SearchStopwordDictionaryDefinitionExecutable
       extends SearchDictionaryDefinitionExecutable[StopwordEntry]
@@ -158,6 +153,28 @@ trait DictionaryDsl {
         implicit executor: ExecutionContext
     ): Future[SearchDictionaryResult] = {
       client.requestSearch[SearchDictionaryResult](query.build())
+    }
+  }
+
+  // Dictionary Settings Definition
+
+  implicit object SetSettingsDictionaryDefinitionExecutable
+      extends Executable[SetSettingsDictionaryDefinition, DictionaryTask] {
+    override def apply(
+        client: AlgoliaClient,
+        query: SetSettingsDictionaryDefinition
+    )(implicit executor: ExecutionContext): Future[DictionaryTask] = {
+      client.requestSearch[DictionaryTask](query.build())
+    }
+  }
+
+  implicit object GetSettingsDictionaryDefinitionExecutable
+      extends Executable[GetSettingsDictionaryDefinition, DictionarySettings] {
+    override def apply(
+        client: AlgoliaClient,
+        query: GetSettingsDictionaryDefinition
+    )(implicit executor: ExecutionContext): Future[DictionarySettings] = {
+      client.requestSearch[DictionarySettings](query.build())
     }
   }
 }

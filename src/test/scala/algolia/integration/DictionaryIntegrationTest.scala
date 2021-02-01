@@ -34,9 +34,9 @@ import java.util.UUID
 
 class DictionaryIntegrationTest extends AlgoliaTest {
 
-  describe("dictionaries") {
+  private val client = AlgoliaTest.client2
 
-    val client = AlgoliaTest.client2
+  describe("Stop word dictionary") {
     val id = UUID.randomUUID().toString
     val entry = StopwordEntry(id, "en", "upper", "enabled")
     val stopwords = Seq(entry)
@@ -110,7 +110,7 @@ class DictionaryIntegrationTest extends AlgoliaTest {
       }
     }
 
-    it("search for clear stop words entries") {
+    it("clear stop words entries") {
       val r = client.execute {
         clear dictionary Stopwords
       }
@@ -119,6 +119,39 @@ class DictionaryIntegrationTest extends AlgoliaTest {
 
       whenReady(r) { res =>
         res.updatedAt shouldNot be(None)
+      }
+    }
+  }
+
+  describe("Dictionary Settings") {
+
+    val settings = DictionarySettings(
+      Some(
+        DisableStandardEntries(
+          stopwords = Some(Map("en" -> true))
+        )
+      )
+    )
+
+    it("set settings") {
+      val r = client.execute {
+        set dictionarySettings settings
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+
+    it("get settings") {
+      val r = client.execute {
+        get dictionarySettings
+      }
+
+      whenReady(r) { res =>
+        res should be(settings)
       }
     }
   }

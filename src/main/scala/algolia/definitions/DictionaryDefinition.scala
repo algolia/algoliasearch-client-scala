@@ -25,13 +25,8 @@
 
 package algolia.definitions
 
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.{
-  Dictionary,
-  DictionaryEntry,
-  QueryDictionary,
-  RequestOptions
-}
+import algolia.http.{GET, HttpPayload, POST, PUT}
+import algolia.objects._
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
@@ -134,7 +129,8 @@ case class DeleteDictionaryDefinition(
   override private[algolia] def build() = {
     val body = buildBody(
       entries = objectIDs.map(entry => Map("objectID" -> entry)),
-      action = "deleteEntry")
+      action = "deleteEntry"
+    )
 
     HttpPayload(
       POST,
@@ -192,12 +188,10 @@ case class SearchDictionaryDefinition[A <: DictionaryEntry](
   def query(q: QueryDictionary): SearchDictionaryDefinition[A] = copy(query = q)
 
   override private[algolia] def build() = {
-    val path = Seq("1", "dictionaries", dictionary.name, "search")
-    val body = query.toQueryParam
     HttpPayload(
       POST,
-      path,
-      body = Some(write(body)),
+      Seq("1", "dictionaries", dictionary.name, "search"),
+      body = Some(write(query)),
       isSearch = true,
       requestOptions = requestOptions
     )
@@ -206,4 +200,48 @@ case class SearchDictionaryDefinition[A <: DictionaryEntry](
   override def options(
       requestOptions: RequestOptions
   ): SearchDictionaryDefinition[A] = copy(requestOptions = Some(requestOptions))
+}
+
+case class SetSettingsDictionaryDefinition(
+    dictionarySettings: DictionarySettings,
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends Definition {
+  override type T = SetSettingsDictionaryDefinition
+
+  override private[algolia] def build() = {
+    HttpPayload(
+      PUT,
+      Seq("1", "dictionaries", "*", "settings"),
+      body = Some(write(dictionarySettings)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(
+      requestOptions: RequestOptions
+  ): SetSettingsDictionaryDefinition =
+    copy(requestOptions = Some(requestOptions))
+}
+
+case class GetSettingsDictionaryDefinition(
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends Definition {
+  override type T = GetSettingsDictionaryDefinition
+
+  override private[algolia] def build() = {
+    HttpPayload(
+      GET,
+      Seq("1", "dictionaries", "*", "settings"),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(
+      requestOptions: RequestOptions
+  ): GetSettingsDictionaryDefinition =
+    copy(requestOptions = Some(requestOptions))
 }

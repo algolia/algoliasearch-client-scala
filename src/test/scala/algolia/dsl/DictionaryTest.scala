@@ -27,14 +27,19 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.http.{HttpPayload, POST}
+import algolia.http.{GET, HttpPayload, POST, PUT}
 import algolia.objects.Dictionary.Stopwords
-import algolia.objects.{QueryDictionary, StopwordEntry}
+import algolia.objects.{
+  DictionarySettings,
+  DisableStandardEntries,
+  QueryDictionary,
+  StopwordEntry
+}
 import org.json4s.native.Serialization.write
 
 class DictionaryTest extends AlgoliaTest {
 
-  describe("dictionary") {
+  describe("Stop word Dictionary") {
 
     val stopwordEntry = StopwordEntry("MyObjectID", "en", "word", "enabled")
     val stopwordEntries = Seq(stopwordEntry)
@@ -181,6 +186,54 @@ class DictionaryTest extends AlgoliaTest {
               )
             ),
             isSearch = true,
+            requestOptions = None
+          )
+        )
+      }
+    }
+  }
+
+  describe("Dictionary Settings") {
+
+    describe("Get Dictionary Settings") {
+
+      it("should get dictionary settings") {
+        get dictionarySettings
+      }
+
+      it("should call API") {
+        (get dictionarySettings).build() should be(
+          HttpPayload(
+            GET,
+            Seq("1", "dictionaries", "*", "settings"),
+            isSearch = false,
+            requestOptions = None
+          )
+        )
+      }
+    }
+
+    describe("Set Dictionary Settings") {
+
+      val dictionarySettings = DictionarySettings(
+        Some(
+          DisableStandardEntries(
+            stopwords = Some(Map("en" -> true))
+          )
+        )
+      )
+
+      it("should set dictionary settings") {
+        set dictionarySettings dictionarySettings
+      }
+
+      it("should call API") {
+        (set dictionarySettings dictionarySettings).build() should be(
+          HttpPayload(
+            PUT,
+            Seq("1", "dictionaries", "*", "settings"),
+            body = Some(write(dictionarySettings)),
+            isSearch = false,
             requestOptions = None
           )
         )

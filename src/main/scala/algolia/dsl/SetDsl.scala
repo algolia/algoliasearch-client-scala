@@ -27,9 +27,10 @@ package algolia.dsl
 
 import algolia.definitions.{
   SetPersonalizationStrategyDefinition,
-  SetRecommendationStrategyDefinition
+  SetRecommendationStrategyDefinition,
+  SetSettingsDictionaryDefinition
 }
-import algolia.objects.{SetStrategyRequest, Strategy}
+import algolia.objects.{DictionarySettings, SetStrategyRequest, Strategy}
 import algolia.responses.{SetStrategyResponse, SetStrategyResult}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -54,6 +55,9 @@ trait SetDsl {
         strategy: SetStrategyRequest
     ): SetRecommendationStrategyDefinition =
       SetRecommendationStrategyDefinition(strategy)
+
+    def dictionarySettings(dictionarySettings: DictionarySettings) =
+      SetSettingsDictionaryDefinition(dictionarySettings)
   }
 
   @deprecated(
