@@ -25,16 +25,15 @@
 
 package algolia
 
-import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
-import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
-
 import algolia.definitions._
 import algolia.dsl._
 import algolia.objects._
-import org.json4s.{CustomSerializer, Formats}
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
+import org.json4s.{CustomSerializer, Formats}
 
+import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
+import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
 import scala.util.matching.Regex
 
 trait AlgoliaDsl
@@ -70,6 +69,7 @@ trait AlgoliaDsl
     with SetDsl
     with RestoreDsl
     with DictionaryDsl
+    with ReplaceDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 

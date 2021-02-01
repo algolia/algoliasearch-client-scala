@@ -25,10 +25,7 @@
 
 package algolia.dsl
 
-import algolia.definitions.{
-  SaveDictionaryDefinition,
-  SearchDictionaryDefinition
-}
+import algolia.definitions._
 import algolia.objects.{
   CompoundEntry,
   DictionaryEntry,
@@ -70,6 +67,71 @@ trait DictionaryDsl {
           new AlgoliaClientException(s"Dictionary entries cannot be empty")
         )
       }
+      client.request[DictionaryTask](query.build())
+    }
+  }
+
+  // Replace Dictionary Definition
+
+  implicit object ReplaceStopwordDictionaryDefinitionExecutable
+      extends ReplaceDictionaryDefinitionExecutable[StopwordEntry]
+
+  implicit object ReplacePluralDictionaryDefinitionExecutable
+      extends ReplaceDictionaryDefinitionExecutable[PluralEntry]
+
+  implicit object ReplaceCompoundDictionaryDefinitionExecutable
+      extends ReplaceDictionaryDefinitionExecutable[CompoundEntry]
+
+  sealed abstract class ReplaceDictionaryDefinitionExecutable[
+      T <: DictionaryEntry
+  ] extends Executable[ReplaceDictionaryDefinition[T], DictionaryTask] {
+
+    override def apply(
+        client: AlgoliaClient,
+        query: ReplaceDictionaryDefinition[T]
+    )(
+        implicit executor: ExecutionContext
+    ): Future[DictionaryTask] = {
+      if (query.dictionaryEntries.isEmpty) {
+        return Future.failed(
+          new AlgoliaClientException(s"Dictionary entries cannot be empty")
+        )
+      }
+      client.request[DictionaryTask](query.build())
+    }
+  }
+
+  //Delete Dictionary Definition
+
+  implicit object DeleteDictionaryDefinitionExecutable
+      extends Executable[DeleteDictionaryDefinition, DictionaryTask] {
+
+    override def apply(
+        client: AlgoliaClient,
+        query: DeleteDictionaryDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[DictionaryTask] = {
+      if (query.objectIDs.isEmpty) {
+        return Future.failed(
+          new AlgoliaClientException(s"Dictionary entries cannot be empty")
+        )
+      }
+      client.request[DictionaryTask](query.build())
+    }
+  }
+
+  //Delete Dictionary Definition
+
+  implicit object ClearDictionaryDefinitionExecutable
+      extends Executable[ClearDictionaryDefinition, DictionaryTask] {
+
+    override def apply(
+        client: AlgoliaClient,
+        query: ClearDictionaryDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[DictionaryTask] = {
       client.request[DictionaryTask](query.build())
     }
   }

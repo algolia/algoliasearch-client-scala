@@ -23,25 +23,21 @@
  * THE SOFTWARE.
  */
 
-package algolia.objects
+package algolia.dsl
 
-case class QueryDictionary(
-    query: Option[String] = None,
-    page: Option[Int] = None,
-    hitsPerPage: Option[Int] = None,
-    language: Option[String] = None,
-    customParameters: Option[Map[String, String]] = None
-) {
+import algolia.definitions._
+import algolia.objects.{Dictionary, DictionaryEntry}
+import org.json4s.Formats
 
-  def toQueryParam: Map[String, String] = {
-    val queryParam = Map(
-      "query" -> query,
-      "page" -> page.map(_.toString),
-      "hitsPerPage" -> hitsPerPage.map(_.toString),
-      "language" -> language
-    ).filter { case (_, v) => v.isDefined }
-      .map { case (k, v) => k -> v.get }
+trait ReplaceDsl {
 
-    customParameters.fold(queryParam)(c => queryParam ++ c)
+  implicit val formats: Formats
+
+  object replace {
+
+    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
+      ReplaceDictionaryDefinition[T](dictionary)
+
   }
+
 }

@@ -27,10 +27,12 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl.Of
 import algolia.definitions.{
+  ClearDictionaryDefinition,
   ClearIndexDefinition,
   ClearRulesDefinition,
   ClearSynonymsDefinition
 }
+import algolia.objects.{Dictionary, DictionaryEntry}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -50,6 +52,8 @@ trait ClearDsl {
 
     def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
 
+    def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
+      ClearDictionaryDefinition(dictionary)
   }
 
   implicit object ClearIndexDefinitionExecutable

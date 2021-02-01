@@ -25,6 +25,7 @@
 
 package algolia.responses
 
+import algolia.objects.DictionaryEntry
 import org.json4s.{Formats, JObject}
 
 case class SearchDictionaryResult(
@@ -36,7 +37,7 @@ case class SearchDictionaryResult(
 
   implicit val formats: Formats = org.json4s.DefaultFormats
 
-  def asHit[T <: Hit: Manifest]: Seq[T] = hits.map(_.extract[T])
+  def asEntry[T <: DictionaryEntry: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  def as[T: Manifest]: Seq[T] = hits.map(_.extract[T])
+  def as[T <: DictionaryEntry: Manifest]: Seq[T] = hits.map(_.extract[T])
 }

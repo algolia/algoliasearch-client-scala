@@ -35,12 +35,35 @@ import algolia.objects.{
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
+sealed trait BatchDictionaryDefinition extends Definition {
+  val dictionary: Dictionary[_]
+  val requestOptions: Option[RequestOptions] = None
+
+  val path = Seq("1", "dictionaries", dictionary.name, "batch")
+
+  def buildBody(
+      entries: Seq[_],
+      action: String,
+      clearExistingDictionaryEntries: Boolean = false
+  ): Map[String, Any] = {
+    Map(
+      "clearExistingDictionaryEntries" -> clearExistingDictionaryEntries,
+      "requests" -> entries.map(entry =>
+        Map(
+          "action" -> action,
+          "body" -> entry
+        )
+      )
+    )
+  }
+}
+
 case class SaveDictionaryDefinition[A <: DictionaryEntry](
-    dictionary: Dictionary[A],
+    override val dictionary: Dictionary[A],
     dictionaryEntries: Seq[A] = List(),
-    requestOptions: Option[RequestOptions] = None
+    override val requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
-    extends Definition {
+    extends BatchDictionaryDefinition {
 
   override type T = SaveDictionaryDefinition[A]
 
@@ -48,15 +71,71 @@ case class SaveDictionaryDefinition[A <: DictionaryEntry](
     copy(dictionaryEntries = entries)
 
   override private[algolia] def build() = {
-    val path = Seq("1", "dictionaries", dictionary.name, "batch")
-    val body = Map(
-      "clearExistingDictionaryEntries" -> false,
-      "requests" -> dictionaryEntries.map(entry =>
-        Map(
-          "action" -> "addEntry",
-          "body" -> entry
-        )
-      )
+    val body = buildBody(entries = dictionaryEntries, action = "addEntry")
+    HttpPayload(
+      POST,
+      path,
+      body = Some(write(body)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(
+      requestOptions: RequestOptions
+  ): SaveDictionaryDefinition[A] = copy(requestOptions = Some(requestOptions))
+}
+
+case class ReplaceDictionaryDefinition[A <: DictionaryEntry](
+    override val dictionary: Dictionary[A],
+    dictionaryEntries: Seq[A] = List(),
+    override val requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends BatchDictionaryDefinition {
+
+  override type T = ReplaceDictionaryDefinition[A]
+
+  def entries(entries: Seq[A]): ReplaceDictionaryDefinition[A] =
+    copy(dictionaryEntries = entries)
+
+  override private[algolia] def build() = {
+    val body = buildBody(
+      entries = dictionaryEntries,
+      action = "addEntry",
+      clearExistingDictionaryEntries = true
+    )
+    HttpPayload(
+      POST,
+      path,
+      body = Some(write(body)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(
+      requestOptions: RequestOptions
+  ): ReplaceDictionaryDefinition[A] =
+    copy(requestOptions = Some(requestOptions))
+}
+
+case class DeleteDictionaryDefinition(
+    override val dictionary: Dictionary[_ <: DictionaryEntry],
+    objectIDs: Seq[String] = List(),
+    override val requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends BatchDictionaryDefinition {
+
+  override type T = DeleteDictionaryDefinition
+
+  def entries(objectIDs: Seq[String]): DeleteDictionaryDefinition =
+    copy(objectIDs = objectIDs)
+
+  override private[algolia] def build() = {
+    val body = buildBody(
+      entries = objectIDs.map(entry => Map("objectID" -> entry)),
+      action = "deleteEntry",
+      clearExistingDictionaryEntries = true
     )
 
     HttpPayload(
@@ -70,7 +149,37 @@ case class SaveDictionaryDefinition[A <: DictionaryEntry](
 
   override def options(
       requestOptions: RequestOptions
-  ): SaveDictionaryDefinition[A] = copy(requestOptions = Some(requestOptions))
+  ): DeleteDictionaryDefinition =
+    copy(requestOptions = Some(requestOptions))
+}
+
+case class ClearDictionaryDefinition(
+    override val dictionary: Dictionary[_ <: DictionaryEntry],
+    override val requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends BatchDictionaryDefinition {
+
+  override type T = ClearDictionaryDefinition
+
+  override private[algolia] def build() = {
+    val body = buildBody(
+      entries = List.empty,
+      action = "addEntry",
+      clearExistingDictionaryEntries = true
+    )
+    HttpPayload(
+      POST,
+      path,
+      body = Some(write(body)),
+      isSearch = false,
+      requestOptions = requestOptions
+    )
+  }
+
+  override def options(
+      requestOptions: RequestOptions
+  ): ClearDictionaryDefinition =
+    copy(requestOptions = Some(requestOptions))
 }
 
 case class SearchDictionaryDefinition[A <: DictionaryEntry](

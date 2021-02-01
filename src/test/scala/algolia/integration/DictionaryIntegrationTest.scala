@@ -38,9 +38,10 @@ class DictionaryIntegrationTest extends AlgoliaTest {
 
     val client = AlgoliaTest.client2
     val id = UUID.randomUUID().toString
-    val stopwords = Seq(StopwordEntry("MyObjectID", "en", "upper", "enabled"))
+    val entry = StopwordEntry(id, "en", "upper", "enabled")
+    val stopwords = Seq(entry)
 
-    it("should save stop word entries") {
+    it("save stop word entries") {
       val r = client.execute {
         save dictionary Stopwords entries stopwords
       }
@@ -52,14 +53,72 @@ class DictionaryIntegrationTest extends AlgoliaTest {
       }
     }
 
-    it("should search for stop words entries") {
+    it("search for stop words entries") {
       val r = client.execute {
-        search into Stopwords query QueryDictionary(query = Some("MyObjectID"))
+        search into Stopwords query QueryDictionary(query = Some(id))
       }
 
       whenReady(r) { res =>
-        println(res)
         res.hits shouldNot have size 0
+      }
+    }
+
+    it("replace stop words entries") {
+      val r = client.execute {
+        replace dictionary Stopwords entries Seq(entry.copy(word = "uppercase"))
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+
+    it("search for updated stop words entries") {
+      val r = client.execute {
+        search into Stopwords query QueryDictionary(query = Some(id))
+      }
+
+      whenReady(r) { res =>
+        res.hits shouldNot have size 0
+        val entries = res.asEntry[StopwordEntry]
+        entries shouldNot have size 0
+        entries.head.word should be("uppercase")
+      }
+    }
+
+    it("delete stop words entries") {
+      val r = client.execute {
+        delete dictionary Stopwords entries Seq(id)
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+
+    it("search for deleted stop words entries") {
+      val r = client.execute {
+        search into Stopwords query QueryDictionary(query = Some(id))
+      }
+
+      whenReady(r) { res =>
+        res.nbHits shouldBe 0
+      }
+    }
+
+    it("search for clear stop words entries") {
+      val r = client.execute {
+        clear dictionary Stopwords
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
       }
     }
   }
