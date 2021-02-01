@@ -26,7 +26,13 @@
 package algolia.dsl
 
 import algolia.definitions._
-import algolia.objects.{CompoundEntry, DictionaryEntry, DictionarySettings, PluralEntry, StopwordEntry}
+import algolia.objects.{
+  CompoundEntry,
+  DictionaryEntry,
+  DictionarySettings,
+  PluralEntry,
+  StopwordEntry
+}
 import algolia.responses.{DictionaryTask, SearchDictionaryResult}
 import algolia.{AlgoliaClient, AlgoliaClientException, Executable}
 import org.json4s.Formats
