@@ -123,7 +123,7 @@ case class DeleteDictionaryDefinition(
 
   override type T = DeleteDictionaryDefinition
 
-  def entries(objectIDs: Seq[String]): DeleteDictionaryDefinition =
+  def objectIDs(objectIDs: Seq[String]): DeleteDictionaryDefinition =
     copy(objectIDs = objectIDs)
 
   override private[algolia] def build() = {

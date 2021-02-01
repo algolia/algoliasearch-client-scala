@@ -32,7 +32,7 @@ sealed trait Dictionary[T <: DictionaryEntry] {
 object Dictionary {
 
   case object Plurals extends Dictionary[PluralEntry] {
-    override val name: String = "plural"
+    override val name: String = "plurals"
   }
 
   case object Stopwords extends Dictionary[StopwordEntry] {

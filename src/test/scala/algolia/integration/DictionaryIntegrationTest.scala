@@ -27,7 +27,7 @@ package algolia.integration
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.objects.Dictionary.Stopwords
+import algolia.objects.Dictionary.{Compounds, Plurals, Stopwords}
 import algolia.objects._
 
 import java.util.UUID
@@ -39,11 +39,10 @@ class DictionaryIntegrationTest extends AlgoliaTest {
   describe("Stop word dictionary") {
     val id = UUID.randomUUID().toString
     val entry = StopwordEntry(id, "en", "upper", "enabled")
-    val stopwords = Seq(entry)
 
     it("save stop word entries") {
       val r = client.execute {
-        save dictionary Stopwords entries stopwords
+        save dictionary Stopwords entries Seq(entry)
       }
 
       appTaskShouldBeCreatedAndWaitForIt(client, r)
@@ -90,7 +89,7 @@ class DictionaryIntegrationTest extends AlgoliaTest {
 
     it("delete stop words entries") {
       val r = client.execute {
-        delete dictionary Stopwords entries Seq(id)
+        delete dictionary Stopwords objectIDs Seq(id)
       }
 
       appTaskShouldBeCreatedAndWaitForIt(client, r)
@@ -113,6 +112,95 @@ class DictionaryIntegrationTest extends AlgoliaTest {
     it("clear stop words entries") {
       val r = client.execute {
         clear dictionary Stopwords
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+  }
+
+  describe("Plurals dictionary") {
+    val id = UUID.randomUUID().toString
+    val entry = PluralEntry(id, "en", Seq("cheval", "chevaux"))
+
+    it("save plural entries") {
+
+      val r = client.execute {
+        replace dictionary Plurals entries Seq(entry)
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+
+    it("search plural entries") {
+      val r = client.execute {
+        search into Plurals query QueryDictionary(query = Some(id))
+      }
+
+      whenReady(r) { res =>
+        res.hits shouldNot have size 0
+        res.asEntry[PluralEntry].head should be(entry)
+      }
+    }
+
+    it("delete plural entries") {
+
+      val r = client.execute {
+        delete dictionary Plurals objectIDs Seq(id)
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+  }
+
+  describe("Compounds dictionary") {
+    val id = UUID.randomUUID().toString
+    val entry = CompoundEntry(
+      id,
+      "nl",
+      "kopfschmerztablette",
+      Seq("kopf", "schmerz", "tablette")
+    )
+
+    it("save compound entries") {
+
+      val r = client.execute {
+        replace dictionary Compounds entries Seq(entry)
+      }
+
+      appTaskShouldBeCreatedAndWaitForIt(client, r)
+
+      whenReady(r) { res =>
+        res.updatedAt shouldNot be(None)
+      }
+    }
+
+    it("search compound entries") {
+      val r = client.execute {
+        search into Compounds query QueryDictionary(query = Some(id))
+      }
+
+      whenReady(r) { res =>
+        res.hits shouldNot have size 0
+        res.asEntry[CompoundEntry].head should be(entry)
+      }
+    }
+
+    it("delete compound entries") {
+
+      val r = client.execute {
+        delete dictionary Compounds objectIDs Seq(id)
       }
 
       appTaskShouldBeCreatedAndWaitForIt(client, r)

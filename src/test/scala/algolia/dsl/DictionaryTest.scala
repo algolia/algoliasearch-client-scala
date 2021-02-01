@@ -111,11 +111,11 @@ class DictionaryTest extends AlgoliaTest {
     describe("delete entries in stop word dictionary") {
 
       it("should delete entries") {
-        delete dictionary Stopwords entries Seq(stopwordEntry.objectID)
+        delete dictionary Stopwords objectIDs Seq(stopwordEntry.objectID)
       }
 
       it("should call API") {
-        (delete dictionary Stopwords entries Seq(stopwordEntry.objectID))
+        (delete dictionary Stopwords objectIDs Seq(stopwordEntry.objectID))
           .build() should be(
           HttpPayload(
             POST,
