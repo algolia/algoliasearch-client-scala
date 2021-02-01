@@ -56,7 +56,7 @@ trait SetDsl {
     ): SetRecommendationStrategyDefinition =
       SetRecommendationStrategyDefinition(strategy)
 
-    def dictionarySettings(dictionarySettings: DictionarySettings) =
+    def dictionarySettings(dictionarySettings: DictionarySettings): SetSettingsDictionaryDefinition =
       SetSettingsDictionaryDefinition(dictionarySettings)
   }
 
