@@ -77,7 +77,8 @@ trait GetDsl {
     def personalizationRecommendationStrategy() =
       GetRecommendationStrategyDefinition()
 
-    def dictionarySettings(): GetSettingsDictionaryDefinition = GetSettingsDictionaryDefinition()
+    def dictionarySettings(): GetSettingsDictionaryDefinition =
+      GetSettingsDictionaryDefinition()
 
   }
 
