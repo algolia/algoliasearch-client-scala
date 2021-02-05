@@ -25,7 +25,7 @@
 
 package algolia.objects
 
-sealed trait Dictionary[T <: DictionaryEntry] {
+sealed trait Dictionary[+T <: DictionaryEntry] {
   val name: String
 }
 

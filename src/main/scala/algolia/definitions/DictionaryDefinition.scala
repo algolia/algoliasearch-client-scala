@@ -115,7 +115,7 @@ case class ReplaceDictionaryDefinition[A <: DictionaryEntry](
 }
 
 case class DeleteDictionaryDefinition(
-    override val dictionary: Dictionary[_ <: DictionaryEntry],
+    override val dictionary: Dictionary[DictionaryEntry],
     objectIDs: Seq[String] = List(),
     override val requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
@@ -148,7 +148,7 @@ case class DeleteDictionaryDefinition(
 }
 
 case class ClearDictionaryDefinition(
-    override val dictionary: Dictionary[_ <: DictionaryEntry],
+    override val dictionary: Dictionary[DictionaryEntry],
     override val requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends BatchDictionaryDefinition {
