@@ -31,6 +31,7 @@ import algolia.objects.Dictionary.{Compounds, Plurals, Stopwords}
 import algolia.objects._
 
 import java.util.UUID
+import scala.language.postfixOps
 
 class DictionaryIntegrationTest extends AlgoliaTest {
 

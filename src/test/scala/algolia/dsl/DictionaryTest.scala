@@ -37,6 +37,8 @@ import algolia.objects.{
 }
 import org.json4s.native.Serialization.write
 
+import scala.language.postfixOps
+
 class DictionaryTest extends AlgoliaTest {
 
   describe("Stop word Dictionary") {
