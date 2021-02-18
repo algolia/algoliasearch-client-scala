@@ -25,7 +25,7 @@
 
 package algolia.dsl
 
-import algolia.definitions.BrowseIndexDefinition
+import algolia.definitions.{BrowseIndexDefinition, BrowseIndexPostDefinition}
 import algolia.responses.BrowseResult
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -47,6 +47,15 @@ trait BrowseDsl {
       extends Executable[BrowseIndexDefinition, BrowseResult] {
     override def apply(client: AlgoliaClient, query: BrowseIndexDefinition)(
         implicit executor: ExecutionContext
+    ): Future[BrowseResult] = {
+      client.request[BrowseResult](query.build())
+    }
+  }
+
+  implicit object BrowseIndexPostDefinitionExecutable
+    extends Executable[BrowseIndexPostDefinition, BrowseResult] {
+    override def apply(client: AlgoliaClient, query: BrowseIndexPostDefinition)(
+      implicit executor: ExecutionContext
     ): Future[BrowseResult] = {
       client.request[BrowseResult](query.build())
     }

@@ -25,9 +25,10 @@
 
 package algolia.definitions
 
-import algolia.http.{GET, HttpPayload}
+import algolia.http.{GET, HttpPayload, POST}
 import algolia.objects.{Query, RequestOptions}
 import org.json4s.Formats
+import org.json4s.native.Serialization.write
 
 case class BrowseIndexDefinition(
     source: String,
@@ -38,6 +39,8 @@ case class BrowseIndexDefinition(
     extends Definition {
 
   type T = BrowseIndexDefinition
+
+  val post: BrowseIndexPostDefinition = BrowseIndexPostDefinition(source, query, cursor, requestOptions)
 
   def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
 
@@ -53,6 +56,37 @@ case class BrowseIndexDefinition(
       GET,
       Seq("1", "indexes", source, "browse"),
       queryParameters = Some(q.toQueryParam),
+      isSearch = true,
+      requestOptions = requestOptions
+    )
+  }
+}
+
+case class BrowseIndexPostDefinition(
+  source: String,
+  query: Option[Query] = None,
+  cursor: Option[String] = None,
+  requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+  extends Definition {
+
+  type T = BrowseIndexPostDefinition
+
+  def from(cursor: String): BrowseIndexPostDefinition = copy(cursor = Some(cursor))
+
+  def query(query: Query): BrowseIndexPostDefinition = copy(query = Some(query))
+
+  override def options(requestOptions: RequestOptions): BrowseIndexPostDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build(): HttpPayload = {
+    val q = query.getOrElse(Query()).copy(cursor = cursor)
+    val body = Map("params" -> q.toParam)
+
+    HttpPayload(
+      POST,
+      Seq("1", "indexes", source, "browse"),
+      body = Some(write(body)),
       isSearch = true,
       requestOptions = requestOptions
     )

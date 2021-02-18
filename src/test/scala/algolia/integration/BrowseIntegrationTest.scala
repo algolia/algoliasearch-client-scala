@@ -29,6 +29,7 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.objects.Query
 import algolia.responses.TasksMultipleIndex
+import scala.language.postfixOps
 
 import scala.concurrent.Future
 
@@ -53,7 +54,7 @@ class BrowseIntegrationTest extends AlgoliaTest {
     taskShouldBeCreatedAndWaitForIt(b, indexToBrowse)
   }
 
-  describe("browse") {
+  describe("browse GET") {
 
     it("should browse and not get a cursor") {
       val s = AlgoliaTest.client.execute {
@@ -82,6 +83,45 @@ class BrowseIntegrationTest extends AlgoliaTest {
 
       val s2 = AlgoliaTest.client.execute {
         browse index indexToBrowse from c
+      }
+
+      whenReady(s2) { result =>
+        result.cursor should not be empty
+        result.hits should have length 1
+      }
+    }
+
+  }
+
+  describe("browse POST") {
+
+    it("should browse and not get a cursor") {
+      val s = AlgoliaTest.client.execute {
+        browse index indexToBrowse post
+      }
+
+      whenReady(s) { result =>
+        result.cursor shouldBe empty
+        result.hits should have length 4
+      }
+    }
+
+    it("should browse with query and get a cursor") {
+      val s = AlgoliaTest.client.execute {
+        browse.index(indexToBrowse).post query Query(
+          query = Some("algolia"),
+          hitsPerPage = Some(1)
+        )
+      }
+
+      val c = whenReady(s) { result =>
+        result.cursor should not be empty
+        result.hits should have length 1
+        result.cursor.get
+      }
+
+      val s2 = AlgoliaTest.client.execute {
+        browse.index(indexToBrowse).post from c
       }
 
       whenReady(s2) { result =>
