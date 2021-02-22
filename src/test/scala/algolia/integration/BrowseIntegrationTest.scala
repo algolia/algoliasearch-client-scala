@@ -29,7 +29,6 @@ import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
 import algolia.objects.Query
 import algolia.responses.TasksMultipleIndex
-import scala.language.postfixOps
 
 import scala.concurrent.Future
 
