@@ -25,9 +25,10 @@
 
 package algolia.definitions
 
-import algolia.http.{GET, HttpPayload}
+import algolia.http.{HttpPayload, POST}
 import algolia.objects.{Query, RequestOptions}
 import org.json4s.Formats
+import org.json4s.native.Serialization.write
 
 case class BrowseIndexDefinition(
     source: String,
@@ -48,11 +49,12 @@ case class BrowseIndexDefinition(
 
   override private[algolia] def build(): HttpPayload = {
     val q = query.getOrElse(Query()).copy(cursor = cursor)
+    val body = Map("params" -> q.toParam)
 
     HttpPayload(
-      GET,
+      POST,
       Seq("1", "indexes", source, "browse"),
-      queryParameters = Some(q.toQueryParam),
+      body = Some(write(body)),
       isSearch = true,
       requestOptions = requestOptions
     )
