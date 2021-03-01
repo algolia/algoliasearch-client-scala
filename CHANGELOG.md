@@ -1,5 +1,13 @@
 # ChangeLog
 
+## [1.39.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.39.0...1.40.0) (2021-03-01)
+
+### Fix
+
+- **browse**: Implement browse POST request  (#622) ([303e7c1](https://github.com/algolia/algoliasearch-client-scala/commit/303e7c1))
+
+
+
 ## [1.39.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.38.2...1.39.0) (2020-11-03)
 
 ### Fix
