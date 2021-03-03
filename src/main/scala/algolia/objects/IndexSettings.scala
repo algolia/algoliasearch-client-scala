@@ -40,6 +40,7 @@ case class IndexSettings(
     userData: Option[Any] = None,
     customNormalization: Option[Map[String, Map[String, String]]] = None,
     enablePersonalization: Option[Boolean] = None,
+    decompoundQuery: Option[Boolean] = None,
     /* Attributes */
     attributesToIndex: Option[Seq[AttributesToIndex]] = None,
     searchableAttributes: Option[Seq[SearchableAttributes]] = None,
