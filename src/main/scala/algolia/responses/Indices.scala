@@ -36,5 +36,6 @@ case class Index(
     fileSize: Int,
     lastBuildTimeS: Int,
     numberOfPendingTasks: Int,
-    pendingTask: Boolean
+    pendingTask: Boolean,
+    primary: String
 )
