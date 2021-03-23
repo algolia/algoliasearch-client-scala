@@ -7,7 +7,7 @@
 
   <p align="center">
       <a href="https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/"><img src="https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/badge.svg" alt="Licence"></img></a> 
-<a href="https://travis-ci.org/algolia/algoliasearch-client-scala"><img src="https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=master" alt="Licence"></img></a>   
+<a href="https://travis-ci.org/algolia/algoliasearch-client-scala"><img src="https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=main" alt="Licence"></img></a>   
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Licence"></img></a>
   </p>
 </p>
@@ -119,8 +119,8 @@ val indexing2: Future[Indexing] = client.execute {
 
 The main goal of this client is to provide a human-accessible and readable DSL for using AlgoliaSearch.
 
-The entry point of the DSL is the [`algolia.AlgoliaDSL` object](https://github.com/algolia/algoliasearch-client-scala/blob/master/src/main/scala/algolia/AlgoliaDsl.scala).
-This DSL is used in the `execute` method of [`algolia.AlgoliaClient`](https://github.com/algolia/algoliasearch-client-scala/blob/master/src/main/scala/algolia/AlgoliaClient.scala).
+The entry point of the DSL is the [`algolia.AlgoliaDSL` object](https://github.com/algolia/algoliasearch-client-scala/blob/main/src/main/scala/algolia/AlgoliaDsl.scala).
+This DSL is used in the `execute` method of [`algolia.AlgoliaClient`](https://github.com/algolia/algoliasearch-client-scala/blob/main/src/main/scala/algolia/AlgoliaClient.scala).
 
 As we want to provide human-readable DSL, there's more than one way to use this DSL. For example, to get an object by its `objectID`:
 ```scala
