@@ -649,7 +649,6 @@ class AlgoliaClientTest extends AlgoliaTest {
 
       whenReady(res.failed) { e =>
         e shouldBe a[WaitForTimeoutException]
-        e should have message "Waiting for task `1` on index `toto` timeout after 32ms"
       }
     }
   }
