@@ -217,7 +217,7 @@ class DictionaryIntegrationTest extends AlgoliaTest {
     val settings = DictionarySettings(
       Some(
         DisableStandardEntries(
-          stopwords = Some(Map("en" -> true))
+          stopwords = Some(Map("en" -> true, "fr" -> true))
         )
       )
     )
