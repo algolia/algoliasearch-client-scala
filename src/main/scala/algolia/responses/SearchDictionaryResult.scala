@@ -23,46 +23,21 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.responses
 
-import algolia.AlgoliaDsl.Of
-import algolia.definitions.{
-  ClearDictionaryDefinition,
-  ClearIndexDefinition,
-  ClearRulesDefinition,
-  ClearSynonymsDefinition
-}
-import algolia.objects.{Dictionary, DictionaryEntry}
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
+import algolia.objects.DictionaryEntry
+import org.json4s.{Formats, JObject}
 
-import scala.concurrent.{ExecutionContext, Future}
+case class SearchDictionaryResult(
+    hits: Seq[JObject],
+    nbHits: Int,
+    page: Int,
+    nbPages: Int
+) {
 
-trait ClearDsl {
+  implicit val formats: Formats = org.json4s.DefaultFormats
 
-  implicit val formats: Formats
+  def asEntry[T <: DictionaryEntry: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  case object clear {
-
-    def index(index: String): ClearIndexDefinition =
-      ClearIndexDefinition(index)
-
-    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
-
-    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
-
-    def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
-      ClearDictionaryDefinition(dictionary)
-  }
-
-  implicit object ClearIndexDefinitionExecutable
-      extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
-        implicit executor: ExecutionContext
-    ): Future[Task] = {
-      client.request[Task](query.build())
-    }
-  }
-
+  def as[T <: DictionaryEntry: Manifest]: Seq[T] = hits.map(_.extract[T])
 }

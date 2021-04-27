@@ -23,46 +23,47 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.objects
 
-import algolia.AlgoliaDsl.Of
-import algolia.definitions.{
-  ClearDictionaryDefinition,
-  ClearIndexDefinition,
-  ClearRulesDefinition,
-  ClearSynonymsDefinition
+sealed trait Dictionary[+T <: DictionaryEntry] {
+  val name: String
 }
-import algolia.objects.{Dictionary, DictionaryEntry}
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
 
-import scala.concurrent.{ExecutionContext, Future}
+object Dictionary {
 
-trait ClearDsl {
-
-  implicit val formats: Formats
-
-  case object clear {
-
-    def index(index: String): ClearIndexDefinition =
-      ClearIndexDefinition(index)
-
-    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
-
-    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
-
-    def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
-      ClearDictionaryDefinition(dictionary)
+  case object Plurals extends Dictionary[PluralEntry] {
+    override val name: String = "plurals"
   }
 
-  implicit object ClearIndexDefinitionExecutable
-      extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
-        implicit executor: ExecutionContext
-    ): Future[Task] = {
-      client.request[Task](query.build())
-    }
+  case object Stopwords extends Dictionary[StopwordEntry] {
+    override val name: String = "stopwords"
   }
-
+  case object Compounds extends Dictionary[CompoundEntry] {
+    override val name: String = "compounds"
+  }
 }
+
+sealed trait DictionaryEntry {
+  val objectID: String
+  val language: String
+}
+
+case class StopwordEntry(
+    objectID: String,
+    language: String,
+    word: String,
+    state: String
+) extends DictionaryEntry
+
+case class PluralEntry(
+    objectID: String,
+    language: String,
+    words: Seq[String]
+) extends DictionaryEntry
+
+case class CompoundEntry(
+    objectID: String,
+    language: String,
+    word: String,
+    decomposition: Seq[String]
+) extends DictionaryEntry

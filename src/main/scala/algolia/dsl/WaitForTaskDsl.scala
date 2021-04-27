@@ -25,14 +25,18 @@
 
 package algolia.dsl
 
-import java.time.ZonedDateTime
-import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
-
-import algolia.definitions.{WaitForTaskDefinition, WaitForTimeoutException}
-import algolia.responses.{AlgoliaTask, TaskStatus}
+import algolia.definitions.{
+  TaskDefinition,
+  WaitForAppTaskDefinition,
+  WaitForTaskDefinition,
+  WaitForTimeoutException
+}
+import algolia.responses.{AlgoliaAppTask, AlgoliaTask, TaskStatus}
 import algolia.{AlgoliaClient, Executable}
 import io.netty.util.{HashedWheelTimer, Timeout, TimerTask}
 
+import java.time.ZonedDateTime
+import java.util.concurrent.{Executors, ThreadFactory, TimeUnit}
 import scala.concurrent.{ExecutionContext, Future, Promise}
 
 trait WaitForTaskDsl {
@@ -43,10 +47,22 @@ trait WaitForTaskDsl {
 
     def task(taskID: Long): WaitForTaskDefinition =
       WaitForTaskDefinition(taskID)
+
+    def task(task: AlgoliaAppTask): WaitForAppTaskDefinition =
+      WaitForAppTaskDefinition(task.idToWaitFor)
+
+    def appTask(taskID: Long): WaitForAppTaskDefinition =
+      WaitForAppTaskDefinition(taskID)
   }
 
   implicit object WaitForTaskDefinitionExecutable
-      extends Executable[WaitForTaskDefinition, TaskStatus] {
+      extends WaitTaskDefinitionExecutable[WaitForTaskDefinition]
+
+  implicit object WaitForAppTaskDefinitionExecutable
+      extends WaitTaskDefinitionExecutable[WaitForAppTaskDefinition]
+
+  sealed class WaitTaskDefinitionExecutable[A <: TaskDefinition]
+      extends Executable[A, TaskStatus] {
 
     // Run every 100 ms, use a wheel with 512 buckets
     private lazy val timer = {
@@ -74,7 +90,7 @@ trait WaitForTaskDsl {
       * etc...
       *
       */
-    override def apply(client: AlgoliaClient, query: WaitForTaskDefinition)(
+    override def apply(client: AlgoliaClient, query: A)(
         implicit executor: ExecutionContext
     ): Future[TaskStatus] = {
 
@@ -87,7 +103,7 @@ trait WaitForTaskDsl {
           } else if (totalDelay > query.maxDelay) {
             Future.failed(
               WaitForTimeoutException(
-                s"Waiting for task `${query.taskId}` on index `${query.index.get}` timeout after ${d}ms"
+                s"Waiting for task `${query.taskId}` timeout after ${d}ms"
               )
             )
           } else {

@@ -23,46 +23,20 @@
  * THE SOFTWARE.
  */
 
-package algolia.dsl
+package algolia.objects
 
-import algolia.AlgoliaDsl.Of
-import algolia.definitions.{
-  ClearDictionaryDefinition,
-  ClearIndexDefinition,
-  ClearRulesDefinition,
-  ClearSynonymsDefinition
-}
-import algolia.objects.{Dictionary, DictionaryEntry}
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable}
-import org.json4s.Formats
+/** Represents Dictionary settings. */
+case class DictionarySettings(
+    disableStandardEntries: Option[DisableStandardEntries] = None
+)
 
-import scala.concurrent.{ExecutionContext, Future}
-
-trait ClearDsl {
-
-  implicit val formats: Formats
-
-  case object clear {
-
-    def index(index: String): ClearIndexDefinition =
-      ClearIndexDefinition(index)
-
-    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
-
-    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
-
-    def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
-      ClearDictionaryDefinition(dictionary)
-  }
-
-  implicit object ClearIndexDefinitionExecutable
-      extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
-        implicit executor: ExecutionContext
-    ): Future[Task] = {
-      client.request[Task](query.build())
-    }
-  }
-
-}
+/**
+  * Map of language ISO code supported by the dictionary (e.g., “en” for English) to a boolean value.
+  * When set to true, the standard entries for the language are disabled. Changes are set for the
+  * given languages only. To re-enable standard entries, set the language to false. To reset settings
+  * to default values, set dictionary to `null`.
+  */
+case class DisableStandardEntries(
+    /** Settings for the stop word dictionary. */
+    stopwords: Option[Map[String, Boolean]] = None
+)

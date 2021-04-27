@@ -28,13 +28,7 @@ package algolia.dsl
 import algolia.AlgoliaDsl.ABTests
 import algolia.definitions._
 import algolia.objects.Strategy
-import algolia.responses.{
-  GetObject,
-  GetStrategyResponse,
-  Results,
-  TopUserID,
-  UserDataWithCluster
-}
+import algolia.responses._
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 import org.json4s.JsonAST.JObject
@@ -82,6 +76,9 @@ trait GetDsl {
 
     def personalizationRecommendationStrategy() =
       GetRecommendationStrategyDefinition()
+
+    def dictionarySettings(): GetSettingsDictionaryDefinition =
+      GetSettingsDictionaryDefinition()
 
   }
 

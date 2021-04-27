@@ -25,44 +25,19 @@
 
 package algolia.dsl
 
-import algolia.AlgoliaDsl.Of
-import algolia.definitions.{
-  ClearDictionaryDefinition,
-  ClearIndexDefinition,
-  ClearRulesDefinition,
-  ClearSynonymsDefinition
-}
+import algolia.definitions._
 import algolia.objects.{Dictionary, DictionaryEntry}
-import algolia.responses.Task
-import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
-import scala.concurrent.{ExecutionContext, Future}
-
-trait ClearDsl {
+trait ReplaceDsl {
 
   implicit val formats: Formats
 
-  case object clear {
+  object replace {
 
-    def index(index: String): ClearIndexDefinition =
-      ClearIndexDefinition(index)
+    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
+      ReplaceDictionaryDefinition[T](dictionary)
 
-    def synonyms(of: Of): ClearSynonymsDefinition = ClearSynonymsDefinition()
-
-    def rules(of: Of): ClearRulesDefinition = ClearRulesDefinition()
-
-    def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
-      ClearDictionaryDefinition(dictionary)
-  }
-
-  implicit object ClearIndexDefinitionExecutable
-      extends Executable[ClearIndexDefinition, Task] {
-    override def apply(client: AlgoliaClient, query: ClearIndexDefinition)(
-        implicit executor: ExecutionContext
-    ): Future[Task] = {
-      client.request[Task](query.build())
-    }
   }
 
 }

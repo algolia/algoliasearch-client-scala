@@ -51,3 +51,26 @@ case class TaskStatusDefinition(
   }
 
 }
+
+case class AppTaskStatusDefinition(
+    taskId: Long,
+    requestOptions: Option[RequestOptions] = None
+) extends Definition {
+
+  type T = AppTaskStatusDefinition
+
+  override def options(
+      requestOptions: RequestOptions
+  ): AppTaskStatusDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build(): HttpPayload = {
+    HttpPayload(
+      GET,
+      Seq("1", "task", taskId.toString),
+      isSearch = true,
+      requestOptions = requestOptions
+    )
+  }
+
+}
