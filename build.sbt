@@ -1,7 +1,6 @@
 organization := "com.algolia"
 name := "algoliasearch-scala"
 description := "Scala client for Algolia Search API"
-version := "1.39.1"
 crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
 scalaVersion := "2.13.1"
 testOptions in Test += Tests.Argument("-P10")
@@ -24,6 +23,8 @@ developers += Developer(
   "contact@algolia.com",
   url("https://github.com/algolia/algoliasearch-client-scala/")
 )
+publishTo := sonatypePublishToBundle.value
+pgpSigningKey := Credentials.forHost(credentials.value, "pgp").map(_.userName) // related to https://github.com/sbt/sbt-pgp/issues/170
 
 lazy val root = project
   .in(file("."))
