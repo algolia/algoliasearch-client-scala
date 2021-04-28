@@ -1,6 +1,15 @@
 # ChangeLog
 
-## [1.39.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.39.0...1.40.0) (2021-03-01)
+## [1.40.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.39.1...1.40.0) (2021-04-28)
+
+### Feat
+
+- **dictionaries**: dictionaries API implementation ([f957b29](https://github.com/algolia/algoliasearch-client-scala/commit/f957b29))
+- **rules**: add filters param to rules condition ([3a8e81d](https://github.com/algolia/algoliasearch-client-scala/commit/3a8e81d))
+
+
+
+## [1.39.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.39.0...1.39.1) (2021-03-01)
 
 ### Fix
 
