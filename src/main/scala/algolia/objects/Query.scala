@@ -45,6 +45,7 @@ case class Query(
     enableABTest: Option[Boolean] = None,
     explain: Option[Seq[String]] = None,
     naturalLanguages: Option[Seq[String]] = None,
+    decompoundQuery: Option[Boolean] = None,
     /* Attributes */
     attributesToRetrieve: Option[Seq[String]] = None,
     restrictSearchableAttributes: Option[Seq[String]] = None,
@@ -143,6 +144,7 @@ case class Query(
       "maxFacetHits" -> maxFacetHits.map(_.toString),
       "percentileComputation" -> percentileComputation.map(_.toString),
       "queryLanguages" -> queryLanguages.map(_.mkString(",")),
+      "decompoundQuery" -> decompoundQuery.map(_.toString),
       /* Attributes */
       "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
       "restrictSearchableAttributes" -> restrictSearchableAttributes.map(
