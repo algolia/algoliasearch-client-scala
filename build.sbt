@@ -4,7 +4,7 @@ description := "Scala client for Algolia Search API"
 version := "1.39.0"
 crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
 scalaVersion := "2.13.1"
-testOptions in Test += Tests.Argument("-P10")
+Test / testOptions += Tests.Argument("-P10")
 publishMavenStyle := true
 publishArtifact in Test := false
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
@@ -31,7 +31,7 @@ lazy val root = project
   .settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "algolia",
-    evictionWarningOptions in update := EvictionWarningOptions.default
+    update / evictionWarningOptions := EvictionWarningOptions.default
       .withWarnTransitiveEvictions(false)
       .withWarnDirectEvictions(false)
       .withWarnScalaVersionEviction(false)
