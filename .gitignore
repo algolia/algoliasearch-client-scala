@@ -16,4 +16,5 @@ gpg.sbt
 .scala_dependencies
 .worksheet
 .idea
+.bsp/
 *.iml
