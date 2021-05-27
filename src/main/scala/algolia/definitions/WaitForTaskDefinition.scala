@@ -28,27 +28,63 @@ package algolia.definitions
 import algolia.http.HttpPayload
 import algolia.objects.RequestOptions
 
-case class WaitForTaskDefinition(
-    taskId: Long,
-    index: Option[String] = None,
-    baseDelay: Long = 100,
-    maxDelay: Long = Long.MaxValue,
-    requestOptions: Option[RequestOptions] = None
-) extends Definition {
+sealed trait TaskDefinition extends Definition {
+  val taskId: Long
+  val baseDelay: Long
+  val maxDelay: Long
+  val requestOptions: Option[RequestOptions]
+  def baseDelay(delay: Long): TaskDefinition
+  def maxDelay(delay: Long): TaskDefinition
+}
 
-  type T = WaitForTaskDefinition
+case class WaitForTaskDefinition(
+    override val taskId: Long,
+    index: Option[String] = None,
+    override val baseDelay: Long = 100,
+    override val maxDelay: Long = Long.MaxValue,
+    override val requestOptions: Option[RequestOptions] = None
+) extends TaskDefinition {
+
+  override type T = WaitForTaskDefinition
 
   def from(index: String): WaitForTaskDefinition = copy(index = Some(index))
 
-  def baseDelay(delay: Long): WaitForTaskDefinition = copy(baseDelay = delay)
+  override def baseDelay(delay: Long): WaitForTaskDefinition =
+    copy(baseDelay = delay)
 
-  def maxDelay(delay: Long): WaitForTaskDefinition = copy(maxDelay = delay)
+  override def maxDelay(delay: Long): WaitForTaskDefinition =
+    copy(maxDelay = delay)
 
   override def options(requestOptions: RequestOptions): WaitForTaskDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload =
     TaskStatusDefinition(taskId, index).build()
+
+}
+
+case class WaitForAppTaskDefinition(
+    override val taskId: Long,
+    override val baseDelay: Long = 100,
+    override val maxDelay: Long = Long.MaxValue,
+    override val requestOptions: Option[RequestOptions] = None
+) extends TaskDefinition {
+
+  type T = WaitForAppTaskDefinition
+
+  override def baseDelay(delay: Long): WaitForAppTaskDefinition =
+    copy(baseDelay = delay)
+
+  override def maxDelay(delay: Long): WaitForAppTaskDefinition =
+    copy(maxDelay = delay)
+
+  override def options(
+      requestOptions: RequestOptions
+  ): WaitForAppTaskDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build(): HttpPayload =
+    AppTaskStatusDefinition(taskId).build()
 
 }
 

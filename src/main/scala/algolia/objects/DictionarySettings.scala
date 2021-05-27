@@ -23,40 +23,20 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.objects
 
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Query, RequestOptions}
-import org.json4s.Formats
-import org.json4s.native.Serialization.write
+/** Represents Dictionary settings. */
+case class DictionarySettings(
+    disableStandardEntries: Option[DisableStandardEntries] = None
+)
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None
-)(implicit val formats: Formats)
-    extends Definition {
-
-  type T = BrowseIndexDefinition
-
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
-
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
-
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-    val body = Map("params" -> q.toParam)
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", source, "browse"),
-      body = Some(write(body)),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
-  }
-}
+/**
+  * Map of language ISO code supported by the dictionary (e.g., “en” for English) to a boolean value.
+  * When set to true, the standard entries for the language are disabled. Changes are set for the
+  * given languages only. To re-enable standard entries, set the language to false. To reset settings
+  * to default values, set dictionary to `null`.
+  */
+case class DisableStandardEntries(
+    /** Settings for the stop word dictionary. */
+    stopwords: Option[Map[String, Boolean]] = None
+)

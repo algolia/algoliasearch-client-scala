@@ -75,3 +75,16 @@ case class ABTestTask(abTestID: Int, taskID: Long, index: String)
     extends AlgoliaTask {
   override val idToWaitFor: Long = taskID
 }
+
+sealed trait AlgoliaAppTask {
+
+  protected[algolia] val idToWaitFor: Long
+
+}
+
+case class DictionaryTask(
+    taskID: Long,
+    updatedAt: Option[String] = None
+) extends AlgoliaAppTask {
+  override protected[algolia] val idToWaitFor: Long = taskID
+}

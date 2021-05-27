@@ -27,7 +27,7 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl._
 import algolia.AlgoliaTest
-import algolia.http.{GET, HttpPayload}
+import algolia.http.{HttpPayload, POST}
 import algolia.objects.Query
 
 class BrowseIndexTest extends AlgoliaTest {
@@ -43,11 +43,12 @@ class BrowseIndexTest extends AlgoliaTest {
     }
 
     it("should call API") {
-      (browse index "toto" from "cursor1").build() should be(
+      val payload = (browse index "toto" from "cursor1").build()
+      payload should be(
         HttpPayload(
-          GET,
+          POST,
           Seq("1", "indexes", "toto", "browse"),
-          queryParameters = Some(Map("cursor" -> "cursor1")),
+          body = Some("{\"params\":\"cursor=cursor1\"}"),
           isSearch = true,
           requestOptions = None
         )
@@ -57,9 +58,9 @@ class BrowseIndexTest extends AlgoliaTest {
     it("should call API with query") {
       (browse index "toto" query Query(query = Some("q"))).build() should be(
         HttpPayload(
-          GET,
+          POST,
           Seq("1", "indexes", "toto", "browse"),
-          queryParameters = Some(Map("query" -> "q")),
+          body = Some("{\"params\":\"query=q\"}"),
           isSearch = true,
           requestOptions = None
         )
@@ -70,9 +71,9 @@ class BrowseIndexTest extends AlgoliaTest {
       (browse index "toto" query Query(query = Some("q")) from "cursor1")
         .build() should be(
         HttpPayload(
-          GET,
+          POST,
           Seq("1", "indexes", "toto", "browse"),
-          queryParameters = Some(Map("query" -> "q", "cursor" -> "cursor1")),
+          body = Some("{\"params\":\"query=q&cursor=cursor1\"}"),
           isSearch = true,
           requestOptions = None
         )

@@ -58,7 +58,7 @@ class AlgoliaClientTest extends AlgoliaTest {
 
     it("should set user agent") {
       apiClient.userAgent should (startWith("Algolia for Scala (1.") and include(
-        "; JVM (1.8"
+        "; JVM ("
       ) and include("; Scala (2.1"))
     }
 
@@ -649,7 +649,6 @@ class AlgoliaClientTest extends AlgoliaTest {
 
       whenReady(res.failed) { e =>
         e shouldBe a[WaitForTimeoutException]
-        e should have message "Waiting for task `1` on index `toto` timeout after 32ms"
       }
     }
   }

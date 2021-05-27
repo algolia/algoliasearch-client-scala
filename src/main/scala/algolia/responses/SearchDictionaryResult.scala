@@ -23,40 +23,21 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.responses
 
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Query, RequestOptions}
-import org.json4s.Formats
-import org.json4s.native.Serialization.write
+import algolia.objects.DictionaryEntry
+import org.json4s.{Formats, JObject}
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None
-)(implicit val formats: Formats)
-    extends Definition {
+case class SearchDictionaryResult(
+    hits: Seq[JObject],
+    nbHits: Int,
+    page: Int,
+    nbPages: Int
+) {
 
-  type T = BrowseIndexDefinition
+  implicit val formats: Formats = org.json4s.DefaultFormats
 
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
+  def asEntry[T <: DictionaryEntry: Manifest]: Seq[T] = hits.map(_.extract[T])
 
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
-
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-    val body = Map("params" -> q.toParam)
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", source, "browse"),
-      body = Some(write(body)),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
-  }
+  def as[T <: DictionaryEntry: Manifest]: Seq[T] = hits.map(_.extract[T])
 }

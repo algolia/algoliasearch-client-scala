@@ -39,7 +39,8 @@ case class Condition(
     pattern: String,
     anchoring: String,
     context: Option[String] = None,
-    alternatives: Option[Alternatives] = None
+    alternatives: Option[Alternatives] = None,
+    filters: Option[String] = None
 )
 
 case class Consequence(

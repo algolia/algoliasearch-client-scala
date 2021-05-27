@@ -27,6 +27,7 @@ package algolia.dsl
 
 import algolia.definitions._
 import algolia.inputs.SafeDeleteObjectOperation
+import algolia.objects.{Dictionary, DictionaryEntry}
 import algolia.responses.Task
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -63,6 +64,8 @@ trait DeleteDsl {
     // AB test
     def abTest(id: Int) = DeleteABTestDefinition(id)
 
+    def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
+      DeleteDictionaryDefinition(dictionary)
   }
 
   implicit object DeleteObjectDefinitionExecutable

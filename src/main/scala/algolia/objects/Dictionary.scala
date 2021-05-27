@@ -23,40 +23,47 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.objects
 
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Query, RequestOptions}
-import org.json4s.Formats
-import org.json4s.native.Serialization.write
+sealed trait Dictionary[+T <: DictionaryEntry] {
+  val name: String
+}
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None
-)(implicit val formats: Formats)
-    extends Definition {
+object Dictionary {
 
-  type T = BrowseIndexDefinition
+  case object Plurals extends Dictionary[PluralEntry] {
+    override val name: String = "plurals"
+  }
 
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
-
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
-
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-    val body = Map("params" -> q.toParam)
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", source, "browse"),
-      body = Some(write(body)),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
+  case object Stopwords extends Dictionary[StopwordEntry] {
+    override val name: String = "stopwords"
+  }
+  case object Compounds extends Dictionary[CompoundEntry] {
+    override val name: String = "compounds"
   }
 }
+
+sealed trait DictionaryEntry {
+  val objectID: String
+  val language: String
+}
+
+case class StopwordEntry(
+    objectID: String,
+    language: String,
+    word: String,
+    state: String
+) extends DictionaryEntry
+
+case class PluralEntry(
+    objectID: String,
+    language: String,
+    words: Seq[String]
+) extends DictionaryEntry
+
+case class CompoundEntry(
+    objectID: String,
+    language: String,
+    word: String,
+    decomposition: Seq[String]
+) extends DictionaryEntry

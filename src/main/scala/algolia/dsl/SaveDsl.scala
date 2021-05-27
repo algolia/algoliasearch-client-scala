@@ -26,7 +26,7 @@
 package algolia.dsl
 
 import algolia.definitions._
-import algolia.objects.{AbstractSynonym, Rule}
+import algolia.objects.{AbstractSynonym, Dictionary, DictionaryEntry, Rule}
 import org.json4s.Formats
 
 trait SaveDsl {
@@ -46,6 +46,9 @@ trait SaveDsl {
 
     def rules(rules: Iterable[Rule]) =
       BatchRulesDefinition(rules = rules)
+
+    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
+      SaveDictionaryDefinition[T](dictionary)
 
   }
 

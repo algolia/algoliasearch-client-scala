@@ -23,40 +23,21 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.dsl
 
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Query, RequestOptions}
+import algolia.definitions._
+import algolia.objects.{Dictionary, DictionaryEntry}
 import org.json4s.Formats
-import org.json4s.native.Serialization.write
 
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None
-)(implicit val formats: Formats)
-    extends Definition {
+trait ReplaceDsl {
 
-  type T = BrowseIndexDefinition
+  implicit val formats: Formats
 
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
+  object replace {
 
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
+    def dictionary[T <: DictionaryEntry](dictionary: Dictionary[T]) =
+      ReplaceDictionaryDefinition[T](dictionary)
 
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-    val body = Map("params" -> q.toParam)
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", source, "browse"),
-      body = Some(write(body)),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
   }
+
 }

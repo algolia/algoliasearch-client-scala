@@ -25,24 +25,17 @@
 
 package algolia
 
-import java.time.{ZoneOffset, ZonedDateTime}
-
 import algolia.AlgoliaDsl._
 import algolia.objects.{Condition, Consequence, Rule}
-import algolia.responses.{AlgoliaTask, TasksMultipleIndex}
+import algolia.responses.{AlgoliaAppTask, AlgoliaTask, TasksMultipleIndex}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{
-  BeforeAndAfter,
-  BeforeAndAfterAll,
-  EitherValues,
-  Inside,
-  Inspectors
-}
+import org.scalatest._
+import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.time.{Millis, Seconds, Span}
 
+import java.time.{ZoneOffset, ZonedDateTime}
 import scala.concurrent.{ExecutionContext, Future}
 
 object AlgoliaTest {
@@ -53,6 +46,14 @@ object AlgoliaTest {
   lazy val applicationId: String = System.getenv("ALGOLIA_APPLICATION_ID_1")
   lazy val apiKey: String = System.getenv("ALGOLIA_ADMIN_KEY_1")
   lazy val client: AlgoliaClient = new AlgoliaClient(applicationId, apiKey) {
+    override val httpClient: AlgoliaHttpClient =
+      AlgoliaHttpClient(
+        AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000)
+      )
+  }
+  lazy val applicationId2: String = System.getenv("ALGOLIA_APPLICATION_ID_2")
+  lazy val apiKey2: String = System.getenv("ALGOLIA_ADMIN_KEY_2")
+  lazy val client2: AlgoliaClient = new AlgoliaClient(applicationId2, apiKey2) {
     override val httpClient: AlgoliaHttpClient =
       AlgoliaHttpClient(
         AlgoliaClientConfiguration(100000, 100000, 100000, 100000, 100000)
@@ -87,6 +88,15 @@ class AlgoliaTest
     }
   }
 
+  def appTaskShouldBeCreated(
+      task: Future[AlgoliaAppTask]
+  )(implicit ec: ExecutionContext): AlgoliaAppTask = {
+    whenReady(task) { result =>
+      result.idToWaitFor should not be 0
+      result
+    }
+  }
+
   def taskShouldBeCreatedAndWaitForIt(task: Future[AlgoliaTask], index: String)(
       implicit ec: ExecutionContext
   ): Unit = {
@@ -94,6 +104,23 @@ class AlgoliaTest
 
     val waiting = AlgoliaTest.client.execute {
       waitFor task t from index maxDelay (60 * 10 * 1000) //600 seconds
+    }
+
+    whenReady(waiting) { result =>
+      result.status should equal("published")
+    }
+  }
+
+  def appTaskShouldBeCreatedAndWaitForIt(
+      client: AlgoliaClient,
+      task: Future[AlgoliaAppTask]
+  )(
+      implicit ec: ExecutionContext
+  ): Unit = {
+    val t = appTaskShouldBeCreated(task)
+
+    val waiting = client.execute {
+      waitFor task t maxDelay (60 * 10 * 1000) //600 seconds
     }
 
     whenReady(waiting) { result =>

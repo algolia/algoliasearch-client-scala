@@ -23,40 +23,12 @@
  * THE SOFTWARE.
  */
 
-package algolia.definitions
+package algolia.objects
 
-import algolia.http.{HttpPayload, POST}
-import algolia.objects.{Query, RequestOptions}
-import org.json4s.Formats
-import org.json4s.native.Serialization.write
-
-case class BrowseIndexDefinition(
-    source: String,
-    query: Option[Query] = None,
-    cursor: Option[String] = None,
-    requestOptions: Option[RequestOptions] = None
-)(implicit val formats: Formats)
-    extends Definition {
-
-  type T = BrowseIndexDefinition
-
-  def from(cursor: String): BrowseIndexDefinition = copy(cursor = Some(cursor))
-
-  def query(query: Query): BrowseIndexDefinition = copy(query = Some(query))
-
-  override def options(requestOptions: RequestOptions): BrowseIndexDefinition =
-    copy(requestOptions = Some(requestOptions))
-
-  override private[algolia] def build(): HttpPayload = {
-    val q = query.getOrElse(Query()).copy(cursor = cursor)
-    val body = Map("params" -> q.toParam)
-
-    HttpPayload(
-      POST,
-      Seq("1", "indexes", source, "browse"),
-      body = Some(write(body)),
-      isSearch = true,
-      requestOptions = requestOptions
-    )
-  }
-}
+case class QueryDictionary(
+    query: Option[String] = None,
+    page: Option[Int] = None,
+    hitsPerPage: Option[Int] = None,
+    language: Option[String] = None,
+    customParameters: Option[Map[String, String]] = None
+)
