@@ -60,6 +60,9 @@ case class SearchResult(
     index: Option[String],
     // advanced
     explain: Option[Explain],
+    // virtual indices
+    appliedRelevancyStrictness: Option[Integer],
+    nbSortedHits: Option[Int],
     // Facets ordering
     renderingContent: Option[RenderingContent]
 ) {
