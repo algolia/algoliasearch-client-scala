@@ -59,7 +59,10 @@ case class SearchResult(
     processed: Option[Boolean],
     index: Option[String],
     // advanced
-    explain: Option[Explain]
+    explain: Option[Explain],
+    // virtual indices
+    appliedRelevancyStrictness: Option[Integer],
+    nbSortedHits: Option[Int]
 ) {
 
   implicit val formats: Formats = org.json4s.DefaultFormats
