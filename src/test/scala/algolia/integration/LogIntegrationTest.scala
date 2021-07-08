@@ -25,25 +25,24 @@
 
 package algolia.integration
 
-import algolia.responses.{LogType, Logs}
-import algolia.AlgoliaTest
 import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
+import algolia.responses.LogType
 
-import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, Future}
+import scala.language.postfixOps
 
 class LogIntegrationTest extends AlgoliaTest {
 
-  val indexName: String = getTestIndexName("indexToSearch")
-
   it("should get the logs") {
-    val indexRes = AlgoliaTest.client.execute {
-      index into indexName `object` Obj("1")
-    }
-
-    taskShouldBeCreatedAndWaitForIt(indexRes, indexName)
+    val listIndices1 = AlgoliaTest.client.execute { list indexes }
+    val listIndices2 = AlgoliaTest.client.execute { list indexes }
+    val futures = Future.sequence(Seq(listIndices1, listIndices2))
+    Await.result(futures, 10 seconds)
 
     val getLogsRes = AlgoliaTest.client.execute {
-      getLogs offset 0 length 10 `type` LogType.all
+      getLogs offset 0 length 2 `type` LogType.all
     }
 
     whenReady(getLogsRes) { r =>
