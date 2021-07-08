@@ -27,19 +27,19 @@ package algolia.integration
 
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneOffset, ZonedDateTime}
-
 import algolia.AlgoliaDsl._
 import algolia.inputs.{UserIDAssignment, UserIDsAssignment}
 import algolia.responses.{ClusterData, UserDataWithCluster}
 import algolia.{
   AlgoliaClient,
   AlgoliaClientConfiguration,
+  AlgoliaClientException,
   AlgoliaHttpClient,
   AlgoliaTest,
   SkipInCI
 }
-import org.scalatest.Ignore
 
+import scala.annotation.tailrec
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
@@ -119,7 +119,7 @@ class MCMIntegrationTest extends AlgoliaTest {
         10 seconds
       )
 
-    Thread.sleep(3000)
+    waitUserID(mcmClient, userID)
 
     val hits = Await
       .result(
@@ -132,10 +132,38 @@ class MCMIntegrationTest extends AlgoliaTest {
       hits.exists(_.userID == u) should be(true)
     )
 
-    val mappingFuture = mcmClient execute (has pendingMappings)
+    removeUserId(mcmClient, userID)
+
+    val mappingFuture = mcmClient execute has.pendingMappings()
     noException should be thrownBy whenReady(mappingFuture) { res =>
       res.pending should not be None
     }
 
+  }
+
+  @tailrec
+  final def waitUserID(client: AlgoliaClient, id: String): Unit = {
+    try Await.result(client.execute(get userID id), 10 seconds)
+    catch {
+      case e: AlgoliaClientException =>
+        if (e.getMessage.contains("Mapping does not exist for this userID")) {
+          Thread.sleep(1000)
+          waitUserID(client, id)
+        }
+    }
+  }
+
+  @tailrec
+  final def removeUserId(client: AlgoliaClient, id: String): Unit = {
+    try Await.result(client.execute(remove userID id), 10 seconds)
+    catch {
+      case e: AlgoliaClientException =>
+        if (e.getMessage.contains(
+              "Another mapping operation is already running for this userID"
+            )) {
+          Thread.sleep(1000)
+          removeUserId(client, id)
+        }
+    }
   }
 }
