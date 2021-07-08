@@ -1,8 +1,8 @@
 organization := "com.algolia"
 name := "algoliasearch-scala"
 description := "Scala client for Algolia Search API"
-crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1")
-scalaVersion := "2.13.1"
+crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.6")
+scalaVersion := "2.13.6"
 testOptions in Test += Tests.Argument("-P10")
 publishMavenStyle := true
 publishArtifact in Test := false
