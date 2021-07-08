@@ -30,6 +30,7 @@ import algolia.objects.{RequestOptions, SetStrategyRequest}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
+@deprecated("use personalization instead", "1.41.0")
 case class GetRecommendationStrategyDefinition(
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
@@ -47,13 +48,14 @@ case class GetRecommendationStrategyDefinition(
       GET,
       Seq("1", "strategies", "personalization"),
       isSearch = false,
-      isRecommendation = true,
+      isPersonalization = true,
       requestOptions = requestOptions
     )
   }
 
 }
 
+@deprecated("use personalization instead", "1.41.0")
 case class SetRecommendationStrategyDefinition(
     s: SetStrategyRequest,
     requestOptions: Option[RequestOptions] = None
@@ -73,7 +75,7 @@ case class SetRecommendationStrategyDefinition(
       Seq("1", "strategies", "personalization"),
       body = Some(write(s)),
       isSearch = false,
-      isRecommendation = true,
+      isPersonalization = true,
       requestOptions = requestOptions
     )
   }

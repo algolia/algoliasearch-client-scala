@@ -26,14 +26,14 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl._
-import algolia.{AlgoliaClient, AlgoliaTest}
 import algolia.http.{HttpPayload, POST}
 import algolia.objects.{EventsScoring, FacetsScoring, SetStrategyRequest}
+import algolia.{AlgoliaClient, AlgoliaTest}
 
-class RecommendationTest extends AlgoliaTest {
+class PersonalizationTest extends AlgoliaTest {
   describe("test recommendation payload") {
     it("should produce valid payload") {
-      (set personalizationRecommendationStrategy (
+      (set strategy (
         SetStrategyRequest(
           Seq[EventsScoring](
             EventsScoring("buy", "conversion", 10),
@@ -53,19 +53,17 @@ class RecommendationTest extends AlgoliaTest {
             "{\"eventsScoring\":[{\"eventName\":\"buy\",\"eventType\":\"conversion\",\"score\":10},{\"eventName\":\"add to cart\",\"eventType\":\"conversion\",\"score\":20}],\"facetsScoring\":[{\"facetName\":\"brand\",\"score\":10},{\"facetName\":\"category\",\"score\":20}],\"personalizationImpact\":75}"
           ),
           isSearch = false,
-          isRecommendation = true,
+          isPersonalization = true,
           requestOptions = None
         )
       )
     }
 
     it("should override default 'us' host") {
-      val recommendationClient = new AlgoliaClient("appID", "apiKEY")
-      recommendationClient.recommendationHost =
-        "https://recommendation.eu.algolia.com"
-      recommendationClient.recommendationHost shouldEqual "https://recommendation.eu.algolia.com"
+      val personalizationClient = new AlgoliaClient("appID", "apiKEY")
+      personalizationClient.personalizationHost( "https://recommendation.eu.algolia.com")
+      personalizationClient.personalizationHost shouldEqual "https://recommendation.eu.algolia.com"
     }
-
   }
 
 }
