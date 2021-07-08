@@ -61,7 +61,9 @@ class PersonalizationTest extends AlgoliaTest {
 
     it("should override default 'us' host") {
       val personalizationClient = new AlgoliaClient("appID", "apiKEY")
-      personalizationClient.personalizationHost( "https://recommendation.eu.algolia.com")
+      personalizationClient.personalizationHost(
+        "https://recommendation.eu.algolia.com"
+      )
       personalizationClient.personalizationHost shouldEqual "https://recommendation.eu.algolia.com"
     }
   }
