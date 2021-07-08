@@ -33,7 +33,6 @@ import java.nio.charset.Charset
 import java.util.Base64
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import scala.annotation.nowarn
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex
@@ -98,9 +97,7 @@ class AlgoliaClient(
   /* Recommendation default host is set as 'var' because the region might be overridden. */
   @deprecated("use personalizationHost instead", "1.40.0")
   var recommendationHost: String = "https://personalization.us.algolia.com"
-  @nowarn
   def personalizationHost: String = recommendationHost
-  @nowarn
   def personalizationHost(host: String) = {
     recommendationHost = host
   }

@@ -62,7 +62,8 @@ scalacOptions ++= Seq(
   "UTF-8",
   "-unchecked", //Enable additional warnings where generated code depends on assumptions
   "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen"
+  "-Ywarn-numeric-widen",
+  "-deprecation:false"
 )
 
 headerLicense := Some(
