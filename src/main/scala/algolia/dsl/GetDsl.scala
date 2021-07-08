@@ -83,6 +83,9 @@ trait GetDsl {
     def personalizationRecommendationStrategy() =
       GetRecommendationStrategyDefinition()
 
+    def personalizationProfile(userToken: String) =
+      GetPersonalizationProfileDefinition(userToken)
+
     def dictionarySettings: GetSettingsDictionaryDefinition =
       GetSettingsDictionaryDefinition()
 
@@ -168,4 +171,18 @@ trait GetDsl {
     }
   }
 
+  implicit object GetPersonalizationProfileExecutable
+      extends Executable[
+        GetPersonalizationProfileDefinition,
+        PersonalizationProfileResponse
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: GetPersonalizationProfileDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[PersonalizationProfileResponse] = {
+      client.request[PersonalizationProfileResponse](query.build())
+    }
+  }
 }
