@@ -52,8 +52,8 @@ case class FacetsOrder(
   * Facet values ordering rule container.
   */
 case class FacetValuesOrder(
-    order: Seq[String] = Seq.empty,
-    sortRemainingBy: SortRule = SortRule.count
+    order: Seq[String],
+    sortRemainingBy: Option[SortRule] = None
 )
 
 /**
