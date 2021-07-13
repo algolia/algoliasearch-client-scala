@@ -99,5 +99,7 @@ case class IndexSettings(
     ignorePlurals: Option[IgnorePlurals] = None,
     disableTypoToleranceOnAttributes: Option[Seq[String]] = None,
     disableTypoToleranceOnWords: Option[Seq[String]] = None,
-    separatorsToIndex: Option[String] = None
+    separatorsToIndex: Option[String] = None,
+    /* Facets ordering */
+    renderingContent: Option[RenderingContent] = None
 )

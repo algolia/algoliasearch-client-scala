@@ -25,7 +25,7 @@
 
 package algolia.responses
 
-import algolia.objects.{AbstractSynonym, Rule}
+import algolia.objects.{AbstractSynonym, RenderingContent, Rule}
 import org.json4s._
 
 private[algolia] trait SearchHits[A] {
@@ -59,7 +59,9 @@ case class SearchResult(
     processed: Option[Boolean],
     index: Option[String],
     // advanced
-    explain: Option[Explain]
+    explain: Option[Explain],
+    // Facets ordering
+    renderingContent: Option[RenderingContent]
 ) {
 
   implicit val formats: Formats = org.json4s.DefaultFormats
