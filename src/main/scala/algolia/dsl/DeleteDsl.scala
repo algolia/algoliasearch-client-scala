@@ -28,7 +28,7 @@ package algolia.dsl
 import algolia.definitions._
 import algolia.inputs.SafeDeleteObjectOperation
 import algolia.objects.{Dictionary, DictionaryEntry}
-import algolia.responses.Task
+import algolia.responses.{DeletePersonalizationProfileResponse, Task}
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
 
@@ -66,6 +66,10 @@ trait DeleteDsl {
 
     def dictionary(dictionary: Dictionary[_ <: DictionaryEntry]) =
       DeleteDictionaryDefinition(dictionary)
+
+    // Personalization
+    def personalizationProfile(userToken: String) =
+      DeletePersonalizationProfileDefinition(userToken)
   }
 
   implicit object DeleteObjectDefinitionExecutable
@@ -102,6 +106,21 @@ trait DeleteDsl {
         query: SafeDeleteObjectDefinition
     )(implicit executor: ExecutionContext): Future[Task] = {
       client.request[Task](query.build())
+    }
+  }
+
+  implicit object DeletePersonalizationProfileExecutable
+      extends Executable[
+        DeletePersonalizationProfileDefinition,
+        DeletePersonalizationProfileResponse
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: DeletePersonalizationProfileDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[DeletePersonalizationProfileResponse] = {
+      client.request[DeletePersonalizationProfileResponse](query.build())
     }
   }
 

@@ -38,7 +38,7 @@ class RecommendationIntegrationTest extends AlgoliaTest {
 
     it("should get personalization strategy without failing") {
       val task: Future[GetStrategyResponse] = AlgoliaTest.client.execute {
-        get.personalizationRecommendationStrategy()
+        get.strategy()
       }
 
       whenReady(task) { strategy =>

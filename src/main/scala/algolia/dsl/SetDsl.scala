@@ -28,7 +28,8 @@ package algolia.dsl
 import algolia.definitions.{
   SetPersonalizationStrategyDefinition,
   SetRecommendationStrategyDefinition,
-  SetSettingsDictionaryDefinition
+  SetSettingsDictionaryDefinition,
+  SetStrategyDefinition
 }
 import algolia.objects.{DictionarySettings, SetStrategyRequest, Strategy}
 import algolia.responses.{SetStrategyResponse, SetStrategyResult}
@@ -42,8 +43,11 @@ trait SetDsl {
 
   case object set {
 
+    def strategy(strategy: SetStrategyRequest): SetStrategyDefinition =
+      SetStrategyDefinition(strategy)
+
     @deprecated(
-      "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+      "Method is deprecated, please use strategy methods instead",
       "1.34"
     )
     def personalizationStrategy(
@@ -51,6 +55,10 @@ trait SetDsl {
     ): SetPersonalizationStrategyDefinition =
       SetPersonalizationStrategyDefinition(s)
 
+    @deprecated(
+      "Method is deprecated, please use strategy methods instead",
+      "1.40.0"
+    )
     def personalizationRecommendationStrategy(
         strategy: SetStrategyRequest
     ): SetRecommendationStrategyDefinition =
@@ -62,8 +70,17 @@ trait SetDsl {
       SetSettingsDictionaryDefinition(dictionarySettings)
   }
 
+  implicit object SetStrategyExecutable
+      extends Executable[SetStrategyDefinition, SetStrategyResult] {
+    override def apply(client: AlgoliaClient, query: SetStrategyDefinition)(
+        implicit executor: ExecutionContext
+    ): Future[SetStrategyResult] = {
+      client.request[SetStrategyResult](query.build())
+    }
+  }
+
   @deprecated(
-    "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+    "Method is deprecated, please use strategy methods instead",
     "1.34"
   )
   implicit object SetPersonalizationStrategyExecutable
@@ -79,6 +96,10 @@ trait SetDsl {
     }
   }
 
+  @deprecated(
+    "Method is deprecated, please use strategy methods instead",
+    "1.34"
+  )
   implicit object SetPersonalizationRecommendationStrategy
       extends Executable[
         SetRecommendationStrategyDefinition,

@@ -25,4 +25,40 @@
 
 package algolia.responses
 
+import algolia.objects.{EventsScoring, FacetsScoring}
+
+case class SetStrategyResponse(status: Int, message: String)
+
+case class GetStrategyResponse(
+    eventsScoring: Option[Seq[EventsScoring]],
+    facetsScoring: Option[Seq[FacetsScoring]],
+    personalizationImpact: Option[Int]
+)
+
 case class SetStrategyResult(updatedAt: String)
+
+/**
+  * User profile built from Personalization strategy.
+  *
+  * @param userToken the user token representing the user and associated data
+  * @param lastEventAt the last processed event timestamp using the ISO 8601 format.
+  * @param scores The profile is structured by facet name used in the strategy. Each facet value is mapped to its score.
+  *               Each score represents the user affinity for a specific facet value given the userToken past events and
+  *               the Personalization strategy defined. Scores are bounded to 20.
+  */
+case class PersonalizationProfileResponse(
+    userToken: String,
+    lastEventAt: String,
+    scores: Map[String, Any]
+)
+
+/**
+  * Delete the user profile response.
+  *
+  * @param userToken the user token representing the user and associated data
+  * @param deletedUntil date until which the data can safely be considered as deleted for the given use
+  */
+case class DeletePersonalizationProfileResponse(
+    userToken: String,
+    deletedUntil: String
+)

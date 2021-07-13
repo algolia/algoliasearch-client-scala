@@ -26,8 +26,7 @@
 package algolia
 
 import algolia.http.HttpPayload
-import algolia.objects.{DictionaryEntry, Query}
-import algolia.responses.SearchDictionaryResult
+import algolia.objects.Query
 import org.slf4j.{Logger, LoggerFactory}
 
 import java.nio.charset.Charset
@@ -94,8 +93,14 @@ class AlgoliaClient(
 
   val analyticsHost: String = "https://analytics.algolia.com"
   val insightsHost: String = "https://insights.algolia.io"
+
   /* Recommendation default host is set as 'var' because the region might be overridden. */
-  var recommendationHost: String = "https://recommendation.us.algolia.com"
+  @deprecated("use personalizationHost instead", "1.40.0")
+  var recommendationHost: String = "https://personalization.us.algolia.com"
+  def personalizationHost: String = recommendationHost
+  def personalizationHost(host: String) = {
+    recommendationHost = host
+  }
 
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
@@ -172,8 +177,8 @@ class AlgoliaClient(
       requestAnalytics(payload)
     } else if (payload.isInsights) {
       requestInsights(payload)
-    } else if (payload.isRecommendation) {
-      requestRecommendation(payload)
+    } else if (payload.isPersonalization) {
+      requestPersonalization(payload)
     } else {
       requestSearch(payload)
     }
@@ -190,10 +195,10 @@ class AlgoliaClient(
     }
   }
 
-  private[algolia] def requestRecommendation[T: Manifest](
+  private[algolia] def requestPersonalization[T: Manifest](
       payload: HttpPayload
   )(implicit executor: ExecutionContext): Future[T] = {
-    httpClient.request[T](recommendationHost, headers, payload).andThen {
+    httpClient.request[T](personalizationHost, headers, payload).andThen {
       case Failure(e) =>
         logger.debug("Recommendation API call failed", e)
         Future.failed(

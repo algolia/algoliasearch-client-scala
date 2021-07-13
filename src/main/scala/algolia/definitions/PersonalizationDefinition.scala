@@ -25,58 +25,103 @@
 
 package algolia.definitions
 
-import algolia.http.{GET, HttpPayload, POST}
-import algolia.objects.Strategy
-import algolia.objects.RequestOptions
+import algolia.http.{DELETE, GET, HttpPayload, POST}
+import algolia.objects.{RequestOptions, SetStrategyRequest}
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
-@deprecated("use personalization instead", "1.41.0")
-case class GetPersonalizationStrategyDefinition(
+case class GeStrategyDefinition(
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends Definition {
 
-  override type T = GetPersonalizationStrategyDefinition
+  override type T = GeStrategyDefinition
 
   override def options(
       requestOptions: RequestOptions
-  ): GetPersonalizationStrategyDefinition =
+  ): GeStrategyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
       GET,
-      Seq("1", "recommendation", "personalization", "strategy"),
-      isSearch = true,
+      Seq("1", "strategies", "personalization"),
+      isSearch = false,
+      isPersonalization = true,
       requestOptions = requestOptions
     )
   }
 
 }
 
-@deprecated("use personalization instead", "1.41.0")
-case class SetPersonalizationStrategyDefinition(
-    s: Strategy,
+case class SetStrategyDefinition(
+    s: SetStrategyRequest,
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends Definition {
 
-  override type T = SetPersonalizationStrategyDefinition
+  override type T = SetStrategyDefinition
 
   override def options(
       requestOptions: RequestOptions
-  ): SetPersonalizationStrategyDefinition =
+  ): SetStrategyDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
       POST,
-      Seq("1", "recommendation", "personalization", "strategy"),
+      Seq("1", "strategies", "personalization"),
       body = Some(write(s)),
       isSearch = false,
+      isPersonalization = true,
       requestOptions = requestOptions
     )
   }
 
+}
+
+case class GetPersonalizationProfileDefinition(
+    userToken: String,
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends Definition {
+  override type T = GetPersonalizationProfileDefinition
+
+  override def options(
+      requestOptions: RequestOptions
+  ): GetPersonalizationProfileDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build() = {
+    HttpPayload(
+      GET,
+      Seq("1", "profiles", "personalization", userToken),
+      isSearch = false,
+      isPersonalization = true,
+      requestOptions = requestOptions
+    )
+  }
+}
+
+case class DeletePersonalizationProfileDefinition(
+    userToken: String,
+    requestOptions: Option[RequestOptions] = None
+)(implicit val formats: Formats)
+    extends Definition {
+  override type T = DeletePersonalizationProfileDefinition
+
+  override def options(
+      requestOptions: RequestOptions
+  ): DeletePersonalizationProfileDefinition =
+    copy(requestOptions = Some(requestOptions))
+
+  override private[algolia] def build() = {
+    HttpPayload(
+      DELETE,
+      Seq("1", "profiles", userToken),
+      isSearch = false,
+      isPersonalization = true,
+      requestOptions = requestOptions
+    )
+  }
 }
