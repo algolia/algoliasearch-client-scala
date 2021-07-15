@@ -55,3 +55,13 @@ case class Consequence(
 case class ConsequencePromote(objectID: String, position: Int)
 
 case class ConsequenceHide(objectID: String)
+
+case class RenderingContent(
+    redirect: Redirect,
+    facetMerchandising: FacetMerchandising,
+    userData: Option[Map[String, Any]] = None
+)
+
+case class Redirect(url: String)
+
+case class FacetMerchandising(order: Seq[String])
