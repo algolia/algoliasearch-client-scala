@@ -25,11 +25,11 @@
 
 package algolia.http
 
-import java.net.InetAddress
-
 import algolia.objects.RequestOptions
 import io.netty.resolver.NameResolver
 import org.asynchttpclient.{Request, RequestBuilder}
+
+import java.net.InetAddress
 
 private[algolia] sealed trait HttpVerb
 
@@ -57,6 +57,8 @@ private[algolia] case class HttpPayload(
     isSearch: Boolean,
     isAnalytics: Boolean = false,
     isInsights: Boolean = false,
+    isPersonalization: Boolean = false,
+    @deprecated("use personalization instead", "1.40.0")
     isRecommendation: Boolean = false,
     requestOptions: Option[RequestOptions]
 ) {

@@ -68,14 +68,23 @@ trait GetDsl {
     def userID(userID: String) = GetUserIDDefinition(userID)
 
     // Personalization
+    def strategy(): GeStrategyDefinition = GeStrategyDefinition()
+
     @deprecated(
-      "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+      "Method is deprecated, please use strategy methods instead",
       "1.34"
     )
     def personalizationStrategy() = GetPersonalizationStrategyDefinition()
 
+    @deprecated(
+      "Method is deprecated, please use strategy methods instead",
+      "1.40.0"
+    )
     def personalizationRecommendationStrategy() =
       GetRecommendationStrategyDefinition()
+
+    def personalizationProfile(userToken: String) =
+      GetPersonalizationProfileDefinition(userToken)
 
     def dictionarySettings: GetSettingsDictionaryDefinition =
       GetSettingsDictionaryDefinition()
@@ -122,8 +131,17 @@ trait GetDsl {
     }
   }
 
+  implicit object GetStrategyExecutable
+      extends Executable[GeStrategyDefinition, GetStrategyResponse] {
+    override def apply(client: AlgoliaClient, query: GeStrategyDefinition)(
+        implicit executor: ExecutionContext
+    ): Future[GetStrategyResponse] = {
+      client.request[GetStrategyResponse](query.build())
+    }
+  }
+
   @deprecated(
-    "Method is deprecated, please use personalizationRecommendationStrategy methods instead",
+    "Method is deprecated, please use strategy methods instead",
     "1.34"
   )
   implicit object GetPersonalizationStrategyExecutable
@@ -136,6 +154,10 @@ trait GetDsl {
     }
   }
 
+  @deprecated(
+    "Method is deprecated, please use strategy methods instead",
+    "1.40.0"
+  )
   implicit object GetPersonalizationRecommendationStrategy
       extends Executable[
         GetRecommendationStrategyDefinition,
@@ -149,4 +171,18 @@ trait GetDsl {
     }
   }
 
+  implicit object GetPersonalizationProfileExecutable
+      extends Executable[
+        GetPersonalizationProfileDefinition,
+        PersonalizationProfileResponse
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: GetPersonalizationProfileDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[PersonalizationProfileResponse] = {
+      client.request[PersonalizationProfileResponse](query.build())
+    }
+  }
 }

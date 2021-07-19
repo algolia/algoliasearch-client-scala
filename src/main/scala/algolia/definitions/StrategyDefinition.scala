@@ -31,6 +31,7 @@ import algolia.objects.RequestOptions
 import org.json4s.Formats
 import org.json4s.native.Serialization.write
 
+@deprecated("use personalization instead", "1.41.0")
 case class GetPersonalizationStrategyDefinition(
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
@@ -54,6 +55,7 @@ case class GetPersonalizationStrategyDefinition(
 
 }
 
+@deprecated("use personalization instead", "1.41.0")
 case class SetPersonalizationStrategyDefinition(
     s: Strategy,
     requestOptions: Option[RequestOptions] = None

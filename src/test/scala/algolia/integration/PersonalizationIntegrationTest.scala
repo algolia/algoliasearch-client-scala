@@ -23,14 +23,28 @@
  * THE SOFTWARE.
  */
 
-package algolia.responses
+package algolia.integration
 
-import algolia.objects.{EventsScoring, FacetsScoring}
+import algolia.AlgoliaDsl._
+import algolia.AlgoliaTest
+import algolia.responses.GetStrategyResponse
 
-case class SetStrategyResponse(status: Int, message: String)
+import scala.concurrent.Future
+import scala.language.postfixOps
 
-case class GetStrategyResponse(
-    eventsScoring: Option[Seq[EventsScoring]],
-    facetsScoring: Option[Seq[FacetsScoring]],
-    personalizationImpact: Option[Int]
-)
+class PersonalizationIntegrationTest extends AlgoliaTest {
+
+  describe("personalization API test") {
+
+    it("should get personalization strategy without failing") {
+      val task: Future[GetStrategyResponse] = AlgoliaTest.client.execute {
+        get.strategy()
+      }
+
+      whenReady(task) { strategy =>
+        strategy should not be None
+      }
+    }
+
+  }
+}
