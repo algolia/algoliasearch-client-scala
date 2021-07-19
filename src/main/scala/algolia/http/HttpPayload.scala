@@ -58,6 +58,8 @@ private[algolia] case class HttpPayload(
     isAnalytics: Boolean = false,
     isInsights: Boolean = false,
     isPersonalization: Boolean = false,
+    @deprecated("use personalization instead", "1.40.0")
+    isRecommendation: Boolean = false,
     requestOptions: Option[RequestOptions]
 ) {
 

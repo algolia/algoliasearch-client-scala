@@ -94,13 +94,11 @@ class AlgoliaClient(
   val analyticsHost: String = "https://analytics.algolia.com"
   val insightsHost: String = "https://insights.algolia.io"
 
-  /* Recommendation default host is set as 'var' because the region might be overridden. */
-  @deprecated("use personalizationHost instead", "1.40.0")
-  var recommendationHost: String = "https://personalization.us.algolia.com"
-  def personalizationHost: String = recommendationHost
-  def personalizationHost(host: String) = {
-    recommendationHost = host
-  }
+  /* Personalization default host is set as 'var' because the region might be overridden. */
+  var personalizationHost: String = "https://personalization.us.algolia.com"
+
+  @deprecated("use personalization instead", "1.40.0")
+  var recommendationHost: String = "https://recommendation.us.algolia.com"
 
   val userAgent =
     s"Algolia for Scala (${BuildInfo.version}); JVM (${System.getProperty("java.version")}); Scala (${BuildInfo.scalaVersion})"
@@ -179,6 +177,8 @@ class AlgoliaClient(
       requestInsights(payload)
     } else if (payload.isPersonalization) {
       requestPersonalization(payload)
+    } else if (payload.isRecommendation) {
+      requestRecommendation(payload)
     } else {
       requestSearch(payload)
     }
@@ -199,6 +199,19 @@ class AlgoliaClient(
       payload: HttpPayload
   )(implicit executor: ExecutionContext): Future[T] = {
     httpClient.request[T](personalizationHost, headers, payload).andThen {
+      case Failure(e) =>
+        logger.debug("Personalization API call failed", e)
+        Future.failed(
+          new AlgoliaClientException("Personalization API call failed", e)
+        )
+    }
+  }
+
+  @deprecated("use personalization instead", "1.40.0")
+  private[algolia] def requestRecommendation[T: Manifest](
+      payload: HttpPayload
+  )(implicit executor: ExecutionContext): Future[T] = {
+    httpClient.request[T](recommendationHost, headers, payload).andThen {
       case Failure(e) =>
         logger.debug("Recommendation API call failed", e)
         Future.failed(

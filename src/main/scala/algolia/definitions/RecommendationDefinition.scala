@@ -48,7 +48,7 @@ case class GetRecommendationStrategyDefinition(
       GET,
       Seq("1", "strategies", "personalization"),
       isSearch = false,
-      isPersonalization = true,
+      isRecommendation = true,
       requestOptions = requestOptions
     )
   }
@@ -75,7 +75,7 @@ case class SetRecommendationStrategyDefinition(
       Seq("1", "strategies", "personalization"),
       body = Some(write(s)),
       isSearch = false,
-      isPersonalization = true,
+      isRecommendation = true,
       requestOptions = requestOptions
     )
   }

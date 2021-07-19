@@ -31,7 +31,7 @@ import algolia.objects.{EventsScoring, FacetsScoring, SetStrategyRequest}
 import algolia.{AlgoliaClient, AlgoliaTest}
 
 class PersonalizationTest extends AlgoliaTest {
-  describe("test recommendation payload") {
+  describe("test personalization payload") {
     it("should produce valid payload") {
       (set strategy (
         SetStrategyRequest(
@@ -61,10 +61,8 @@ class PersonalizationTest extends AlgoliaTest {
 
     it("should override default 'us' host") {
       val personalizationClient = new AlgoliaClient("appID", "apiKEY")
-      personalizationClient.personalizationHost(
-        "https://recommendation.eu.algolia.com"
-      )
-      personalizationClient.personalizationHost shouldEqual "https://recommendation.eu.algolia.com"
+      personalizationClient.personalizationHost = "https://personalization.eu.algolia.com"
+      personalizationClient.personalizationHost shouldEqual "https://personalization.eu.algolia.com"
     }
   }
 
