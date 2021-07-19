@@ -32,9 +32,9 @@ import algolia.responses.GetStrategyResponse
 import scala.concurrent.Future
 import scala.language.postfixOps
 
-class RecommendationIntegrationTest extends AlgoliaTest {
+class PersonalizationIntegrationTest extends AlgoliaTest {
 
-  describe("recommendation API test") {
+  describe("personalization API test") {
 
     it("should get personalization strategy without failing") {
       val task: Future[GetStrategyResponse] = AlgoliaTest.client.execute {
