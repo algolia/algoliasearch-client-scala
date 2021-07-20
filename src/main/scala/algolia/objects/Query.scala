@@ -116,7 +116,9 @@ case class Query(
     /* Personalization */
     enablePersonalization: Option[Boolean] = None,
     /* CUSTOM */
-    customParameters: Option[Map[String, String]] = None
+    customParameters: Option[Map[String, String]] = None,
+    /* Virtual Indices */
+    relevancyStrictness: Option[Int] = None
 ) {
 
   def toParam: String = {
@@ -220,7 +222,9 @@ case class Query(
       "restrictIndices" -> restrictIndices.map(_.mkString(",")),
       "restrictSources" -> restrictSources.map(_.mkString(",")),
       /* Browse */
-      "cursor" -> cursor
+      "cursor" -> cursor,
+      /* Virtual Indices */
+      "relevancyStrictness" -> relevancyStrictness.map(_.toString)
     ).filter { case (_, v) => v.isDefined }
       .map { case (k, v) => k -> v.get }
 

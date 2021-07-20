@@ -101,5 +101,7 @@ case class IndexSettings(
     disableTypoToleranceOnWords: Option[Seq[String]] = None,
     separatorsToIndex: Option[String] = None,
     /* Facets ordering */
-    renderingContent: Option[RenderingContent] = None
+    renderingContent: Option[RenderingContent] = None,
+    /* Virtual Indices */
+    relevancyStrictness: Option[Int] = None
 )
