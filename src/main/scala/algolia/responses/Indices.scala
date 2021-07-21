@@ -37,5 +37,5 @@ case class Index(
     lastBuildTimeS: Int,
     numberOfPendingTasks: Int,
     pendingTask: Boolean,
-    primary: String
+    primary: Option[String] = None
 )
