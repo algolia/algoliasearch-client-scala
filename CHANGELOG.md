@@ -1,5 +1,21 @@
 # ChangeLog
 
+## [1.41.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.40.0...1.41.0) (2021-07-23)
+
+### Feat
+
+- **index**: add primary param to Index (#625) ([7452f35](https://github.com/algolia/algoliasearch-client-scala/commit/7452f35))
+- **analytics**: add trackedSearchCount to variant response (#607) ([ddce033](https://github.com/algolia/algoliasearch-client-scala/commit/ddce033))
+- facets ordering (#631) ([a32af41](https://github.com/algolia/algoliasearch-client-scala/commit/a32af41))
+- **settings**: add attributesToTransliterate and decompoundQuery params (#623) ([a257ff2](https://github.com/algolia/algoliasearch-client-scala/commit/a257ff2))
+- **virtual indices**: Virtual indices related parameters (#632) ([4e85211](https://github.com/algolia/algoliasearch-client-scala/commit/4e85211))
+
+### Change
+
+- rename `RecommendationClient` to `PersonalizationClient`  (#634) ([aa3fa2f](https://github.com/algolia/algoliasearch-client-scala/commit/aa3fa2f))
+
+
+
 ## [1.40.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.39.1...1.40.0) (2021-04-28)
 
 ### Feat
