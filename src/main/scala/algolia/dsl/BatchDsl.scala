@@ -36,10 +36,23 @@ trait BatchDsl {
 
   implicit val formats: Formats
 
+  def batchForIndex(
+      index: String,
+      batches: Iterable[Definition]
+  ): BatchDefinition = {
+    BatchDefinition(definitions = batches, index = Some(index))
+  }
+
+  def batchForIndex(index: String, batches: Definition*): BatchDefinition = {
+    BatchDefinition(definitions = batches, index = Some(index))
+  }
+
+  @deprecated("send one batch per index, use batchForIndex instead")
   def batch(batches: Iterable[Definition]): BatchDefinition = {
     BatchDefinition(batches)
   }
 
+  @deprecated("send one batch per index, use batchForIndex instead")
   def batch(batches: Definition*): BatchDefinition = {
     BatchDefinition(batches)
   }
