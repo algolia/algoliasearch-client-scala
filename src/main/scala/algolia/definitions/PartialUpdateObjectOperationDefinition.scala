@@ -218,7 +218,8 @@ case class PartialUpdateOneObjectDefinition(
           requestOptions
         )
       ),
-      requestOptions
+      requestOptions,
+      Some(index)
     )
 
 }

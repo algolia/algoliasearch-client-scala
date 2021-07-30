@@ -50,9 +50,12 @@ case class DeleteObjectDefinition(
     copy(oid = Some(objectId))
 
   def objectIds(objectIds: Iterable[String]): BatchDefinition =
-    BatchDefinition(objectIds.map { oid =>
-      DeleteObjectDefinition(index, Some(oid))
-    })
+    BatchDefinition(
+      index = index,
+      definitions = objectIds.map { oid =>
+        DeleteObjectDefinition(oid = Some(oid))
+      }
+    )
 
   def by(query: Query): DeleteByDefinition =
     DeleteByDefinition(index, query, requestOptions)
