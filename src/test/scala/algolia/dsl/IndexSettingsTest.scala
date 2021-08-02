@@ -100,7 +100,8 @@ class IndexSettingsTest extends AlgoliaTest {
         |    ]
         |  },
         |  "numericAttributesToIndex":[
-        |    "equalOnly(att5)"
+        |    "equalOnly(att5)",
+        |    "equalOnly(att6)"
         |  ],
         |  "removeStopWords":"fr,en",
         |  "ranking":[
@@ -123,8 +124,17 @@ class IndexSettingsTest extends AlgoliaTest {
         |  "ignorePlurals":"fr,en"
         |}""".stripMargin
 
+    // |    "numericAttributesToIndex":[
+    //    "equalOnly(att5)"
+    //  ],
+
+    //  "numericAttributesForFiltering":[
+    //    "att5",
+    //    "att6"
+    //  ],
     it("should deserialize json") {
-      inside(parse(json).extract[IndexSettings]) {
+      val indexSettings = parse(json).extract[IndexSettings]
+      inside(indexSettings) {
         case i: IndexSettings =>
           i.attributesToIndex should be(
             Some(
@@ -205,8 +215,12 @@ class IndexSettingsTest extends AlgoliaTest {
             SearchableAttributes.unordered("att4")
           )
         ),
-        numericAttributesToIndex =
-          Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
+        numericAttributesToIndex = Some(
+          Seq(
+            NumericAttributesToIndex.equalOnly("att5"),
+            NumericAttributesToIndex.equalOnly("att6")
+          )
+        ),
         ranking = Some(
           Seq(
             Ranking.typo,

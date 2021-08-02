@@ -30,7 +30,7 @@ import algolia.dsl._
 import algolia.objects._
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
-import org.json4s.{CustomSerializer, Formats}
+import org.json4s.{CustomSerializer, FieldSerializer, Formats, JField}
 
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
@@ -90,7 +90,35 @@ object AlgoliaDsl extends AlgoliaDsl {
       new IgnorePluralsSerializer +
       new LocalDateTimeSerializer +
       new ZonedDateTimeSerializer +
-      new AlternativesSerializer
+      new AlternativesSerializer +
+      new FieldSerializer[IndexSettings](
+        numericAttributesToIndexSerializer,
+        numericAttributesToIndexDeserializer
+      )
+
+  def numericAttributesToIndexSerializer
+      : PartialFunction[(String, Any), Option[(String, Any)]] = {
+    case (
+        "numericAttributesToIndex",
+        Some(s: Seq[NumericAttributesToIndex.equalOnly])
+        ) =>
+      Some("numericAttributesForFiltering", s.map(e => e.attribute))
+  }
+
+  def numericAttributesToIndexDeserializer: PartialFunction[JField, JField] = {
+    case JField(
+        "numericAttributesToIndex",
+        JArray(s: Seq[JValue])
+        ) =>
+      JField(
+        "numericAttributesForFiltering",
+        s.map(e =>
+          e.asInstanceOf[JString].s match {
+            case numericAttributesToIndexEqualOnly(attr) => attr
+          }
+        )
+      )
+  }
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
