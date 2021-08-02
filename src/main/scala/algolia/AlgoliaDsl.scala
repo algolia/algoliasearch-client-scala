@@ -77,7 +77,6 @@ object AlgoliaDsl extends AlgoliaDsl {
     org.json4s.DefaultFormats +
       new SearchableAttributesSerializer +
       new AttributesToIndexSerializer +
-      new NumericAttributesToIndexSerializer +
       new RankingSerializer +
       new CustomRankingSerializer +
       new QueryTypeSerializer +
@@ -148,18 +147,6 @@ object AlgoliaDsl extends AlgoliaDsl {
             case SearchableAttributes.attribute(attr) => JString(attr)
             case SearchableAttributes.attributes(attributes @ _*) =>
               JString(attributes.mkString(","))
-          })
-      )
-
-  class NumericAttributesToIndexSerializer
-      extends CustomSerializer[NumericAttributesToIndex](
-        _ =>
-          ({
-            case JString(numericAttributesToIndexEqualOnly(attr)) =>
-              NumericAttributesToIndex.equalOnly(attr)
-          }, {
-            case NumericAttributesToIndex.equalOnly(attr) =>
-              JString(s"equalOnly($attr)")
           })
       )
 
