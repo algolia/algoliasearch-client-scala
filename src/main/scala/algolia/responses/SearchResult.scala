@@ -34,8 +34,8 @@ private[algolia] trait SearchHits[A] {
 
 case class SearchResult(
     hits: Seq[JObject],
-    nbHits: Int,
-    processingTimeMS: Int,
+    nbHits: Option[Int],
+    processingTimeMS: Option[Int] = None,
     hitsPerPage: Option[Int],
     page: Option[Int],
     nbPages: Option[Int],
@@ -44,9 +44,9 @@ case class SearchResult(
     facets: Option[Map[String, Map[String, Int]]],
     exhaustiveFacetsCount: Option[Boolean],
     exhaustiveNbHits: Option[Boolean],
-    query: String,
+    query: Option[String],
     queryAfterRemoval: Option[String],
-    params: String,
+    params: Option[String],
     message: Option[String],
     aroundLatLng: Option[String],
     automaticRadius: Option[String],

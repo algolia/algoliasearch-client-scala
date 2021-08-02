@@ -30,9 +30,9 @@ import org.json4s.{DefaultFormats, JObject}
 case class BrowseResult(
     cursor: Option[String],
     hits: Seq[JObject],
-    processingTimeMS: Int,
-    query: String,
-    params: String,
+    processingTimeMS: Option[Int],
+    query: Option[String],
+    params: Option[String],
     nbHits: Option[Int],
     page: Option[Int],
     histPerPage: Option[Int],

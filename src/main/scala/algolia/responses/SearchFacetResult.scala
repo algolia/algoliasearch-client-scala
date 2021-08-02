@@ -27,8 +27,8 @@ package algolia.responses
 
 case class SearchFacetResult(
     facetHits: List[FacetHit],
-    exhaustiveFacetsCount: Boolean,
-    processingTimeMS: Int
+    exhaustiveFacetsCount: Option[Boolean],
+    processingTimeMS: Option[Int]
 )
 
 case class FacetHit(value: String, highlighted: String, count: Int)
