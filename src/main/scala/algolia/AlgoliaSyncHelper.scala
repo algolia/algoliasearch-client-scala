@@ -48,7 +48,7 @@ case class AlgoliaSyncHelper(client: AlgoliaClient) {
   def deleteByQuery[T <: ObjectID: Manifest](index: String, query: Query)(
       implicit duration: Duration,
       executor: ExecutionContext
-  ): Future[Iterator[TasksMultipleIndex]] = {
+  ): Future[Iterator[TasksSingleIndex]] = {
     val res = browse[T](index, query).map { seq =>
       client.execute {
         delete from index objectIds seq.map(_.objectID)

@@ -26,7 +26,7 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl._
-import algolia.{AlgoliaTest, inputs}
+import algolia.AlgoliaTest
 import algolia.http.{DELETE, HttpPayload, POST}
 import algolia.inputs.SafeDeleteObjectOperation
 
@@ -61,11 +61,9 @@ class DeleteObjectTest extends AlgoliaTest {
             | {
             |   "requests":[
             |     {
-            |       "indexName":"toto",
             |       "objectID":"1",
             |       "action":"deleteObject"
             |     },{
-            |       "indexName":"toto",
             |       "objectID":"2",
             |       "action":"deleteObject"
             |     }
@@ -76,14 +74,13 @@ class DeleteObjectTest extends AlgoliaTest {
         (delete from "toto" objectIds Seq("1", "2")).build() should be(
           HttpPayload(
             POST,
-            List("1", "indexes", "*", "batch"),
+            List("1", "indexes", "toto", "batch"),
             body = Some(body),
             isSearch = false,
             requestOptions = None
           )
         )
       }
-
     }
   }
 

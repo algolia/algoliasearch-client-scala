@@ -36,10 +36,12 @@ trait BatchDsl {
 
   implicit val formats: Formats
 
+  @deprecated("Send one batch per index. Use indexBatch instead")
   def batch(batches: Iterable[Definition]): BatchDefinition = {
     BatchDefinition(batches)
   }
 
+  @deprecated("Send one batch per index, Use indexBatch instead")
   def batch(batches: Definition*): BatchDefinition = {
     BatchDefinition(batches)
   }

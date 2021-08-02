@@ -316,10 +316,10 @@ class PartialUpdateObjectTest extends AlgoliaTest {
       )).build() should be(
         HttpPayload(
           POST,
-          Seq("1", "indexes", "*", "batch"),
+          Seq("1", "indexes", "index", "batch"),
           queryParameters = None,
           body = Some(
-            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObject"}]}"""
+            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"action":"partialUpdateObject"}]}"""
           ),
           isSearch = false,
           requestOptions = None
@@ -343,10 +343,10 @@ class PartialUpdateObjectTest extends AlgoliaTest {
       )).build() should be(
         HttpPayload(
           POST,
-          Seq("1", "indexes", "*", "batch"),
+          Seq("1", "indexes", "index", "batch"),
           queryParameters = None,
           body = Some(
-            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObject"}]}"""
+            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"action":"partialUpdateObject"}]}"""
           ),
           isSearch = false,
           requestOptions = None
@@ -370,10 +370,10 @@ class PartialUpdateObjectTest extends AlgoliaTest {
       )).build() should be(
         HttpPayload(
           POST,
-          Seq("1", "indexes", "*", "batch"),
+          Seq("1", "indexes", "index", "batch"),
           queryParameters = None,
           body = Some(
-            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"indexName":"index","action":"partialUpdateObjectNoCreate"}]}"""
+            """{"requests":[{"body":{"name":"name1","age":1,"objectID":"myId"},"action":"partialUpdateObjectNoCreate"}]}"""
           ),
           isSearch = false,
           requestOptions = None

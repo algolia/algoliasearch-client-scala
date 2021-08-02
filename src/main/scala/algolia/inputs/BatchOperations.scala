@@ -58,17 +58,17 @@ case class PartialUpdateObjectNoCreateOperation[T <: AnyRef](
 ) extends BatchOperation[T]
 
 case class DeleteObjectOperation[T <: AnyRef](
-    indexName: String,
+    indexName: Option[String] = None,
     objectID: String,
     action: String = "deleteObject"
 ) extends BatchOperation[T]
 
 case class ClearIndexOperation[T <: AnyRef](
-    indexName: String,
+    indexName: Option[String] = None,
     action: String = "clear"
 ) extends BatchOperation[T]
 
 case class DeleteIndexOperation[T <: AnyRef](
-    indexName: String,
+    indexName: Option[String] = None,
     action: String = "delete"
 ) extends BatchOperation[T]

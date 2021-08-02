@@ -208,8 +208,9 @@ case class PartialUpdateOneObjectDefinition(
   def `object`[T <: ObjectID](obj: T): PartialUpdateOneObjectDefinition =
     copy(`object` = Some(obj))
 
-  def objects[T <: ObjectID](objects: Iterable[T]): BatchDefinition =
-    BatchDefinition(
+  def objects[T <: ObjectID](objects: Iterable[T]): IndexingBatchDefinition =
+    IndexingBatchDefinition(
+      index,
       objects.map(o =>
         PartialUpdateOneObjectDefinition(
           index,

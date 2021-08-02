@@ -26,14 +26,11 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.inputs.{
-  AddObjectOperation,
-  BatchOperations,
-  UpdateObjectOperation
-}
+import algolia.inputs._
 import algolia.objects.RequestOptions
-import org.json4s.Formats
+import org.json4s.JsonAST.JValue
 import org.json4s.native.Serialization._
+import org.json4s.{Extraction, Formats}
 
 case class IndexingBatchDefinition(
     index: String,
@@ -51,16 +48,7 @@ case class IndexingBatchDefinition(
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
-    val operations = definitions.map {
-      case IndexingDefinition(_, None, Some(obj), _) =>
-        hasObjectId(obj) match {
-          case (true, o)  => UpdateObjectOperation(o)
-          case (false, o) => AddObjectOperation(o)
-        }
-
-      case IndexingDefinition(_, Some(objectId), Some(obj), _) =>
-        UpdateObjectOperation(addObjectId(obj, objectId))
-    }
+    val operations = definitions.flatMap(transform)
 
     HttpPayload(
       POST,
@@ -69,5 +57,100 @@ case class IndexingBatchDefinition(
       isSearch = false,
       requestOptions = requestOptions
     )
+  }
+
+  private def transform(
+      definition: Definition
+  ): Iterable[BatchOperation[JValue]] = {
+    definition match {
+      case IndexingDefinition(_, None, Some(obj), _) =>
+        hasObjectId(obj) match {
+          case (true, o)  => Iterable(UpdateObjectOperation(o))
+          case (false, o) => Iterable(AddObjectOperation(o))
+        }
+
+      case IndexingDefinition(_, Some(objectId), Some(obj), _) =>
+        Iterable(UpdateObjectOperation(addObjectId(obj, objectId)))
+
+      case ClearIndexDefinition(_, _) =>
+        Iterable(ClearIndexOperation())
+
+      case DeleteObjectDefinition(_, Some(oid), _) =>
+        Iterable(DeleteObjectOperation(objectID = oid))
+
+      case SafeDeleteObjectDefinition(op, _) =>
+        Iterable(DeleteObjectOperation(objectID = op.objectID))
+
+      case DeleteIndexDefinition(_, _) =>
+        Iterable(DeleteIndexOperation())
+
+      case PartialUpdateObjectOperationDefinition(
+          operation,
+          index,
+          Some(objectId),
+          Some(attribute),
+          value,
+          true,
+          _
+          ) =>
+        val body = Map(
+          "objectID" -> objectId,
+          attribute -> PartialUpdateObject(operation.name, value)
+        )
+        Iterable(
+          PartialUpdateObjectOperation(Extraction.decompose(body))
+        )
+
+      case PartialUpdateObjectOperationDefinition(
+          operation,
+          index,
+          Some(objectId),
+          Some(attribute),
+          value,
+          false,
+          _
+          ) =>
+        val body = Map(
+          "objectID" -> objectId,
+          attribute -> PartialUpdateObject(operation.name, value)
+        )
+        Iterable(
+          PartialUpdateObjectNoCreateOperation(Extraction.decompose(body))
+        )
+
+      case PartialUpdateObjectDefinition(
+          _,
+          Some(objectId),
+          Some(attribute),
+          value,
+          _
+          ) =>
+        val body = Map(
+          "objectID" -> objectId,
+          attribute -> value
+        )
+        Iterable(
+          PartialUpdateObjectOperation(Extraction.decompose(body))
+        )
+
+      case IndexingBatchDefinition(_, defs, _) =>
+        defs.flatMap(transform)
+
+      case PartialUpdateOneObjectDefinition(
+          _,
+          Some(obj),
+          createIfNotExists,
+          _
+          ) =>
+        if (createIfNotExists) {
+          Iterable(
+            PartialUpdateObjectOperation(Extraction.decompose(obj))
+          )
+        } else {
+          Iterable(
+            PartialUpdateObjectNoCreateOperation(Extraction.decompose(obj))
+          )
+        }
+    }
   }
 }

@@ -32,6 +32,7 @@ import org.json4s.JsonAST.JValue
 import org.json4s.native.Serialization._
 import org.json4s.{Extraction, Formats}
 
+@deprecated("Send one batch per index. Use IndexingBatchDefinition instead.")
 case class BatchDefinition(
     definitions: Iterable[Definition],
     requestOptions: Option[RequestOptions] = None
@@ -68,16 +69,16 @@ case class BatchDefinition(
         Iterable(UpdateObjectOperation(addObjectId(obj, objectId), Some(index)))
 
       case ClearIndexDefinition(index, _) =>
-        Iterable(ClearIndexOperation(index))
+        Iterable(ClearIndexOperation(Some(index)))
 
       case DeleteObjectDefinition(Some(index), Some(oid), _) =>
-        Iterable(DeleteObjectOperation(index, oid))
+        Iterable(DeleteObjectOperation(Some(index), oid))
 
       case SafeDeleteObjectDefinition(op, _) =>
-        Iterable(DeleteObjectOperation(op.index, op.objectID))
+        Iterable(DeleteObjectOperation(Some(op.index), op.objectID))
 
       case DeleteIndexDefinition(index, _) =>
-        Iterable(DeleteIndexOperation(index))
+        Iterable(DeleteIndexOperation(Some(index)))
 
       case PartialUpdateObjectOperationDefinition(
           operation,
