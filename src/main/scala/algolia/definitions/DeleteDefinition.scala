@@ -49,10 +49,10 @@ case class DeleteObjectDefinition(
   def objectId(objectId: String): DeleteObjectDefinition =
     copy(oid = Some(objectId))
 
-  def objectIds(objectIds: Iterable[String]): BatchDefinition =
-    BatchDefinition(
-      index = index,
-      definitions = objectIds.map { oid =>
+  def objectIds(objectIds: Iterable[String]): IndexingBatchDefinition =
+    IndexingBatchDefinition(
+      index.get,
+      objectIds.map { oid =>
         DeleteObjectDefinition(oid = Some(oid))
       }
     )

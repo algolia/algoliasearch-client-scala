@@ -25,13 +25,30 @@
 
 package algolia.dsl
 
-import algolia.definitions.IndexingBatchDefinition
+import algolia.definitions.{Definition, IndexingBatchDefinition}
 import algolia.responses.TasksSingleIndex
 import algolia.{AlgoliaClient, Executable}
+import org.json4s.Formats
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait IndexingBatchDsl {
+
+  implicit val formats: Formats
+
+  def indexBatch(
+      index: String,
+      batches: Iterable[Definition]
+  ): IndexingBatchDefinition = {
+    IndexingBatchDefinition(index, batches)
+  }
+
+  def indexBatch(
+      index: String,
+      batches: Definition*
+  ): IndexingBatchDefinition = {
+    IndexingBatchDefinition(index, batches)
+  }
 
   implicit object IndexingBatchDefinitionExecutable
       extends Executable[IndexingBatchDefinition, TasksSingleIndex] {
