@@ -92,33 +92,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new ZonedDateTimeSerializer +
       new AlternativesSerializer +
       new FieldSerializer[IndexSettings](
-        numericAttributesToIndexSerializer,
-        numericAttributesToIndexDeserializer
+        deserializer = numericAttributesToIndexDeserializer
       )
-
-  def numericAttributesToIndexSerializer
-      : PartialFunction[(String, Any), Option[(String, Any)]] = {
-    case (
-        "numericAttributesToIndex",
-        Some(s: Seq[NumericAttributesToIndex.equalOnly])
-        ) =>
-      Some("numericAttributesForFiltering", s.map(e => e.attribute))
-  }
-
-  def numericAttributesToIndexDeserializer: PartialFunction[JField, JField] = {
-    case JField(
-        "numericAttributesToIndex",
-        JArray(s: Seq[JValue])
-        ) =>
-      JField(
-        "numericAttributesForFiltering",
-        s.map(e =>
-          e.asInstanceOf[JString].s match {
-            case numericAttributesToIndexEqualOnly(attr) => attr
-          }
-        )
-      )
-  }
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -440,6 +415,18 @@ object AlgoliaDsl extends AlgoliaDsl {
           })
       )
 
+  def numericAttributesToIndexDeserializer: PartialFunction[JField, JField] = {
+    case JField("numericAttributesToIndex", JArray(s: Seq[JValue])) =>
+      JField(
+        "numericAttributesForFiltering",
+        s.map(e =>
+          e.asInstanceOf[JString].s match {
+            case numericAttributesToIndexEqualOnly(attr) => attr
+          }
+        )
+      )
+  }
+
   case object forwardToSlaves extends ForwardToReplicas
 
   case object forwardToReplicas extends ForwardToReplicas
@@ -453,5 +440,4 @@ object AlgoliaDsl extends AlgoliaDsl {
   case object in extends In
 
   case object abTests extends ABTests
-
 }

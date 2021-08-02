@@ -68,7 +68,6 @@ case class IndexSettings(
     paginationLimitedTo: Option[Int] = None,
     /* Performance */
     numericAttributesForFiltering: Option[Seq[String]] = None,
-    numericAttributesToIndex: Option[Seq[NumericAttributesToIndex]] = None,
     allowCompressionOfIntegerArray: Option[Boolean] = None,
     /* Query rules */
     enableRules: Option[Boolean] = None,
