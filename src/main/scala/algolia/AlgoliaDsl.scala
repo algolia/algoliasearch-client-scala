@@ -30,7 +30,7 @@ import algolia.dsl._
 import algolia.objects._
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
-import org.json4s.{CustomSerializer, Formats}
+import org.json4s.{CustomSerializer, FieldSerializer, Formats, JField}
 
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
 import java.time.{Instant, LocalDateTime, ZoneOffset, ZonedDateTime}
@@ -77,7 +77,6 @@ object AlgoliaDsl extends AlgoliaDsl {
     org.json4s.DefaultFormats +
       new SearchableAttributesSerializer +
       new AttributesToIndexSerializer +
-      new NumericAttributesToIndexSerializer +
       new RankingSerializer +
       new CustomRankingSerializer +
       new QueryTypeSerializer +
@@ -90,7 +89,10 @@ object AlgoliaDsl extends AlgoliaDsl {
       new IgnorePluralsSerializer +
       new LocalDateTimeSerializer +
       new ZonedDateTimeSerializer +
-      new AlternativesSerializer
+      new AlternativesSerializer +
+      new FieldSerializer[IndexSettings](
+        deserializer = numericAttributesToIndexDeserializer
+      )
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -145,18 +147,6 @@ object AlgoliaDsl extends AlgoliaDsl {
             case SearchableAttributes.attribute(attr) => JString(attr)
             case SearchableAttributes.attributes(attributes @ _*) =>
               JString(attributes.mkString(","))
-          })
-      )
-
-  class NumericAttributesToIndexSerializer
-      extends CustomSerializer[NumericAttributesToIndex](
-        _ =>
-          ({
-            case JString(numericAttributesToIndexEqualOnly(attr)) =>
-              NumericAttributesToIndex.equalOnly(attr)
-          }, {
-            case NumericAttributesToIndex.equalOnly(attr) =>
-              JString(s"equalOnly($attr)")
           })
       )
 
@@ -412,6 +402,18 @@ object AlgoliaDsl extends AlgoliaDsl {
           })
       )
 
+  def numericAttributesToIndexDeserializer: PartialFunction[JField, JField] = {
+    case JField("numericAttributesToIndex", JArray(s: Seq[JValue])) =>
+      JField(
+        "numericAttributesForFiltering",
+        s.map(e =>
+          e.asInstanceOf[JString].s match {
+            case numericAttributesToIndexEqualOnly(attr) => attr
+          }
+        )
+      )
+  }
+
   case object forwardToSlaves extends ForwardToReplicas
 
   case object forwardToReplicas extends ForwardToReplicas
@@ -425,5 +427,4 @@ object AlgoliaDsl extends AlgoliaDsl {
   case object in extends In
 
   case object abTests extends ABTests
-
 }

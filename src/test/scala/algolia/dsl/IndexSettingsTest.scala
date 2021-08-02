@@ -99,8 +99,9 @@ class IndexSettingsTest extends AlgoliaTest {
         |      "attr2"
         |    ]
         |  },
-        |  "numericAttributesToIndex":[
-        |    "equalOnly(att5)"
+        |  "numericAttributesForFiltering":[
+        |    "att5",
+        |    "att6"
         |  ],
         |  "removeStopWords":"fr,en",
         |  "ranking":[
@@ -124,7 +125,8 @@ class IndexSettingsTest extends AlgoliaTest {
         |}""".stripMargin
 
     it("should deserialize json") {
-      inside(parse(json).extract[IndexSettings]) {
+      val indexSettings = parse(json).extract[IndexSettings]
+      inside(indexSettings) {
         case i: IndexSettings =>
           i.attributesToIndex should be(
             Some(
@@ -144,11 +146,9 @@ class IndexSettingsTest extends AlgoliaTest {
               )
             )
           )
-          i.numericAttributesToIndex should be(
+          i.numericAttributesForFiltering should be(
             Some(
-              Seq(
-                NumericAttributesToIndex.equalOnly("att5")
-              )
+              Seq("att5", "att6")
             )
           )
           i.ranking should be(
@@ -205,8 +205,7 @@ class IndexSettingsTest extends AlgoliaTest {
             SearchableAttributes.unordered("att4")
           )
         ),
-        numericAttributesToIndex =
-          Some(Seq(NumericAttributesToIndex.equalOnly("att5"))),
+        numericAttributesForFiltering = Some(Seq("att5", "att6")),
         ranking = Some(
           Seq(
             Ranking.typo,
@@ -238,6 +237,33 @@ class IndexSettingsTest extends AlgoliaTest {
       writePretty(i) should be(json)
     }
 
+    it("should deserialize legacy json") {
+      val jsonDeserialize =
+        """{
+          |  "numericAttributesToIndex":[
+          |    "equalOnly(att5)",
+          |    "equalOnly(att6)"
+          |  ]
+          |}""".stripMargin
+
+      val indexSettings = parse(jsonDeserialize).extract[IndexSettings]
+      inside(indexSettings) {
+        case i: IndexSettings =>
+          i.numericAttributesForFiltering should be(
+            Some(Seq("att5", "att6"))
+          )
+      }
+
+      val jsonSerialize =
+        """{
+          |  "numericAttributesForFiltering":[
+          |    "att5",
+          |    "att6"
+          |  ]
+          |}""".stripMargin
+
+      writePretty(indexSettings) should be(jsonSerialize)
+    }
   }
 
 }
