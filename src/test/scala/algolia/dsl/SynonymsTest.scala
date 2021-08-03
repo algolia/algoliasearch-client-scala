@@ -26,6 +26,7 @@
 package algolia.dsl
 
 import algolia.AlgoliaDsl._
+import algolia.definitions.BatchSynonymsDefinition
 import algolia.http._
 import algolia.objects.Synonym.Placeholder
 import algolia.objects.{QuerySynonyms, SynonymType}
@@ -159,12 +160,12 @@ class SynonymsTest extends AlgoliaTest {
     describe("batch") {
 
       it("should save batches synonyms of an index") {
-        save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToSlaves and replaceExistingSynonyms
-        save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and replaceExistingSynonyms
+        save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToSlaves and clearExistingSynonyms
+        save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and clearExistingSynonyms
       }
 
       it("should call API") {
-        (save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and replaceExistingSynonyms)
+        (save synonyms Seq(Placeholder("oid", "1", Seq("2", "3"))) inIndex "toto" and forwardToReplicas and clearExistingSynonyms)
           .build() should be(
           HttpPayload(
             POST,

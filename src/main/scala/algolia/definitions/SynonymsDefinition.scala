@@ -25,7 +25,12 @@
 
 package algolia.definitions
 
-import algolia.AlgoliaDsl.{ForwardToReplicas, ReplaceExistingSynonyms}
+import algolia.AlgoliaDsl.{
+  ClearExistingSynonyms,
+  ForwardToReplicas,
+  ReplaceExistingSynonyms,
+  clearExistingSynonyms
+}
 import algolia.http._
 import algolia.objects.{AbstractSynonym, QuerySynonyms, RequestOptions}
 import org.json4s.Formats
@@ -174,7 +179,7 @@ case class BatchSynonymsDefinition(
     synonyms: Iterable[AbstractSynonym],
     index: Option[String] = None,
     forward: Option[ForwardToReplicas] = None,
-    replace: Option[ReplaceExistingSynonyms] = None,
+    replace: Option[ClearExistingSynonyms] = None,
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends Definition {
@@ -187,7 +192,11 @@ case class BatchSynonymsDefinition(
   def and(forward: ForwardToReplicas): BatchSynonymsDefinition =
     copy(forward = Some(forward))
 
+  @deprecated("Use ClearExistingSynonyms instead")
   def and(replace: ReplaceExistingSynonyms): BatchSynonymsDefinition =
+    and(clearExistingSynonyms)
+
+  def and(replace: ClearExistingSynonyms): BatchSynonymsDefinition =
     copy(replace = Some(replace))
 
   override def options(
