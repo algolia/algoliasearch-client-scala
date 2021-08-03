@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [1.42.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.41.0...1.42.0) (2021-08-03)
+## [1.43.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.41.0...1.43.0) (2021-08-03)
 
 This version introduces some **breaking changes**.
 
@@ -10,6 +10,9 @@ This version introduces some **breaking changes**.
 - **index**: `numericAttributesToIndex` deserialization (#637) ([e7ed32f](https://github.com/algolia/algoliasearch-client-scala/commit/e7ed32f))
 - **search**: make result fields optional (#635) ([cc048b0](https://github.com/algolia/algoliasearch-client-scala/commit/cc048b0))
 
+### Misc
+
+- **search**: `replaceExistingSynonyms` to `clearExistingSynonyms` (#610) ([cc32835](https://github.com/algolia/algoliasearch-client-scala/commit/cc32835))
 
 
 ## [1.41.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.40.0...1.41.0) (2021-07-23)
