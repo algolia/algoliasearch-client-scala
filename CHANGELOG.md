@@ -1,5 +1,17 @@
 # ChangeLog
 
+## [1.42.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.41.0...1.42.0) (2021-08-03)
+
+This version introduces some **breaking changes**.
+
+### Fix
+
+- **index**: batch index write operations (#636) ([ab766b0](https://github.com/algolia/algoliasearch-client-scala/commit/ab766b0))
+- **index**: `numericAttributesToIndex` deserialization (#637) ([e7ed32f](https://github.com/algolia/algoliasearch-client-scala/commit/e7ed32f))
+- **search**: make result fields optional (#635) ([cc048b0](https://github.com/algolia/algoliasearch-client-scala/commit/cc048b0))
+
+
+
 ## [1.41.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.40.0...1.41.0) (2021-07-23)
 
 ### Feat

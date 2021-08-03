@@ -6,9 +6,8 @@
   <h4 align="center">The perfect starting point to integrate <a href="https://algolia.com" target="_blank">Algolia</a> within your Scala project</h4>
 
   <p align="center">
-      <a href="https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/"><img src="https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.11/badge.svg" alt="Licence"></img></a> 
-<a href="https://travis-ci.org/algolia/algoliasearch-client-scala"><img src="https://travis-ci.org/algolia/algoliasearch-client-scala.png?branch=master" alt="Licence"></img></a>   
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Licence"></img></a>
+      <a href="https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.13/"><img src="https://maven-badges.herokuapp.com/maven-central/com.algolia/algoliasearch-scala_2.13/badge.svg" alt="Licence"></img></a> 
+      <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Licence"></img></a>
   </p>
 </p>
 
