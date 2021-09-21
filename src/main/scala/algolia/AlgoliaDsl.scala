@@ -92,8 +92,12 @@ object AlgoliaDsl extends AlgoliaDsl {
       new LocalDateTimeSerializer +
       new ZonedDateTimeSerializer +
       new AlternativesSerializer +
-      new FieldSerializer[IndexSettings](deserializer = numericAttributesToIndexDeserializer) +
-      new FieldSerializer[DeleteObjectOperation[JValue]](serializer = deleteObjectOperationSerializer)
+      new FieldSerializer[IndexSettings](
+        deserializer = numericAttributesToIndexDeserializer
+      ) +
+      new FieldSerializer[DeleteObjectOperation[JValue]](
+        serializer = deleteObjectOperationSerializer
+      )
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -418,7 +422,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       )
   }
 
-  def deleteObjectOperationSerializer: PartialFunction[(String, Any), Option[(String, Any)]] = {
+  def deleteObjectOperationSerializer
+      : PartialFunction[(String, Any), Option[(String, Any)]] = {
     case "objectID" -> objectID => Some("body" -> ("objectID" -> objectID))
   }
 
