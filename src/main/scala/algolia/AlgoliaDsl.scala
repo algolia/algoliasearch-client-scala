@@ -27,7 +27,9 @@ package algolia
 
 import algolia.definitions._
 import algolia.dsl._
+import algolia.inputs.DeleteObjectOperation
 import algolia.objects._
+import org.json4s
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
 import org.json4s.{CustomSerializer, FieldSerializer, Formats, JField}
@@ -90,9 +92,8 @@ object AlgoliaDsl extends AlgoliaDsl {
       new LocalDateTimeSerializer +
       new ZonedDateTimeSerializer +
       new AlternativesSerializer +
-      new FieldSerializer[IndexSettings](
-        deserializer = numericAttributesToIndexDeserializer
-      )
+      new FieldSerializer[IndexSettings](deserializer = numericAttributesToIndexDeserializer) +
+      new FieldSerializer[DeleteObjectOperation[JValue]](serializer = deleteObjectOperationSerializer)
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
@@ -415,6 +416,10 @@ object AlgoliaDsl extends AlgoliaDsl {
           }
         )
       )
+  }
+
+  def deleteObjectOperationSerializer: PartialFunction[(String, Any), Option[(String, Any)]] = {
+    case "objectID" -> objectID => Some("body" -> ("objectID" -> objectID))
   }
 
   case object forwardToSlaves extends ForwardToReplicas
