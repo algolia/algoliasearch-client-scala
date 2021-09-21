@@ -424,7 +424,8 @@ object AlgoliaDsl extends AlgoliaDsl {
 
   def deleteObjectOperationSerializer
       : PartialFunction[(String, Any), Option[(String, Any)]] = {
-    case "objectID" -> objectID => Some("body" -> ("objectID" -> objectID))
+    case Tuple2("objectID", objectID) =>
+      Some("body" -> ("objectID" -> objectID))
   }
 
   case object forwardToSlaves extends ForwardToReplicas
