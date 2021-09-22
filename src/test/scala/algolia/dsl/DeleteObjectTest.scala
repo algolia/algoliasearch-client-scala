@@ -61,10 +61,10 @@ class DeleteObjectTest extends AlgoliaTest {
             | {
             |   "requests":[
             |     {
-            |       "objectID":"1",
+            |       "body":{"objectID":"1"},
             |       "action":"deleteObject"
             |     },{
-            |       "objectID":"2",
+            |       "body":{"objectID":"2"},
             |       "action":"deleteObject"
             |     }
             |   ]
