@@ -1,5 +1,15 @@
 # ChangeLog
 
+## [1.43.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.43.0...1.43.1) (2021-09-22)
+
+### Fix
+
+- **index**: batch delete operation serialization (#640) ([e2f72cc](https://github.com/algolia/algoliasearch-client-scala/commit/e2f72cc))
+
+### Misc
+
+- **deps**: chore: update `netty-codec` version to `4.1.68.Final` (#639) ([9dbbe55](https://github.com/algolia/algoliasearch-client-scala/commit/9dbbe55))
+
 ## [1.43.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.41.0...1.43.0) (2021-08-03)
 
 This version introduces some **breaking changes**.
