@@ -26,21 +26,21 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.objects.{RecommendationsQuery, RequestOptions}
+import algolia.objects.{FrequentlyBoughtTogetherQuery, RequestOptions}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
 
-case class GetRecommendationDefinition(
-    query: RecommendationsQuery,
+case class GetFrequentlyBoughtTogetherDefinition(
+    query: FrequentlyBoughtTogetherQuery,
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends Definition {
 
-  override type T = GetRecommendationDefinition
+  override type T = GetFrequentlyBoughtTogetherDefinition
 
   override def options(
       requestOptions: RequestOptions
-  ): GetRecommendationDefinition =
+  ): GetFrequentlyBoughtTogetherDefinition =
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {

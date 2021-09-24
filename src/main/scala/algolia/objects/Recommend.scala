@@ -42,34 +42,46 @@ sealed trait RecommendationsOptions {
   val objectID: String
 
   /** The threshold to use when filtering recommendations by their score, default 0, between 0 and 100 */
-  val threshold: Int = 0
+  val threshold: Int
 
   /** The maximum number of recommendations to retrieve */
-  val maxRecommendations: Option[Int] = None
+  val maxRecommendations: Option[Int]
 
   /** Search parameters to filter the recommendations */
-  val queryParameters: Option[Query] = None
+  val queryParameters: Option[Query]
 
   /** Search parameters to use as fallback when there are no recommendations */
-  val fallbackParameters: Option[Query] = None
+  val fallbackParameters: Option[Query]
 }
 
 case class RecommendationsQuery(
     override val indexName: String,
     override val model: String,
-    override val objectID: String
+    override val objectID: String,
+    override val threshold: Int = 0,
+    override val maxRecommendations: Option[Int] = None,
+    override val queryParameters: Option[Query] = None,
+    override val fallbackParameters: Option[Query] = None
 ) extends RecommendationsOptions
 
 case class RelatedProductsQuery(
     override val indexName: String,
-    override val objectID: String
+    override val objectID: String,
+    override val threshold: Int = 0,
+    override val maxRecommendations: Option[Int] = None,
+    override val queryParameters: Option[Query] = None,
+    override val fallbackParameters: Option[Query] = None
 ) extends RecommendationsOptions {
   override val model: String = "related-products"
 }
 
 case class FrequentlyBoughtTogetherQuery(
     override val indexName: String,
-    override val objectID: String
+    override val objectID: String,
+    override val threshold: Int = 0,
+    override val maxRecommendations: Option[Int] = None,
+    override val queryParameters: Option[Query] = None,
+    override val fallbackParameters: Option[Query] = None
 ) extends RecommendationsOptions {
   override val model: String = "bought-together"
 }

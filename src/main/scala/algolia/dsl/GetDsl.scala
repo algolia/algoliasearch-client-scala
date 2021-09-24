@@ -27,7 +27,12 @@ package algolia.dsl
 
 import algolia.AlgoliaDsl.ABTests
 import algolia.definitions._
-import algolia.objects.{RecommendationsOptions, Strategy}
+import algolia.objects.{
+  FrequentlyBoughtTogetherQuery,
+  RecommendationsQuery,
+  RelatedProductsQuery,
+  Strategy
+}
 import algolia.responses._
 import algolia.{AlgoliaClient, Executable}
 import org.json4s.Formats
@@ -90,8 +95,17 @@ trait GetDsl {
       GetSettingsDictionaryDefinition()
 
     def recommendation(
-        query: RecommendationsOptions
+        query: RecommendationsQuery
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
+
+    def relatedProduct(
+        query: RelatedProductsQuery
+    ): GetRelatedProductsDefinition = GetRelatedProductsDefinition(query)
+
+    def frequentlyBoughtTogether(
+        query: FrequentlyBoughtTogetherQuery
+    ): GetFrequentlyBoughtTogetherDefinition =
+      GetFrequentlyBoughtTogetherDefinition(query)
   }
 
   implicit object GetObjectDefinitionExecutable
