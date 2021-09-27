@@ -99,7 +99,9 @@ object AlgoliaDsl extends AlgoliaDsl {
       ) +
       FieldSerializer[RecommendationsQuery with RecommendationsOptions]() +
       FieldSerializer[RelatedProductsQuery with RecommendationsOptions]() +
-      FieldSerializer[FrequentlyBoughtTogetherQuery with RecommendationsOptions]()
+      FieldSerializer[
+        FrequentlyBoughtTogetherQuery with RecommendationsOptions
+      ]()
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
