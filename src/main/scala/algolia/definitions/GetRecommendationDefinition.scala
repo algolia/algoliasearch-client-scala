@@ -26,12 +26,12 @@
 package algolia.definitions
 
 import algolia.http.{HttpPayload, POST}
-import algolia.objects.{RecommendationsQuery, RequestOptions}
+import algolia.objects.{RecommendationsOptions, RequestOptions}
 import org.json4s.Formats
 import org.json4s.native.Serialization._
 
 case class GetRecommendationDefinition(
-    query: RecommendationsQuery,
+    query: RecommendationsOptions,
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends Definition {

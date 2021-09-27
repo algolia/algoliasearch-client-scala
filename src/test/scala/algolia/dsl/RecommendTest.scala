@@ -44,7 +44,6 @@ class RecommendTest extends AlgoliaTest {
         indexName = "products",
         model = "bought-together",
         objectID = "B018APC4LE",
-        threshold = 10,
         maxRecommendations = Some(10),
         queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
       )).build() should be(
@@ -52,7 +51,7 @@ class RecommendTest extends AlgoliaTest {
           POST,
           Seq("1", "indexes", "*", "recommendations"),
           body = Some(
-            "{\"indexName\":\"products\",\"model\":\"bought-together\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}}"
+            "{\"indexName\":\"products\",\"model\":\"bought-together\",\"objectID\":\"B018APC4LE\",\"threshold\":0,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}}"
           ),
           isSearch = true,
           requestOptions = None
@@ -72,7 +71,7 @@ class RecommendTest extends AlgoliaTest {
           POST,
           Seq("1", "indexes", "*", "recommendations"),
           body = Some(
-            "{\"indexName\":\"products\",\"model\":\"related-products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}}"
+            "{\"indexName\":\"products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]},\"model\":\"related-products\"}"
           ),
           isSearch = true,
           requestOptions = None
@@ -92,7 +91,7 @@ class RecommendTest extends AlgoliaTest {
           POST,
           Seq("1", "indexes", "*", "recommendations"),
           body = Some(
-            "{\"indexName\":\"products\",\"model\":\"bought-together\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}}"
+            "{\"indexName\":\"products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]},\"model\":\"bought-together\"}"
           ),
           isSearch = true,
           requestOptions = None

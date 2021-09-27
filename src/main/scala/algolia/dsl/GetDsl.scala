@@ -100,12 +100,11 @@ trait GetDsl {
 
     def relatedProduct(
         query: RelatedProductsQuery
-    ): GetRelatedProductsDefinition = GetRelatedProductsDefinition(query)
+    ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
     def frequentlyBoughtTogether(
         query: FrequentlyBoughtTogetherQuery
-    ): GetFrequentlyBoughtTogetherDefinition =
-      GetFrequentlyBoughtTogetherDefinition(query)
+    ): GetRecommendationDefinition = GetRecommendationDefinition(query)
   }
 
   implicit object GetObjectDefinitionExecutable
