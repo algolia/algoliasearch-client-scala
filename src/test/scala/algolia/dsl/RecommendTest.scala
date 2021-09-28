@@ -40,7 +40,7 @@ class RecommendTest extends AlgoliaTest {
   describe("test recommend payload") {
 
     it("should produce valid recommendation query payload") {
-      (get recommendation RecommendationsQuery(
+      (get recommendations RecommendationsQuery(
         indexName = "products",
         model = "bought-together",
         objectID = "B018APC4LE",
@@ -60,7 +60,7 @@ class RecommendTest extends AlgoliaTest {
     }
 
     it("should produce valid related products query payload") {
-      (get relatedProduct RelatedProductsQuery(
+      (get relatedProducts RelatedProductsQuery(
         indexName = "products",
         objectID = "B018APC4LE",
         threshold = 10,

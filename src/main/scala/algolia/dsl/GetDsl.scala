@@ -94,11 +94,11 @@ trait GetDsl {
     def dictionarySettings: GetSettingsDictionaryDefinition =
       GetSettingsDictionaryDefinition()
 
-    def recommendation(
+    def recommendations(
         query: RecommendationsQuery
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
-    def relatedProduct(
+    def relatedProducts(
         query: RelatedProductsQuery
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
