@@ -29,7 +29,6 @@ import algolia.definitions._
 import algolia.dsl._
 import algolia.inputs.DeleteObjectOperation
 import algolia.objects._
-import org.json4s
 import org.json4s.JsonAST._
 import org.json4s.JsonDSL._
 import org.json4s.{CustomSerializer, FieldSerializer, Formats, JField}
@@ -97,7 +96,12 @@ object AlgoliaDsl extends AlgoliaDsl {
       ) +
       new FieldSerializer[DeleteObjectOperation[JValue]](
         serializer = deleteObjectOperationSerializer
-      )
+      ) +
+      FieldSerializer[RecommendationsQuery with RecommendationsOptions]() +
+      FieldSerializer[RelatedProductsQuery with RecommendationsOptions]() +
+      FieldSerializer[
+        FrequentlyBoughtTogetherQuery with RecommendationsOptions
+      ]()
 
   val searchableAttributesUnordered: Regex = """^unordered\(([\w-\\.]+)\)$""".r
   val searchableAttributesAttributes: Regex =
