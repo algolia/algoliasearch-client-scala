@@ -71,6 +71,7 @@ trait AlgoliaDsl
     with RestoreDsl
     with DictionaryDsl
     with ReplaceDsl
+    with CustomDsl
 
 object AlgoliaDsl extends AlgoliaDsl {
 
