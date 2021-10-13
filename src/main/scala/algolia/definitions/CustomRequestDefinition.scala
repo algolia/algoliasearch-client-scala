@@ -25,35 +25,32 @@
 
 package algolia.definitions
 
-import algolia.http.{HttpPayload, HttpVerb}
-import algolia.objects.{RequestEndpoint, RequestOptions}
+import algolia.http.HttpPayload
+import algolia.objects.{CustomRequest, RequestEndpoint, RequestOptions}
 import org.json4s.Formats
 
 case class CustomRequestDefinition(
-    verb: HttpVerb,
-    path: Seq[String],
-    requestEndpoint: RequestEndpoint,
-    queryParameters: Option[Map[String, String]] = None,
-    body: Option[String] = None,
-    requestOptions: Option[RequestOptions]
+    customRequest: CustomRequest
 )(implicit val formats: Formats)
     extends Definition {
 
   type T = CustomRequestDefinition
 
-  override def options(requestOptions: RequestOptions): CustomRequestDefinition =
+  override def options(
+      requestOptions: RequestOptions
+  ): CustomRequestDefinition =
     this
 
   override private[algolia] def build(): HttpPayload = {
     HttpPayload(
-      verb,
-      path,
-      queryParameters,
-      body,
-      isSearch = RequestEndpoint.Search == requestEndpoint,
-      isAnalytics = RequestEndpoint.Analytics == requestEndpoint,
-      isInsights = RequestEndpoint.Insights == requestEndpoint,
-      isPersonalization = RequestEndpoint.Personalization == requestEndpoint,
+      customRequest.verb,
+      customRequest.path,
+      customRequest.queryParameters,
+      customRequest.body,
+      isSearch = RequestEndpoint.Search == customRequest.requestEndpoint,
+      isAnalytics = RequestEndpoint.Analytics == customRequest.requestEndpoint,
+      isInsights = RequestEndpoint.Insights == customRequest.requestEndpoint,
+      isPersonalization = RequestEndpoint.Personalization == customRequest.requestEndpoint,
       requestOptions = None
     )
   }

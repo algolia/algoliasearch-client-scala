@@ -1,5 +1,16 @@
 package algolia.objects
 
+import algolia.http.HttpVerb
+
+case class CustomRequest(
+    verb: HttpVerb,
+    path: Seq[String],
+    requestEndpoint: RequestEndpoint,
+    queryParameters: Option[Map[String, String]] = None,
+    body: Option[String] = None,
+    requestOptions: Option[RequestOptions] = None
+)
+
 sealed trait RequestEndpoint
 
 object RequestEndpoint {

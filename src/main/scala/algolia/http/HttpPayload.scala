@@ -31,21 +31,21 @@ import org.asynchttpclient.{Request, RequestBuilder}
 
 import java.net.InetAddress
 
-private[algolia] sealed trait HttpVerb
+sealed trait HttpVerb
 
-private[algolia] case object GET extends HttpVerb {
+case object GET extends HttpVerb {
   override def toString: String = "GET"
 }
 
-private[algolia] case object POST extends HttpVerb {
+case object POST extends HttpVerb {
   override def toString: String = "POST"
 }
 
-private[algolia] case object PUT extends HttpVerb {
+case object PUT extends HttpVerb {
   override def toString: String = "PUT"
 }
 
-private[algolia] case object DELETE extends HttpVerb {
+case object DELETE extends HttpVerb {
   override def toString: String = "DELETE"
 }
 
