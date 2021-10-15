@@ -29,7 +29,7 @@ commands:
 jobs:
   format:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
     steps:
       - checkout
       - restore_cache:
@@ -39,7 +39,7 @@ jobs:
           command: cat /dev/null | sbt '++ 2.13.1 scalafmtCheckAll'
   test-2-11:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
     steps:
       - checkout
       - restore_cache:
@@ -55,7 +55,7 @@ jobs:
             - "~/.m2"
   test-2-12:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
     steps:
       - checkout
       - restore_cache:
@@ -71,7 +71,7 @@ jobs:
             - "~/.m2"
   test-2-13:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
     steps:
       - checkout
       - restore_cache:
@@ -88,7 +88,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0
     steps:
       - checkout
       - run:
