@@ -12,7 +12,7 @@ class CustomRequestTest extends AlgoliaTest {
       custom request CustomRequest(
         verb = POST,
         path = Seq("1", "indexes", "indexName", "query"),
-        requestEndpoint = RequestEndpoint.Search,
+        endpoint = RequestEndpoint.Search,
         body = Some("""{"query": "van"}""")
       )
     }
@@ -20,7 +20,7 @@ class CustomRequestTest extends AlgoliaTest {
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "indexes", "indexName", "query"),
-        requestEndpoint = RequestEndpoint.Search,
+        endpoint = RequestEndpoint.Search,
         body = Some(write(Map("query" -> "van", "hitsPerPage" -> 1)))
       )).build() should be(
         HttpPayload(
@@ -37,7 +37,7 @@ class CustomRequestTest extends AlgoliaTest {
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "indexes", "indexName", "clear"),
-        requestEndpoint = RequestEndpoint.Indexing
+        endpoint = RequestEndpoint.Indexing
       )).build() should be(
         HttpPayload(
           POST,
@@ -52,7 +52,7 @@ class CustomRequestTest extends AlgoliaTest {
       (custom request CustomRequest(
         verb = POST,
         path = Seq("2", "abtests", "42", "stop"),
-        requestEndpoint = RequestEndpoint.Analytics
+        endpoint = RequestEndpoint.Analytics
       )).build() should be(
         HttpPayload(
           POST,
@@ -68,7 +68,7 @@ class CustomRequestTest extends AlgoliaTest {
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "events"),
-        requestEndpoint = RequestEndpoint.Insights,
+        endpoint = RequestEndpoint.Insights,
         body = Some(
           write(
             Map(
@@ -103,7 +103,7 @@ class CustomRequestTest extends AlgoliaTest {
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "strategies", "personalization"),
-        requestEndpoint = RequestEndpoint.Personalization,
+        endpoint = RequestEndpoint.Personalization,
         body = Some(
           write(
             Map(

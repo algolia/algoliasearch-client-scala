@@ -5,7 +5,7 @@ import algolia.http.HttpVerb
 case class CustomRequest(
     verb: HttpVerb,
     path: Seq[String],
-    requestEndpoint: RequestEndpoint,
+    endpoint: RequestEndpoint,
     queryParameters: Option[Map[String, String]] = None,
     body: Option[String] = None,
     requestOptions: Option[RequestOptions] = None

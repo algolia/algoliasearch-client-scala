@@ -42,15 +42,16 @@ case class CustomRequestDefinition(
     this
 
   override private[algolia] def build(): HttpPayload = {
+    import customRequest._
     HttpPayload(
-      customRequest.verb,
-      customRequest.path,
-      customRequest.queryParameters,
-      customRequest.body,
-      isSearch = RequestEndpoint.Search == customRequest.requestEndpoint,
-      isAnalytics = RequestEndpoint.Analytics == customRequest.requestEndpoint,
-      isInsights = RequestEndpoint.Insights == customRequest.requestEndpoint,
-      isPersonalization = RequestEndpoint.Personalization == customRequest.requestEndpoint,
+      verb = verb,
+      path = path,
+      queryParameters = queryParameters,
+      body = body,
+      isSearch = RequestEndpoint.Search == endpoint,
+      isAnalytics = RequestEndpoint.Analytics == endpoint,
+      isInsights = RequestEndpoint.Insights == endpoint,
+      isPersonalization = RequestEndpoint.Personalization == endpoint,
       requestOptions = None
     )
   }
