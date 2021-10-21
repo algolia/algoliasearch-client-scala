@@ -1,10 +1,34 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016 Algolia
+ * http://www.algolia.com/
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package algolia.dsl
 
-import algolia.AlgoliaDsl.{custom, formats}
+import algolia.AlgoliaDsl.custom
 import algolia.AlgoliaTest
 import algolia.http.{HttpPayload, POST}
 import algolia.objects.{CustomRequest, RequestEndpoint}
-import org.json4s.native.Serialization.write
 
 class CustomRequestTest extends AlgoliaTest {
   describe("customRequest") {
@@ -17,16 +41,17 @@ class CustomRequestTest extends AlgoliaTest {
       )
     }
     it("should call search endpoint") {
+      val json = """{"query":"van","hitsPerPage":1}"""
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "indexes", "indexName", "query"),
         endpoint = RequestEndpoint.Search,
-        body = Some(write(Map("query" -> "van", "hitsPerPage" -> 1)))
+        body = Some(json)
       )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "indexName", "query"),
-          body = Some("""{"query":"van","hitsPerPage":1}"""),
+          body = Some(json),
           isSearch = true,
           requestOptions = None
         )
@@ -65,33 +90,18 @@ class CustomRequestTest extends AlgoliaTest {
     }
 
     it("should call insights endpoint") {
+      val json =
+        """{"events":[{"eventType":"conversion","eventName":"event-name","index":"index-name","userToken":"user-token","queryID":"query-id","objectIDs":["objectID"]}]}"""
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "events"),
         endpoint = RequestEndpoint.Insights,
-        body = Some(
-          write(
-            Map(
-              "events" -> Seq(
-                Map(
-                  "eventType" -> "conversion",
-                  "eventName" -> "event-name",
-                  "index" -> "index-name",
-                  "userToken" -> "user-token",
-                  "objectIDs" -> Seq("objectID"),
-                  "queryID" -> "query-id"
-                )
-              )
-            )
-          )
-        )
+        body = Some(json)
       )).build() should be(
         HttpPayload(
           verb = POST,
           path = Seq("1", "events"),
-          body = Some(
-            """{"events":[{"eventName":"event-name","queryID":"query-id","objectIDs":["objectID"],"index":"index-name","eventType":"conversion","userToken":"user-token"}]}"""
-          ),
+          body = Some(json),
           isSearch = false,
           isInsights = true,
           requestOptions = None
@@ -100,37 +110,18 @@ class CustomRequestTest extends AlgoliaTest {
     }
 
     it("should call personalization endpoint") {
+      val json =
+        """{"eventsScoring":[{"eventName":"buy","eventType":"conversion","score":10}],"facetsScoring":[{"facetName":"brand","score":10}],"personalizationImpact":75}"""
       (custom request CustomRequest(
         verb = POST,
         path = Seq("1", "strategies", "personalization"),
         endpoint = RequestEndpoint.Personalization,
-        body = Some(
-          write(
-            Map(
-              "eventsScoring" -> Seq(
-                Map(
-                  "eventName" -> "buy",
-                  "eventType" -> "conversion",
-                  "score" -> 10
-                )
-              ),
-              "facetsScoring" -> Seq(
-                Map(
-                  "facetName" -> "brand",
-                  "score" -> 10
-                )
-              ),
-              "personalizationImpact" -> 75
-            )
-          )
-        )
+        body = Some(json)
       )).build() should be(
         HttpPayload(
           verb = POST,
           path = Seq("1", "strategies", "personalization"),
-          body = Some(
-            """{"eventsScoring":[{"eventName":"buy","eventType":"conversion","score":10}],"facetsScoring":[{"facetName":"brand","score":10}],"personalizationImpact":75}"""
-          ),
+          body = Some(json),
           isSearch = false,
           isPersonalization = true,
           requestOptions = None
