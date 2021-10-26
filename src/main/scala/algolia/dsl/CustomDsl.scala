@@ -28,6 +28,7 @@ package algolia.dsl
 import algolia.definitions.CustomRequestDefinition
 import algolia.objects.CustomRequest
 import algolia.{AlgoliaClient, Executable}
+import org.json4s.JsonAST.JValue
 import org.json4s.{Formats, JObject}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,9 +44,9 @@ trait CustomDsl {
   }
 
   implicit object CustomRequestDefinitionExecutable
-      extends Executable[CustomRequestDefinition, JObject] {
+      extends Executable[CustomRequestDefinition, JValue] {
     override def apply(client: AlgoliaClient, query: CustomRequestDefinition)(
         implicit executor: ExecutionContext
-    ): Future[JObject] = { client.request[JObject](query.build()) }
+    ): Future[JValue] = { client.request[JValue](query.build()) }
   }
 }
