@@ -31,7 +31,7 @@ import org.json4s.Formats
 import org.json4s.native.Serialization._
 
 case class GetRecommendationDefinition(
-    query: RecommendationsOptions,
+    queries: List[RecommendationsOptions],
     requestOptions: Option[RequestOptions] = None
 )(implicit val formats: Formats)
     extends Definition {
@@ -44,10 +44,11 @@ case class GetRecommendationDefinition(
     copy(requestOptions = Some(requestOptions))
 
   override private[algolia] def build(): HttpPayload = {
+    val requests = Map("requests" -> queries)
     HttpPayload(
       POST,
       Seq("1", "indexes", "*", "recommendations"),
-      body = Some(write(query)),
+      body = Some(write(requests)),
       isSearch = true,
       requestOptions = requestOptions
     )

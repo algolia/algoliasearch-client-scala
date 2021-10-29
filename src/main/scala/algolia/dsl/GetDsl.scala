@@ -95,15 +95,15 @@ trait GetDsl {
       GetSettingsDictionaryDefinition()
 
     def recommendations(
-        query: RecommendationsQuery
+        query: List[RecommendationsQuery]
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
     def relatedProducts(
-        query: RelatedProductsQuery
+        query: List[RelatedProductsQuery]
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
     def frequentlyBoughtTogether(
-        query: FrequentlyBoughtTogetherQuery
+        query: List[FrequentlyBoughtTogetherQuery]
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
   }
 
