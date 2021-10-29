@@ -201,4 +201,19 @@ trait GetDsl {
       client.request[PersonalizationProfileResponse](query.build())
     }
   }
+
+  implicit object GetRecommendationDefinitionExecutable
+      extends Executable[
+        GetRecommendationDefinition,
+        SearchResult
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: GetRecommendationDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[SearchResult] = {
+      client.request[SearchResult](query.build())
+    }
+  }
 }
