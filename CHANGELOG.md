@@ -1,5 +1,14 @@
 # ChangeLog
 
+## [1.44.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.43.1...1.44.0) (2021-10-29)
+
+### Feat
+
+- **recommend**: client implementation (#644) ([4dc225e](https://github.com/algolia/algoliasearch-client-scala/commit/4dc225e))
+- **search**: custom request (#645) ([6ed1018](https://github.com/algolia/algoliasearch-client-scala/commit/6ed1018))
+
+
+
 ## [1.43.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.43.0...1.43.1) (2021-09-22)
 
 ### Fix
