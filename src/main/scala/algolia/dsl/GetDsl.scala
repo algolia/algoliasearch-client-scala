@@ -95,15 +95,15 @@ trait GetDsl {
       GetSettingsDictionaryDefinition()
 
     def recommendations(
-        query: RecommendationsQuery
+        query: List[RecommendationsQuery]
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
     def relatedProducts(
-        query: RelatedProductsQuery
+        query: List[RelatedProductsQuery]
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
 
     def frequentlyBoughtTogether(
-        query: FrequentlyBoughtTogetherQuery
+        query: List[FrequentlyBoughtTogetherQuery]
     ): GetRecommendationDefinition = GetRecommendationDefinition(query)
   }
 
@@ -199,6 +199,21 @@ trait GetDsl {
         implicit executor: ExecutionContext
     ): Future[PersonalizationProfileResponse] = {
       client.request[PersonalizationProfileResponse](query.build())
+    }
+  }
+
+  implicit object GetRecommendationDefinitionExecutable
+      extends Executable[
+        GetRecommendationDefinition,
+        SearchResult
+      ] {
+    override def apply(
+        client: AlgoliaClient,
+        query: GetRecommendationDefinition
+    )(
+        implicit executor: ExecutionContext
+    ): Future[SearchResult] = {
+      client.request[SearchResult](query.build())
     }
   }
 }

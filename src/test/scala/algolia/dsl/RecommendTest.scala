@@ -40,18 +40,27 @@ class RecommendTest extends AlgoliaTest {
   describe("test recommend payload") {
 
     it("should produce valid recommendation query payload") {
-      (get recommendations RecommendationsQuery(
+      val queryRelatedProducts = RecommendationsQuery(
+        indexName = "products",
+        model = "related-products",
+        objectID = "B018APC4LE",
+        maxRecommendations = Some(10),
+        queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
+      )
+      val queryBoughtTogether = RecommendationsQuery(
         indexName = "products",
         model = "bought-together",
         objectID = "B018APC4LE",
         maxRecommendations = Some(10),
         queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
-      )).build() should be(
+      )
+      (get recommendations List(queryRelatedProducts, queryBoughtTogether))
+        .build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "*", "recommendations"),
           body = Some(
-            "{\"indexName\":\"products\",\"model\":\"bought-together\",\"objectID\":\"B018APC4LE\",\"threshold\":0,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}}"
+            "{\"requests\":[{\"indexName\":\"products\",\"model\":\"related-products\",\"objectID\":\"B018APC4LE\",\"threshold\":0,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}},{\"indexName\":\"products\",\"model\":\"bought-together\",\"objectID\":\"B018APC4LE\",\"threshold\":0,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]}}]}"
           ),
           isSearch = true,
           requestOptions = None
@@ -60,18 +69,20 @@ class RecommendTest extends AlgoliaTest {
     }
 
     it("should produce valid related products query payload") {
-      (get relatedProducts RelatedProductsQuery(
-        indexName = "products",
-        objectID = "B018APC4LE",
-        threshold = 10,
-        maxRecommendations = Some(10),
-        queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
+      (get relatedProducts List(
+        RelatedProductsQuery(
+          indexName = "products",
+          objectID = "B018APC4LE",
+          threshold = 10,
+          maxRecommendations = Some(10),
+          queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
+        )
       )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "*", "recommendations"),
           body = Some(
-            "{\"indexName\":\"products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]},\"model\":\"related-products\"}"
+            "{\"requests\":[{\"indexName\":\"products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]},\"model\":\"related-products\"}]}"
           ),
           isSearch = true,
           requestOptions = None
@@ -80,18 +91,20 @@ class RecommendTest extends AlgoliaTest {
     }
 
     it("should produce valid frequently bought together query payload") {
-      (get frequentlyBoughtTogether FrequentlyBoughtTogetherQuery(
-        indexName = "products",
-        objectID = "B018APC4LE",
-        threshold = 10,
-        maxRecommendations = Some(10),
-        queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
+      (get frequentlyBoughtTogether List(
+        FrequentlyBoughtTogetherQuery(
+          indexName = "products",
+          objectID = "B018APC4LE",
+          threshold = 10,
+          maxRecommendations = Some(10),
+          queryParameters = Some(Query(attributesToRetrieve = Some(Seq("*"))))
+        )
       )).build() should be(
         HttpPayload(
           POST,
           Seq("1", "indexes", "*", "recommendations"),
           body = Some(
-            "{\"indexName\":\"products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]},\"model\":\"bought-together\"}"
+            "{\"requests\":[{\"indexName\":\"products\",\"objectID\":\"B018APC4LE\",\"threshold\":10,\"maxRecommendations\":10,\"queryParameters\":{\"attributesToRetrieve\":[\"*\"]},\"model\":\"bought-together\"}]}"
           ),
           isSearch = true,
           requestOptions = None
