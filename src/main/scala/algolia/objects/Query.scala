@@ -46,6 +46,7 @@ case class Query(
     explain: Option[Seq[String]] = None,
     naturalLanguages: Option[Seq[String]] = None,
     decompoundQuery: Option[Boolean] = None,
+    enableReRanking: Option[Boolean] = None,
     /* Attributes */
     attributesToRetrieve: Option[Seq[String]] = None,
     restrictSearchableAttributes: Option[Seq[String]] = None,
@@ -147,6 +148,7 @@ case class Query(
       "percentileComputation" -> percentileComputation.map(_.toString),
       "queryLanguages" -> queryLanguages.map(_.mkString(",")),
       "decompoundQuery" -> decompoundQuery.map(_.toString),
+      "enableReRanking" -> enableReRanking.map(_.toString),
       /* Attributes */
       "attributesToRetrieve" -> attributesToRetrieve.map(_.mkString(",")),
       "restrictSearchableAttributes" -> restrictSearchableAttributes.map(
