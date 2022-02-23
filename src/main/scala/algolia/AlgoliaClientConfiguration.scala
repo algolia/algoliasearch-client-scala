@@ -31,7 +31,8 @@ case class AlgoliaClientConfiguration(
     httpReadTimeoutMs: Int,
     httpRequestTimeoutMs: Int,
     dnsTimeoutMs: Int,
-    hostDownTimeoutMs: Int
+    hostDownTimeoutMs: Int,
+    useSystemProxy: Boolean = false
 ) {}
 
 object AlgoliaClientConfiguration {
