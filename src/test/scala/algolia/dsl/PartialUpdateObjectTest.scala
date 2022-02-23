@@ -223,8 +223,8 @@ class PartialUpdateObjectTest extends AlgoliaTest {
       )
     }
 
-    it ("sample") {
-      partialUpdate from "productIndex" createIfNotExists() objects()
+    it("sample") {
+      partialUpdate from "productIndex" createIfNotExists () objects ()
     }
 
     it("should call API") {
