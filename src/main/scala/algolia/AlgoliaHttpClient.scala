@@ -49,6 +49,7 @@ case class AlgoliaHttpClient(
       .setConnectTimeout(configuration.httpConnectTimeoutMs)
       .setReadTimeout(configuration.httpReadTimeoutMs)
       .setRequestTimeout(configuration.httpRequestTimeoutMs)
+      .setUseProxyProperties(configuration.useSystemProxy)
       .build
 
   val dnsNameResolver: DnsNameResolver =
