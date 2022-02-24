@@ -26,8 +26,8 @@
 package algolia
 
 import java.util.concurrent.ExecutionException
-
 import algolia.http._
+import io.netty.channel.EventLoop
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioDatagramChannel
 import io.netty.resolver.dns.{DnsNameResolver, DnsNameResolverBuilder}
@@ -52,8 +52,9 @@ case class AlgoliaHttpClient(
       .setUseProxyProperties(configuration.useSystemProxy)
       .build
 
+  val dnsEventLoop: EventLoop = new NioEventLoopGroup(1).next()
   val dnsNameResolver: DnsNameResolver =
-    new DnsNameResolverBuilder(new NioEventLoopGroup(1).next()) //We only need 1 thread for DNS resolution
+    new DnsNameResolverBuilder(dnsEventLoop) //We only need 1 thread for DNS resolution
       .channelType(classOf[NioDatagramChannel])
       .queryTimeoutMillis(configuration.dnsTimeoutMs.toLong)
       .maxQueriesPerResolve(2)
@@ -67,6 +68,7 @@ case class AlgoliaHttpClient(
 
   def close(): Unit = {
     dnsNameResolver.close()
+    dnsEventLoop.shutdownGracefully()
     _httpClient.close()
   }
 
