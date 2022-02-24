@@ -1,5 +1,18 @@
 # ChangeLog
 
+## [1.45.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.44.0...1.45.0) (2022-02-24)
+
+### Fix
+
+- shutdown DNS event loop when closing HTTP client (#651) ([bdd3d7d](https://github.com/algolia/algoliasearch-client-scala/commit/bdd3d7d))
+
+### Feat
+
+- add 'enableReRanking' query parameter (#649) ([de4a91b](https://github.com/algolia/algoliasearch-client-scala/commit/de4a91b))
+- allow use of system proxy (#652) ([c36dbf3](https://github.com/algolia/algoliasearch-client-scala/commit/c36dbf3))
+
+
+
 ## [1.44.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.43.1...1.44.0) (2021-10-29)
 
 ### Feat
