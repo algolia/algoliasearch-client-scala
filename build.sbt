@@ -1,8 +1,8 @@
 organization := "com.algolia"
 name := "algoliasearch-scala"
 description := "Scala client for Algolia Search API"
-crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.6")
-scalaVersion := "2.13.6"
+crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.8")
+scalaVersion := "2.13.8"
 Test / testOptions += Tests.Argument("-P10")
 publishMavenStyle := true
 Test / publishArtifact := false
@@ -24,7 +24,9 @@ developers += Developer(
   url("https://github.com/algolia/algoliasearch-client-scala/")
 )
 publishTo := sonatypePublishToBundle.value
-pgpSigningKey := Credentials.forHost(credentials.value, "pgp").map(_.userName) // related to https://github.com/sbt/sbt-pgp/issues/170
+pgpSigningKey := Credentials
+  .forHost(credentials.value, "pgp")
+  .map(_.userName) // related to https://github.com/sbt/sbt-pgp/issues/170
 
 lazy val root = project
   .in(file("."))
@@ -42,21 +44,21 @@ lazy val root = project
 // Project dependencies
 libraryDependencies += "org.asynchttpclient" % "async-http-client" % "2.12.3"
 libraryDependencies += "io.netty" % "netty-resolver-dns" % "4.1.45.Final"
-libraryDependencies += "org.json4s" %% "json4s-ast" % "3.6.7"
-libraryDependencies += "org.json4s" %% "json4s-core" % "3.6.7"
-libraryDependencies += "org.json4s" %% "json4s-native" % "3.6.7"
-libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.4"
-libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.30"
+libraryDependencies += "org.json4s" %% "json4s-ast" % "4.0.5"
+libraryDependencies += "org.json4s" %% "json4s-core" % "4.0.5"
+libraryDependencies += "org.json4s" %% "json4s-native" % "4.0.5"
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0"
+libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.36"
 
 // Related to https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584063,
 // To be removed when 'async-http-client' updates dependency version of 'netty-codec'
 libraryDependencies += "io.netty" % "netty-codec" % "4.1.68.Final"
 
 // Testing dependencies
-libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3" % Test
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.11" % Test
 //libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.3" % Test
-libraryDependencies += "org.scalamock" %% "scalamock" % "4.4.0" % Test
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % Test
+libraryDependencies += "org.scalamock" %% "scalamock" % "5.2.0" % Test
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % Test
 
 scalacOptions ++= Seq(
   "-deprecation",

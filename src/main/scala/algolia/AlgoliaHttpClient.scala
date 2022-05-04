@@ -105,7 +105,7 @@ case class AlgoliaHttpClient(
     }
 
   def fromJson(r: Response): JValue =
-    parse(StringInput(r.getResponseBody), useBigDecimalForDouble = true)
+    parse(r.getResponseBodyAsStream, useBigDecimalForDouble = true)
 
   def makeRequest[T](host: String, request: Request, handler: AsyncHandler[T])(
       implicit executor: ExecutionContext
