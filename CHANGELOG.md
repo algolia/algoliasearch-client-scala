@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [1.45.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.44.0...1.45.0) (2022-02-24)
+## [1.44.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.44.0...1.44.1) (2022-02-24)
 
 ### Fix
 
