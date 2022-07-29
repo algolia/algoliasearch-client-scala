@@ -272,4 +272,14 @@ class SearchTest extends AlgoliaTest {
     }
   }
 
+  describe("search with similarQuery") {
+    it("should parametrize stuff") {
+      val q = Query(
+        query = Some(""),
+        similarQuery = Some("\"test phrase\"")
+      )
+
+      q.toParam should be("query=&similarQuery=%22test+phrase%22")
+    }
+  }
 }
