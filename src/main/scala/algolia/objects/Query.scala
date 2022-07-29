@@ -210,6 +210,7 @@ case class Query(
       /* Search */
       "query" -> query,
       "facetQuery" -> facetQuery,
+      "similarQuery" -> similarQuery,
       /* Typos */
       "minWordSizefor1Typo" -> minWordSizefor1Typo.map(_.toString),
       "minWordSizefor2Typos" -> minWordSizefor2Typos.map(_.toString),
