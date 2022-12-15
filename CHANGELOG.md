@@ -1,9 +1,22 @@
 # ChangeLog
 
-## [1.44.5](https://github.com/algolia/algoliasearch-client-scala/compare/1.44.1...1.44.5) (2022-05-17)
+## [1.45.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.45.0...1.45.1) (2022-12-15)
+
+### Fix
+
+- **query**: `similarQuery` not accounted for in param string (#654)
 
 ### Misc
+
+- **deps**: update `netty-codec` version to `4.1.86.Final` (#656)
+
+
+## [1.45.0](https://github.com/algolia/algoliasearch-client-scala/compare/1.44.1...1.45.0) (2022-05-17)
+
+### Misc
+
 - Upgraded json4s dependency to v4.0.5, other dependencies to their latest versions. (#653)
+
 
 ## [1.44.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.44.0...1.44.1) (2022-02-24)
 
