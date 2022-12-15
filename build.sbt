@@ -52,7 +52,7 @@ libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.36"
 
 // Related to https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584063,
 // To be removed when 'async-http-client' updates dependency version of 'netty-codec'
-libraryDependencies += "io.netty" % "netty-codec" % "4.1.68.Final"
+libraryDependencies += "io.netty" % "netty-codec" % "4.1.86.Final"
 
 // Testing dependencies
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.11" % Test
