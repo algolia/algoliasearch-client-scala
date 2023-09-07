@@ -24,7 +24,7 @@
 
 * Supports Scala 2.11, 2.12, 2.13.
 * Asynchronous methods to target Algolia's API
-* Json as case class
+* Json as a case class
 * DSL
 
 ## 💡 Getting Started
