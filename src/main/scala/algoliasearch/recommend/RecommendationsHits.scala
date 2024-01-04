@@ -11,8 +11,15 @@
   */
 package algoliasearch.recommend
 
-/** GetRecommendationsResponse
+/** RecommendationsHits
+  *
+  * @param query
+  *   Text to search for in an index.
+  * @param params
+  *   URL-encoded string of all search parameters.
   */
-case class GetRecommendationsResponse(
-    results: Option[Seq[RecommendationsResults]] = scala.None
+case class RecommendationsHits(
+    hits: Seq[RecommendationsHit],
+    query: Option[String] = scala.None,
+    params: Option[String] = scala.None
 )

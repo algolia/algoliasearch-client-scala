@@ -11,7 +11,7 @@
   */
 package algoliasearch.recommend
 
-/** RecommendationsResponse
+/** RecommendationsResults
   *
   * @param abTestID
   *   A/B test ID. This is only included in the response for indices that are part of an A/B test.
@@ -68,7 +68,7 @@ package algoliasearch.recommend
   * @param params
   *   URL-encoded string of all search parameters.
   */
-case class RecommendationsResponse(
+case class RecommendationsResults(
     abTestID: Option[Int] = scala.None,
     abTestVariantID: Option[Int] = scala.None,
     aroundLatLng: Option[String] = scala.None,
@@ -96,7 +96,7 @@ case class RecommendationsResponse(
     serverTimeMS: Option[Int] = scala.None,
     serverUsed: Option[String] = scala.None,
     userData: Option[Any] = scala.None,
-    hits: Seq[RecommendHit],
+    hits: Seq[RecommendationsHit],
     query: Option[String] = scala.None,
     params: Option[String] = scala.None
 )

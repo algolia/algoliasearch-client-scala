@@ -11,8 +11,12 @@
   */
 package algoliasearch.recommend
 
-/** GetRecommendationsResponse
+/** BaseRecommendedForYouQueryParameters
+  *
+  * @param userToken
+  *   Associates a [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current
+  *   search.
   */
-case class GetRecommendationsResponse(
-    results: Option[Seq[RecommendationsResults]] = scala.None
+case class BaseRecommendedForYouQueryParameters(
+    userToken: String
 )

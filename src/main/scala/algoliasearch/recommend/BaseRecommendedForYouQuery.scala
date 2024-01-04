@@ -11,8 +11,12 @@
   */
 package algoliasearch.recommend
 
-/** GetRecommendationsResponse
+import algoliasearch.recommend.RecommendedForYouModel._
+
+/** BaseRecommendedForYouQuery
   */
-case class GetRecommendationsResponse(
-    results: Option[Seq[RecommendationsResults]] = scala.None
+case class BaseRecommendedForYouQuery(
+    model: RecommendedForYouModel,
+    queryParameters: Option[RecommendedForYouQueryParameters] = scala.None,
+    fallbackParameters: Option[RecommendedForYouQueryParameters] = scala.None
 )

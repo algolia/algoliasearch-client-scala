@@ -11,15 +11,17 @@
   */
 package algoliasearch.recommend
 
-/** RecommendHits
+/** Trending facet hit.
   *
-  * @param query
-  *   Text to search for in an index.
-  * @param params
-  *   URL-encoded string of all search parameters.
+  * @param score
+  *   Recommendation score.
+  * @param facetName
+  *   Facet name for trending models.
+  * @param facetValue
+  *   Facet value for trending models.
   */
-case class RecommendHits(
-    hits: Seq[RecommendHit],
-    query: Option[String] = scala.None,
-    params: Option[String] = scala.None
-)
+case class TrendingFacetHit(
+    score: Double,
+    facetName: String,
+    facetValue: String
+) extends RecommendationsHitTrait

@@ -11,9 +11,9 @@
   */
 package algoliasearch.recommend
 
-import algoliasearch.recommend.TrendingFacetsModel._
+import algoliasearch.recommend.RecommendedForYouModel._
 
-/** TrendingFacetsQuery
+/** RecommendedForYouQuery
   *
   * @param indexName
   *   Algolia index name.
@@ -23,13 +23,12 @@ import algoliasearch.recommend.TrendingFacetsModel._
   *   recommendations are.
   * @param maxRecommendations
   *   Maximum number of recommendations to retrieve. If 0, all recommendations will be returned.
-  * @param facetName
-  *   Facet name for trending models.
   */
-case class TrendingFacetsQuery(
+case class RecommendedForYouQuery(
     indexName: String,
     threshold: Option[Int] = scala.None,
     maxRecommendations: Option[Int] = scala.None,
-    facetName: String,
-    model: Option[TrendingFacetsModel] = scala.None
+    model: RecommendedForYouModel,
+    queryParameters: Option[RecommendedForYouQueryParameters] = scala.None,
+    fallbackParameters: Option[RecommendedForYouQueryParameters] = scala.None
 ) extends RecommendationsRequestTrait
