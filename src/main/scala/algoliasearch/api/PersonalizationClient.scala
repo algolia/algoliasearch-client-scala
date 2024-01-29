@@ -173,9 +173,6 @@ class PersonalizationClient(
     * this date, they will be ignored. Any data received after the deletedUntil date will start building a new user
     * profile. It might take a couple hours for the deletion request to be fully processed.
     *
-    * Required API Key ACLs:
-    *   - recommendation
-    *
     * @param userToken
     *   userToken representing the user for which to fetch the Personalization profile.
     */
@@ -194,9 +191,6 @@ class PersonalizationClient(
 
   /** The strategy contains information on the events and facets that impact user profiles and personalized search
     * results.
-    *
-    * Required API Key ACLs:
-    *   - recommendation
     */
   def getPersonalizationStrategy(
       requestOptions: Option[RequestOptions] = None
@@ -215,9 +209,6 @@ class PersonalizationClient(
     * value given the userToken past events and the Personalization strategy defined. Scores are bounded to 20. The last
     * processed event timestamp is provided using the ISO 8601 format for debugging purposes.
     *
-    * Required API Key ACLs:
-    *   - recommendation
-    *
     * @param userToken
     *   userToken representing the user for which to fetch the Personalization profile.
     */
@@ -235,9 +226,6 @@ class PersonalizationClient(
   }
 
   /** A strategy defines the events and facets that impact user profiles and personalized search results.
-    *
-    * Required API Key ACLs:
-    *   - recommendation
     */
   def setPersonalizationStrategy(
       personalizationStrategyParams: PersonalizationStrategyParams,

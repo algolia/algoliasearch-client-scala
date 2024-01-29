@@ -68,9 +68,6 @@ class AbtestingClient(
     ) {
 
   /** Creates an A/B test.
-    *
-    * Required API Key ACLs:
-    *   - editSettings
     */
   def addABTests(addABTestsRequest: AddABTestsRequest, requestOptions: Option[RequestOptions] = None)(implicit
       ec: ExecutionContext
@@ -189,9 +186,6 @@ class AbtestingClient(
   /** Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests`
     * operation](#tag/abtest/operation/listABTests).
     *
-    * Required API Key ACLs:
-    *   - editSettings
-    *
     * @param id
     *   Unique A/B test ID.
     */
@@ -211,9 +205,6 @@ class AbtestingClient(
   /** Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests`
     * operation](#tag/abtest/operation/listABTests).
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param id
     *   Unique A/B test ID.
     */
@@ -230,9 +221,6 @@ class AbtestingClient(
     }
 
   /** List all A/B tests.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param offset
     *   Position of the starting record. Used for paging. 0 is the first record.
@@ -266,9 +254,6 @@ class AbtestingClient(
   /** If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search
     * requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the
     * [`listABTests` operation](#tag/abtest/operation/listABTests).
-    *
-    * Required API Key ACLs:
-    *   - editSettings
     *
     * @param id
     *   Unique A/B test ID.

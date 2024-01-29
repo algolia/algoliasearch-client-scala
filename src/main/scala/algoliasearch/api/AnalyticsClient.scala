@@ -186,9 +186,6 @@ class AnalyticsClient(
     * `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked
     * searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     * @param startDate
@@ -226,9 +223,6 @@ class AnalyticsClient(
     * `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked
     * searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     * @param startDate
@@ -265,9 +259,6 @@ class AnalyticsClient(
   /** Returns a [click-through rate
     * (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     * @param startDate
@@ -302,9 +293,6 @@ class AnalyticsClient(
   }
 
   /** Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -342,9 +330,6 @@ class AnalyticsClient(
   /** Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given
     * time range, as well as a value per day. It also returns the count of searches and searches without clicks.
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     * @param startDate
@@ -379,9 +364,6 @@ class AnalyticsClient(
   }
 
   /** Returns the rate at which searches didn't return any results.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -418,9 +400,6 @@ class AnalyticsClient(
 
   /** Returns the number of searches within a time range.
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     * @param startDate
@@ -455,9 +434,6 @@ class AnalyticsClient(
   }
 
   /** Return the most popular of the last 1,000 searches that didn't lead to any clicks.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -501,9 +477,6 @@ class AnalyticsClient(
   }
 
   /** Returns the most popular of the latest 1,000 searches that didn't return any results.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -550,9 +523,6 @@ class AnalyticsClient(
     * search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every
     * 5&nbsp;minutes.
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     */
@@ -571,9 +541,6 @@ class AnalyticsClient(
   }
 
   /** Returns top countries. Limited to the 1,000 most frequent ones.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -619,9 +586,6 @@ class AnalyticsClient(
   /** Return the most popular [filterable
     * attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most
     * recently used filters.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -669,9 +633,6 @@ class AnalyticsClient(
   }
 
   /** Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param attribute
     *   Attribute name.
@@ -725,9 +686,6 @@ class AnalyticsClient(
   /** Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used
     * filters.
     *
-    * Required API Key ACLs:
-    *   - analytics
-    *
     * @param index
     *   Index name to target.
     * @param search
@@ -774,9 +732,6 @@ class AnalyticsClient(
   }
 
   /** Return the most popular clicked results in the last 1,000 searches.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -829,9 +784,6 @@ class AnalyticsClient(
   }
 
   /** Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
@@ -888,9 +840,6 @@ class AnalyticsClient(
   }
 
   /** Return the count of unique users.
-    *
-    * Required API Key ACLs:
-    *   - analytics
     *
     * @param index
     *   Index name to target.
