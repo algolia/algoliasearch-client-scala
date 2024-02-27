@@ -6,6 +6,7 @@ src/main/scala/algoliasearch/search/AdvancedSyntaxFeatures.scala
 src/main/scala/algoliasearch/search/AlternativesAsExact.scala
 src/main/scala/algoliasearch/search/Anchoring.scala
 src/main/scala/algoliasearch/search/ApiKey.scala
+src/main/scala/algoliasearch/search/ApiKeyOperation.scala
 src/main/scala/algoliasearch/search/AroundPrecision.scala
 src/main/scala/algoliasearch/search/AroundPrecisionFromValueInner.scala
 src/main/scala/algoliasearch/search/AroundRadius.scala
@@ -141,6 +142,7 @@ src/main/scala/algoliasearch/search/SearchTypeDefault.scala
 src/main/scala/algoliasearch/search/SearchTypeFacet.scala
 src/main/scala/algoliasearch/search/SearchUserIdsParams.scala
 src/main/scala/algoliasearch/search/SearchUserIdsResponse.scala
+src/main/scala/algoliasearch/search/SecuredAPIKeyRestrictions.scala
 src/main/scala/algoliasearch/search/SemanticSearch.scala
 src/main/scala/algoliasearch/search/SnippetResult.scala
 src/main/scala/algoliasearch/search/SnippetResultOption.scala
