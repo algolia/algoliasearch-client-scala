@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 src/main/scala/algoliasearch/api/SearchClient.scala
 src/main/scala/algoliasearch/search/Acl.scala
 src/main/scala/algoliasearch/search/Action.scala
