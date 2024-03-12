@@ -117,6 +117,7 @@ src/main/scala/algoliasearch/search/SaveObjectResponse.scala
 src/main/scala/algoliasearch/search/SaveSynonymResponse.scala
 src/main/scala/algoliasearch/search/ScopeType.scala
 src/main/scala/algoliasearch/search/SearchDictionaryEntriesParams.scala
+src/main/scala/algoliasearch/search/SearchDictionaryEntriesResponse.scala
 src/main/scala/algoliasearch/search/SearchForFacetValuesRequest.scala
 src/main/scala/algoliasearch/search/SearchForFacetValuesResponse.scala
 src/main/scala/algoliasearch/search/SearchForFacets.scala
