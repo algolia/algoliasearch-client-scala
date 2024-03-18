@@ -150,6 +150,7 @@ src/main/scala/algoliasearch/search/SnippetResultOption.scala
 src/main/scala/algoliasearch/search/SortRemainingBy.scala
 src/main/scala/algoliasearch/search/Source.scala
 src/main/scala/algoliasearch/search/StandardEntries.scala
+src/main/scala/algoliasearch/search/SupportedLanguage.scala
 src/main/scala/algoliasearch/search/SynonymHit.scala
 src/main/scala/algoliasearch/search/SynonymType.scala
 src/main/scala/algoliasearch/search/TagFilters.scala
