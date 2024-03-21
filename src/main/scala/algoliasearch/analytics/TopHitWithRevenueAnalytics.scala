@@ -24,12 +24,48 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** TopHitWithRevenueAnalytics
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param hit
+  *   Object ID of a record that's returned as a search result.
+  * @param count
+  *   Number of occurrences.
+  * @param clickThroughRate
+  *   Click-through rate, calculated as number of tracked searches with at least one click event divided by the number
+  *   of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param conversionRate
+  *   Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number
+  *   of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param trackedHitCount
+  *   Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.
+  * @param clickCount
+  *   Number of clicks associated with this search.
+  * @param conversionCount
+  *   Number of conversions from this search.
+  * @param addToCartRate
+  *   Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the
+  *   number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param addToCartCount
+  *   Number of add-to-cart events from this search.
+  * @param purchaseRate
+  *   Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of
+  *   tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param purchaseCount
+  *   Number of purchase events from this search.
+  * @param currencies
+  *   Revenue associated with this search, broken-down by currencies.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class TopHitWithRevenueAnalytics(
+    hit: String,
+    count: Int,
+    clickThroughRate: Option[Double] = scala.None,
+    conversionRate: Option[Double] = scala.None,
+    trackedHitCount: Int,
+    clickCount: Int,
+    conversionCount: Int,
+    addToCartRate: Option[Double] = scala.None,
+    addToCartCount: Int,
+    purchaseRate: Option[Double] = scala.None,
+    purchaseCount: Int,
+    currencies: Map[String, CurrenciesValue]
 )

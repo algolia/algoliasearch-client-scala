@@ -24,12 +24,52 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
-  *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+import org.json4s._
+
+sealed trait Operator
+
+/** Character that characterizes how the filter is applied. For example, for a facet filter `facet:value`, `:` is the
+  * operator. For a numeric filter `count>50`, `>` is the operator.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
-)
+object Operator {
+  case object Colon extends Operator {
+    override def toString = ":"
+  }
+  case object LessThan extends Operator {
+    override def toString = "&lt;"
+  }
+  case object LessThanOrEqualTo extends Operator {
+    override def toString = "&lt;&#x3D;"
+  }
+  case object Equal extends Operator {
+    override def toString = "&#x3D;"
+  }
+  case object NotEqual extends Operator {
+    override def toString = "!&#x3D;"
+  }
+  case object GreaterThan extends Operator {
+    override def toString = "&gt;"
+  }
+  case object GreaterThanOrEqualTo extends Operator {
+    override def toString = "&gt;&#x3D;"
+  }
+  val values: Seq[Operator] =
+    Seq(Colon, LessThan, LessThanOrEqualTo, Equal, NotEqual, GreaterThan, GreaterThanOrEqualTo)
+
+  def withName(name: String): Operator = Operator.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown Operator value: $name"))
+}
+
+class OperatorSerializer
+    extends CustomSerializer[Operator](_ =>
+      (
+        {
+          case JString(value) => Operator.withName(value)
+          case JNull          => null
+        },
+        { case value: Operator =>
+          JString(value.toString)
+        }
+      )
+    )

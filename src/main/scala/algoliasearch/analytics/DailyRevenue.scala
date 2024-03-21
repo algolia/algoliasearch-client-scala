@@ -24,12 +24,14 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** DailyRevenue
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param currencies
+  *   Revenue associated with this search, broken-down by currencies.
+  * @param date
+  *   Date in the format YYYY-MM-DD.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class DailyRevenue(
+    currencies: Map[String, CurrenciesValue],
+    date: String
 )

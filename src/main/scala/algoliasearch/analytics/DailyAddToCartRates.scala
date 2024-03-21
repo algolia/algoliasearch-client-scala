@@ -24,12 +24,21 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** DailyAddToCartRates
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param rate
+  *   Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the
+  *   number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param trackedSearchCount
+  *   Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.
+  * @param addToCartCount
+  *   Number of add-to-cart events from this search.
+  * @param date
+  *   Date in the format YYYY-MM-DD.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class DailyAddToCartRates(
+    rate: Option[Double] = scala.None,
+    trackedSearchCount: Int,
+    addToCartCount: Int,
+    date: String
 )

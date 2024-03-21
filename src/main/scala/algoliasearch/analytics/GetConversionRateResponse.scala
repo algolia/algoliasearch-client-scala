@@ -24,12 +24,21 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** GetConversionRateResponse
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param rate
+  *   Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number
+  *   of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param trackedSearchCount
+  *   Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.
+  * @param conversionCount
+  *   Number of conversions from this search.
+  * @param dates
+  *   Daily conversion rates.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class GetConversionRateResponse(
+    rate: Option[Double] = scala.None,
+    trackedSearchCount: Int,
+    conversionCount: Int,
+    dates: Seq[DailyConversionRates]
 )

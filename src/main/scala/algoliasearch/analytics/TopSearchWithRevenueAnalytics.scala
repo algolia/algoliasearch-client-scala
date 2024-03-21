@@ -24,7 +24,7 @@
   */
 package algoliasearch.analytics
 
-/** TopSearchWithAnalytics
+/** TopSearchWithRevenueAnalytics
   *
   * @param search
   *   Search query.
@@ -49,8 +49,20 @@ package algoliasearch.analytics
   *   Number of conversions from this search.
   * @param nbHits
   *   Number of results (hits).
+  * @param currencies
+  *   Revenue associated with this search, broken-down by currencies.
+  * @param addToCartRate
+  *   Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the
+  *   number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param addToCartCount
+  *   Number of add-to-cart events from this search.
+  * @param purchaseRate
+  *   Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of
+  *   tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param purchaseCount
+  *   Number of purchase events from this search.
   */
-case class TopSearchWithAnalytics(
+case class TopSearchWithRevenueAnalytics(
     search: String,
     count: Int,
     clickThroughRate: Option[Double] = scala.None,
@@ -60,5 +72,10 @@ case class TopSearchWithAnalytics(
     trackedSearchCount: Int,
     clickCount: Int,
     conversionCount: Int,
-    nbHits: Int
+    nbHits: Int,
+    currencies: Map[String, CurrenciesValue],
+    addToCartRate: Option[Double] = scala.None,
+    addToCartCount: Int,
+    purchaseRate: Option[Double] = scala.None,
+    purchaseCount: Int
 )

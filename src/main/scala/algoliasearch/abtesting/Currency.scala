@@ -7,7 +7,7 @@
   */
 package algoliasearch.abtesting
 
-/** CurrenciesValue
+/** Currency
   *
   * @param currency
   *   Currency code.
@@ -18,7 +18,7 @@ package algoliasearch.abtesting
   * @param standardDeviation
   *   Standard deviation for this currency.
   */
-case class CurrenciesValue(
+case class Currency(
     currency: Option[String] = scala.None,
     revenue: Option[Double] = scala.None,
     mean: Option[Double] = scala.None,

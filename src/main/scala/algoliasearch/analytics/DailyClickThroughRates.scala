@@ -24,12 +24,21 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** DailyClickThroughRates
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param rate
+  *   Click-through rate, calculated as number of tracked searches with at least one click event divided by the number
+  *   of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.
+  * @param clickCount
+  *   Number of clicks associated with this search.
+  * @param trackedSearchCount
+  *   Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.
+  * @param date
+  *   Date in the format YYYY-MM-DD.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class DailyClickThroughRates(
+    rate: Option[Double] = scala.None,
+    clickCount: Int,
+    trackedSearchCount: Int,
+    date: String
 )

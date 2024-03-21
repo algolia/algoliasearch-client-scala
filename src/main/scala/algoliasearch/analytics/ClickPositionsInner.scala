@@ -24,12 +24,15 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** Click position.
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param position
+  *   Range of positions in the search results, using the pattern `[start,end]`. For positions 11 and up, click events
+  *   are summed over the specified range. `-1` indicates the end of the list of search results.
+  * @param clickCount
+  *   Number of times this search has been clicked at that position.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class ClickPositionsInner(
+    position: Option[Seq[Int]] = scala.None,
+    clickCount: Option[Int] = scala.None
 )

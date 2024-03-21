@@ -24,12 +24,11 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** TopSearchesResponseWithRevenueAnalytics
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param searches
+  *   Most popular searches, including their click and revenue metrics.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
-)
+case class TopSearchesResponseWithRevenueAnalytics(
+    searches: Seq[TopSearchWithRevenueAnalytics]
+) extends GetTopSearchesResponseTrait

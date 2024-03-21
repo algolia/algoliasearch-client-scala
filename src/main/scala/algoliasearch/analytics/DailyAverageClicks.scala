@@ -24,12 +24,18 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** DailyAverageClicks
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param average
+  *   Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any
+  *   search requests with `clickAnalytics` set to true.
+  * @param clickCount
+  *   Number of clicks associated with this search.
+  * @param date
+  *   Date in the format YYYY-MM-DD.
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class DailyAverageClicks(
+    average: Option[Double] = scala.None,
+    clickCount: Int,
+    date: String
 )

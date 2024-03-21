@@ -24,12 +24,17 @@
   */
 package algoliasearch.analytics
 
-/** GetTopFiltersNoResultsResponse
+/** DailySearchesNoClicks
   *
-  * @param values
-  *   Filters for searches without any results. If null, the search term specified with the `search` parameter is not a
-  *   search without results, or the `search` parameter is absent from the request.
+  * @param search
+  *   Search query.
+  * @param count
+  *   Number of tracked searches.
+  * @param nbHits
+  *   Number of results (hits).
   */
-case class GetTopFiltersNoResultsResponse(
-    values: Option[Seq[GetTopFiltersNoResultsValues]] = scala.None
+case class DailySearchesNoClicks(
+    search: String,
+    count: Int,
+    nbHits: Int
 )
