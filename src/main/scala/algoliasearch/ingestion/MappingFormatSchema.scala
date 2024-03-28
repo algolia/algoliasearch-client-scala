@@ -24,8 +24,32 @@
   */
 package algoliasearch.ingestion
 
-/** SourceSearch
+import org.json4s._
+
+sealed trait MappingFormatSchema
+
+/** Mapping format schema.
   */
-case class SourceSearch(
-    sourceIDs: Seq[String]
-)
+object MappingFormatSchema {
+  case object MappingkitV1 extends MappingFormatSchema {
+    override def toString = "mappingkit/v1"
+  }
+  val values: Seq[MappingFormatSchema] = Seq(MappingkitV1)
+
+  def withName(name: String): MappingFormatSchema = MappingFormatSchema.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown MappingFormatSchema value: $name"))
+}
+
+class MappingFormatSchemaSerializer
+    extends CustomSerializer[MappingFormatSchema](_ =>
+      (
+        {
+          case JString(value) => MappingFormatSchema.withName(value)
+          case JNull          => null
+        },
+        { case value: MappingFormatSchema =>
+          JString(value.toString)
+        }
+      )
+    )
