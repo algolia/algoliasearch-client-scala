@@ -24,47 +24,14 @@
   */
 package algoliasearch.ingestion
 
-import org.json4s._
-
-sealed trait AuthenticationType
-
-/** Type of authentication. This determines the type of credentials required in the `input` object.
+/** Credentials for authenticating with the Algolia Insights API.
+  *
+  * @param appID
+  *   Algolia application ID.
+  * @param apiKey
+  *   Algolia API key with the ACL: `search`. This field is `null` in the API response.
   */
-object AuthenticationType {
-  case object GoogleServiceAccount extends AuthenticationType {
-    override def toString = "googleServiceAccount"
-  }
-  case object Basic extends AuthenticationType {
-    override def toString = "basic"
-  }
-  case object ApiKey extends AuthenticationType {
-    override def toString = "apiKey"
-  }
-  case object Oauth extends AuthenticationType {
-    override def toString = "oauth"
-  }
-  case object Algolia extends AuthenticationType {
-    override def toString = "algolia"
-  }
-  case object AlgoliaInsights extends AuthenticationType {
-    override def toString = "algoliaInsights"
-  }
-  val values: Seq[AuthenticationType] = Seq(GoogleServiceAccount, Basic, ApiKey, Oauth, Algolia, AlgoliaInsights)
-
-  def withName(name: String): AuthenticationType = AuthenticationType.values
-    .find(_.toString == name)
-    .getOrElse(throw new MappingException(s"Unknown AuthenticationType value: $name"))
-}
-
-class AuthenticationTypeSerializer
-    extends CustomSerializer[AuthenticationType](_ =>
-      (
-        {
-          case JString(value) => AuthenticationType.withName(value)
-          case JNull          => null
-        },
-        { case value: AuthenticationType =>
-          JString(value.toString)
-        }
-      )
-    )
+case class AuthAlgoliaInsightsPartial(
+    appID: Option[String] = scala.None,
+    apiKey: Option[String] = scala.None
+) extends AuthInputPartialTrait
