@@ -23,14 +23,41 @@
   */
 package algoliasearch.abtesting
 
-/** Outliers removed from the A/B test as a result of configuration settings.
-  *
-  * @param usersCount
-  *   Number of users removed from the A/B test.
-  * @param trackedSearchesCount
-  *   Number of tracked searches removed from the A/B test.
+import org.json4s._
+
+sealed trait Effect
+
+/** Metric for which you want to detect the smallest relative difference.
   */
-case class FilterEffectsOutliers(
-    usersCount: Option[Int] = scala.None,
-    trackedSearchesCount: Option[Int] = scala.None
-)
+object Effect {
+  case object AddToCartRate extends Effect {
+    override def toString = "addToCartRate"
+  }
+  case object ClickThroughRate extends Effect {
+    override def toString = "clickThroughRate"
+  }
+  case object ConversionRate extends Effect {
+    override def toString = "conversionRate"
+  }
+  case object PurchaseRate extends Effect {
+    override def toString = "purchaseRate"
+  }
+  val values: Seq[Effect] = Seq(AddToCartRate, ClickThroughRate, ConversionRate, PurchaseRate)
+
+  def withName(name: String): Effect = Effect.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown Effect value: $name"))
+}
+
+class EffectSerializer
+    extends CustomSerializer[Effect](_ =>
+      (
+        {
+          case JString(value) => Effect.withName(value)
+          case JNull          => null
+        },
+        { case value: Effect =>
+          JString(value.toString)
+        }
+      )
+    )

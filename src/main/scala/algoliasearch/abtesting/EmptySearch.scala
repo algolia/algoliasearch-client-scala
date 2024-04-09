@@ -23,14 +23,11 @@
   */
 package algoliasearch.abtesting
 
-/** Outliers removed from the A/B test as a result of configuration settings.
+/** Configuration for handling empty searches.
   *
-  * @param usersCount
-  *   Number of users removed from the A/B test.
-  * @param trackedSearchesCount
-  *   Number of tracked searches removed from the A/B test.
+  * @param exclude
+  *   Whether to exclude empty searches when calculating A/B test results.
   */
-case class FilterEffectsOutliers(
-    usersCount: Option[Int] = scala.None,
-    trackedSearchesCount: Option[Int] = scala.None
+case class EmptySearch(
+    exclude: Option[Boolean] = scala.None
 )

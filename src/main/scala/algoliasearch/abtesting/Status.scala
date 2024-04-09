@@ -23,14 +23,43 @@
   */
 package algoliasearch.abtesting
 
-/** Outliers removed from the A/B test as a result of configuration settings.
-  *
-  * @param usersCount
-  *   Number of users removed from the A/B test.
-  * @param trackedSearchesCount
-  *   Number of tracked searches removed from the A/B test.
+import org.json4s._
+
+sealed trait Status
+
+/** A/B test status. - `active`. The A/B test is live and search traffic is split between the two variants. - `stopped`.
+  * You stopped the A/B test. The A/B test data is still available for analysis. - `expired`. The A/B test was
+  * automatically stopped after reaching its end date. - `failed`. Creating the A/B test failed.
   */
-case class FilterEffectsOutliers(
-    usersCount: Option[Int] = scala.None,
-    trackedSearchesCount: Option[Int] = scala.None
-)
+object Status {
+  case object Active extends Status {
+    override def toString = "active"
+  }
+  case object Stopped extends Status {
+    override def toString = "stopped"
+  }
+  case object Expired extends Status {
+    override def toString = "expired"
+  }
+  case object Failed extends Status {
+    override def toString = "failed"
+  }
+  val values: Seq[Status] = Seq(Active, Stopped, Expired, Failed)
+
+  def withName(name: String): Status = Status.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown Status value: $name"))
+}
+
+class StatusSerializer
+    extends CustomSerializer[Status](_ =>
+      (
+        {
+          case JString(value) => Status.withName(value)
+          case JNull          => null
+        },
+        { case value: Status =>
+          JString(value.toString)
+        }
+      )
+    )

@@ -23,14 +23,15 @@
   */
 package algoliasearch.abtesting
 
-/** Outliers removed from the A/B test as a result of configuration settings.
+import algoliasearch.abtesting.Effect._
+
+/** Configuration for the smallest difference between test variants you want to detect.
   *
-  * @param usersCount
-  *   Number of users removed from the A/B test.
-  * @param trackedSearchesCount
-  *   Number of tracked searches removed from the A/B test.
+  * @param size
+  *   Smallest difference in an observable metric between variants. For example, to detect a 10% difference between
+  *   variants, set this value to 0.1.
   */
-case class FilterEffectsOutliers(
-    usersCount: Option[Int] = scala.None,
-    trackedSearchesCount: Option[Int] = scala.None
+case class MinimumDetectableEffect(
+    size: Option[Double] = scala.None,
+    effect: Option[Effect] = scala.None
 )
