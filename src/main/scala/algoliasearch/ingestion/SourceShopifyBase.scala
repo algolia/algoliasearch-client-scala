@@ -23,35 +23,11 @@
   */
 package algoliasearch.ingestion
 
-import org.json4s._
-
-/** Configuration of the task, depending on its type.
+/** SourceShopifyBase
+  *
+  * @param shopURL
+  *   URL of the Shopify store.
   */
-sealed trait TaskInput
-
-trait TaskInputTrait extends TaskInput
-
-object TaskInput {}
-
-object TaskInputSerializer extends Serializer[TaskInput] {
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), TaskInput] = {
-
-    case (TypeInfo(clazz, _), json) if clazz == classOf[TaskInput] =>
-      json match {
-        case value: JObject => Extraction.extract[OnDemandDateUtilsInput](value)
-        case value: JObject => Extraction.extract[ScheduleDateUtilsInput](value)
-        case value: JObject => Extraction.extract[StreamingUtilsInput](value)
-        case value: JObject => Extraction.extract[ShopifyInput](value)
-        case _              => throw new MappingException("Can't convert " + json + " to TaskInput")
-      }
-  }
-
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: TaskInput =>
-    value match {
-      case value: OnDemandDateUtilsInput => Extraction.decompose(value)(format - this)
-      case value: ScheduleDateUtilsInput => Extraction.decompose(value)(format - this)
-      case value: StreamingUtilsInput    => Extraction.decompose(value)(format - this)
-      case value: ShopifyInput           => Extraction.decompose(value)(format - this)
-    }
-  }
-}
+case class SourceShopifyBase(
+    shopURL: String
+)
