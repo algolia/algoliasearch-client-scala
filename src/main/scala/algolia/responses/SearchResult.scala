@@ -25,7 +25,7 @@
 
 package algolia.responses
 
-import algolia.objects.{AbstractSynonym, RenderingContent, Rule}
+import algolia.objects.{AbstractSynonym, FacetStats, RenderingContent, Rule}
 import org.json4s._
 
 private[algolia] trait SearchHits[A] {
@@ -50,7 +50,7 @@ case class SearchResult(
     message: Option[String],
     aroundLatLng: Option[String],
     automaticRadius: Option[String],
-    facets_stats: Option[Map[String, Float]],
+    facets_stats: Option[Map[String, FacetStats]],
     // For getRankingInfo
     serverUsed: Option[String],
     parsedQuery: Option[String],
