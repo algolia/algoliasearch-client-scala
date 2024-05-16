@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [1.45.2](https://github.com/algolia/algoliasearch-client-scala/compare/1.45.1...1.45.2) (2024-05-16)
+
+### Fix
+
+- **search**: add `facets_stats` object
+
+
 ## [1.45.1](https://github.com/algolia/algoliasearch-client-scala/compare/1.45.0...1.45.1) (2022-12-15)
 
 ### Fix
