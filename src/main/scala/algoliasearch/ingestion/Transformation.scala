@@ -23,57 +23,26 @@
   */
 package algoliasearch.ingestion
 
-import org.json4s._
-
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ActionTypeSerializer() :+
-    new AuthenticationSortKeysSerializer() :+
-    new AuthenticationTypeSerializer() :+
-    new BigQueryDataTypeSerializer() :+
-    new DestinationSortKeysSerializer() :+
-    new DestinationTypeSerializer() :+
-    new DockerImageTypeSerializer() :+
-    new DockerRegistrySerializer() :+
-    new EventSortKeysSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new MappingFormatSchemaSerializer() :+
-    new MappingTypeCSVSerializer() :+
-    new MethodTypeSerializer() :+
-    new OnDemandTriggerTypeSerializer() :+
-    new OrderKeysSerializer() :+
-    new PlatformSerializer() :+
-    new PlatformNoneSerializer() :+
-    new RecordTypeSerializer() :+
-    new RunOutcomeSerializer() :+
-    new RunReasonCodeSerializer() :+
-    new RunSortKeysSerializer() :+
-    new RunStatusSerializer() :+
-    new RunTypeSerializer() :+
-    new ScheduleTriggerTypeSerializer() :+
-    new SortKeysSerializer() :+
-    new SourceSortKeysSerializer() :+
-    new SourceTypeSerializer() :+
-    new StreamingTriggerTypeSerializer() :+
-    new SubscriptionTriggerTypeSerializer() :+
-    new TaskSortKeysSerializer() :+
-    new TriggerTypeSerializer()
-
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AuthInputSerializer :+
-    AuthInputPartialSerializer :+
-    DestinationInputSerializer :+
-    PlatformWithNoneSerializer :+
-    SourceInputSerializer :+
-    SourceUpdateInputSerializer :+
-    TaskCreateTriggerSerializer :+
-    TaskInputSerializer :+
-    TriggerSerializer
-
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
-}
+/** Transformation
+  *
+  * @param transformationID
+  *   Universally unique identifier (UUID) of a transformation.
+  * @param code
+  *   The source code of the transformation.
+  * @param name
+  *   The uniquely identified name of your transformation.
+  * @param description
+  *   A descriptive name for your transformation of what it does.
+  * @param createdAt
+  *   Date of creation in RFC 3339 format.
+  * @param updatedAt
+  *   Date of last update in RFC 3339 format.
+  */
+case class Transformation(
+    transformationID: String,
+    code: String,
+    name: String,
+    description: String,
+    createdAt: String,
+    updatedAt: Option[String] = scala.None
+)

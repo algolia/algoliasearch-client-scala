@@ -25,55 +25,39 @@ package algoliasearch.ingestion
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ActionTypeSerializer() :+
-    new AuthenticationSortKeysSerializer() :+
-    new AuthenticationTypeSerializer() :+
-    new BigQueryDataTypeSerializer() :+
-    new DestinationSortKeysSerializer() :+
-    new DestinationTypeSerializer() :+
-    new DockerImageTypeSerializer() :+
-    new DockerRegistrySerializer() :+
-    new EventSortKeysSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new MappingFormatSchemaSerializer() :+
-    new MappingTypeCSVSerializer() :+
-    new MethodTypeSerializer() :+
-    new OnDemandTriggerTypeSerializer() :+
-    new OrderKeysSerializer() :+
-    new PlatformSerializer() :+
-    new PlatformNoneSerializer() :+
-    new RecordTypeSerializer() :+
-    new RunOutcomeSerializer() :+
-    new RunReasonCodeSerializer() :+
-    new RunSortKeysSerializer() :+
-    new RunStatusSerializer() :+
-    new RunTypeSerializer() :+
-    new ScheduleTriggerTypeSerializer() :+
-    new SortKeysSerializer() :+
-    new SourceSortKeysSerializer() :+
-    new SourceTypeSerializer() :+
-    new StreamingTriggerTypeSerializer() :+
-    new SubscriptionTriggerTypeSerializer() :+
-    new TaskSortKeysSerializer() :+
-    new TriggerTypeSerializer()
+sealed trait SortKeys
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AuthInputSerializer :+
-    AuthInputPartialSerializer :+
-    DestinationInputSerializer :+
-    PlatformWithNoneSerializer :+
-    SourceInputSerializer :+
-    SourceUpdateInputSerializer :+
-    TaskCreateTriggerSerializer :+
-    TaskInputSerializer :+
-    TriggerSerializer
+/** Property by which to sort the list.
+  */
+object SortKeys {
+  case object Name extends SortKeys {
+    override def toString = "name"
+  }
+  case object `Type` extends SortKeys {
+    override def toString = "type"
+  }
+  case object UpdatedAt extends SortKeys {
+    override def toString = "updatedAt"
+  }
+  case object CreatedAt extends SortKeys {
+    override def toString = "createdAt"
+  }
+  val values: Seq[SortKeys] = Seq(Name, `Type`, UpdatedAt, CreatedAt)
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): SortKeys = SortKeys.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown SortKeys value: $name"))
 }
+
+class SortKeysSerializer
+    extends CustomSerializer[SortKeys](_ =>
+      (
+        {
+          case JString(value) => SortKeys.withName(value)
+          case JNull          => null
+        },
+        { case value: SortKeys =>
+          JString(value.toString)
+        }
+      )
+    )

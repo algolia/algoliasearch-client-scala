@@ -23,57 +23,8 @@
   */
 package algoliasearch.ingestion
 
-import org.json4s._
-
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ActionTypeSerializer() :+
-    new AuthenticationSortKeysSerializer() :+
-    new AuthenticationTypeSerializer() :+
-    new BigQueryDataTypeSerializer() :+
-    new DestinationSortKeysSerializer() :+
-    new DestinationTypeSerializer() :+
-    new DockerImageTypeSerializer() :+
-    new DockerRegistrySerializer() :+
-    new EventSortKeysSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new MappingFormatSchemaSerializer() :+
-    new MappingTypeCSVSerializer() :+
-    new MethodTypeSerializer() :+
-    new OnDemandTriggerTypeSerializer() :+
-    new OrderKeysSerializer() :+
-    new PlatformSerializer() :+
-    new PlatformNoneSerializer() :+
-    new RecordTypeSerializer() :+
-    new RunOutcomeSerializer() :+
-    new RunReasonCodeSerializer() :+
-    new RunSortKeysSerializer() :+
-    new RunStatusSerializer() :+
-    new RunTypeSerializer() :+
-    new ScheduleTriggerTypeSerializer() :+
-    new SortKeysSerializer() :+
-    new SourceSortKeysSerializer() :+
-    new SourceTypeSerializer() :+
-    new StreamingTriggerTypeSerializer() :+
-    new SubscriptionTriggerTypeSerializer() :+
-    new TaskSortKeysSerializer() :+
-    new TriggerTypeSerializer()
-
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AuthInputSerializer :+
-    AuthInputPartialSerializer :+
-    DestinationInputSerializer :+
-    PlatformWithNoneSerializer :+
-    SourceInputSerializer :+
-    SourceUpdateInputSerializer :+
-    TaskCreateTriggerSerializer :+
-    TaskInputSerializer :+
-    TriggerSerializer
-
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
-}
+/** TransformationSearch
+  */
+case class TransformationSearch(
+    transformationsIDs: Seq[String]
+)
