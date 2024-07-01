@@ -29,10 +29,8 @@
   */
 package algoliasearch.recommend
 
-/** [Redirect results to a
-  * URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/), this
-  * this parameter is for internal use only.
+/** The redirect rule container.
   */
-case class Redirect(
-    index: Option[Seq[RedirectRuleIndexMetadata]] = scala.None
+case class RedirectURL(
+    url: Option[String] = scala.None
 )

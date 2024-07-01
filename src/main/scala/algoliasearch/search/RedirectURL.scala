@@ -33,10 +33,8 @@
   */
 package algoliasearch.search
 
-/** Extra data that can be used in the search UI. You can use this to control aspects of your search UI, such as, the
-  * order of facet names and values without changing your frontend code.
+/** The redirect rule container.
   */
-case class RenderingContent(
-    facetOrdering: Option[FacetOrdering] = scala.None,
-    redirect: Option[RedirectURL] = scala.None
+case class RedirectURL(
+    url: Option[String] = scala.None
 )
