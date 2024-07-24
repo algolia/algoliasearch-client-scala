@@ -23,30 +23,9 @@
   */
 package algoliasearch.ingestion
 
-import algoliasearch.ingestion.ActionType._
-
-/** API request body for creating a task.
-  *
-  * @param sourceID
-  *   Universally uniqud identifier (UUID) of a source.
-  * @param destinationID
-  *   Universally unique identifier (UUID) of a destination resource.
-  * @param cron
-  *   Cron expression for the task's schedule.
-  * @param enabled
-  *   Whether the task is enabled.
-  * @param failureThreshold
-  *   Maximum accepted percentage of failures for a task run to finish successfully.
-  * @param cursor
-  *   Date of the last cursor in RFC 3339 format.
+/** Configured tasks and pagination information.
   */
-case class TaskCreate(
-    sourceID: String,
-    destinationID: String,
-    action: ActionType,
-    cron: Option[String] = scala.None,
-    enabled: Option[Boolean] = scala.None,
-    failureThreshold: Option[Int] = scala.None,
-    input: Option[TaskInput] = scala.None,
-    cursor: Option[String] = scala.None
+case class ListTasksResponseV1(
+    tasks: Seq[TaskV1],
+    pagination: Pagination
 )

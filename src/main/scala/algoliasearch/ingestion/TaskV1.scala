@@ -25,28 +25,35 @@ package algoliasearch.ingestion
 
 import algoliasearch.ingestion.ActionType._
 
-/** API request body for creating a task.
+/** The V1 task object, please use methods and types that don't contain the V1 suffix.
   *
+  * @param taskID
+  *   Universally unique identifier (UUID) of a task.
   * @param sourceID
   *   Universally uniqud identifier (UUID) of a source.
   * @param destinationID
   *   Universally unique identifier (UUID) of a destination resource.
-  * @param cron
-  *   Cron expression for the task's schedule.
   * @param enabled
   *   Whether the task is enabled.
   * @param failureThreshold
   *   Maximum accepted percentage of failures for a task run to finish successfully.
   * @param cursor
   *   Date of the last cursor in RFC 3339 format.
+  * @param createdAt
+  *   Date of creation in RFC 3339 format.
+  * @param updatedAt
+  *   Date of last update in RFC 3339 format.
   */
-case class TaskCreate(
+case class TaskV1(
+    taskID: String,
     sourceID: String,
     destinationID: String,
-    action: ActionType,
-    cron: Option[String] = scala.None,
-    enabled: Option[Boolean] = scala.None,
-    failureThreshold: Option[Int] = scala.None,
+    trigger: Trigger,
     input: Option[TaskInput] = scala.None,
-    cursor: Option[String] = scala.None
+    enabled: Boolean,
+    failureThreshold: Option[Int] = scala.None,
+    action: ActionType,
+    cursor: Option[String] = scala.None,
+    createdAt: String,
+    updatedAt: Option[String] = scala.None
 )
