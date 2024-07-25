@@ -25,56 +25,49 @@ package algoliasearch.ingestion
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ActionSerializer() :+
-    new ActionTypeSerializer() :+
-    new AuthenticationSortKeysSerializer() :+
-    new AuthenticationTypeSerializer() :+
-    new BigQueryDataTypeSerializer() :+
-    new DestinationSortKeysSerializer() :+
-    new DestinationTypeSerializer() :+
-    new DockerImageTypeSerializer() :+
-    new DockerRegistrySerializer() :+
-    new EventSortKeysSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new MappingFormatSchemaSerializer() :+
-    new MappingTypeCSVSerializer() :+
-    new MethodTypeSerializer() :+
-    new OnDemandTriggerTypeSerializer() :+
-    new OrderKeysSerializer() :+
-    new PlatformSerializer() :+
-    new PlatformNoneSerializer() :+
-    new RecordTypeSerializer() :+
-    new RunOutcomeSerializer() :+
-    new RunReasonCodeSerializer() :+
-    new RunSortKeysSerializer() :+
-    new RunStatusSerializer() :+
-    new RunTypeSerializer() :+
-    new ScheduleTriggerTypeSerializer() :+
-    new SortKeysSerializer() :+
-    new SourceSortKeysSerializer() :+
-    new SourceTypeSerializer() :+
-    new StreamingTriggerTypeSerializer() :+
-    new SubscriptionTriggerTypeSerializer() :+
-    new TaskSortKeysSerializer() :+
-    new TriggerTypeSerializer()
+sealed trait Action
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AuthInputSerializer :+
-    AuthInputPartialSerializer :+
-    DestinationInputSerializer :+
-    PlatformWithNoneSerializer :+
-    SourceInputSerializer :+
-    SourceUpdateInputSerializer :+
-    TaskCreateTriggerSerializer :+
-    TaskInputSerializer :+
-    TriggerSerializer
+/** Type of indexing operation.
+  */
+object Action {
+  case object AddObject extends Action {
+    override def toString = "addObject"
+  }
+  case object UpdateObject extends Action {
+    override def toString = "updateObject"
+  }
+  case object PartialUpdateObject extends Action {
+    override def toString = "partialUpdateObject"
+  }
+  case object PartialUpdateObjectNoCreate extends Action {
+    override def toString = "partialUpdateObjectNoCreate"
+  }
+  case object DeleteObject extends Action {
+    override def toString = "deleteObject"
+  }
+  case object Delete extends Action {
+    override def toString = "delete"
+  }
+  case object Clear extends Action {
+    override def toString = "clear"
+  }
+  val values: Seq[Action] =
+    Seq(AddObject, UpdateObject, PartialUpdateObject, PartialUpdateObjectNoCreate, DeleteObject, Delete, Clear)
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): Action = Action.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown Action value: $name"))
 }
+
+class ActionSerializer
+    extends CustomSerializer[Action](_ =>
+      (
+        {
+          case JString(value) => Action.withName(value)
+          case JNull          => null
+        },
+        { case value: Action =>
+          JString(value.toString)
+        }
+      )
+    )
