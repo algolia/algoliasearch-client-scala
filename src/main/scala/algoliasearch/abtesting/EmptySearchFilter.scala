@@ -30,7 +30,7 @@ package algoliasearch.abtesting
   * @param trackedSearchesCount
   *   Number of tracked searches removed from the A/B test.
   */
-case class FilterEffectsEmptySearch(
+case class EmptySearchFilter(
     usersCount: Option[Int] = scala.None,
     trackedSearchesCount: Option[Int] = scala.None
 )

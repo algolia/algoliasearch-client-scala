@@ -31,7 +31,7 @@ package algoliasearch.analytics
   * @param clickCount
   *   Number of times this search has been clicked at that position.
   */
-case class ClickPositionsInner(
+case class ClickPosition(
     position: Option[Seq[Int]] = scala.None,
     clickCount: Option[Int] = scala.None
 )

@@ -15,8 +15,10 @@
   */
 package algoliasearch.usage
 
-/** GetUsage400Response
+/** InvalidRequestError
   */
-case class GetUsage400Response(
-    error: GetUsage400ResponseError
+case class InvalidRequestError(
+    code: Option[String] = scala.None,
+    message: Option[String] = scala.None,
+    errors: Option[Seq[ErrorItem]] = scala.None
 )

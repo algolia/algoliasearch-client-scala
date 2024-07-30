@@ -15,8 +15,10 @@
   */
 package algoliasearch.usage
 
-/** GetUsage200Response
+/** ForbiddenError
   */
-case class GetUsage200Response(
-    statistics: Option[Seq[GetUsage200ResponseStatisticsInner]] = scala.None
+case class ForbiddenError(
+    code: Option[String] = scala.None,
+    message: Option[String] = scala.None,
+    errors: Option[Seq[ErrorItem]] = scala.None
 )

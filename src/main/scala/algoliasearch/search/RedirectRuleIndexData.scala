@@ -35,6 +35,6 @@ package algoliasearch.search
 
 /** Redirect rule data.
   */
-case class RedirectRuleIndexMetadataData(
+case class RedirectRuleIndexData(
     ruleObjectID: String
 )

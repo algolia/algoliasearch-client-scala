@@ -18,8 +18,8 @@
   */
 package algoliasearch.monitoring
 
-/** LatencyResponseMetrics
+/** Unauthorized
   */
-case class LatencyResponseMetrics(
-    latency: Option[Map[String, Seq[TimeInner]]] = scala.None
+case class Unauthorized(
+    reason: Option[String] = scala.None
 )

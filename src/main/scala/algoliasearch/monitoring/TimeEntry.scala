@@ -18,8 +18,14 @@
   */
 package algoliasearch.monitoring
 
-/** InfrastructureResponse
+/** TimeEntry
+  *
+  * @param t
+  *   Timestamp, measured in milliseconds since the Unix epoch.
+  * @param v
+  *   Time in ms.
   */
-case class InfrastructureResponse(
-    metrics: Option[Metrics] = scala.None
+case class TimeEntry(
+    t: Option[Long] = scala.None,
+    v: Option[Int] = scala.None
 )

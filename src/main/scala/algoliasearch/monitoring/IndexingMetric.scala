@@ -18,8 +18,8 @@
   */
 package algoliasearch.monitoring
 
-/** InfrastructureResponse
+/** IndexingMetric
   */
-case class InfrastructureResponse(
-    metrics: Option[Metrics] = scala.None
+case class IndexingMetric(
+    indexing: Option[Map[String, Seq[TimeEntry]]] = scala.None
 )

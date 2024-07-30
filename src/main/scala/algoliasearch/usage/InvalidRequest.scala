@@ -15,12 +15,8 @@
   */
 package algoliasearch.usage
 
-/** GetUsage200ResponseStatisticsInner
-  *
-  * @param t
-  *   Timestamp, measured in milliseconds since the Unix epoch.
+/** InvalidRequest
   */
-case class GetUsage200ResponseStatisticsInner(
-    t: Option[Int] = scala.None,
-    v: Option[StatisticValue] = scala.None
+case class InvalidRequest(
+    error: InvalidRequestError
 )

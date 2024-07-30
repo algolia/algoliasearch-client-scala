@@ -18,14 +18,8 @@
   */
 package algoliasearch.monitoring
 
-/** TimeInner
-  *
-  * @param t
-  *   Timestamp, measured in milliseconds since the Unix epoch.
-  * @param v
-  *   Time in ms.
+/** Forbidden
   */
-case class TimeInner(
-    t: Option[Long] = scala.None,
-    v: Option[Int] = scala.None
+case class Forbidden(
+    reason: Option[String] = scala.None
 )

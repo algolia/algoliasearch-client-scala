@@ -29,14 +29,8 @@
   */
 package algoliasearch.recommend
 
-/** Range object with lower and upper values in meters to define custom ranges.
-  *
-  * @param from
-  *   Lower boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.
-  * @param value
-  *   Upper boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.
+/** Redirect rule data.
   */
-case class AroundPrecisionFromValueInner(
-    from: Option[Int] = scala.None,
-    value: Option[Int] = scala.None
+case class RedirectRuleIndexData(
+    ruleObjectID: String
 )

@@ -40,7 +40,7 @@ package algoliasearch.search
   * @param value
   *   Upper boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.
   */
-case class AroundPrecisionFromValueInner(
+case class Range(
     from: Option[Int] = scala.None,
     value: Option[Int] = scala.None
 )

@@ -18,12 +18,8 @@
   */
 package algoliasearch.monitoring
 
-/** IncidentsInner
-  *
-  * @param t
-  *   Timestamp, measured in milliseconds since the Unix epoch.
+/** LatencyMetric
   */
-case class IncidentsInner(
-    t: Option[Long] = scala.None,
-    v: Option[Incident] = scala.None
+case class LatencyMetric(
+    latency: Option[Map[String, Seq[TimeEntry]]] = scala.None
 )

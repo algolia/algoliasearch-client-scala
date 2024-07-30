@@ -30,7 +30,7 @@ package algoliasearch.ingestion
   * @param message
   *   A descriptive message explaining the failure.
   */
-case class TransformationTryResponseError(
+case class TransformationError(
     code: Option[Int] = scala.None,
     message: Option[String] = scala.None
 )

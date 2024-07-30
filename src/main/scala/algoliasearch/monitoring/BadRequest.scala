@@ -18,24 +18,8 @@
   */
 package algoliasearch.monitoring
 
-/** InfrastructureResponseMetrics
-  *
-  * @param cpuUsage
-  *   CPU idleness in %.
-  * @param ramIndexingUsage
-  *   RAM used for indexing in MB.
-  * @param ramSearchUsage
-  *   RAM used for search in MB.
-  * @param ssdUsage
-  *   Solid-state disk (SSD) usage expressed as % of RAM. 0% means no SSD usage. A value of 50% indicates 32&nbsp;GB SSD
-  *   usage for a machine with 64&nbsp;RAM.
-  * @param avgBuildTime
-  *   Average build time of the indices in seconds.
+/** BadRequest
   */
-case class InfrastructureResponseMetrics(
-    cpuUsage: Option[Map[String, Seq[ProbesMetric]]] = scala.None,
-    ramIndexingUsage: Option[Map[String, Seq[ProbesMetric]]] = scala.None,
-    ramSearchUsage: Option[Map[String, Seq[ProbesMetric]]] = scala.None,
-    ssdUsage: Option[Map[String, Seq[ProbesMetric]]] = scala.None,
-    avgBuildTime: Option[Map[String, Seq[ProbesMetric]]] = scala.None
+case class BadRequest(
+    reason: Option[String] = scala.None
 )

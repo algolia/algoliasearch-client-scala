@@ -29,8 +29,11 @@
   */
 package algoliasearch.recommend
 
-/** Redirect rule data.
+/** Rule metadata.
+  *
+  * @param lastUpdate
+  *   Date and time when the object was updated, in RFC 3339 format.
   */
-case class RedirectRuleIndexMetadataData(
-    ruleObjectID: String
+case class RuleMetadata(
+    lastUpdate: Option[String] = scala.None
 )

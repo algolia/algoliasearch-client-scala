@@ -18,8 +18,12 @@
   */
 package algoliasearch.monitoring
 
-/** GetServers403Response
+/** IncidentEntry
+  *
+  * @param t
+  *   Timestamp, measured in milliseconds since the Unix epoch.
   */
-case class GetServers403Response(
-    reason: Option[String] = scala.None
+case class IncidentEntry(
+    t: Option[Long] = scala.None,
+    v: Option[Incident] = scala.None
 )

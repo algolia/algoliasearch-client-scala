@@ -15,10 +15,11 @@
   */
 package algoliasearch.usage
 
-/** GetUsage400ResponseError
+/** ErrorItem
   */
-case class GetUsage400ResponseError(
+case class ErrorItem(
     code: Option[String] = scala.None,
-    message: Option[String] = scala.None,
-    errors: Option[Seq[GetUsage400ResponseErrorErrorsInner]] = scala.None
+    message: String,
+    line: Option[Int] = scala.None,
+    position: Option[Int] = scala.None
 )

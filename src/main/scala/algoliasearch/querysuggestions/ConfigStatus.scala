@@ -22,21 +22,23 @@
   */
 package algoliasearch.querysuggestions
 
-import algoliasearch.querysuggestions.LogLevel._
-
-/** GetLogFile200Response
+/** ConfigStatus
   *
-  * @param timestamp
-  *   Date and time of the log entry, in RFC 3339 format.
-  * @param message
-  *   Details about this log entry.
-  * @param contextLevel
-  *   Level indicating the position of a suggestion in a hierarchy of records. For example, a `contextLevel` of 1
-  *   indicates that this suggestion belongs to a previous suggestion with `contextLevel` 0.
+  * @param indexName
+  *   Name of the Query Suggestions index (case-sensitive).
+  * @param isRunning
+  *   Whether the creation or update of the Query Suggestions index is in progress.
+  * @param lastBuiltAt
+  *   Date and time when the Query Suggestions index was last built, in RFC 3339 format.
+  * @param lastSuccessfulBuiltAt
+  *   Date and time when the Query Suggestions index was last updated successfully.
+  * @param lastSuccessfulBuildDuration
+  *   Duration of the last successful build in seconds.
   */
-case class GetLogFile200Response(
-    timestamp: Option[String] = scala.None,
-    level: Option[LogLevel] = scala.None,
-    message: Option[String] = scala.None,
-    contextLevel: Option[Int] = scala.None
+case class ConfigStatus(
+    indexName: Option[String] = scala.None,
+    isRunning: Option[Boolean] = scala.None,
+    lastBuiltAt: Option[String] = scala.None,
+    lastSuccessfulBuiltAt: Option[String] = scala.None,
+    lastSuccessfulBuildDuration: Option[String] = scala.None
 )

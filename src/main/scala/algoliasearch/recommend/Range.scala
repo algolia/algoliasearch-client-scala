@@ -29,11 +29,14 @@
   */
 package algoliasearch.recommend
 
-/** Rule metadata.
+/** Range object with lower and upper values in meters to define custom ranges.
   *
-  * @param lastUpdate
-  *   Date and time when the object was updated, in RFC 3339 format.
+  * @param from
+  *   Lower boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.
+  * @param value
+  *   Upper boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.
   */
-case class RecommendRuleMetadata(
-    lastUpdate: Option[String] = scala.None
+case class Range(
+    from: Option[Int] = scala.None,
+    value: Option[Int] = scala.None
 )

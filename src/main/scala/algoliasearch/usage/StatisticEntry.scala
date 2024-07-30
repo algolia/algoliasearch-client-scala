@@ -15,11 +15,12 @@
   */
 package algoliasearch.usage
 
-/** GetUsage400ResponseErrorErrorsInner
+/** StatisticEntry
+  *
+  * @param t
+  *   Timestamp, measured in milliseconds since the Unix epoch.
   */
-case class GetUsage400ResponseErrorErrorsInner(
-    code: Option[String] = scala.None,
-    message: String,
-    line: Option[Int] = scala.None,
-    position: Option[Int] = scala.None
+case class StatisticEntry(
+    t: Option[Int] = scala.None,
+    v: Option[StatisticValue] = scala.None
 )
