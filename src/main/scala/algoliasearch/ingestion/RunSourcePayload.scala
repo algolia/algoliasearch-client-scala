@@ -23,59 +23,20 @@
   */
 package algoliasearch.ingestion
 
-import org.json4s._
+import algoliasearch.ingestion.EntityType._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ActionSerializer() :+
-    new ActionTypeSerializer() :+
-    new AuthenticationSortKeysSerializer() :+
-    new AuthenticationTypeSerializer() :+
-    new BigQueryDataTypeSerializer() :+
-    new DestinationSortKeysSerializer() :+
-    new DestinationTypeSerializer() :+
-    new DockerImageTypeSerializer() :+
-    new DockerRegistrySerializer() :+
-    new EntityTypeSerializer() :+
-    new EventSortKeysSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new MappingFormatSchemaSerializer() :+
-    new MappingTypeCSVSerializer() :+
-    new MethodTypeSerializer() :+
-    new OnDemandTriggerTypeSerializer() :+
-    new OrderKeysSerializer() :+
-    new PlatformSerializer() :+
-    new PlatformNoneSerializer() :+
-    new RecordTypeSerializer() :+
-    new RunOutcomeSerializer() :+
-    new RunReasonCodeSerializer() :+
-    new RunSortKeysSerializer() :+
-    new RunStatusSerializer() :+
-    new RunTypeSerializer() :+
-    new ScheduleTriggerTypeSerializer() :+
-    new SortKeysSerializer() :+
-    new SourceSortKeysSerializer() :+
-    new SourceTypeSerializer() :+
-    new StreamingTriggerTypeSerializer() :+
-    new SubscriptionTriggerTypeSerializer() :+
-    new TaskSortKeysSerializer() :+
-    new TriggerTypeSerializer()
-
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AuthInputSerializer :+
-    AuthInputPartialSerializer :+
-    DestinationInputSerializer :+
-    PlatformWithNoneSerializer :+
-    SourceInputSerializer :+
-    SourceUpdateInputSerializer :+
-    TaskCreateTriggerSerializer :+
-    TaskInputSerializer :+
-    TriggerSerializer
-
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
-}
+/** RunSourcePayload
+  *
+  * @param indexToInclude
+  *   List of index names to include in reidexing/update.
+  * @param indexToExclude
+  *   List of index names to exclude in reidexing/update.
+  * @param entityIDs
+  *   List of entityID to update.
+  */
+case class RunSourcePayload(
+    indexToInclude: Option[Seq[String]] = scala.None,
+    indexToExclude: Option[Seq[String]] = scala.None,
+    entityIDs: Option[Seq[String]] = scala.None,
+    entityType: Option[EntityType] = scala.None
+)

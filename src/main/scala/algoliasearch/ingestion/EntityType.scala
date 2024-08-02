@@ -25,57 +25,33 @@ package algoliasearch.ingestion
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ActionSerializer() :+
-    new ActionTypeSerializer() :+
-    new AuthenticationSortKeysSerializer() :+
-    new AuthenticationTypeSerializer() :+
-    new BigQueryDataTypeSerializer() :+
-    new DestinationSortKeysSerializer() :+
-    new DestinationTypeSerializer() :+
-    new DockerImageTypeSerializer() :+
-    new DockerRegistrySerializer() :+
-    new EntityTypeSerializer() :+
-    new EventSortKeysSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new MappingFormatSchemaSerializer() :+
-    new MappingTypeCSVSerializer() :+
-    new MethodTypeSerializer() :+
-    new OnDemandTriggerTypeSerializer() :+
-    new OrderKeysSerializer() :+
-    new PlatformSerializer() :+
-    new PlatformNoneSerializer() :+
-    new RecordTypeSerializer() :+
-    new RunOutcomeSerializer() :+
-    new RunReasonCodeSerializer() :+
-    new RunSortKeysSerializer() :+
-    new RunStatusSerializer() :+
-    new RunTypeSerializer() :+
-    new ScheduleTriggerTypeSerializer() :+
-    new SortKeysSerializer() :+
-    new SourceSortKeysSerializer() :+
-    new SourceTypeSerializer() :+
-    new StreamingTriggerTypeSerializer() :+
-    new SubscriptionTriggerTypeSerializer() :+
-    new TaskSortKeysSerializer() :+
-    new TriggerTypeSerializer()
+sealed trait EntityType
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AuthInputSerializer :+
-    AuthInputPartialSerializer :+
-    DestinationInputSerializer :+
-    PlatformWithNoneSerializer :+
-    SourceInputSerializer :+
-    SourceUpdateInputSerializer :+
-    TaskCreateTriggerSerializer :+
-    TaskInputSerializer :+
-    TriggerSerializer
+/** Type of entity to update.
+  */
+object EntityType {
+  case object Product extends EntityType {
+    override def toString = "product"
+  }
+  case object Collection extends EntityType {
+    override def toString = "collection"
+  }
+  val values: Seq[EntityType] = Seq(Product, Collection)
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): EntityType = EntityType.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown EntityType value: $name"))
 }
+
+class EntityTypeSerializer
+    extends CustomSerializer[EntityType](_ =>
+      (
+        {
+          case JString(value) => EntityType.withName(value)
+          case JNull          => null
+        },
+        { case value: EntityType =>
+          JString(value.toString)
+        }
+      )
+    )
