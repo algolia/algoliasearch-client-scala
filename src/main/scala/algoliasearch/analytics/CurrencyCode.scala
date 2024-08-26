@@ -30,7 +30,7 @@ package algoliasearch.analytics
   * @param revenue
   *   Revenue associated with this search in this currency.
   */
-case class CurrenciesValue(
+case class CurrencyCode(
     currency: Option[String] = scala.None,
     revenue: Option[Float] = scala.None
 )

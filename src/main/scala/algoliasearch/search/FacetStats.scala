@@ -33,7 +33,7 @@
   */
 package algoliasearch.search
 
-/** FacetsStats
+/** FacetStats
   *
   * @param min
   *   Minimum value in the results.
@@ -44,7 +44,7 @@ package algoliasearch.search
   * @param sum
   *   Sum of all values in the results.
   */
-case class FacetsStats(
+case class FacetStats(
     min: Option[Double] = scala.None,
     max: Option[Double] = scala.None,
     avg: Option[Double] = scala.None,
