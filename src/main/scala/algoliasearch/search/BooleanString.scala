@@ -33,50 +33,35 @@
   */
 package algoliasearch.search
 
-import algoliasearch.search.BooleanString._
-import algoliasearch.search.SupportedLanguage._
-
 import org.json4s._
 
-/** Treat singular, plurals, and other forms of declensions as equivalent. You should only use this feature for the
-  * languages used in your index.
+sealed trait BooleanString extends IgnorePluralsTrait
+
+/** BooleanString enumeration
   */
-sealed trait IgnorePlurals
-
-trait IgnorePluralsTrait extends IgnorePlurals
-
-object IgnorePlurals {
-
-  case class SeqOfSupportedLanguage(value: Seq[SupportedLanguage]) extends IgnorePlurals
-  case class BooleanValue(value: Boolean) extends IgnorePlurals
-
-  def apply(value: Seq[SupportedLanguage]): IgnorePlurals = {
-    IgnorePlurals.SeqOfSupportedLanguage(value)
+object BooleanString {
+  case object `True` extends BooleanString {
+    override def toString = "true"
   }
-  def apply(value: Boolean): IgnorePlurals = {
-    IgnorePlurals.BooleanValue(value)
+  case object `False` extends BooleanString {
+    override def toString = "false"
   }
+  val values: Seq[BooleanString] = Seq(`True`, `False`)
 
+  def withName(name: String): BooleanString = BooleanString.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown BooleanString value: $name"))
 }
 
-object IgnorePluralsSerializer extends Serializer[IgnorePlurals] {
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), IgnorePlurals] = {
-
-    case (TypeInfo(clazz, _), json) if clazz == classOf[IgnorePlurals] =>
-      json match {
-        case JArray(value) if value.forall(_.isInstanceOf[JArray]) =>
-          IgnorePlurals.SeqOfSupportedLanguage(value.map(_.extract))
-        case value: JString => Extraction.extract[BooleanString](value)
-        case JBool(value)   => IgnorePlurals.BooleanValue(value)
-        case _              => throw new MappingException("Can't convert " + json + " to IgnorePlurals")
-      }
-  }
-
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: IgnorePlurals =>
-    value match {
-      case IgnorePlurals.SeqOfSupportedLanguage(value) => JArray(value.map(Extraction.decompose).toList)
-      case value: BooleanString                        => JString(value.toString)
-      case IgnorePlurals.BooleanValue(value)           => JBool(value)
-    }
-  }
-}
+class BooleanStringSerializer
+    extends CustomSerializer[BooleanString](_ =>
+      (
+        {
+          case JString(value) => BooleanString.withName(value)
+          case JNull          => null
+        },
+        { case value: BooleanString =>
+          JString(value.toString)
+        }
+      )
+    )

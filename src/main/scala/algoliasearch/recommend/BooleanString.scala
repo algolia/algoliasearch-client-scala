@@ -31,51 +31,33 @@ package algoliasearch.recommend
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new FbtModelSerializer() :+
-    new LookingSimilarModelSerializer() :+
-    new MatchLevelSerializer() :+
-    new ModeSerializer() :+
-    new QueryTypeSerializer() :+
-    new RecommendModelsSerializer() :+
-    new RecommendedForYouModelSerializer() :+
-    new RelatedModelSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new TaskStatusSerializer() :+
-    new TrendingFacetsModelSerializer() :+
-    new TrendingItemsModelSerializer() :+
-    new TypoToleranceEnumSerializer()
+sealed trait BooleanString extends IgnorePluralsTrait
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RecommendationsHitSerializer :+
-    RecommendationsRequestSerializer :+
-    RemoveStopWordsSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
+/** BooleanString enumeration
+  */
+object BooleanString {
+  case object `True` extends BooleanString {
+    override def toString = "true"
+  }
+  case object `False` extends BooleanString {
+    override def toString = "false"
+  }
+  val values: Seq[BooleanString] = Seq(`True`, `False`)
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new BaseSearchResponseSerializer() :+
-    new ErrorBaseSerializer() :+
-    new RecommendHitSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): BooleanString = BooleanString.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown BooleanString value: $name"))
 }
+
+class BooleanStringSerializer
+    extends CustomSerializer[BooleanString](_ =>
+      (
+        {
+          case JString(value) => BooleanString.withName(value)
+          case JNull          => null
+        },
+        { case value: BooleanString =>
+          JString(value.toString)
+        }
+      )
+    )
