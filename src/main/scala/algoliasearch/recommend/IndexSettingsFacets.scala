@@ -29,12 +29,12 @@
   */
 package algoliasearch.recommend
 
-/** Settings for the semantic search part of NeuralSearch. Only used when `mode` is `neuralSearch`.
+/** Order of facet names.
   *
-  * @param eventSources
-  *   Indices from which to collect click and conversion events. If null, the current index and all its replicas are
-  *   used.
+  * @param order
+  *   Explicit order of facets or facet values. This setting lets you always show specific facets or facet values at the
+  *   top of the list.
   */
-case class SemanticSearch(
-    eventSources: Option[Seq[String]] = scala.None
+case class IndexSettingsFacets(
+    order: Option[Seq[String]] = scala.None
 )

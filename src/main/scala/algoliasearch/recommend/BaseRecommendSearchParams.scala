@@ -31,7 +31,7 @@ package algoliasearch.recommend
 
 import algoliasearch.recommend.SupportedLanguage._
 
-/** BaseSearchParamsWithoutQuery
+/** BaseRecommendSearchParams
   *
   * @param similarQuery
   *   Keywords to be used instead of the search query to conduct a more broader search. Using the `similarQuery`
@@ -68,12 +68,6 @@ import algoliasearch.recommend.SupportedLanguage._
   *   using faceting in combination with `distinct`. It's usually better to use `afterDistinct` modifiers in the
   *   `attributesForFaceting` setting, as `facetingAfterDistinct` only computes correct facet counts if all records have
   *   the same facet values for the `attributeForDistinct`.
-  * @param page
-  *   Page of search results to retrieve.
-  * @param offset
-  *   Position of the first hit to retrieve.
-  * @param length
-  *   Number of hits to retrieve (used in combination with `offset`).
   * @param aroundLatLng
   *   Coordinates for the center of a circle, expressed as a comma-separated string of latitude and longitude. Only
   *   records included within circle around this central location are included in the results. The radius of the circle
@@ -128,7 +122,7 @@ import algoliasearch.recommend.SupportedLanguage._
   * @param enableABTest
   *   Whether to enable A/B testing for this search.
   */
-case class BaseSearchParamsWithoutQuery(
+case class BaseRecommendSearchParams(
     similarQuery: Option[String] = scala.None,
     filters: Option[String] = scala.None,
     facetFilters: Option[FacetFilters] = scala.None,
@@ -139,9 +133,6 @@ case class BaseSearchParamsWithoutQuery(
     restrictSearchableAttributes: Option[Seq[String]] = scala.None,
     facets: Option[Seq[String]] = scala.None,
     facetingAfterDistinct: Option[Boolean] = scala.None,
-    page: Option[Int] = scala.None,
-    offset: Option[Int] = scala.None,
-    length: Option[Int] = scala.None,
     aroundLatLng: Option[String] = scala.None,
     aroundLatLngViaIP: Option[Boolean] = scala.None,
     aroundRadius: Option[AroundRadius] = scala.None,
