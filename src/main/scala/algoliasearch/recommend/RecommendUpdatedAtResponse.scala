@@ -29,23 +29,16 @@
   */
 package algoliasearch.recommend
 
-/** Recommend rule.
+/** Response, taskID, and update timestamp.
   *
-  * @param objectID
-  *   Unique identifier of a rule object.
-  * @param description
-  *   Description of the rule's purpose. This can be helpful for display in the Algolia dashboard.
-  * @param enabled
-  *   Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time.
-  * @param validity
-  *   Time periods when the rule is active.
+  * @param taskID
+  *   Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run
+  *   immediately. You can check the task's progress with the [`task` operation](#tag/Indices/operation/getTask) and
+  *   this `taskID`.
+  * @param updatedAt
+  *   Date and time when the object was updated, in RFC 3339 format.
   */
-case class RecommendRule(
-    metadata: Option[RuleMetadata] = scala.None,
-    objectID: Option[String] = scala.None,
-    condition: Option[Condition] = scala.None,
-    consequence: Option[Consequence] = scala.None,
-    description: Option[String] = scala.None,
-    enabled: Option[Boolean] = scala.None,
-    validity: Option[Seq[TimeRange]] = scala.None
+case class RecommendUpdatedAtResponse(
+    taskID: Long,
+    updatedAt: String
 )

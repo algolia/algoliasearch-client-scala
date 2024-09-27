@@ -29,23 +29,14 @@
   */
 package algoliasearch.recommend
 
-/** Recommend rule.
+/** TimeRange
   *
-  * @param objectID
-  *   Unique identifier of a rule object.
-  * @param description
-  *   Description of the rule's purpose. This can be helpful for display in the Algolia dashboard.
-  * @param enabled
-  *   Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time.
-  * @param validity
-  *   Time periods when the rule is active.
+  * @param from
+  *   When the rule should start to be active, in Unix epoch time.
+  * @param until
+  *   When the rule should stop to be active, in Unix epoch time.
   */
-case class RecommendRule(
-    metadata: Option[RuleMetadata] = scala.None,
-    objectID: Option[String] = scala.None,
-    condition: Option[Condition] = scala.None,
-    consequence: Option[Consequence] = scala.None,
-    description: Option[String] = scala.None,
-    enabled: Option[Boolean] = scala.None,
-    validity: Option[Seq[TimeRange]] = scala.None
+case class TimeRange(
+    from: Int,
+    until: Int
 )
