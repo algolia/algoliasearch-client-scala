@@ -26,17 +26,39 @@ package algoliasearch.abtesting
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new EffectMetricSerializer() :+
-    new StatusSerializer()
+sealed trait EffectMetric
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AddABTestsVariantSerializer
+/** Metric for which you want to detect the smallest relative difference.
+  */
+object EffectMetric {
+  case object AddToCartRate extends EffectMetric {
+    override def toString = "addToCartRate"
+  }
+  case object ClickThroughRate extends EffectMetric {
+    override def toString = "clickThroughRate"
+  }
+  case object ConversionRate extends EffectMetric {
+    override def toString = "conversionRate"
+  }
+  case object PurchaseRate extends EffectMetric {
+    override def toString = "purchaseRate"
+  }
+  val values: Seq[EffectMetric] = Seq(AddToCartRate, ClickThroughRate, ConversionRate, PurchaseRate)
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): EffectMetric = EffectMetric.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown EffectMetric value: $name"))
 }
+
+class EffectMetricSerializer
+    extends CustomSerializer[EffectMetric](_ =>
+      (
+        {
+          case JString(value) => EffectMetric.withName(value)
+          case JNull          => null
+        },
+        { case value: EffectMetric =>
+          JString(value.toString)
+        }
+      )
+    )

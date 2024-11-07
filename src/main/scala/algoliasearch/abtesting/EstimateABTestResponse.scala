@@ -24,19 +24,18 @@
   */
 package algoliasearch.abtesting
 
-import org.json4s._
-
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new EffectMetricSerializer() :+
-    new StatusSerializer()
-
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AddABTestsVariantSerializer
-
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
-}
+/** EstimateABTestResponse
+  *
+  * @param durationDays
+  *   Estimated number of days needed to reach the sample sizes required for detecting the configured effect. This value
+  *   is based on historical traffic.
+  * @param controlSampleSize
+  *   Number of tracked searches needed to be able to detect the configured effect for the control variant.
+  * @param experimentSampleSize
+  *   Number of tracked searches needed to be able to detect the configured effect for the experiment variant.
+  */
+case class EstimateABTestResponse(
+    durationDays: Option[Long] = scala.None,
+    controlSampleSize: Option[Long] = scala.None,
+    experimentSampleSize: Option[Long] = scala.None
+)
