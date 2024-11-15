@@ -31,52 +31,40 @@ package algoliasearch.recommend
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new FbtModelSerializer() :+
-    new LookingSimilarModelSerializer() :+
-    new MatchLevelSerializer() :+
-    new QueryTypeSerializer() :+
-    new RecommendModelsSerializer() :+
-    new RecommendedForYouModelSerializer() :+
-    new RelatedModelSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new TaskStatusSerializer() :+
-    new TrendingFacetsModelSerializer() :+
-    new TrendingItemsModelSerializer() :+
-    new TypoToleranceEnumSerializer()
+/** InsideBoundingBox
+  */
+sealed trait InsideBoundingBox
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    InsideBoundingBoxSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    OptionalWordsSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RecommendationsHitSerializer :+
-    RecommendationsRequestSerializer :+
-    RemoveStopWordsSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
+object InsideBoundingBox {
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new BaseSearchResponseSerializer() :+
-    new ErrorBaseSerializer() :+
-    new RecommendHitSerializer()
+  case class StringValue(value: String) extends InsideBoundingBox
+  case class SeqOfSeqOfDouble(value: Seq[Seq[Double]]) extends InsideBoundingBox
 
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def apply(value: String): InsideBoundingBox = {
+    InsideBoundingBox.StringValue(value)
+  }
+  def apply(value: Seq[Seq[Double]]): InsideBoundingBox = {
+    InsideBoundingBox.SeqOfSeqOfDouble(value)
+  }
+
+}
+
+object InsideBoundingBoxSerializer extends Serializer[InsideBoundingBox] {
+  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InsideBoundingBox] = {
+
+    case (TypeInfo(clazz, _), json) if clazz == classOf[InsideBoundingBox] =>
+      json match {
+        case JString(value) => InsideBoundingBox.StringValue(value)
+        case JArray(value) if value.forall(_.isInstanceOf[JArray]) =>
+          InsideBoundingBox.SeqOfSeqOfDouble(value.map(_.extract))
+        case _ => throw new MappingException("Can't convert " + json + " to InsideBoundingBox")
+      }
+  }
+
+  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: InsideBoundingBox =>
+    value match {
+      case InsideBoundingBox.StringValue(value)      => JString(value)
+      case InsideBoundingBox.SeqOfSeqOfDouble(value) => JArray(value.map(Extraction.decompose).toList)
+    }
+  }
 }

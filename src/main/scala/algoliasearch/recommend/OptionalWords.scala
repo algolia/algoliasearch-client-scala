@@ -31,52 +31,39 @@ package algoliasearch.recommend
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new FbtModelSerializer() :+
-    new LookingSimilarModelSerializer() :+
-    new MatchLevelSerializer() :+
-    new QueryTypeSerializer() :+
-    new RecommendModelsSerializer() :+
-    new RecommendedForYouModelSerializer() :+
-    new RelatedModelSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new TaskStatusSerializer() :+
-    new TrendingFacetsModelSerializer() :+
-    new TrendingItemsModelSerializer() :+
-    new TypoToleranceEnumSerializer()
+/** OptionalWords
+  */
+sealed trait OptionalWords
 
-  private def oneOfsSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    InsideBoundingBoxSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    OptionalWordsSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RecommendationsHitSerializer :+
-    RecommendationsRequestSerializer :+
-    RemoveStopWordsSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
+object OptionalWords {
 
-  private def classMapSerializers: Seq[Serializer[_]] = Seq[Serializer[_]]() :+
-    new BaseSearchResponseSerializer() :+
-    new ErrorBaseSerializer() :+
-    new RecommendHitSerializer()
+  case class StringValue(value: String) extends OptionalWords
+  case class SeqOfString(value: Seq[String]) extends OptionalWords
 
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def apply(value: String): OptionalWords = {
+    OptionalWords.StringValue(value)
+  }
+  def apply(value: Seq[String]): OptionalWords = {
+    OptionalWords.SeqOfString(value)
+  }
+
+}
+
+object OptionalWordsSerializer extends Serializer[OptionalWords] {
+  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), OptionalWords] = {
+
+    case (TypeInfo(clazz, _), json) if clazz == classOf[OptionalWords] =>
+      json match {
+        case JString(value)                                        => OptionalWords.StringValue(value)
+        case JArray(value) if value.forall(_.isInstanceOf[JArray]) => OptionalWords.SeqOfString(value.map(_.extract))
+        case _ => throw new MappingException("Can't convert " + json + " to OptionalWords")
+      }
+  }
+
+  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: OptionalWords =>
+    value match {
+      case OptionalWords.StringValue(value) => JString(value)
+      case OptionalWords.SeqOfString(value) => JArray(value.map(Extraction.decompose).toList)
+    }
+  }
 }

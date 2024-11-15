@@ -33,41 +33,42 @@
   */
 package algoliasearch.search
 
-/** DeleteByParams
-  *
-  * @param filters
-  *   Filter expression to only include items that match the filter criteria in the response. You can use these filter
-  *   expressions: - **Numeric filters.** `<facet> <op> <number>`, where `<op>` is one of `<`, `<=`, `=`, `!=`, `>`,
-  *   `>=`. - **Ranges.** `<facet>:<lower> TO <upper>` where `<lower>` and `<upper>` are the lower and upper limits of
-  *   the range (inclusive). - **Facet filters.** `<facet>:<value>` where `<facet>` is a facet attribute
-  *   (case-sensitive) and `<value>` a facet value. - **Tag filters.** `_tags:<value>` or just `<value>`
-  *   (case-sensitive). - **Boolean filters.** `<facet>: true | false`. You can combine filters with `AND`, `OR`, and
-  *   `NOT` operators with the following restrictions: - You can only combine filters of the same type with `OR`. **Not
-  *   supported:** `facet:value OR num > 3`. - You can't use `NOT` with combinations of filters. **Not supported:**
-  *   `NOT(facet:value OR facet:value)` - You can't combine conjunctions (`AND`) with `OR`. **Not supported:**
-  *   `facet:value OR (facet:value AND facet:value)` Use quotes around your filters, if the facet attribute name or
-  *   facet value has spaces, keywords (`OR`, `AND`, `NOT`), or quotes. If a facet attribute is an array, the filter
-  *   matches if it matches at least one element of the array. For more information, see
-  *   [Filters](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/).
-  * @param aroundLatLng
-  *   Coordinates for the center of a circle, expressed as a comma-separated string of latitude and longitude. Only
-  *   records included within a circle around this central location are included in the results. The radius of the
-  *   circle is determined by the `aroundRadius` and `minimumAroundRadius` settings. This parameter is ignored if you
-  *   also specify `insidePolygon` or `insideBoundingBox`.
-  * @param insidePolygon
-  *   Coordinates of a polygon in which to search. Polygons are defined by 3 to 10,000 points. Each point is represented
-  *   by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering
-  *   inside
-  *   polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas).
-  *   This parameter is ignored if you also specify `insideBoundingBox`.
+import org.json4s._
+
+/** InsideBoundingBox
   */
-case class DeleteByParams(
-    facetFilters: Option[FacetFilters] = scala.None,
-    filters: Option[String] = scala.None,
-    numericFilters: Option[NumericFilters] = scala.None,
-    tagFilters: Option[TagFilters] = scala.None,
-    aroundLatLng: Option[String] = scala.None,
-    aroundRadius: Option[AroundRadius] = scala.None,
-    insideBoundingBox: Option[InsideBoundingBox] = scala.None,
-    insidePolygon: Option[Seq[Seq[Double]]] = scala.None
-)
+sealed trait InsideBoundingBox
+
+object InsideBoundingBox {
+
+  case class StringValue(value: String) extends InsideBoundingBox
+  case class SeqOfSeqOfDouble(value: Seq[Seq[Double]]) extends InsideBoundingBox
+
+  def apply(value: String): InsideBoundingBox = {
+    InsideBoundingBox.StringValue(value)
+  }
+  def apply(value: Seq[Seq[Double]]): InsideBoundingBox = {
+    InsideBoundingBox.SeqOfSeqOfDouble(value)
+  }
+
+}
+
+object InsideBoundingBoxSerializer extends Serializer[InsideBoundingBox] {
+  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InsideBoundingBox] = {
+
+    case (TypeInfo(clazz, _), json) if clazz == classOf[InsideBoundingBox] =>
+      json match {
+        case JString(value) => InsideBoundingBox.StringValue(value)
+        case JArray(value) if value.forall(_.isInstanceOf[JArray]) =>
+          InsideBoundingBox.SeqOfSeqOfDouble(value.map(_.extract))
+        case _ => throw new MappingException("Can't convert " + json + " to InsideBoundingBox")
+      }
+  }
+
+  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: InsideBoundingBox =>
+    value match {
+      case InsideBoundingBox.StringValue(value)      => JString(value)
+      case InsideBoundingBox.SeqOfSeqOfDouble(value) => JArray(value.map(Extraction.decompose).toList)
+    }
+  }
+}
