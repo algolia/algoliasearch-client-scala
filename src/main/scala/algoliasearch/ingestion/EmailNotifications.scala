@@ -19,23 +19,11 @@
   */
 package algoliasearch.ingestion
 
-/** API request body for updating a task.
+/** EmailNotifications
   *
-  * @param destinationID
-  *   Universally unique identifier (UUID) of a destination resource.
-  * @param cron
-  *   Cron expression for the task's schedule.
   * @param enabled
-  *   Whether the task is enabled.
-  * @param failureThreshold
-  *   Maximum accepted percentage of failures for a task run to finish successfully.
+  *   Whether to send email notifications, note that this doesn't prevent the task from being blocked.
   */
-case class TaskUpdate(
-    destinationID: Option[String] = scala.None,
-    cron: Option[String] = scala.None,
-    input: Option[TaskInput] = scala.None,
-    enabled: Option[Boolean] = scala.None,
-    failureThreshold: Option[Int] = scala.None,
-    notifications: Option[Notifications] = scala.None,
-    policies: Option[Policies] = scala.None
+case class EmailNotifications(
+    enabled: Option[Boolean] = scala.None
 )
