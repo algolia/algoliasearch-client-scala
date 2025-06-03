@@ -19,36 +19,31 @@
   */
 package algoliasearch.ingestion
 
-import algoliasearch.ingestion.TransformationType._
+import org.json4s._
 
-/** Transformation
-  *
-  * @param transformationID
-  *   Universally unique identifier (UUID) of a transformation.
-  * @param authenticationIDs
-  *   The authentications associated with the current transformation.
-  * @param code
-  *   It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code.
-  * @param name
-  *   The uniquely identified name of your transformation.
-  * @param description
-  *   A descriptive name for your transformation of what it does.
-  * @param owner
-  *   Owner of the resource.
-  * @param createdAt
-  *   Date of creation in RFC 3339 format.
-  * @param updatedAt
-  *   Date of last update in RFC 3339 format.
+/** The input for the transformation, which can be either code or a no-code configuration.
   */
-case class Transformation(
-    transformationID: String,
-    authenticationIDs: Option[Seq[String]] = scala.None,
-    code: String,
-    `type`: Option[TransformationType] = scala.None,
-    input: Option[TransformationInput] = scala.None,
-    name: String,
-    description: Option[String] = scala.None,
-    owner: Option[String] = scala.None,
-    createdAt: String,
-    updatedAt: String
-)
+sealed trait TransformationInput
+
+trait TransformationInputTrait extends TransformationInput
+
+object TransformationInput {}
+
+object TransformationInputSerializer extends Serializer[TransformationInput] {
+  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), TransformationInput] = {
+
+    case (TypeInfo(clazz, _), json) if clazz == classOf[TransformationInput] =>
+      json match {
+        case value: JObject => Extraction.extract[TransformationCode](value)
+        case value: JObject => Extraction.extract[TransformationNoCode](value)
+        case _              => throw new MappingException("Can't convert " + json + " to TransformationInput")
+      }
+  }
+
+  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: TransformationInput =>
+    value match {
+      case value: TransformationCode   => Extraction.decompose(value)(format - this)
+      case value: TransformationNoCode => Extraction.decompose(value)(format - this)
+    }
+  }
+}

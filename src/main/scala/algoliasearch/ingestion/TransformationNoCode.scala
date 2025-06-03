@@ -19,36 +19,8 @@
   */
 package algoliasearch.ingestion
 
-import algoliasearch.ingestion.TransformationType._
-
-/** Transformation
-  *
-  * @param transformationID
-  *   Universally unique identifier (UUID) of a transformation.
-  * @param authenticationIDs
-  *   The authentications associated with the current transformation.
-  * @param code
-  *   It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code.
-  * @param name
-  *   The uniquely identified name of your transformation.
-  * @param description
-  *   A descriptive name for your transformation of what it does.
-  * @param owner
-  *   Owner of the resource.
-  * @param createdAt
-  *   Date of creation in RFC 3339 format.
-  * @param updatedAt
-  *   Date of last update in RFC 3339 format.
+/** Input for a no-code transformation that contains a series of steps.
   */
-case class Transformation(
-    transformationID: String,
-    authenticationIDs: Option[Seq[String]] = scala.None,
-    code: String,
-    `type`: Option[TransformationType] = scala.None,
-    input: Option[TransformationInput] = scala.None,
-    name: String,
-    description: Option[String] = scala.None,
-    owner: Option[String] = scala.None,
-    createdAt: String,
-    updatedAt: String
-)
+case class TransformationNoCode(
+    steps: Seq[Any]
+) extends TransformationInputTrait
