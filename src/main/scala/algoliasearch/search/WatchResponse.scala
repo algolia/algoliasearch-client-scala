@@ -33,83 +33,27 @@
   */
 package algoliasearch.search
 
-import org.json4s._
-
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new AclSerializer() :+
-    new ActionSerializer() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AnchoringSerializer() :+
-    new ApiKeyOperationSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new BuiltInOperationTypeSerializer() :+
-    new DictionaryActionSerializer() :+
-    new DictionaryEntryStateSerializer() :+
-    new DictionaryEntryTypeSerializer() :+
-    new DictionaryTypeSerializer() :+
-    new EditTypeSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new LogTypeSerializer() :+
-    new MatchLevelSerializer() :+
-    new ModeSerializer() :+
-    new OperationTypeSerializer() :+
-    new QueryTypeSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new ScopeTypeSerializer() :+
-    new SearchStrategySerializer() :+
-    new SearchTypeDefaultSerializer() :+
-    new SearchTypeFacetSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new SynonymTypeSerializer() :+
-    new TaskStatusSerializer() :+
-    new TypoToleranceEnumSerializer()
-
-  private def oneOfsSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    AttributeToUpdateSerializer :+
-    AutomaticFacetFiltersSerializer :+
-    BrowseParamsSerializer :+
-    BuiltInOperationValueSerializer :+
-    ConsequenceQuerySerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    InsideBoundingBoxSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    OptionalWordsSerializer :+
-    PromoteSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RemoveStopWordsSerializer :+
-    SearchParamsSerializer :+
-    SearchQuerySerializer :+
-    SearchResultSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
-
-  private def classMapSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new BaseSearchResponseSerializer() :+
-    new BrowseResponseSerializer() :+
-    new BuiltInOperationSerializer() :+
-    new DictionaryEntrySerializer() :+
-    new ErrorBaseSerializer() :+
-    new HitSerializer() :+
-    new LogSerializer() :+
-    new LogQuerySerializer() :+
-    new SearchHitsSerializer() :+
-    new SearchResponseSerializer() :+
-    new SearchSynonymsResponseSerializer() :+
-    new UserHitSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
-}
+/** WatchResponse
+  *
+  * @param runID
+  *   Universally unique identifier (UUID) of a task run.
+  * @param eventID
+  *   Universally unique identifier (UUID) of an event.
+  * @param data
+  *   This field is always null when used with the Push endpoint. When used for a source discover or source validate
+  *   run, it will include the sampled data of the source.
+  * @param events
+  *   in case of error, observability events will be added to the response.
+  * @param message
+  *   a message describing the outcome of the operation that has been ran (push, discover or validate) run.
+  * @param createdAt
+  *   Date of creation in RFC 3339 format.
+  */
+case class WatchResponse(
+    runID: String,
+    eventID: Option[String] = scala.None,
+    data: Option[Seq[Any]] = scala.None,
+    events: Option[Seq[Event]] = scala.None,
+    message: Option[String] = scala.None,
+    createdAt: Option[String] = scala.None
+)

@@ -35,81 +35,45 @@ package algoliasearch.search
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new AclSerializer() :+
-    new ActionSerializer() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AnchoringSerializer() :+
-    new ApiKeyOperationSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new BuiltInOperationTypeSerializer() :+
-    new DictionaryActionSerializer() :+
-    new DictionaryEntryStateSerializer() :+
-    new DictionaryEntryTypeSerializer() :+
-    new DictionaryTypeSerializer() :+
-    new EditTypeSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new LogTypeSerializer() :+
-    new MatchLevelSerializer() :+
-    new ModeSerializer() :+
-    new OperationTypeSerializer() :+
-    new QueryTypeSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new ScopeTypeSerializer() :+
-    new SearchStrategySerializer() :+
-    new SearchTypeDefaultSerializer() :+
-    new SearchTypeFacetSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new SynonymTypeSerializer() :+
-    new TaskStatusSerializer() :+
-    new TypoToleranceEnumSerializer()
+sealed trait EventStatus
 
-  private def oneOfsSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    AttributeToUpdateSerializer :+
-    AutomaticFacetFiltersSerializer :+
-    BrowseParamsSerializer :+
-    BuiltInOperationValueSerializer :+
-    ConsequenceQuerySerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    InsideBoundingBoxSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    OptionalWordsSerializer :+
-    PromoteSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RemoveStopWordsSerializer :+
-    SearchParamsSerializer :+
-    SearchQuerySerializer :+
-    SearchResultSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
+/** EventStatus enumeration
+  */
+object EventStatus {
+  case object Created extends EventStatus {
+    override def toString = "created"
+  }
+  case object Started extends EventStatus {
+    override def toString = "started"
+  }
+  case object Retried extends EventStatus {
+    override def toString = "retried"
+  }
+  case object Failed extends EventStatus {
+    override def toString = "failed"
+  }
+  case object Succeeded extends EventStatus {
+    override def toString = "succeeded"
+  }
+  case object Critical extends EventStatus {
+    override def toString = "critical"
+  }
+  val values: Seq[EventStatus] = Seq(Created, Started, Retried, Failed, Succeeded, Critical)
 
-  private def classMapSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new BaseSearchResponseSerializer() :+
-    new BrowseResponseSerializer() :+
-    new BuiltInOperationSerializer() :+
-    new DictionaryEntrySerializer() :+
-    new ErrorBaseSerializer() :+
-    new HitSerializer() :+
-    new LogSerializer() :+
-    new LogQuerySerializer() :+
-    new SearchHitsSerializer() :+
-    new SearchResponseSerializer() :+
-    new SearchSynonymsResponseSerializer() :+
-    new UserHitSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): EventStatus = EventStatus.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown EventStatus value: $name"))
 }
+
+class EventStatusSerializer
+    extends CustomSerializer[EventStatus](_ =>
+      (
+        {
+          case JString(value) => EventStatus.withName(value)
+          case JNull          => null
+        },
+        { case value: EventStatus =>
+          JString(value.toString)
+        }
+      )
+    )

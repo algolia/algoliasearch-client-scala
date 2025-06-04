@@ -33,83 +33,26 @@
   */
 package algoliasearch.search
 
-import org.json4s._
+import algoliasearch.search.EventStatus._
+import algoliasearch.search.EventType._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new AclSerializer() :+
-    new ActionSerializer() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AnchoringSerializer() :+
-    new ApiKeyOperationSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new BuiltInOperationTypeSerializer() :+
-    new DictionaryActionSerializer() :+
-    new DictionaryEntryStateSerializer() :+
-    new DictionaryEntryTypeSerializer() :+
-    new DictionaryTypeSerializer() :+
-    new EditTypeSerializer() :+
-    new EventStatusSerializer() :+
-    new EventTypeSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new LogTypeSerializer() :+
-    new MatchLevelSerializer() :+
-    new ModeSerializer() :+
-    new OperationTypeSerializer() :+
-    new QueryTypeSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new ScopeTypeSerializer() :+
-    new SearchStrategySerializer() :+
-    new SearchTypeDefaultSerializer() :+
-    new SearchTypeFacetSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new SynonymTypeSerializer() :+
-    new TaskStatusSerializer() :+
-    new TypoToleranceEnumSerializer()
-
-  private def oneOfsSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    AttributeToUpdateSerializer :+
-    AutomaticFacetFiltersSerializer :+
-    BrowseParamsSerializer :+
-    BuiltInOperationValueSerializer :+
-    ConsequenceQuerySerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    InsideBoundingBoxSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    OptionalWordsSerializer :+
-    PromoteSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RemoveStopWordsSerializer :+
-    SearchParamsSerializer :+
-    SearchQuerySerializer :+
-    SearchResultSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
-
-  private def classMapSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new BaseSearchResponseSerializer() :+
-    new BrowseResponseSerializer() :+
-    new BuiltInOperationSerializer() :+
-    new DictionaryEntrySerializer() :+
-    new ErrorBaseSerializer() :+
-    new HitSerializer() :+
-    new LogSerializer() :+
-    new LogQuerySerializer() :+
-    new SearchHitsSerializer() :+
-    new SearchResponseSerializer() :+
-    new SearchSynonymsResponseSerializer() :+
-    new UserHitSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
-}
+/** An event describe a step of the task execution flow..
+  *
+  * @param eventID
+  *   Universally unique identifier (UUID) of an event.
+  * @param runID
+  *   Universally unique identifier (UUID) of a task run.
+  * @param batchSize
+  *   The extracted record batch size.
+  * @param publishedAt
+  *   Date of publish RFC 3339 format.
+  */
+case class Event(
+    eventID: String,
+    runID: String,
+    status: Option[EventStatus] = scala.None,
+    `type`: EventType,
+    batchSize: Int,
+    data: Option[Map[String, Any]] = scala.None,
+    publishedAt: String
+)
