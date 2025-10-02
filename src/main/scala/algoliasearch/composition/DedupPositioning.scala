@@ -30,13 +30,39 @@
   */
 package algoliasearch.composition
 
-/** Injection
-  *
-  * @param injectedItems
-  *   list of injected items of the current Composition.
+import org.json4s._
+
+sealed trait DedupPositioning
+
+/** Deduplication positioning configures how a duplicate result should be resolved between an injected item and main
+  * search results. Current configuration supports: - 'highest': always select the item in the highest position, and
+  * remove duplicates that appear lower in the results. - 'highestInjected': duplicate result will be moved to its
+  * highest possible injected position, but not higher. If a duplicate appears higher in main search results, it will be
+  * removed to stay it's intended group position (which could be lower than main).
   */
-case class Injection(
-    main: Main,
-    injectedItems: Option[Seq[InjectedItem]] = scala.None,
-    deduplication: Option[Deduplication] = scala.None
-)
+object DedupPositioning {
+  case object Highest extends DedupPositioning {
+    override def toString = "highest"
+  }
+  case object HighestInjected extends DedupPositioning {
+    override def toString = "highestInjected"
+  }
+  val values: Seq[DedupPositioning] = Seq(Highest, HighestInjected)
+
+  def withName(name: String): DedupPositioning = DedupPositioning.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown DedupPositioning value: $name"))
+}
+
+class DedupPositioningSerializer
+    extends CustomSerializer[DedupPositioning](_ =>
+      (
+        {
+          case JString(value) => DedupPositioning.withName(value)
+          case JNull          => null
+        },
+        { case value: DedupPositioning =>
+          JString(value.toString)
+        }
+      )
+    )

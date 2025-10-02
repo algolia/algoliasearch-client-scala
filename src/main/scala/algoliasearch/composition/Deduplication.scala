@@ -30,13 +30,11 @@
   */
 package algoliasearch.composition
 
-/** Injection
-  *
-  * @param injectedItems
-  *   list of injected items of the current Composition.
+import algoliasearch.composition.DedupPositioning._
+
+/** Deduplication configures the methods used to resolve duplicate items between main search results and injected group
+  * results.
   */
-case class Injection(
-    main: Main,
-    injectedItems: Option[Seq[InjectedItem]] = scala.None,
-    deduplication: Option[Deduplication] = scala.None
+case class Deduplication(
+    positioning: DedupPositioning
 )
