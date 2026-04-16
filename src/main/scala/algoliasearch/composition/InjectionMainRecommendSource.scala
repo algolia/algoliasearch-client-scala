@@ -28,13 +28,8 @@
   */
 package algoliasearch.composition
 
-/** Injection
-  *
-  * @param injectedItems
-  *   list of injected items of the current Composition.
+/** Organic result set will originate from a recommend request.
   */
-case class Injection(
-    main: InjectionMain,
-    injectedItems: Option[Seq[InjectionInjectedItem]] = scala.None,
-    deduplication: Option[Deduplication] = scala.None
-)
+case class InjectionMainRecommendSource(
+    recommend: MainRecommend
+) extends InjectionMainSourceTrait

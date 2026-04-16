@@ -28,13 +28,15 @@
   */
 package algoliasearch.composition
 
-/** Injection
+import algoliasearch.composition.ExternalOrdering._
+
+/** InjectedItemExternal
   *
-  * @param injectedItems
-  *   list of injected items of the current Composition.
+  * @param index
+  *   Composition Index name.
   */
-case class Injection(
-    main: InjectionMain,
-    injectedItems: Option[Seq[InjectionInjectedItem]] = scala.None,
-    deduplication: Option[Deduplication] = scala.None
+case class InjectedItemExternal(
+    index: String,
+    params: Option[BaseInjectionQueryParameters] = scala.None,
+    ordering: Option[ExternalOrdering] = scala.None
 )

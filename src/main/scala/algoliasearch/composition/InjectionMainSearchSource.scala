@@ -28,15 +28,8 @@
   */
 package algoliasearch.composition
 
-/** InjectedItem
-  *
-  * @param key
-  *   injected Item unique identifier.
+/** Organic result set will originate from a search request performed on the specified index.
   */
-case class InjectedItem(
-    key: String,
-    source: InjectedItemSource,
-    position: Int,
-    length: Int,
-    metadata: Option[InjectedItemMetadata] = scala.None
-)
+case class InjectionMainSearchSource(
+    search: MainSearch
+) extends InjectionMainSourceTrait

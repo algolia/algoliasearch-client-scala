@@ -28,8 +28,8 @@
   */
 package algoliasearch.composition
 
-/** Injected items will originate from a search request performed on the specified index.
+/** Main defines the organic result set of the injection.
   */
-case class SearchSource(
-    search: Search
-) extends InjectedItemSourceTrait
+case class InjectionMain(
+    source: Option[InjectionMainSource] = scala.None
+)

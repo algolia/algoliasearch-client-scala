@@ -28,12 +28,12 @@
   */
 package algoliasearch.composition
 
-/** CompositionSourceSearch
+/** MainSearch
   *
   * @param index
-  *   Composition Main Index name.
+  *   Targeted index name.
   */
-case class CompositionSourceSearch(
+case class MainSearch(
     index: String,
     params: Option[MainInjectionQueryParameters] = scala.None
 )

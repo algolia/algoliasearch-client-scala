@@ -31,6 +31,6 @@ package algoliasearch.composition
 /** Injected items will originate from externally provided objectIDs (that must exist in the index) given at runtime in
   * the run request payload.
   */
-case class ExternalSource(
-    external: External
+case class InjectedItemExternalSource(
+    external: InjectedItemExternal
 ) extends InjectedItemSourceTrait

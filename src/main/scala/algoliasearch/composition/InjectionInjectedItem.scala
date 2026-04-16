@@ -28,13 +28,15 @@
   */
 package algoliasearch.composition
 
-/** Injection
+/** InjectionInjectedItem
   *
-  * @param injectedItems
-  *   list of injected items of the current Composition.
+  * @param key
+  *   injected Item unique identifier.
   */
-case class Injection(
-    main: InjectionMain,
-    injectedItems: Option[Seq[InjectionInjectedItem]] = scala.None,
-    deduplication: Option[Deduplication] = scala.None
+case class InjectionInjectedItem(
+    key: String,
+    source: InjectedItemSource,
+    position: Int,
+    length: Int,
+    metadata: Option[InjectedItemMetadata] = scala.None
 )

@@ -28,8 +28,12 @@
   */
 package algoliasearch.composition
 
-/** CompositionSource
+/** InjectedItemSearch
+  *
+  * @param index
+  *   Composition Index name.
   */
-case class CompositionSource(
-    search: CompositionSourceSearch
+case class InjectedItemSearch(
+    index: String,
+    params: Option[BaseInjectionQueryParameters] = scala.None
 )

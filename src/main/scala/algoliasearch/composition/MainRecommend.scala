@@ -28,15 +28,11 @@
   */
 package algoliasearch.composition
 
-import algoliasearch.composition.ExternalOrdering._
-
-/** External
+/** MainRecommend
   *
   * @param index
-  *   Composition Index name.
+  *   Targeted index name.
   */
-case class External(
-    index: String,
-    params: Option[BaseInjectionQueryParameters] = scala.None,
-    ordering: Option[ExternalOrdering] = scala.None
+case class MainRecommend(
+    index: String
 )
