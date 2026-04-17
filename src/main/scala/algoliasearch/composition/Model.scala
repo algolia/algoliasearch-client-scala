@@ -30,33 +30,30 @@ package algoliasearch.composition
 
 import org.json4s._
 
-/** InjectedItemSource
+sealed trait Model
+
+/** Recommendation model to use for retrieving recommendations.
   */
-sealed trait InjectedItemSource
-
-trait InjectedItemSourceTrait extends InjectedItemSource
-
-object InjectedItemSource {}
-
-object InjectedItemSourceSerializer extends Serializer[InjectedItemSource] {
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InjectedItemSource] = {
-
-    case (TypeInfo(clazz, _), json) if clazz == classOf[InjectedItemSource] =>
-      json match {
-        case value: JObject if value.obj.exists(_._1 == "search") => Extraction.extract[InjectedItemSearchSource](value)
-        case value: JObject if value.obj.exists(_._1 == "external") =>
-          Extraction.extract[InjectedItemExternalSource](value)
-        case value: JObject if value.obj.exists(_._1 == "recommend") =>
-          Extraction.extract[InjectedItemRecommendSource](value)
-        case _ => throw new MappingException("Can't convert " + json + " to InjectedItemSource")
-      }
+object Model {
+  case object TrendingItems extends Model {
+    override def toString = "trending-items"
   }
+  val values: Seq[Model] = Seq(TrendingItems)
 
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: InjectedItemSource =>
-    value match {
-      case value: InjectedItemSearchSource    => Extraction.decompose(value)(format - this)
-      case value: InjectedItemExternalSource  => Extraction.decompose(value)(format - this)
-      case value: InjectedItemRecommendSource => Extraction.decompose(value)(format - this)
-    }
-  }
+  def withName(name: String): Model = Model.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown Model value: $name"))
 }
+
+class ModelSerializer
+    extends CustomSerializer[Model](_ =>
+      (
+        {
+          case JString(value) => Model.withName(value)
+          case JNull          => null
+        },
+        { case value: Model =>
+          JString(value.toString)
+        }
+      )
+    )

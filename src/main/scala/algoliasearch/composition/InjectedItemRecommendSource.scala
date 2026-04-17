@@ -28,35 +28,8 @@
   */
 package algoliasearch.composition
 
-import org.json4s._
-
-/** InjectedItemSource
+/** Injected items will originate from a recommendation request performed on the specified index.
   */
-sealed trait InjectedItemSource
-
-trait InjectedItemSourceTrait extends InjectedItemSource
-
-object InjectedItemSource {}
-
-object InjectedItemSourceSerializer extends Serializer[InjectedItemSource] {
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InjectedItemSource] = {
-
-    case (TypeInfo(clazz, _), json) if clazz == classOf[InjectedItemSource] =>
-      json match {
-        case value: JObject if value.obj.exists(_._1 == "search") => Extraction.extract[InjectedItemSearchSource](value)
-        case value: JObject if value.obj.exists(_._1 == "external") =>
-          Extraction.extract[InjectedItemExternalSource](value)
-        case value: JObject if value.obj.exists(_._1 == "recommend") =>
-          Extraction.extract[InjectedItemRecommendSource](value)
-        case _ => throw new MappingException("Can't convert " + json + " to InjectedItemSource")
-      }
-  }
-
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: InjectedItemSource =>
-    value match {
-      case value: InjectedItemSearchSource    => Extraction.decompose(value)(format - this)
-      case value: InjectedItemExternalSource  => Extraction.decompose(value)(format - this)
-      case value: InjectedItemRecommendSource => Extraction.decompose(value)(format - this)
-    }
-  }
-}
+case class InjectedItemRecommendSource(
+    recommend: Recommend
+) extends InjectedItemSourceTrait
