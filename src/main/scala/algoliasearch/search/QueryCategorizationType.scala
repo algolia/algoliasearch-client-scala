@@ -34,54 +34,39 @@ package algoliasearch.search
 
 import org.json4s._
 
-/** SearchHits
-  *
-  * @param hits
-  *   Search results (hits). Hits are records from your index that match the search criteria, augmented with additional
-  *   attributes, such as, for highlighting.
-  * @param query
-  *   Search query.
-  * @param params
-  *   URL-encoded string of all search parameters.
+sealed trait QueryCategorizationType
+
+/** Classification of the query scope.
   */
-case class SearchHits(
-    hits: Seq[Hit],
-    query: Option[String] = scala.None,
-    params: Option[String] = scala.None,
-    extensions: Option[ResponseExtensions] = scala.None,
-    additionalProperties: Option[List[JField]] = None
-)
-
-class SearchHitsSerializer extends Serializer[SearchHits] {
-
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), SearchHits] = {
-    case (TypeInfo(clazz, _), json) if clazz == classOf[SearchHits] =>
-      json match {
-        case jobject: JObject =>
-          val formats = format - this
-          val mf = manifest[SearchHits]
-          val obj = Extraction.extract[SearchHits](jobject)(formats, mf)
-
-          val fields = Set("hits", "query", "params", "extensions")
-          val extraProperties = jobject removeField {
-            case (name, _) if fields.contains(name) => true
-            case _                                  => false
-          }
-          extraProperties match {
-            case JObject(fieldsList) => obj.copy(additionalProperties = Some(fieldsList))
-            case _                   => obj
-          }
-        case _ => throw new IllegalArgumentException(s"Can't deserialize $json as SearchHits")
-      }
+object QueryCategorizationType {
+  case object Narrow extends QueryCategorizationType {
+    override def toString = "narrow"
   }
-
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: SearchHits =>
-    val formats = format - this // remove current serializer from formats to avoid stackoverflow
-    val baseObj = Extraction.decompose(value.copy(additionalProperties = None))(formats)
-
-    value.additionalProperties match {
-      case Some(fields) => baseObj merge JObject(fields)
-      case None         => baseObj
-    }
+  case object Broad extends QueryCategorizationType {
+    override def toString = "broad"
   }
+  case object Ambiguous extends QueryCategorizationType {
+    override def toString = "ambiguous"
+  }
+  case object None extends QueryCategorizationType {
+    override def toString = "none"
+  }
+  val values: Seq[QueryCategorizationType] = Seq(Narrow, Broad, Ambiguous, None)
+
+  def withName(name: String): QueryCategorizationType = QueryCategorizationType.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown QueryCategorizationType value: $name"))
 }
+
+class QueryCategorizationTypeSerializer
+    extends CustomSerializer[QueryCategorizationType](_ =>
+      (
+        {
+          case JString(value) => QueryCategorizationType.withName(value)
+          case JNull          => null
+        },
+        { case value: QueryCategorizationType =>
+          JString(value.toString)
+        }
+      )
+    )
