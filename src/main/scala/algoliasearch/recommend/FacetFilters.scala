@@ -29,54 +29,45 @@ package algoliasearch.recommend
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new AdvancedSyntaxFeaturesSerializer() :+
-    new AlternativesAsExactSerializer() :+
-    new AroundRadiusAllSerializer() :+
-    new BooleanStringSerializer() :+
-    new ExactOnSingleWordQuerySerializer() :+
-    new FbtModelSerializer() :+
-    new LookingSimilarModelSerializer() :+
-    new MatchLevelSerializer() :+
-    new QueryTypeSerializer() :+
-    new RecommendModelsSerializer() :+
-    new RelatedModelSerializer() :+
-    new RemoveWordsIfNoResultsSerializer() :+
-    new SortRemainingBySerializer() :+
-    new SupportedLanguageSerializer() :+
-    new TaskStatusSerializer() :+
-    new TrendingFacetsModelSerializer() :+
-    new TrendingItemsModelSerializer() :+
-    new TypoToleranceEnumSerializer()
+/** Filter the search by facet values, so that only records with the same facet values are retrieved. **Prefer using the
+  * `filters` parameter, which supports all filter types and combinations with boolean operators.** - `[filter1,
+  * filter2]` is interpreted as `filter1 AND filter2`. - `[[filter1, filter2], filter3]` is interpreted as `filter1 OR
+  * filter2 AND filter3`. - `facet:-value` is interpreted as `NOT facet:value`. While it's best to avoid attributes that
+  * start with a `-`, you can still filter them by escaping with a backslash: `facet:\\-value`.
+  */
+sealed trait FacetFilters
 
-  private def oneOfsSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    AroundPrecisionSerializer :+
-    AroundRadiusSerializer :+
-    DistinctSerializer :+
-    FacetFiltersSerializer :+
-    HighlightResultSerializer :+
-    IgnorePluralsSerializer :+
-    InsideBoundingBoxSerializer :+
-    NumericFiltersSerializer :+
-    OptionalFiltersSerializer :+
-    OptionalWordsSerializer :+
-    ReRankingApplyFilterSerializer :+
-    RecommendationsHitSerializer :+
-    RecommendationsRequestSerializer :+
-    RemoveStopWordsSerializer :+
-    SnippetResultSerializer :+
-    TagFiltersSerializer :+
-    TypoToleranceSerializer
+object FacetFilters {
 
-  private def classMapSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new BaseSearchResponseSerializer() :+
-    new ErrorBaseSerializer() :+
-    new RecommendHitSerializer() :+
-    new RecommendRuleSerializer() :+
-    new RecommendationsResultsSerializer() :+
-    new TrendingFacetHitSerializer()
+  case class SeqOfFacetFilters(value: Seq[FacetFilters]) extends FacetFilters
 
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  case class StringValue(value: String) extends FacetFilters
+
+  def apply(value: Seq[FacetFilters]): FacetFilters = {
+    FacetFilters.SeqOfFacetFilters(value)
+  }
+
+  def apply(value: String): FacetFilters = {
+    FacetFilters.StringValue(value)
+  }
+
+}
+
+object FacetFiltersSerializer extends Serializer[FacetFilters] {
+  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), FacetFilters] = {
+
+    case (TypeInfo(clazz, _), json) if clazz == classOf[FacetFilters] =>
+      json match {
+        case value: JArray  => FacetFilters.apply(Extraction.extract[Seq[FacetFilters]](value))
+        case JString(value) => FacetFilters.StringValue(value)
+        case _              => throw new MappingException("Can't convert " + json + " to FacetFilters")
+      }
+  }
+
+  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: FacetFilters =>
+    value match {
+      case FacetFilters.SeqOfFacetFilters(value) => JArray(value.map(Extraction.decompose).toList)
+      case FacetFilters.StringValue(value)       => JString(value)
+    }
+  }
 }
