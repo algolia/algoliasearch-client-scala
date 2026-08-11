@@ -27,24 +27,30 @@ package algoliasearch.insights
 
 import org.json4s._
 
-object JsonSupport {
-  private def enumSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new AddToCartEventSerializer() :+
-    new ClickEventSerializer() :+
-    new ConversionEventSerializer() :+
-    new InstantsearchEventSerializer() :+
-    new PurchaseEventSerializer() :+
-    new ViewEventSerializer()
+sealed trait InstantsearchEvent
 
-  private def oneOfsSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    DiscountSerializer :+
-    EventsItemsSerializer :+
-    PriceSerializer :+
-    ValueSerializer
+/** InstantsearchEvent enumeration
+  */
+object InstantsearchEvent {
+  case object Instantsearch extends InstantsearchEvent {
+    override def toString = "instantsearch"
+  }
+  val values: Seq[InstantsearchEvent] = Seq(Instantsearch)
 
-  private def classMapSerializers: Seq[Serializer[?]] = Seq[Serializer[?]]() :+
-    new ErrorBaseSerializer()
-
-  implicit val format: Formats = DefaultFormats ++ enumSerializers ++ oneOfsSerializers ++ classMapSerializers
-  implicit val serialization: org.json4s.Serialization = org.json4s.native.Serialization
+  def withName(name: String): InstantsearchEvent = InstantsearchEvent.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown InstantsearchEvent value: $name"))
 }
+
+class InstantsearchEventSerializer
+    extends CustomSerializer[InstantsearchEvent](_ =>
+      (
+        {
+          case JString(value) => InstantsearchEvent.withName(value)
+          case JNull          => null
+        },
+        { case value: InstantsearchEvent =>
+          JString(value.toString)
+        }
+      )
+    )

@@ -25,25 +25,14 @@
   */
 package algoliasearch.insights
 
-import algoliasearch.insights.ClickEvent
+import algoliasearch.insights.InstantsearchEvent
 
-/** Click event after an Algolia request. Use this event to track when users click items in the search results. If
-  * you're building your category pages with Algolia, you'll also use this event.
+/** Instantsearch
   *
   * @param eventName
   *   Event name, up to 64 ASCII characters. Consider naming events consistently—for example, by adopting Segment's
   *   [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework)
   *   framework.
-  * @param index
-  *   Index name (case-sensitive) to which the event's items belong.
-  * @param objectIDs
-  *   Object IDs of the records that are part of the event.
-  * @param positions
-  *   Position of the clicked item the search results. You must provide 1 `position` for each `objectID`.
-  * @param queryID
-  *   Unique identifier for a search query. The query ID is required for events related to search or browse requests. If
-  *   you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. For
-  *   agentic analytics events, the query ID may be prefixed with `message_` followed by any printable string.
   * @param userToken
   *   Anonymous or pseudonymous user identifier. Don't use personally identifiable information in user tokens. For more
   *   information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken).
@@ -56,15 +45,14 @@ import algoliasearch.insights.ClickEvent
   * @param timestamp
   *   Timestamp of the event, measured in milliseconds since the Unix epoch. Must be no older than 30 days. If not
   *   provided, we use the time at which the request was received.
+  * @param agentID
+  *   Unique identifier for an agent session. Used to correlate instantsearch events with a specific agent interaction.
   */
-case class ClickedObjectIDsAfterSearch(
+case class Instantsearch(
     eventName: String,
-    eventType: ClickEvent,
-    index: String,
-    objectIDs: Seq[String],
-    positions: Seq[Int],
-    queryID: String,
+    eventType: InstantsearchEvent,
     userToken: String,
     authenticatedUserToken: Option[String] = scala.None,
-    timestamp: Option[Long] = scala.None
+    timestamp: Option[Long] = scala.None,
+    agentID: Option[String] = scala.None
 ) extends EventsItemsTrait
