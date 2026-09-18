@@ -40,57 +40,45 @@ package algoliasearch.search
 
 import org.json4s._
 
-sealed trait Action
+sealed trait AttributeCriteriaComputedBy
 
-/** Which indexing operation to perform: - `addObject`: adds records to an index. Equivalent to the \"Add a new record
-  * (with auto-generated object ID)\" operation. - `updateObject`: adds or replaces records in an index. Equivalent to
-  * the \"Add or replace a record\" operation. - `partialUpdateObject`: adds or updates attributes within records.
-  * Equivalent to the \"Add or update attributes\" operation with the `createIfNoExists` parameter set to true. (If a
-  * record with the specified `objectID` doesn't exist in the specified index, this action adds the record to the
-  * index). - `partialUpdateObjectNoCreate`: same as `partialUpdateObject`, but with `createIfNoExists` set to false. (A
-  * record isn't added to the index if its `objectID` doesn't exist). - `deleteObject`: delete records from an index.
-  * Equivalent to the \"Delete a record\" operation. - `delete`. Delete an index. Equivalent to the \"Delete an index\"
-  * operation. - `clear`: delete all records from an index. Equivalent to the \"Delete all records from an index
-  * operation\".
+/** Strategy for computing the Attribute ranking criterion. This mainly affects multi-word queries with matches in more
+  * than one attribute. The `ranking` setting decides whether `best` takes effect. When Attribute comes after Proximity,
+  * which is the default order, the engine always uses the `minProximity` strategy and ignores `best`. To select `best`,
+  * move Attribute before Proximity in `ranking`. The `sum` strategy applies in both orders. - `minProximity`. Pick the
+  * best matching attribute from the attributes that form the best proximity score. On an ordered attribute, the match
+  * position breaks ties. - `best`. Pick the best matching attribute from all attributes that match any query word. On
+  * an ordered attribute, the match position breaks ties. - `sum`. Add up a score for every query word instead of
+  * picking one attribute. Each word's score comes from the attribute it matched, and from its position in that
+  * attribute when the attribute is ordered. A query word that matches nothing adds a large penalty. A record with a
+  * lower total ranks higher. A record therefore cannot rank high only because one word of a multi-word query matched a
+  * top attribute. Use `sum` with short, relevant attributes, and set long-text attributes to unordered.
   */
-object Action {
-  case object AddObject extends Action {
-    override def toString = "addObject"
+object AttributeCriteriaComputedBy {
+  case object MinProximity extends AttributeCriteriaComputedBy {
+    override def toString = "minProximity"
   }
-  case object UpdateObject extends Action {
-    override def toString = "updateObject"
+  case object Best extends AttributeCriteriaComputedBy {
+    override def toString = "best"
   }
-  case object PartialUpdateObject extends Action {
-    override def toString = "partialUpdateObject"
+  case object Sum extends AttributeCriteriaComputedBy {
+    override def toString = "sum"
   }
-  case object PartialUpdateObjectNoCreate extends Action {
-    override def toString = "partialUpdateObjectNoCreate"
-  }
-  case object DeleteObject extends Action {
-    override def toString = "deleteObject"
-  }
-  case object Delete extends Action {
-    override def toString = "delete"
-  }
-  case object Clear extends Action {
-    override def toString = "clear"
-  }
-  val values: Seq[Action] =
-    Seq(AddObject, UpdateObject, PartialUpdateObject, PartialUpdateObjectNoCreate, DeleteObject, Delete, Clear)
+  val values: Seq[AttributeCriteriaComputedBy] = Seq(MinProximity, Best, Sum)
 
-  def withName(name: String): Action = Action.values
+  def withName(name: String): AttributeCriteriaComputedBy = AttributeCriteriaComputedBy.values
     .find(_.toString == name)
-    .getOrElse(throw new MappingException(s"Unknown Action value: $name"))
+    .getOrElse(throw new MappingException(s"Unknown AttributeCriteriaComputedBy value: $name"))
 }
 
-class ActionSerializer
-    extends CustomSerializer[Action](_ =>
+class AttributeCriteriaComputedBySerializer
+    extends CustomSerializer[AttributeCriteriaComputedBy](_ =>
       (
         {
-          case JString(value) => Action.withName(value)
+          case JString(value) => AttributeCriteriaComputedBy.withName(value)
           case JNull          => null
         },
-        { case value: Action =>
+        { case value: AttributeCriteriaComputedBy =>
           JString(value.toString)
         }
       )
