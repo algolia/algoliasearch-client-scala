@@ -23,16 +23,45 @@
   */
 package algoliasearch.abtestingv3
 
-/** Metric specific metadata.
-  *
-  * @param winsorizedValue
-  *   Only present for `revenue` metrics. It is the amount exceeding the 95th percentile of global revenue transactions
-  *   involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a
-  *   per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).
-  * @param mean
-  *   Mean value for this metric.
+import org.json4s._
+
+sealed trait PrimaryMetric
+
+/** Primary metric for Bayesian analysis. Required when `method` is `bayesian`. If the request includes a non-empty
+  * `metrics` list, this metric must be in that list. Revenue per search requires access to revenue analytics.
   */
-case class MetricMetadata(
-    winsorizedValue: Option[Double] = scala.None,
-    mean: Option[Double] = scala.None
-)
+object PrimaryMetric {
+  case object AddToCartRate extends PrimaryMetric {
+    override def toString = "add_to_cart_rate"
+  }
+  case object ClickThroughRate extends PrimaryMetric {
+    override def toString = "click_through_rate"
+  }
+  case object ConversionRate extends PrimaryMetric {
+    override def toString = "conversion_rate"
+  }
+  case object PurchaseRate extends PrimaryMetric {
+    override def toString = "purchase_rate"
+  }
+  case object RevenuePerSearch extends PrimaryMetric {
+    override def toString = "revenue_per_search"
+  }
+  val values: Seq[PrimaryMetric] = Seq(AddToCartRate, ClickThroughRate, ConversionRate, PurchaseRate, RevenuePerSearch)
+
+  def withName(name: String): PrimaryMetric = PrimaryMetric.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown PrimaryMetric value: $name"))
+}
+
+class PrimaryMetricSerializer
+    extends CustomSerializer[PrimaryMetric](_ =>
+      (
+        {
+          case JString(value) => PrimaryMetric.withName(value)
+          case JNull          => null
+        },
+        { case value: PrimaryMetric =>
+          JString(value.toString)
+        }
+      )
+    )

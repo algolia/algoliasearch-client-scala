@@ -23,16 +23,48 @@
   */
 package algoliasearch.abtestingv3
 
-/** Metric specific metadata.
-  *
-  * @param winsorizedValue
-  *   Only present for `revenue` metrics. It is the amount exceeding the 95th percentile of global revenue transactions
-  *   involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a
-  *   per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).
-  * @param mean
-  *   Mean value for this metric.
+import org.json4s._
+
+sealed trait EvidenceStatus
+
+/** Whether this variant metric's result is trustworthy yet. This doesn't mean the A/B test has ended, and it doesn't
+  * declare a winning variant. - `enough`. Enough evidence has accumulated to trust this metric's result for this
+  * variant. - `not_enough`. Evidence was computed but hasn't reached the threshold yet. - `collecting`. Evidence is
+  * still accumulating, so it's too early to report a verdict. - `no_data`. No usable data for this variant metric, and
+  * none is expected for it. - `unavailable`. Evidence can't be computed for this variant metric's comparison.
   */
-case class MetricMetadata(
-    winsorizedValue: Option[Double] = scala.None,
-    mean: Option[Double] = scala.None
-)
+object EvidenceStatus {
+  case object Enough extends EvidenceStatus {
+    override def toString = "enough"
+  }
+  case object NotEnough extends EvidenceStatus {
+    override def toString = "not_enough"
+  }
+  case object Collecting extends EvidenceStatus {
+    override def toString = "collecting"
+  }
+  case object NoData extends EvidenceStatus {
+    override def toString = "no_data"
+  }
+  case object Unavailable extends EvidenceStatus {
+    override def toString = "unavailable"
+  }
+  val values: Seq[EvidenceStatus] = Seq(Enough, NotEnough, Collecting, NoData, Unavailable)
+
+  def withName(name: String): EvidenceStatus = EvidenceStatus.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown EvidenceStatus value: $name"))
+}
+
+class EvidenceStatusSerializer
+    extends CustomSerializer[EvidenceStatus](_ =>
+      (
+        {
+          case JString(value) => EvidenceStatus.withName(value)
+          case JNull          => null
+        },
+        { case value: EvidenceStatus =>
+          JString(value.toString)
+        }
+      )
+    )

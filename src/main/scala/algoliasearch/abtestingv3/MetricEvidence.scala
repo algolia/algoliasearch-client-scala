@@ -23,16 +23,11 @@
   */
 package algoliasearch.abtestingv3
 
-/** Metric specific metadata.
-  *
-  * @param winsorizedValue
-  *   Only present for `revenue` metrics. It is the amount exceeding the 95th percentile of global revenue transactions
-  *   involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a
-  *   per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).
-  * @param mean
-  *   Mean value for this metric.
+import algoliasearch.abtestingv3.EvidenceStatus._
+
+/** Evidence status for this variant metric's comparison with the control. Only present when the API has an evidence
+  * status for the comparison. Omitted when evidence isn't applicable or no status exists.
   */
-case class MetricMetadata(
-    winsorizedValue: Option[Double] = scala.None,
-    mean: Option[Double] = scala.None
+case class MetricEvidence(
+    status: EvidenceStatus
 )

@@ -23,16 +23,36 @@
   */
 package algoliasearch.abtestingv3
 
-/** Metric specific metadata.
-  *
-  * @param winsorizedValue
-  *   Only present for `revenue` metrics. It is the amount exceeding the 95th percentile of global revenue transactions
-  *   involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a
-  *   per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).
-  * @param mean
-  *   Mean value for this metric.
+import org.json4s._
+
+sealed trait AnalysisMethod
+
+/** A/B test statistical analysis method. When omitted, the test is treated as `frequentist`. The server doesn't write a
+  * default value back to the configuration.
   */
-case class MetricMetadata(
-    winsorizedValue: Option[Double] = scala.None,
-    mean: Option[Double] = scala.None
-)
+object AnalysisMethod {
+  case object Bayesian extends AnalysisMethod {
+    override def toString = "bayesian"
+  }
+  case object Frequentist extends AnalysisMethod {
+    override def toString = "frequentist"
+  }
+  val values: Seq[AnalysisMethod] = Seq(Bayesian, Frequentist)
+
+  def withName(name: String): AnalysisMethod = AnalysisMethod.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown AnalysisMethod value: $name"))
+}
+
+class AnalysisMethodSerializer
+    extends CustomSerializer[AnalysisMethod](_ =>
+      (
+        {
+          case JString(value) => AnalysisMethod.withName(value)
+          case JNull          => null
+        },
+        { case value: AnalysisMethod =>
+          JString(value.toString)
+        }
+      )
+    )
