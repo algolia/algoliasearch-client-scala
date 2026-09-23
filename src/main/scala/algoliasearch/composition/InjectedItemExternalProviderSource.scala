@@ -27,36 +27,10 @@
   */
 package algoliasearch.composition
 
-import org.json4s._
+import algoliasearch.composition.InjectedItemExternalProvider
 
-/** Source to be used to retrieve organic result set.
+/** Injected items will originate from a request to an external provider configuration.
   */
-sealed trait InjectionMainSource
-
-trait InjectionMainSourceTrait extends InjectionMainSource
-
-object InjectionMainSource {}
-
-object InjectionMainSourceSerializer extends Serializer[InjectionMainSource] {
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InjectionMainSource] = {
-
-    case (TypeInfo(clazz, _), json) if clazz == classOf[InjectionMainSource] =>
-      json match {
-        case value: JObject if value.obj.exists(_._1 == "search") =>
-          Extraction.extract[InjectionMainSearchSource](value)
-        case value: JObject if value.obj.exists(_._1 == "recommend") =>
-          Extraction.extract[InjectionMainRecommendSource](value)
-        case value: JObject if value.obj.exists(_._1 == "externalProvider") =>
-          Extraction.extract[InjectionMainExternalProviderSource](value)
-        case _ => throw new MappingException("Can't convert " + json + " to InjectionMainSource")
-      }
-  }
-
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: InjectionMainSource =>
-    value match {
-      case value: InjectionMainSearchSource           => Extraction.decompose(value)(format - this)
-      case value: InjectionMainRecommendSource        => Extraction.decompose(value)(format - this)
-      case value: InjectionMainExternalProviderSource => Extraction.decompose(value)(format - this)
-    }
-  }
-}
+case class InjectedItemExternalProviderSource(
+    externalProvider: InjectedItemExternalProvider
+) extends InjectedItemSourceTrait

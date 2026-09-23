@@ -29,34 +29,34 @@ package algoliasearch.composition
 
 import org.json4s._
 
-/** Source to be used to retrieve organic result set.
+sealed trait ExternalProviderOrdering
+
+/** Ordering to apply on the items retrieved from the external provider. 'default' uses the relevance ranking from the
+  * Algolia retrieval step. 'providerDefined' uses the ordering returned by the external provider.
   */
-sealed trait InjectionMainSource
-
-trait InjectionMainSourceTrait extends InjectionMainSource
-
-object InjectionMainSource {}
-
-object InjectionMainSourceSerializer extends Serializer[InjectionMainSource] {
-  override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InjectionMainSource] = {
-
-    case (TypeInfo(clazz, _), json) if clazz == classOf[InjectionMainSource] =>
-      json match {
-        case value: JObject if value.obj.exists(_._1 == "search") =>
-          Extraction.extract[InjectionMainSearchSource](value)
-        case value: JObject if value.obj.exists(_._1 == "recommend") =>
-          Extraction.extract[InjectionMainRecommendSource](value)
-        case value: JObject if value.obj.exists(_._1 == "externalProvider") =>
-          Extraction.extract[InjectionMainExternalProviderSource](value)
-        case _ => throw new MappingException("Can't convert " + json + " to InjectionMainSource")
-      }
+object ExternalProviderOrdering {
+  case object Default extends ExternalProviderOrdering {
+    override def toString = "default"
   }
-
-  override def serialize(implicit format: Formats): PartialFunction[Any, JValue] = { case value: InjectionMainSource =>
-    value match {
-      case value: InjectionMainSearchSource           => Extraction.decompose(value)(format - this)
-      case value: InjectionMainRecommendSource        => Extraction.decompose(value)(format - this)
-      case value: InjectionMainExternalProviderSource => Extraction.decompose(value)(format - this)
-    }
+  case object ProviderDefined extends ExternalProviderOrdering {
+    override def toString = "providerDefined"
   }
+  val values: Seq[ExternalProviderOrdering] = Seq(Default, ProviderDefined)
+
+  def withName(name: String): ExternalProviderOrdering = ExternalProviderOrdering.values
+    .find(_.toString == name)
+    .getOrElse(throw new MappingException(s"Unknown ExternalProviderOrdering value: $name"))
 }
+
+class ExternalProviderOrderingSerializer
+    extends CustomSerializer[ExternalProviderOrdering](_ =>
+      (
+        {
+          case JString(value) => ExternalProviderOrdering.withName(value)
+          case JNull          => null
+        },
+        { case value: ExternalProviderOrdering =>
+          JString(value.toString)
+        }
+      )
+    )
