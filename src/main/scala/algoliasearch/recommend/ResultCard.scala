@@ -27,12 +27,11 @@
   */
 package algoliasearch.recommend
 
-/** Widgets returned from any rules that are applied to the current search.
+/** Agent Studio Result Card to display for a given search.
   *
-  * @param banners
-  *   Banners defined in the Merchandising Studio for a given search.
+  * @param enabled
+  *   Whether to show the Result Card for the current search.
   */
-case class Widgets(
-    banners: Option[Seq[Banner]] = scala.None,
-    resultCard: Option[ResultCard] = scala.None
+case class ResultCard(
+    enabled: Option[Boolean] = scala.None
 )
