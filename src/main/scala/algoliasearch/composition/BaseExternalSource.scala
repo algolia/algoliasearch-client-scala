@@ -27,19 +27,14 @@
   */
 package algoliasearch.composition
 
-import algoliasearch.composition.Model._
+import algoliasearch.composition.ExternalOrdering._
 
-/** MainRecommend
+/** BaseExternalSource
   *
-  * @param indexName
-  *   Index to retrieve recommendations from.
-  * @param threshold
-  *   Minimum score a recommendation must have to be included.
+  * @param index
+  *   Algolia index used to retrieve records.
   */
-case class MainRecommend(
-    indexName: String,
-    model: Model,
-    threshold: Int,
-    queryParameters: Option[MainInjectionQueryParameters] = scala.None,
-    fallbackParameters: Option[MainInjectionQueryParameters] = scala.None
+case class BaseExternalSource(
+    index: String,
+    ordering: Option[ExternalOrdering] = scala.None
 )

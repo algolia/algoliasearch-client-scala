@@ -27,10 +27,21 @@
   */
 package algoliasearch.composition
 
-import algoliasearch.composition.InjectionMainExternalProvider
+import algoliasearch.composition.ExternalProviderOrdering._
 
-/** Organic result set will originate from a request to an external provider configuration.
+/** InjectionMainExternalProvider
+  *
+  * @param index
+  *   Algolia index used to fetch the records.
+  * @param configurationID
+  *   Identifier of the external provider configuration.
+  * @param configurationParams
+  *   Default values for the configuration placeholders that are not reserved Composition placeholders.
   */
-case class InjectionMainExternalProviderSource(
-    externalProvider: InjectionMainExternalProvider
-) extends InjectionMainSourceTrait
+case class InjectionMainExternalProvider(
+    index: String,
+    configurationID: String,
+    configurationParams: Option[Map[String, Any]] = scala.None,
+    ordering: Option[ExternalProviderOrdering] = scala.None,
+    params: Option[MainInjectionQueryParameters] = scala.None
+)

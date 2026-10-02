@@ -27,10 +27,19 @@
   */
 package algoliasearch.composition
 
-import algoliasearch.composition.InjectionMainExternalProvider
+import algoliasearch.composition.Model._
 
-/** Organic result set will originate from a request to an external provider configuration.
+/** InjectedItemRecommend
+  *
+  * @param indexName
+  *   Index to retrieve recommendations from.
+  * @param threshold
+  *   Minimum score a recommendation must have to be included.
   */
-case class InjectionMainExternalProviderSource(
-    externalProvider: InjectionMainExternalProvider
-) extends InjectionMainSourceTrait
+case class InjectedItemRecommend(
+    indexName: String,
+    model: Model,
+    threshold: Int,
+    queryParameters: Option[BaseInjectionQueryParameters] = scala.None,
+    fallbackParameters: Option[BaseInjectionQueryParameters] = scala.None
+)

@@ -27,12 +27,20 @@
   */
 package algoliasearch.composition
 
-/** MainSearch
+import algoliasearch.composition.ExternalProviderOrdering._
+
+/** BaseExternalProviderSource
   *
   * @param index
-  *   Index to retrieve search results from.
+  *   Algolia index used to fetch the records.
+  * @param configurationID
+  *   Identifier of the external provider configuration.
+  * @param configurationParams
+  *   Default values for the configuration placeholders that are not reserved Composition placeholders.
   */
-case class MainSearch(
+case class BaseExternalProviderSource(
     index: String,
-    params: Option[MainInjectionQueryParameters] = scala.None
+    configurationID: String,
+    configurationParams: Option[Map[String, Any]] = scala.None,
+    ordering: Option[ExternalProviderOrdering] = scala.None
 )

@@ -27,21 +27,17 @@
   */
 package algoliasearch.composition
 
-import algoliasearch.composition.ExternalProviderOrdering._
+import algoliasearch.composition.Model._
 
-/** MainExternalProvider
+/** BaseRecommendSource
   *
-  * @param index
-  *   Algolia index used to fetch the records.
-  * @param configurationID
-  *   Identifier of the external provider configuration.
-  * @param configurationParams
-  *   Default values for the configuration placeholders that are not reserved Composition placeholders.
+  * @param indexName
+  *   Index to retrieve recommendations from.
+  * @param threshold
+  *   Minimum score a recommendation must have to be included.
   */
-case class MainExternalProvider(
-    index: String,
-    configurationID: String,
-    configurationParams: Option[Map[String, Any]] = scala.None,
-    params: Option[MainInjectionQueryParameters] = scala.None,
-    ordering: Option[ExternalProviderOrdering] = scala.None
+case class BaseRecommendSource(
+    indexName: String,
+    model: Model,
+    threshold: Int
 )

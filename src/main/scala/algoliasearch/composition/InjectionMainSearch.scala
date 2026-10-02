@@ -27,19 +27,12 @@
   */
 package algoliasearch.composition
 
-import algoliasearch.composition.Model._
-
-/** Recommend
+/** InjectionMainSearch
   *
-  * @param indexName
-  *   Index to retrieve recommendations from.
-  * @param threshold
-  *   Minimum score a recommendation must have to be included.
+  * @param index
+  *   Algolia index used to retrieve records.
   */
-case class Recommend(
-    indexName: String,
-    model: Model,
-    threshold: Int,
-    queryParameters: Option[BaseInjectionQueryParameters] = scala.None,
-    fallbackParameters: Option[BaseInjectionQueryParameters] = scala.None
+case class InjectionMainSearch(
+    index: String,
+    params: Option[MainInjectionQueryParameters] = scala.None
 )
